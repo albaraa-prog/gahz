@@ -9,9 +9,9 @@ import { state, store } from '../utils/state';
 const RING_CIRCUMFERENCE = 440;
 
 const VERDICTS: Record<VerdictLevel, { text: string; className: string }> = {
-  pass: { text: '🏆 Pass - Solid Mid-Level Developer', className: 'score-badge-desc badge badge-success verdict' },
-  junior: { text: '⚙️ Passed - Associate / Junior Level', className: 'score-badge-desc badge verdict verdict--junior' },
-  fail: { text: '⚠️ Review Required - Keep Practicing', className: 'score-badge-desc badge badge-fail verdict' },
+  pass: { text: 'Pass. Solid mid-level developer.', className: 'score-badge-desc badge badge-success verdict' },
+  junior: { text: 'Passed. Associate or junior level.', className: 'score-badge-desc badge verdict verdict--junior' },
+  fail: { text: 'Review required. Keep practicing.', className: 'score-badge-desc badge badge-fail verdict' },
 };
 
 function renderSummary(): void {
@@ -19,7 +19,7 @@ function renderSummary(): void {
   if (!report) return;
 
   byId('scoreCircleText').textContent = `${report.percent}%`;
-  byId('scoreCountsText').textContent = `${report.correct} / ${report.total} Correct`;
+  byId('scoreCountsText').textContent = `${report.correct} of ${report.total} correct`;
 
   const verdict = VERDICTS[report.verdict];
   const badge = byId('scoreVerdictBadge');
@@ -67,7 +67,7 @@ function renderReview(): void {
       const status = correct
         ? '<span class="status-correct">✓ Correct</span>'
         : answer === undefined
-          ? '<span class="status-skipped">⚡ Skipped</span>'
+          ? '<span class="status-skipped">Skipped</span>'
           : '<span class="status-incorrect">✗ Incorrect</span>';
       const rtl = question.category.includes('Arabic') || containsArabic(question.question);
 
@@ -77,10 +77,10 @@ function renderReview(): void {
           let suffix = '';
           if (optionIndex === question.correctAnswer) {
             optionClass = ' correct-choice';
-            suffix = ' ✓ (Correct Answer)';
+            suffix = 'Correct answer';
           } else if (answer === optionIndex) {
             optionClass = ' user-wrong-choice';
-            suffix = ' ✗ (Your Selection)';
+            suffix = 'Your answer';
           }
           return `<div class="review-option${optionClass}"><span>${formatRichText(option)}</span><strong>${suffix}</strong></div>`;
         })
@@ -93,13 +93,13 @@ function renderReview(): void {
               <span class="category-tag">${escapeHtml(question.category)}</span>
               <strong>Question ${index + 1}</strong>
             </div>
-            <div>${status}${flagged ? '<span class="status-flag">🚩 Flagged</span>' : ''}</div>
+            <div>${status}${flagged ? '<span class="status-flag">Flagged</span>' : ''}</div>
           </div>
           <div class="question-text">${formatRichText(question.question)}</div>
           ${question.codeSnippet ? `<pre class="code-block">${escapeHtml(question.codeSnippet)}</pre>` : ''}
           <div class="review-options-list">${options}</div>
           <div class="explanation-box">
-            <span class="explanation-label"><strong>Explanation:</strong></span>
+            <span class="explanation-label"><strong>Explanation</strong></span>
             ${formatRichText(question.explanation)}
           </div>
         </article>`;

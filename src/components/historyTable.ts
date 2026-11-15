@@ -17,12 +17,12 @@ function render(): void {
   const streak = computeStats(history).currentStreak;
   const chip = byId('streakChip');
   chip.hidden = streak === 0;
-  chip.textContent = `🔥 ${streak}-day streak`;
+  chip.textContent = `${streak}-day streak`;
 
   byId<HTMLButtonElement>('clearHistoryBtn').disabled = history.length === 0;
 
   if (history.length === 0) {
-    body.innerHTML = '<tr><td colspan="6" class="empty-row">No attempts logged yet. Show us what you can do!</td></tr>';
+    body.innerHTML = '<tr><td colspan="6" class="empty-row">No attempts yet. Your results will appear here.</td></tr>';
     return;
   }
 
@@ -49,7 +49,7 @@ async function clearHistory(): Promise<void> {
     body: signedIn
       ? 'This permanently deletes your attempt history from this device and from your cloud account.'
       : 'Are you sure you want to clear your local history log? This action is permanent.',
-    confirmLabel: 'Clear Data',
+    confirmLabel: 'Clear history',
     danger: true,
   });
   if (!confirmed) return;

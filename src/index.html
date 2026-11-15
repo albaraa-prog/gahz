@@ -9,9 +9,8 @@
     <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/styles/base.css">
-    <link rel="stylesheet" href="./assets/styles/app.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/styles/main.css">
 </head>
 <body>
 
@@ -26,7 +25,7 @@
         <div class="header-controls">
             <span class="status-chip" id="syncStatusChip" data-status="guest" hidden></span>
             <div id="accountSlot"></div>
-            <button class="theme-toggle" id="themeToggleBtn" type="button" aria-label="Toggle theme">🌙</button>
+            <button class="theme-toggle" id="themeToggleBtn" type="button">Light</button>
         </div>
     </header>
 
@@ -36,65 +35,71 @@
         <section id="homeScreen" class="screen active">
             <div id="homeNotices"></div>
 
-            <div class="welcome-card">
-                <h2>🎯 Start Your Practice Exam</h2>
-                <p id="welcomeBlurb">Test your skills with a randomly mixed set of questions from our complete question bank. Every session is randomized!</p>
+            <div class="hero">
+                <div class="hero-copy">
+                    <p class="eyebrow">Open-source interview practice</p>
+                    <h2 class="display">Walk in already knowing the answers.</h2>
+                    <p class="lead" id="welcomeBlurb">Loading the question bank…</p>
 
-                <div class="study-mode-wrap">
-                    <label class="study-mode-container">
-                        <input type="checkbox" id="studyModeCheckbox" checked>
-                        <span>📖 <strong>Study Mode:</strong> Show instant correctness and explanations upon selecting an answer</span>
-                    </label>
+                    <div class="study-mode-wrap">
+                        <label class="study-mode-container">
+                            <input type="checkbox" id="studyModeCheckbox" checked>
+                            <span><strong>Study mode.</strong> Show whether you were right, and why, as soon as you answer.</span>
+                        </label>
+                    </div>
+
+                    <div class="home-actions">
+                        <button class="btn btn-lg" type="button" data-preset="standard" disabled>Start mixed exam · 25 min</button>
+                        <button class="link-btn" type="button" id="customConfigToggle" aria-expanded="false" aria-controls="customConfigPanel">Build a custom quiz</button>
+                    </div>
                 </div>
-
-                <div class="home-actions">
-                    <button class="btn btn-lg" type="button" data-preset="standard" disabled>🚀 Start Randomized Exam (25m)</button>
-                    <button class="btn btn-outline btn-rounded" type="button" id="customConfigToggle" aria-expanded="false" aria-controls="customConfigPanel">⚙️ Custom Categories Drill</button>
+                <div class="hero-visual" aria-hidden="true">
+                    <canvas id="constellation"></canvas>
                 </div>
             </div>
 
             <!-- Custom Config Panel -->
             <div class="custom-config" id="customConfigPanel">
-                <h3 class="config-title">Configure Custom Quiz</h3>
+                <h3 class="config-title">Build a custom quiz</h3>
                 <div class="config-grid">
                     <div class="config-group">
-                        <label for="customQuestionCount">Questions Count</label>
+                        <label for="customQuestionCount">Number of questions</label>
                         <input type="number" id="customQuestionCount" min="5" max="100" value="25">
                     </div>
                     <div class="config-group">
-                        <label for="customTimer">Time Limit (Minutes)</label>
+                        <label for="customTimer">Time limit (minutes)</label>
                         <input type="number" id="customTimer" min="1" max="120" value="25">
                     </div>
                     <div class="config-group config-group--end">
                         <label class="checkbox-container">
                             <input type="checkbox" id="selectAllCategories" checked>
-                            <strong>Select All Categories</strong>
+                            <strong>Select all categories</strong>
                         </label>
                     </div>
                 </div>
 
                 <div class="config-group">
-                    <span id="categoriesLabel"><strong>Include Categories</strong></span>
+                    <span id="categoriesLabel">Include categories</span>
                     <div class="category-selection-grid" id="categoryTogglesContainer" role="group" aria-labelledby="categoriesLabel"></div>
                 </div>
 
                 <div class="config-actions">
                     <button class="btn btn-outline" type="button" id="customConfigCancel">Cancel</button>
-                    <button class="btn" type="button" id="customConfigStart">Start Custom Quiz</button>
+                    <button class="btn" type="button" id="customConfigStart">Start custom quiz</button>
                 </div>
             </div>
 
             <!-- Quiz Presets -->
-            <h3 class="section-title">Focused Practice Presets</h3>
+            <h3 class="section-title">Focused practice</h3>
             <div class="quiz-modes" id="presetCards"></div>
 
             <!-- History Section -->
             <div class="history-section" id="historySection">
                 <h3>
-                    <span>📊 Performance History</span>
+                    <span>Your history</span>
                     <span class="history-actions">
                         <span class="streak-chip" id="streakChip" hidden></span>
-                        <button class="btn btn-outline btn-danger btn-sm" type="button" id="clearHistoryBtn">Clear Data</button>
+                        <button class="btn btn-outline btn-danger btn-sm" type="button" id="clearHistoryBtn">Clear history</button>
                     </span>
                 </h3>
                 <div class="history-table-wrapper">
@@ -125,7 +130,7 @@
                             <span class="difficulty-tag" id="currentDifficultyTag"></span>
                         </span>
                         <div class="timer-container" id="quizTimer" role="timer" aria-label="Time remaining">
-                            ⏱️ <span id="timerDigits">25:00</span>
+                            <span id="timerDigits">25:00</span>
                         </div>
                     </div>
 
@@ -140,25 +145,25 @@
 
                     <div class="quiz-actions">
                         <button class="btn btn-outline" type="button" id="prevBtn">← Previous</button>
-                        <button class="btn btn-outline flag-btn" type="button" id="flagBtn" aria-pressed="false">🚩 Flag for Review</button>
+                        <button class="btn btn-outline flag-btn" type="button" id="flagBtn" aria-pressed="false">Flag for review</button>
                         <button class="btn" type="button" id="nextBtn">Next →</button>
                     </div>
                 </div>
 
                 <aside class="quiz-sidebar">
                     <div class="sidebar-title">
-                        <span>Question Map</span>
+                        <span>Question map</span>
                         <span class="map-progress" id="mapProgressLabel">0/25</span>
                     </div>
 
                     <div class="question-grid" id="questionGridMap"></div>
 
-                    <button class="btn btn-danger btn-block mt-1" type="button" id="finishBtn">💾 Finish & Submit Exam</button>
+                    <button class="btn btn-outline btn-block mt-1" type="button" id="finishBtn">Finish and submit</button>
 
                     <div class="sidebar-study">
                         <label class="checkbox-container">
                             <input type="checkbox" id="sidebarStudyMode" checked>
-                            <span>📖 Study Mode (Feedback)</span>
+                            <span>Study mode (instant feedback)</span>
                         </label>
                     </div>
 
@@ -184,26 +189,26 @@
                     </div>
                     <div class="score-badge-desc" id="scoreVerdictBadge"></div>
                     <p class="score-counts" id="scoreCountsText"></p>
-                    <button class="btn btn-block mt-15" type="button" id="returnHomeBtn">🏠 Try Another Test</button>
+                    <button class="btn mt-15" type="button" id="returnHomeBtn">Try another exam</button>
                 </div>
 
                 <div class="results-details-card">
-                    <h3 class="results-heading">Domain Analytics</h3>
-                    <p class="results-intro">Understand your topic-specific performance to isolate core areas of improvement.</p>
+                    <h3 class="results-heading">By topic</h3>
+                    <p class="results-intro">See which topics are solid and which ones need another pass.</p>
                     <div class="performance-bars" id="topicPerformanceBars"></div>
                 </div>
             </div>
 
             <div class="review-section">
                 <h3 class="review-heading">
-                    <span>📝 Exam Review</span>
+                    <span>Review</span>
                     <small>Every question with the correct answer and its explanation</small>
                 </h3>
 
                 <div class="review-filters" id="reviewFilters">
-                    <button class="filter-btn active" type="button" data-filter="all">All Questions (<span id="filterAllCount">0</span>)</button>
+                    <button class="filter-btn active" type="button" data-filter="all">All (<span id="filterAllCount">0</span>)</button>
                     <button class="filter-btn" type="button" data-filter="correct">Correct (<span id="filterCorrectCount">0</span>)</button>
-                    <button class="filter-btn" type="button" data-filter="incorrect">Incorrect/Skipped (<span id="filterIncorrectCount">0</span>)</button>
+                    <button class="filter-btn" type="button" data-filter="incorrect">Incorrect or skipped (<span id="filterIncorrectCount">0</span>)</button>
                     <button class="filter-btn" type="button" data-filter="flagged">Flagged (<span id="filterFlaggedCount">0</span>)</button>
                 </div>
 
@@ -219,7 +224,7 @@
             <div class="modal-title" id="appDialogTitle"></div>
             <div class="modal-body" id="appDialogBody"></div>
             <div class="modal-actions">
-                <button class="btn btn-outline" type="button" id="appDialogCancel">Go Back</button>
+                <button class="btn btn-outline" type="button" id="appDialogCancel">Go back</button>
                 <button class="btn" type="button" id="appDialogConfirm">OK</button>
             </div>
         </div>
@@ -264,7 +269,6 @@
         <p>© 2026 DevQuiz Studio. Open source under the MIT License.</p>
         <div class="footer-links">
             <span id="questionCountLabel"></span>
-            <span>•</span>
             <button class="link-btn" type="button" id="privacyBtn">Privacy</button>
         </div>
     </footer>

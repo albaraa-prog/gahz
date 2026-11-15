@@ -54,7 +54,7 @@ with the title and description shown on the home screen. No other change is need
 - Components render from the store and call services; they do not call each other or touch `localStorage`.
 - All browser storage goes through `src/services/storage.ts`.
 - No inline `style="..."` attributes or inline scripts: the site ships a strict Content-Security-Policy.
-  Use a class in `src/assets/styles/app.css`.
+  Use a class in `src/assets/styles/main.css`.
 - Escape anything that did not come from our own templates with `escapeHtml` or `formatRichText`.
 - Add or update a unit test in `tests/` for logic changes.
 

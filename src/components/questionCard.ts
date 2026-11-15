@@ -10,13 +10,12 @@ import { showDialog } from './modal';
 export async function confirmSubmit(): Promise<void> {
   const unanswered = unansweredCount();
   const confirmed = await showDialog({
-    title: 'Submit Exam?',
+    title: 'Submit exam?',
     body:
       unanswered > 0
         ? { html: `You have <strong>${unanswered} unanswered</strong> question(s). Are you sure you want to finish and submit?` }
         : 'Excellent work! All questions have been answered. Would you like to submit and grade your exam now?',
-    confirmLabel: 'Submit & Finish',
-    danger: true,
+    confirmLabel: 'Submit and finish',
   });
   if (confirmed) submitQuiz();
 }
@@ -43,7 +42,7 @@ function render(): void {
   difficulty.dataset.level = question.difficulty;
 
   byId('quizProgressBar').style.width = `${(index / total) * 100}%`;
-  byId('questionText').innerHTML = `<strong>Q${index + 1}.</strong> ${formatRichText(question.question)}`;
+  byId('questionText').innerHTML = `<strong>${String(index + 1).padStart(2, '0')}</strong>&ensp;${formatRichText(question.question)}`;
 
   const code = byId('questionCodeBlock');
   code.hidden = !question.codeSnippet;
@@ -77,14 +76,14 @@ function render(): void {
   const explanation = byId('quizExplanationBox');
   explanation.hidden = !reveal;
   explanation.innerHTML = reveal
-    ? `<span class="explanation-label"><strong>Explanation:</strong></span> ${formatRichText(question.explanation)}`
+    ? `<span class="explanation-label"><strong>Explanation</strong></span> ${formatRichText(question.explanation)}`
     : '';
 
   byId<HTMLButtonElement>('prevBtn').disabled = index === 0;
   const next = byId('nextBtn');
   const last = index === total - 1;
-  next.textContent = last ? 'Review & Finish' : 'Next →';
-  next.className = last ? 'btn btn-outline' : 'btn';
+  next.textContent = last ? 'Review and finish' : 'Next';
+  next.className = 'btn';
 
   const flag = byId('flagBtn');
   const flagged = Boolean(state.flags[question.id]);

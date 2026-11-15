@@ -43,10 +43,10 @@ export const PRESETS: readonly Preset[] = [
     minutes: 25,
     pick: inBank('oman-enterprise'),
     card: {
-      title: '🇴🇲 Oman Enterprise & Banking Tech',
+      title: 'Oman Enterprise & Banking Tech',
       description:
         'Scenario-based interview questions modelled on what banks, telecom operators, consulting firms and government entities in Oman and the GCC look for: enterprise backends and ERP integration, Oracle and PostgreSQL, production incidents and security judgment, resilience, and stakeholder communication.',
-      extraChip: 'GCC Interview Track',
+      extraChip: 'GCC interview track',
       accent: 'oman',
     },
   },
@@ -64,10 +64,10 @@ export const PRESETS: readonly Preset[] = [
       'APIs & Data Integration (REST, GraphQL, WebSockets)',
     ]),
     card: {
-      title: '💙 Senior Flutter Engineer (Thawani Fintech)',
+      title: 'Senior Flutter Engineer (Thawani Fintech)',
       description:
         'Complete mastery pack: Junior-to-Senior Flutter/Dart, Clean Architecture, Provider, Mobile Security (SSL Pinning, Biometrics, JWT), Hive/SQLite, QR/NFC Payments, Deep Links, Flavors, and Performance.',
-      extraChip: 'Fintech Special',
+      extraChip: 'Fintech special',
       accent: 'blue',
     },
   },
@@ -83,7 +83,7 @@ export const PRESETS: readonly Preset[] = [
       'CS & Networks',
     ]),
     card: {
-      title: '🌐 APIs, REST & Networking Protocols',
+      title: 'APIs, REST & Networking Protocols',
       description:
         'Master RESTful design, HTTP/2 & HTTP/3, WebSockets, gRPC, TLS 1.3, TCP/IP, DNS, Caching, CORS, Rate Limiting, and Webhooks.',
       accent: 'violet',
@@ -101,7 +101,7 @@ export const PRESETS: readonly Preset[] = [
       'Databases',
     ]),
     card: {
-      title: '📚 CS Fundamentals & Systems',
+      title: 'CS Fundamentals & Systems',
       description:
         'Core foundations: algorithms, data structures (Trees, Graphs, HashTables), memory allocation, concurrency, and OOP principles.',
     },
@@ -113,7 +113,7 @@ export const PRESETS: readonly Preset[] = [
     minutes: 15,
     pick: inCategories(['Logic & IQ']),
     card: {
-      title: '🧠 Logic & IQ Drill',
+      title: 'Logic & IQ Drill',
       description: 'Test your problem-solving speed with 15 logical reasoning and puzzle questions.',
     },
   },
@@ -124,7 +124,7 @@ export const PRESETS: readonly Preset[] = [
     minutes: 10,
     pick: (all) => all.filter((q) => q.category.includes('Arabic')),
     card: {
-      title: '🇸🇦 الأسئلة باللغة العربية',
+      title: 'الأسئلة باللغة العربية',
       description: 'أسئلة تدريبية ممزوجة باللغة العربية تختبر أساسيات البرمجة وعلم الحاسوب.',
       rtl: true,
     },

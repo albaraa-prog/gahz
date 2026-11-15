@@ -84,4 +84,6 @@ export function initCustomConfig(): void {
 
   render();
   store.subscribe(render, ['categories', 'allQuestions', 'customConfig']);
+  // Category names are data and stay as written; they read left to right.
+  byId('categoryTogglesContainer').lang = 'en';
 }

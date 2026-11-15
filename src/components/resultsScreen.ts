@@ -3,27 +3,36 @@
 import type { ReviewFilter, VerdictLevel } from '../types';
 import { returnToHome } from '../services/quizEngine';
 import { byId, closestFrom, svgById } from '../utils/dom';
-import { containsArabic, escapeHtml, formatRichText } from '../utils/helpers';
+import { escapeHtml, formatRichText } from '../utils/helpers';
+import { t, type TranslationKey } from '../utils/i18n';
 import { state, store } from '../utils/state';
+import { questionDirection } from './questionCard';
 
 const RING_CIRCUMFERENCE = 440;
 
-const VERDICTS: Record<VerdictLevel, { text: string; className: string }> = {
-  pass: { text: 'Pass. Solid mid-level developer.', className: 'score-badge-desc badge badge-success verdict' },
-  junior: { text: 'Passed. Associate or junior level.', className: 'score-badge-desc badge verdict verdict--junior' },
-  fail: { text: 'Review required. Keep practicing.', className: 'score-badge-desc badge badge-fail verdict' },
+const VERDICTS: Record<VerdictLevel, { key: TranslationKey; className: string }> = {
+  pass: { key: 'verdict.pass', className: 'score-badge-desc badge-success' },
+  junior: { key: 'verdict.junior', className: 'score-badge-desc verdict--junior' },
+  fail: { key: 'verdict.fail', className: 'score-badge-desc badge-fail' },
 };
 
-function renderSummary(): void {
+const FILTER_LABEL: Record<ReviewFilter, TranslationKey> = {
+  all: 'filter.all',
+  correct: 'filter.correct',
+  incorrect: 'filter.incorrect',
+  flagged: 'filter.flagged',
+};
+
+function renderSummary(animate: boolean): void {
   const report = state.lastReport;
   if (!report) return;
 
   byId('scoreCircleText').textContent = `${report.percent}%`;
-  byId('scoreCountsText').textContent = `${report.correct} of ${report.total} correct`;
+  byId('scoreCountsText').textContent = t('results.counts', { correct: report.correct, total: report.total });
 
   const verdict = VERDICTS[report.verdict];
   const badge = byId('scoreVerdictBadge');
-  badge.textContent = verdict.text;
+  badge.textContent = t(verdict.key);
   badge.className = verdict.className;
 
   const bars = byId('topicPerformanceBars');
@@ -32,22 +41,27 @@ function renderSummary(): void {
       const percent = Math.round((stat.correct / stat.total) * 100);
       return `
         <div class="perf-bar-item">
-          <div class="perf-label">${escapeHtml(stat.category)}</div>
+          <div class="perf-label" dir="auto">${escapeHtml(stat.category)}</div>
           <div class="perf-track"><div class="perf-fill" data-percent="${percent}"></div></div>
-          <div class="perf-percent">${percent}%</div>
+          <div class="perf-percent" dir="ltr">${percent}%</div>
         </div>`;
     })
     .join('');
 
-  // Start from empty, then set the real values on the next frame so the CSS transitions run.
   const ring = svgById('scoreCircleFill');
-  ring.style.strokeDashoffset = String(RING_CIRCUMFERENCE);
-  requestAnimationFrame(() => {
+  const fill = (): void => {
     ring.style.strokeDashoffset = String(RING_CIRCUMFERENCE - (RING_CIRCUMFERENCE * report.percent) / 100);
-    bars.querySelectorAll<HTMLElement>('.perf-fill').forEach((fill) => {
-      fill.style.width = `${fill.dataset.percent ?? '0'}%`;
+    bars.querySelectorAll<HTMLElement>('.perf-fill').forEach((bar) => {
+      bar.style.width = `${bar.dataset.percent ?? '0'}%`;
     });
-  });
+  };
+  if (animate) {
+    // Start from empty, then set the real values on the next frame so the CSS transitions run.
+    ring.style.strokeDashoffset = String(RING_CIRCUMFERENCE);
+    requestAnimationFrame(fill);
+  } else {
+    fill();
+  }
 }
 
 function renderReview(): void {
@@ -65,11 +79,11 @@ function renderReview(): void {
 
       const cardClass = correct ? 'correct-card' : answer === undefined ? 'unanswered-card' : 'incorrect-card';
       const status = correct
-        ? '<span class="status-correct">✓ Correct</span>'
+        ? `<span class="status-correct">${t('review.correct')}</span>`
         : answer === undefined
-          ? '<span class="status-skipped">Skipped</span>'
-          : '<span class="status-incorrect">✗ Incorrect</span>';
-      const rtl = question.category.includes('Arabic') || containsArabic(question.question);
+          ? `<span class="status-skipped">${t('review.skipped')}</span>`
+          : `<span class="status-incorrect">${t('review.incorrect')}</span>`;
+      const direction = questionDirection(question);
 
       const options = question.options
         .map((option, optionIndex) => {
@@ -77,39 +91,47 @@ function renderReview(): void {
           let suffix = '';
           if (optionIndex === question.correctAnswer) {
             optionClass = ' correct-choice';
-            suffix = 'Correct answer';
+            suffix = t('review.correctAnswer');
           } else if (answer === optionIndex) {
             optionClass = ' user-wrong-choice';
-            suffix = 'Your answer';
+            suffix = t('review.yourAnswer');
           }
           return `<div class="review-option${optionClass}"><span>${formatRichText(option)}</span><strong>${suffix}</strong></div>`;
         })
         .join('');
 
       return `
-        <article class="review-item ${cardClass}${rtl ? ' rtl' : ''}" data-correct="${String(correct)}" data-flagged="${String(flagged)}">
+        <article class="review-item ${cardClass}" data-correct="${String(correct)}" data-flagged="${String(flagged)}">
           <div class="review-status-header">
             <div>
-              <span class="category-tag">${escapeHtml(question.category)}</span>
-              <strong>Question ${index + 1}</strong>
+              <span class="category-tag" dir="auto">${escapeHtml(question.category)}</span>
+              <strong>${t('review.question', { n: index + 1 })}</strong>
             </div>
-            <div>${status}${flagged ? '<span class="status-flag">Flagged</span>' : ''}</div>
+            <div>${status}${flagged ? `<span class="status-flag">${t('review.flagged')}</span>` : ''}</div>
           </div>
-          <div class="question-text">${formatRichText(question.question)}</div>
-          ${question.codeSnippet ? `<pre class="code-block">${escapeHtml(question.codeSnippet)}</pre>` : ''}
-          <div class="review-options-list">${options}</div>
-          <div class="explanation-box">
-            <span class="explanation-label"><strong>Explanation</strong></span>
-            ${formatRichText(question.explanation)}
+          <div dir="${direction}" lang="${direction === 'rtl' ? 'ar' : 'en'}">
+            <div class="question-text">${formatRichText(question.question)}</div>
+            ${question.codeSnippet ? `<pre class="code-block" dir="ltr">${escapeHtml(question.codeSnippet)}</pre>` : ''}
+            <div class="review-options-list">${options}</div>
+            <div class="explanation-box">
+              <span class="explanation-label"><strong>${t('quiz.explanation')}</strong></span>
+              ${formatRichText(question.explanation)}
+            </div>
           </div>
         </article>`;
     })
     .join('');
 
-  byId('filterAllCount').textContent = String(questions.length);
-  byId('filterCorrectCount').textContent = String(correctCount);
-  byId('filterIncorrectCount').textContent = String(questions.length - correctCount);
-  byId('filterFlaggedCount').textContent = String(flaggedCount);
+  const counts: Record<ReviewFilter, number> = {
+    all: questions.length,
+    correct: correctCount,
+    incorrect: questions.length - correctCount,
+    flagged: flaggedCount,
+  };
+  document.querySelectorAll<HTMLButtonElement>('#reviewFilters .filter-btn').forEach((button) => {
+    const filter = FILTERS.find((f) => f === button.dataset.filter);
+    if (filter) button.textContent = t(FILTER_LABEL[filter], { n: counts[filter] });
+  });
 }
 
 function applyFilter(): void {
@@ -137,11 +159,12 @@ export function initResultsScreen(): void {
     if (filter) state.reviewFilter = filter;
   });
 
-  store.subscribe(() => {
+  store.subscribe((_state, changed) => {
     if (state.screen !== 'results') return;
-    renderSummary();
+    // A language switch re-renders in place without replaying the score animation.
+    renderSummary(!changed.has('locale') || changed.has('lastReport'));
     renderReview();
     applyFilter();
-  }, ['lastReport', 'screen']);
+  }, ['lastReport', 'screen', 'locale']);
   store.subscribe(applyFilter, ['reviewFilter']);
 }

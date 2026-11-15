@@ -4,6 +4,7 @@
  */
 
 import { byId } from '../utils/dom';
+import { t } from '../utils/i18n';
 
 let lastFocused: Element | null = null;
 
@@ -70,12 +71,12 @@ export function showDialog(options: DialogOptions): Promise<boolean> {
   else body.innerHTML = options.body.html;
 
   const confirm = byId<HTMLButtonElement>('appDialogConfirm');
-  confirm.textContent = options.confirmLabel ?? 'OK';
+  confirm.textContent = options.confirmLabel ?? t('dialog.ok');
   confirm.className = options.danger ? 'btn btn-danger' : 'btn';
 
   const cancel = byId<HTMLButtonElement>('appDialogCancel');
   cancel.hidden = options.cancelLabel === null;
-  cancel.textContent = options.cancelLabel ?? 'Go back';
+  cancel.textContent = options.cancelLabel ?? t('dialog.back');
 
   return new Promise<boolean>((resolve) => {
     resolveCurrent = resolve;

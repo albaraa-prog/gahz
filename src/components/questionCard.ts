@@ -1,21 +1,25 @@
 /** The active question: text, code snippet, options, explanation and navigation. */
 
 import { navigate, selectOption, setStudyMode, submitQuiz, toggleFlag, unansweredCount } from '../services/quizEngine';
+import type { Question } from '../types';
 import { byId, closestFrom } from '../utils/dom';
 import { containsArabic, formatRichText } from '../utils/helpers';
+import { t } from '../utils/i18n';
 import { state, store } from '../utils/state';
 import { showDialog } from './modal';
+
+/** Questions are written in English or Arabic, independent of the interface language. */
+export function questionDirection(question: Question): 'rtl' | 'ltr' {
+  return question.category.includes('Arabic') || containsArabic(question.question) ? 'rtl' : 'ltr';
+}
 
 /** Shared by the Next button on the last question and the sidebar's Finish button. */
 export async function confirmSubmit(): Promise<void> {
   const unanswered = unansweredCount();
   const confirmed = await showDialog({
-    title: 'Submit exam?',
-    body:
-      unanswered > 0
-        ? { html: `You have <strong>${unanswered} unanswered</strong> question(s). Are you sure you want to finish and submit?` }
-        : 'Excellent work! All questions have been answered. Would you like to submit and grade your exam now?',
-    confirmLabel: 'Submit and finish',
+    title: t('submit.title'),
+    body: unanswered > 0 ? { html: t('submit.unanswered', { n: unanswered }) } : t('submit.allAnswered'),
+    confirmLabel: t('submit.confirm'),
   });
   if (confirmed) submitQuiz();
 }
@@ -30,15 +34,15 @@ function render(): void {
   const answer = state.answers[question.id];
   const answered = answer !== undefined;
   const reveal = state.studyMode && answered;
-  const rtl = question.category.includes('Arabic') || containsArabic(question.question);
+  const direction = questionDirection(question);
 
-  const main = byId('quizMain');
-  main.classList.toggle('rtl', rtl);
-  main.lang = rtl ? 'ar' : 'en';
+  const content = byId('questionContent');
+  content.dir = direction;
+  content.lang = direction === 'rtl' ? 'ar' : 'en';
 
   byId('currentCategoryTag').textContent = question.category;
   const difficulty = byId('currentDifficultyTag');
-  difficulty.textContent = question.difficulty;
+  difficulty.textContent = t(`difficulty.${question.difficulty}`);
   difficulty.dataset.level = question.difficulty;
 
   byId('quizProgressBar').style.width = `${(index / total) * 100}%`;
@@ -76,14 +80,11 @@ function render(): void {
   const explanation = byId('quizExplanationBox');
   explanation.hidden = !reveal;
   explanation.innerHTML = reveal
-    ? `<span class="explanation-label"><strong>Explanation</strong></span> ${formatRichText(question.explanation)}`
+    ? `<span class="explanation-label"><strong>${t('quiz.explanation')}</strong></span> ${formatRichText(question.explanation)}`
     : '';
 
   byId<HTMLButtonElement>('prevBtn').disabled = index === 0;
-  const next = byId('nextBtn');
-  const last = index === total - 1;
-  next.textContent = last ? 'Review and finish' : 'Next';
-  next.className = 'btn';
+  byId('nextBtn').textContent = index === total - 1 ? t('quiz.reviewFinish') : t('quiz.next');
 
   const flag = byId('flagBtn');
   const flagged = Boolean(state.flags[question.id]);
@@ -111,5 +112,5 @@ export function initQuestionCard(): void {
     setStudyMode((event.target as HTMLInputElement).checked);
   });
 
-  store.subscribe(render, ['screen', 'questions', 'currentIdx', 'answers', 'flags', 'studyMode']);
+  store.subscribe(render, ['screen', 'questions', 'currentIdx', 'answers', 'flags', 'studyMode', 'locale']);
 }

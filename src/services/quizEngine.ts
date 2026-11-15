@@ -5,10 +5,11 @@
 
 import type { Attempt, CustomQuizConfig, Question, SavedSession } from '../types';
 import { clamp, createId, formatAttemptDate, isRecord, randomSample } from '../utils/helpers';
+import { t } from '../utils/i18n';
 import { state, store } from '../utils/state';
 import { track } from './analytics';
 import { addAttempt } from './history';
-import { findPreset } from './presets';
+import { customModeLabel, findPreset } from './presets';
 import { parseQuestion } from './questionLoader';
 import { buildAttemptAnswers, gradeQuiz } from './scoring';
 import { STORAGE_KEYS, readJson, remove, writeJson } from './storage';
@@ -130,7 +131,7 @@ function startTimer(): void {
 // -------------------------------------------------------------------- actions
 
 function begin(questions: Question[], minutes: number, modeLabel: string): void {
-  if (questions.length === 0) throw new QuizStartError('No questions are available for this selection.');
+  if (questions.length === 0) throw new QuizStartError(t('start.noQuestions'));
   const totalSeconds = Math.round(minutes * 60);
   store.set({
     questions,
@@ -151,7 +152,7 @@ function begin(questions: Question[], minutes: number, modeLabel: string): void 
 
 function requireBank(): Question[] {
   if (state.bankStatus !== 'ready' || state.allQuestions.length === 0) {
-    throw new QuizStartError('The question bank is still loading. Please try again in a moment.');
+    throw new QuizStartError(t('start.loading'));
   }
   return state.allQuestions;
 }
@@ -160,18 +161,18 @@ export function startPreset(presetId: string): void {
   const preset = findPreset(presetId);
   if (!preset) throw new QuizStartError(`Unknown preset "${presetId}".`);
   const pool = preset.pick(requireBank());
-  if (pool.length === 0) throw new QuizStartError('The questions for this preset could not be loaded.');
+  if (pool.length === 0) throw new QuizStartError(t('start.presetEmpty'));
   begin(randomSample(pool, Math.min(preset.count, pool.length)), preset.minutes, preset.modeLabel);
 }
 
 export function startCustomQuiz(config: CustomQuizConfig): void {
   const all = requireBank();
   const selected = config.categories ?? state.categories;
-  if (selected.length === 0) throw new QuizStartError('Please select at least one category to generate questions.');
+  if (selected.length === 0) throw new QuizStartError(t('start.noCategory'));
   const pool = all.filter((q) => selected.includes(q.category));
-  if (pool.length === 0) throw new QuizStartError('No questions found in the selected categories.');
+  if (pool.length === 0) throw new QuizStartError(t('start.noQuestions'));
   const count = Math.min(clamp(config.count, 1, 100), pool.length);
-  begin(randomSample(pool, count), clamp(config.minutes, 1, 120), `Custom (${count} Qs)`);
+  begin(randomSample(pool, count), clamp(config.minutes, 1, 120), customModeLabel(count));
 }
 
 export function resumeQuiz(session: SavedSession): void {

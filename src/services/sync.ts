@@ -14,6 +14,7 @@
 import type { Attempt, UserPreferences } from '../types';
 import { reportError } from '../utils/errors';
 import { clamp, debounce, isRecord } from '../utils/helpers';
+import { t } from '../utils/i18n';
 import { state, store } from '../utils/state';
 import { getFirebase, isFirebaseConfigured } from './firebase';
 import {
@@ -55,7 +56,7 @@ function trackWrite(write: Promise<unknown>, generation: number = syncGeneration
       pendingWrites -= 1;
       if (generation !== syncGeneration || !state.user) return;
       state.syncStatus = 'error';
-      reportError(error, 'Cloud sync failed. Your progress is still saved on this device.');
+      reportError(error, t('error.sync'));
     });
 }
 
@@ -112,7 +113,7 @@ async function pushProfile(): Promise<void> {
 }
 
 const pushProfileSoon = debounce(() => {
-  void pushProfile().catch((error) => reportError(error, 'Cloud sync failed. Your progress is still saved on this device.'));
+  void pushProfile().catch((error) => reportError(error, t('error.sync')));
 }, 1500);
 
 async function pushAttempt(attempt: Attempt): Promise<void> {
@@ -177,7 +178,7 @@ export async function handleSignedIn(uid: string): Promise<void> {
     applyingRemote = false;
     if (generation !== syncGeneration) return;
     state.syncStatus = state.online ? 'error' : 'offline';
-    reportError(error, 'Could not sync with the cloud. Your progress is still saved on this device.');
+    reportError(error, t('error.sync'));
   }
 }
 
@@ -222,7 +223,7 @@ export function initSync(): void {
 
   onAttemptAdded((attempt) => {
     void pushAttempt(attempt).catch((error) =>
-      reportError(error, 'Cloud sync failed. Your progress is still saved on this device.'),
+      reportError(error, t('error.sync')),
     );
   });
 

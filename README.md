@@ -1,12 +1,13 @@
-# DevQuiz Studio
+# Gahz جاهز
 
 [![Live demo](https://img.shields.io/badge/demo-live-04AA6D)](https://gahz-4e276.web.app)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Deploy](https://github.com/albaraa-prog/gahz/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/albaraa-prog/gahz/actions/workflows/firebase-hosting-merge.yml)
 
-An open-source practice platform for learning programming and getting ready for technical interviews.
-320 multiple-choice questions across 28 topics, timed exams, a study mode with instant explanations, and a
-dedicated **Oman & GCC enterprise interview track**.
+Gahz (جاهز, Arabic for "ready") is an open-source practice platform for learning programming and getting
+ready for technical interviews. 320 multiple-choice questions across 28 topics, timed exams, a study mode with
+instant explanations, an **English and Arabic interface**, and a dedicated **Oman & GCC enterprise interview
+track**. It was previously called DevQuiz Studio.
 
 
 ## Features
@@ -20,6 +21,8 @@ dedicated **Oman & GCC enterprise interview track**.
 - **History and streaks**, saved in the browser. An unfinished quiz can be resumed after closing the tab.
 - **Optional cloud sync**: sign in with Email/Password or Google to back up history, settings and stats to
   Firestore and use them on other devices. Without sign-in the app is a fully working guest mode.
+- **English and Arabic interface** with full right-to-left layout. The language follows the browser on the
+  first visit and can be switched from the header.
 - **Dark and light themes**.
 
 ## Tech stack
@@ -41,7 +44,8 @@ Vite, TypeScript (strict), vanilla DOM components, a small Proxy-based reactive 
 │   ├── data/                 Question banks, one JSON file per topic, plus schema/question.schema.json
 │   ├── services/             questionLoader, quizEngine, scoring, presets, history, preferences,
 │   │                         storage (safe localStorage), firebase, auth, sync, analytics
-│   └── utils/                store (reactive state), state (the app store), theme, errors, helpers, dom
+│   └── utils/                store (reactive state), state (the app store), i18n (English and Arabic text),
+│                             theme, errors, helpers, dom
 ├── scripts/
 │   ├── validate-questions.mjs        Schema and cross-file validation (runs before every build)
 │   └── extract-legacy-questions.mjs  One-off migration from the original single-file app
@@ -162,10 +166,23 @@ Questions live in `src/data/*.json`. Each file is an array of objects like this:
 - `options` has exactly four entries and `correctAnswer` is the zero-based index of the right one.
 - `difficulty` is `easy`, `medium` or `hard`.
 - `**bold**` and `` `code` `` are supported in questions, options and explanations.
+- Questions can be written in English or Arabic; the text direction is detected per question.
 - A new file is picked up automatically; a new `category` appears in the custom quiz builder with no code change.
 
 Run `npm run validate:data` before opening a pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) for the
 full guide, including how to add a preset.
+
+## Translations
+
+All interface text lives in `src/utils/i18n.ts` as two dictionaries with the same keys, `en` and `ar`.
+TypeScript refuses to build if a key is missing from the Arabic dictionary. Static markup in `src/index.html`
+opts in with `data-i18n="key"`; components call `t('key')`. Layout uses CSS logical properties, so it mirrors
+automatically when `<html dir>` is `rtl`.
+
+Question content is not translated by the interface language: each question is shown in the language it was
+written in, with its own text direction. To add Arabic questions, add them to a bank like any other question.
+
+Browser storage keys still start with `devquiz-` (the original name) so existing users keep their history.
 
 ## Privacy
 

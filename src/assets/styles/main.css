@@ -1,5 +1,5 @@
 /*
- * DevQuiz Studio design system.
+ * Gahz design system.
  *
  * A flat, dark-first look: a pure black canvas, one violet accent reserved
  * for the primary action, amber for labels and emphasis, and hierarchy built
@@ -32,7 +32,7 @@
     --code-fg: #d6d6d6;
     --overlay: rgba(0, 0, 0, 0.78);
 
-    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-sans: 'Inter', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'Fira Code', ui-monospace, 'Cascadia Code', Consolas, monospace;
 
     --s-6: 6px;
@@ -318,7 +318,7 @@ header {
 /* -------------------------------------------------------------------- home */
 
 .notice {
-    border-left: 2px solid var(--iris);
+    border-inline-start: 2px solid var(--iris);
     padding: var(--s-12) var(--s-18);
     margin-bottom: var(--s-36);
     display: flex;
@@ -328,8 +328,8 @@ header {
     flex-wrap: wrap;
     color: var(--quiet);
 }
-.notice--error { border-left-color: var(--red); }
-.notice--warning { border-left-color: var(--amber); }
+.notice--error { border-inline-start-color: var(--red); }
+.notice--warning { border-inline-start-color: var(--amber); }
 
 .hero {
     display: grid;
@@ -448,9 +448,8 @@ header {
     flex-direction: column-reverse;
     justify-content: flex-end;
     gap: var(--s-18);
-    text-align: left;
+    text-align: start;
 }
-.mode-card[dir="rtl"] { text-align: right; }
 .mode-card[aria-disabled="true"] { opacity: 0.45; cursor: progress; }
 .mode-meta { display: flex; flex-wrap: wrap; gap: 8px; color: var(--amber); }
 .mode-title {
@@ -464,12 +463,12 @@ header {
 .mode-title::after {
     content: '\2192';
     display: inline-block;
-    margin-left: 10px;
+    margin-inline-start: 10px;
     opacity: 0;
     transform: translateX(-6px);
     transition: opacity 0.15s ease, transform 0.15s ease;
 }
-.mode-card[dir="rtl"] .mode-title::after { content: '\2190'; margin-left: 0; margin-right: 10px; transform: translateX(6px); }
+[dir="rtl"] .mode-title::after { content: '\2190'; transform: translateX(6px); }
 .mode-card:hover .mode-title,
 .mode-card:focus-visible .mode-title { color: var(--iris); }
 .mode-card:hover .mode-title::after,
@@ -492,9 +491,9 @@ header {
 .history-actions { display: flex; align-items: center; gap: var(--s-24); flex-wrap: wrap; letter-spacing: 0; }
 .streak-chip { color: var(--amber); }
 .history-table-wrapper { overflow-x: auto; }
-.history-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 15px; }
+.history-table { width: 100%; border-collapse: collapse; text-align: start; font-size: 15px; }
 .history-table th,
-.history-table td { padding: var(--s-18) var(--s-24) var(--s-18) 0; white-space: nowrap; }
+.history-table td { padding-block: var(--s-18); padding-inline: 0 var(--s-24); white-space: nowrap; text-align: start; }
 .history-table th { color: var(--muted); padding-top: 0; }
 .history-table td { color: var(--quiet); border-top: 1px solid var(--line); }
 .history-table td strong { color: var(--fg); font-weight: 400; }
@@ -527,10 +526,9 @@ header {
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    margin-left: var(--s-12);
+    margin-inline-start: var(--s-12);
     color: var(--muted);
 }
-.rtl .difficulty-tag { margin-left: 0; margin-right: var(--s-12); }
 .difficulty-tag[data-level="easy"] { color: var(--verdant-text); }
 .difficulty-tag[data-level="hard"] { color: var(--red); }
 
@@ -650,12 +648,8 @@ code {
 .flag-btn.active,
 .flag-btn.active:hover { border-color: var(--amber); color: var(--amber); background-color: var(--amber-tint); }
 
-/* Right-to-left questions */
-.quiz-main.rtl,
-.quiz-main.rtl .options-list,
-.review-item.rtl { direction: rtl; text-align: right; }
-.quiz-main.rtl .code-block,
-.review-item.rtl .code-block { direction: ltr; text-align: left; }
+/* Code always reads left to right, whatever the question or interface language. */
+.code-block { direction: ltr; text-align: left; }
 
 /* Sidebar */
 .quiz-sidebar { position: sticky; top: var(--s-36); }
@@ -741,7 +735,7 @@ code {
 .performance-bars { display: flex; flex-direction: column; gap: var(--s-24); }
 .perf-bar-item { display: grid; grid-template-columns: minmax(0, 1fr) 48px; gap: 8px var(--s-18); align-items: center; }
 .perf-label { font-size: 15px; color: var(--quiet); grid-column: 1; }
-.perf-percent { color: var(--fg); text-align: right; grid-column: 2; grid-row: 1; font-variant-numeric: tabular-nums; }
+.perf-percent { color: var(--fg); text-align: end; grid-column: 2; grid-row: 1; font-variant-numeric: tabular-nums; }
 .perf-track { grid-column: 1 / -1; height: 2px; background-color: var(--line); overflow: hidden; }
 .perf-fill { height: 100%; background-color: var(--iris); width: 0%; transition: width 1s ease-out; }
 
@@ -792,12 +786,11 @@ code {
     color: var(--muted);
 }
 .review-status-header strong { font-weight: 600; }
-.review-status-header .category-tag { margin-right: var(--s-12); }
-.rtl .review-status-header .category-tag { margin-right: 0; margin-left: var(--s-12); }
+.review-status-header .category-tag { margin-inline-end: var(--s-12); }
 .status-correct { color: var(--verdant-text); }
 .status-skipped { color: var(--amber); }
 .status-incorrect { color: var(--red); }
-.status-flag { margin-left: var(--s-12); color: var(--amber); }
+.status-flag { margin-inline-start: var(--s-12); color: var(--amber); }
 .review-item .question-text { font-size: 24px; margin-bottom: var(--s-24); }
 
 .review-options-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: var(--s-30); }
@@ -865,7 +858,7 @@ code {
 .toast-region {
     position: fixed;
     bottom: var(--s-24);
-    right: var(--s-24);
+    inset-inline-end: var(--s-24);
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -876,15 +869,15 @@ code {
     background: var(--bg);
     color: var(--fg);
     border: 1px solid var(--line-strong);
-    border-left: 2px solid var(--iris);
+    border-inline-start: 2px solid var(--iris);
     border-radius: 12px;
     padding: var(--s-12) var(--s-18);
     font-size: 14px;
     animation: rise 0.25s ease both;
 }
-.toast--success { border-left-color: var(--verdant-text); }
-.toast--warning { border-left-color: var(--amber); }
-.toast--error { border-left-color: var(--red); }
+.toast--success { border-inline-start-color: var(--verdant-text); }
+.toast--warning { border-inline-start-color: var(--amber); }
+.toast--error { border-inline-start-color: var(--red); }
 
 /* ------------------------------------------------------------------ footer */
 
@@ -903,6 +896,48 @@ footer {
 }
 .footer-links { display: flex; align-items: center; gap: var(--s-18); }
 footer .link-btn { font-size: 13px; }
+
+/* ------------------------------------------------------------------ arabic */
+
+/*
+ * Arabic script is cursive: letter-spacing breaks the joins between letters
+ * and there is no upper case, so tracking is reset wherever Arabic is set.
+ * It also needs more line height than Latin at display sizes.
+ */
+:lang(ar) { letter-spacing: 0 !important; }
+:lang(ar) .display { line-height: 1.3; }
+:lang(ar) .section-title,
+:lang(ar) .history-section h3,
+:lang(ar) .results-heading,
+:lang(ar) .review-heading,
+:lang(ar) .mode-title,
+:lang(ar) .modal-title,
+:lang(ar) .config-title,
+:lang(ar) .score-badge-desc { line-height: 1.5; }
+:lang(ar) .question-text { line-height: 1.6; }
+:lang(ar) .eyebrow,
+:lang(ar) .sidebar-title,
+:lang(ar) .mode-meta,
+:lang(ar) .streak-chip,
+:lang(ar) .history-table th,
+:lang(ar) .badge,
+:lang(ar) .status-chip,
+:lang(ar) .filter-btn,
+:lang(ar) .btn,
+:lang(ar) .theme-toggle,
+:lang(ar) .form-field label,
+:lang(ar) .review-status-header,
+:lang(ar) .review-option strong,
+:lang(ar) .explanation-label,
+:lang(ar) .difficulty-tag { font-size: 14px; }
+:lang(ar) .btn-sm { font-size: 13px; }
+/* Thin weights are harder to read in Arabic. */
+:lang(ar) .lead,
+:lang(ar) .mode-description,
+:lang(ar) .explanation-box,
+:lang(ar) .modal-body,
+:lang(ar) .results-intro { font-weight: 300; }
+.logo-icon:lang(ar) { font-size: 16px; line-height: 1; padding-bottom: 4px; }
 
 /* -------------------------------------------------------------- responsive */
 

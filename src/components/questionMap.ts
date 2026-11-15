@@ -2,6 +2,8 @@
 
 import { goToQuestion } from '../services/quizEngine';
 import { byId, closestFrom } from '../utils/dom';
+import { escapeHtml } from '../utils/helpers';
+import { t } from '../utils/i18n';
 import { state, store } from '../utils/state';
 
 function render(): void {
@@ -12,26 +14,26 @@ function render(): void {
     .map((question, index) => {
       const answer = answers[question.id];
       const classes = ['grid-btn'];
-      const labels = [`Question ${index + 1}`];
+      const labels = [t('map.question', { n: index + 1 })];
       if (answer !== undefined) {
         classes.push('answered');
         if (studyMode) {
           // Study mode reveals the result straight away, so the map shows it too.
           const correct = answer === question.correctAnswer;
           classes.push(correct ? 'correct' : 'wrong');
-          labels.push(correct ? 'correct' : 'incorrect');
+          labels.push(t(correct ? 'map.correct' : 'map.incorrect'));
         } else {
-          labels.push('answered');
+          labels.push(t('map.answered'));
         }
       } else {
-        labels.push('unanswered');
+        labels.push(t('map.unanswered'));
       }
       if (flags[question.id]) {
         classes.push('flagged');
-        labels.push('flagged');
+        labels.push(t('map.flagged'));
       }
       if (index === currentIdx) classes.push('current');
-      return `<button type="button" class="${classes.join(' ')}" data-index="${index}" aria-label="${labels.join(', ')}"${
+      return `<button type="button" class="${classes.join(' ')}" data-index="${index}" aria-label="${escapeHtml(labels.join(', '))}"${
         index === currentIdx ? ' aria-current="true"' : ''
       }>${index + 1}</button>`;
     })
@@ -45,5 +47,5 @@ export function initQuestionMap(): void {
     const button = closestFrom(event, '[data-index]');
     if (button) goToQuestion(Number(button.dataset.index));
   });
-  store.subscribe(render, ['screen', 'questions', 'currentIdx', 'answers', 'flags', 'studyMode']);
+  store.subscribe(render, ['screen', 'questions', 'currentIdx', 'answers', 'flags', 'studyMode', 'locale']);
 }

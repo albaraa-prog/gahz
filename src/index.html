@@ -1,30 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DevQuiz Studio: open-source practice exams for programming, CS fundamentals and technical interviews, including an Oman and GCC enterprise track.">
+    <meta name="description" content="Gahz جاهز: open-source practice exams for programming, CS fundamentals and technical interviews, in English and Arabic, with an Oman and GCC enterprise track.">
     <meta name="color-scheme" content="dark light">
-    <title>DevQuiz Studio - Professional Dev & IQ Assessment</title>
+    <title>Gahz جاهز · Programming and interview practice</title>
     <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@200;300;400;600;700&family=Inter:wght@200;300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/styles/main.css">
 </head>
 <body>
 
     <header>
         <div class="logo-container">
-            <div class="logo-icon" aria-hidden="true">DQ</div>
+            <div class="logo-icon" aria-hidden="true" lang="ar">ج</div>
             <div class="logo-text">
-                <h1>DevQuiz Studio</h1>
-                <p>Advanced Developer Assessment</p>
+                <h1>Gahz <span lang="ar">جاهز</span></h1>
             </div>
         </div>
         <div class="header-controls">
             <span class="status-chip" id="syncStatusChip" data-status="guest" hidden></span>
             <div id="accountSlot"></div>
+            <button class="theme-toggle" id="languageToggleBtn" type="button">العربية</button>
             <button class="theme-toggle" id="themeToggleBtn" type="button">Light</button>
         </div>
     </header>
@@ -37,20 +37,20 @@
 
             <div class="hero">
                 <div class="hero-copy">
-                    <p class="eyebrow">Open-source interview practice</p>
-                    <h2 class="display">Walk in already knowing the answers.</h2>
-                    <p class="lead" id="welcomeBlurb">Loading the question bank…</p>
+                    <p class="eyebrow" data-i18n="home.eyebrow">Open-source interview practice</p>
+                    <h2 class="display" data-i18n="home.headline">Be ready before you walk in.</h2>
+                    <p class="lead" id="welcomeBlurb"></p>
 
                     <div class="study-mode-wrap">
                         <label class="study-mode-container">
                             <input type="checkbox" id="studyModeCheckbox" checked>
-                            <span><strong>Study mode.</strong> Show whether you were right, and why, as soon as you answer.</span>
+                            <span><strong data-i18n="home.studyLabel">Study mode.</strong> <span data-i18n="home.studyText">Show whether you were right, and why, as soon as you answer.</span></span>
                         </label>
                     </div>
 
                     <div class="home-actions">
-                        <button class="btn btn-lg" type="button" data-preset="standard" disabled>Start mixed exam · 25 min</button>
-                        <button class="link-btn" type="button" id="customConfigToggle" aria-expanded="false" aria-controls="customConfigPanel">Build a custom quiz</button>
+                        <button class="btn btn-lg" type="button" data-preset="standard" data-i18n="home.start" disabled>Start mixed exam · 25 min</button>
+                        <button class="link-btn" type="button" id="customConfigToggle" aria-expanded="false" aria-controls="customConfigPanel" data-i18n="home.custom">Build a custom quiz</button>
                     </div>
                 </div>
                 <div class="hero-visual" aria-hidden="true">
@@ -60,58 +60,58 @@
 
             <!-- Custom Config Panel -->
             <div class="custom-config" id="customConfigPanel">
-                <h3 class="config-title">Build a custom quiz</h3>
+                <h3 class="config-title" data-i18n="custom.title">Build a custom quiz</h3>
                 <div class="config-grid">
                     <div class="config-group">
-                        <label for="customQuestionCount">Number of questions</label>
+                        <label for="customQuestionCount" data-i18n="custom.count">Number of questions</label>
                         <input type="number" id="customQuestionCount" min="5" max="100" value="25">
                     </div>
                     <div class="config-group">
-                        <label for="customTimer">Time limit (minutes)</label>
+                        <label for="customTimer" data-i18n="custom.minutes">Time limit (minutes)</label>
                         <input type="number" id="customTimer" min="1" max="120" value="25">
                     </div>
                     <div class="config-group config-group--end">
                         <label class="checkbox-container">
                             <input type="checkbox" id="selectAllCategories" checked>
-                            <strong>Select all categories</strong>
+                            <strong data-i18n="custom.selectAll">Select all categories</strong>
                         </label>
                     </div>
                 </div>
 
                 <div class="config-group">
-                    <span id="categoriesLabel">Include categories</span>
-                    <div class="category-selection-grid" id="categoryTogglesContainer" role="group" aria-labelledby="categoriesLabel"></div>
+                    <span id="categoriesLabel" data-i18n="custom.include">Include categories</span>
+                    <div class="category-selection-grid" id="categoryTogglesContainer" role="group" aria-labelledby="categoriesLabel" dir="ltr"></div>
                 </div>
 
                 <div class="config-actions">
-                    <button class="btn btn-outline" type="button" id="customConfigCancel">Cancel</button>
-                    <button class="btn" type="button" id="customConfigStart">Start custom quiz</button>
+                    <button class="btn btn-outline" type="button" id="customConfigCancel" data-i18n="custom.cancel">Cancel</button>
+                    <button class="btn" type="button" id="customConfigStart" data-i18n="custom.start">Start custom quiz</button>
                 </div>
             </div>
 
             <!-- Quiz Presets -->
-            <h3 class="section-title">Focused practice</h3>
+            <h3 class="section-title" data-i18n="home.focused">Focused practice</h3>
             <div class="quiz-modes" id="presetCards"></div>
 
             <!-- History Section -->
             <div class="history-section" id="historySection">
                 <h3>
-                    <span>Your history</span>
+                    <span data-i18n="history.title">Your history</span>
                     <span class="history-actions">
                         <span class="streak-chip" id="streakChip" hidden></span>
-                        <button class="btn btn-outline btn-danger btn-sm" type="button" id="clearHistoryBtn">Clear history</button>
+                        <button class="btn btn-outline btn-danger btn-sm" type="button" id="clearHistoryBtn" data-i18n="history.clear">Clear history</button>
                     </span>
                 </h3>
                 <div class="history-table-wrapper">
                     <table class="history-table">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Mode</th>
-                                <th>Questions</th>
-                                <th>Score (%)</th>
-                                <th>Correct</th>
-                                <th>Result</th>
+                                <th data-i18n="history.date">Date</th>
+                                <th data-i18n="history.mode">Mode</th>
+                                <th data-i18n="history.questions">Questions</th>
+                                <th data-i18n="history.score">Score</th>
+                                <th data-i18n="history.correct">Correct</th>
+                                <th data-i18n="history.result">Result</th>
                             </tr>
                         </thead>
                         <tbody id="historyTableBody"></tbody>
@@ -126,10 +126,10 @@
                 <div class="quiz-main" id="quizMain">
                     <div class="quiz-meta-info">
                         <span>
-                            <span class="category-tag" id="currentCategoryTag">Category</span>
+                            <span class="category-tag" id="currentCategoryTag" dir="auto"></span>
                             <span class="difficulty-tag" id="currentDifficultyTag"></span>
                         </span>
-                        <div class="timer-container" id="quizTimer" role="timer" aria-label="Time remaining">
+                        <div class="timer-container" id="quizTimer" role="timer" data-i18n-aria-label="quiz.timeRemaining" dir="ltr">
                             <span id="timerDigits">25:00</span>
                         </div>
                     </div>
@@ -138,39 +138,42 @@
                         <div class="progress-bar-fill" id="quizProgressBar"></div>
                     </div>
 
-                    <div class="question-text" id="questionText"></div>
-                    <pre class="code-block" id="questionCodeBlock" hidden></pre>
-                    <div class="options-list" id="optionsContainer"></div>
-                    <div class="explanation-box quiz-explanation" id="quizExplanationBox" hidden></div>
+                    <!-- Question content sets its own direction: questions can be in either language. -->
+                    <div id="questionContent">
+                        <div class="question-text" id="questionText"></div>
+                        <pre class="code-block" id="questionCodeBlock" dir="ltr" hidden></pre>
+                        <div class="options-list" id="optionsContainer"></div>
+                        <div class="explanation-box quiz-explanation" id="quizExplanationBox" hidden></div>
+                    </div>
 
                     <div class="quiz-actions">
-                        <button class="btn btn-outline" type="button" id="prevBtn">← Previous</button>
-                        <button class="btn btn-outline flag-btn" type="button" id="flagBtn" aria-pressed="false">Flag for review</button>
-                        <button class="btn" type="button" id="nextBtn">Next →</button>
+                        <button class="btn btn-outline" type="button" id="prevBtn" data-i18n="quiz.prev">Previous</button>
+                        <button class="btn btn-outline flag-btn" type="button" id="flagBtn" aria-pressed="false" data-i18n="quiz.flag">Flag for review</button>
+                        <button class="btn" type="button" id="nextBtn">Next</button>
                     </div>
                 </div>
 
                 <aside class="quiz-sidebar">
                     <div class="sidebar-title">
-                        <span>Question map</span>
-                        <span class="map-progress" id="mapProgressLabel">0/25</span>
+                        <span data-i18n="quiz.map">Question map</span>
+                        <span class="map-progress" id="mapProgressLabel" dir="ltr">0 / 25</span>
                     </div>
 
                     <div class="question-grid" id="questionGridMap"></div>
 
-                    <button class="btn btn-outline btn-block mt-1" type="button" id="finishBtn">Finish and submit</button>
+                    <button class="btn btn-outline btn-block mt-1" type="button" id="finishBtn" data-i18n="quiz.finish">Finish and submit</button>
 
                     <div class="sidebar-study">
                         <label class="checkbox-container">
                             <input type="checkbox" id="sidebarStudyMode" checked>
-                            <span>Study mode (instant feedback)</span>
+                            <span data-i18n="quiz.studySidebar">Study mode (instant feedback)</span>
                         </label>
                     </div>
 
                     <div class="legend">
-                        <div class="legend-item"><div class="legend-color legend-unanswered"></div><span>Unanswered</span></div>
-                        <div class="legend-item"><div class="legend-color legend-answered"></div><span>Answered</span></div>
-                        <div class="legend-item"><div class="legend-color legend-flagged"></div><span>Flagged</span></div>
+                        <div class="legend-item"><div class="legend-color legend-unanswered"></div><span data-i18n="legend.unanswered">Unanswered</span></div>
+                        <div class="legend-item"><div class="legend-color legend-answered"></div><span data-i18n="legend.answered">Answered</span></div>
+                        <div class="legend-item"><div class="legend-color legend-flagged"></div><span data-i18n="legend.flagged">Flagged</span></div>
                     </div>
                 </aside>
             </div>
@@ -185,31 +188,31 @@
                             <circle class="score-circle-bg" cx="80" cy="80" r="70"></circle>
                             <circle class="score-circle-fill" id="scoreCircleFill" cx="80" cy="80" r="70"></circle>
                         </svg>
-                        <div class="score-circle-text" id="scoreCircleText">0%</div>
+                        <div class="score-circle-text" id="scoreCircleText" dir="ltr">0%</div>
                     </div>
                     <div class="score-badge-desc" id="scoreVerdictBadge"></div>
                     <p class="score-counts" id="scoreCountsText"></p>
-                    <button class="btn mt-15" type="button" id="returnHomeBtn">Try another exam</button>
+                    <button class="btn mt-15" type="button" id="returnHomeBtn" data-i18n="results.again">Try another exam</button>
                 </div>
 
                 <div class="results-details-card">
-                    <h3 class="results-heading">By topic</h3>
-                    <p class="results-intro">See which topics are solid and which ones need another pass.</p>
+                    <h3 class="results-heading" data-i18n="results.byTopic">By topic</h3>
+                    <p class="results-intro" data-i18n="results.intro">See which topics are solid and which ones need another pass.</p>
                     <div class="performance-bars" id="topicPerformanceBars"></div>
                 </div>
             </div>
 
             <div class="review-section">
                 <h3 class="review-heading">
-                    <span>Review</span>
-                    <small>Every question with the correct answer and its explanation</small>
+                    <span data-i18n="review.title">Review</span>
+                    <small data-i18n="review.subtitle">Every question with the correct answer and its explanation</small>
                 </h3>
 
                 <div class="review-filters" id="reviewFilters">
-                    <button class="filter-btn active" type="button" data-filter="all">All (<span id="filterAllCount">0</span>)</button>
-                    <button class="filter-btn" type="button" data-filter="correct">Correct (<span id="filterCorrectCount">0</span>)</button>
-                    <button class="filter-btn" type="button" data-filter="incorrect">Incorrect or skipped (<span id="filterIncorrectCount">0</span>)</button>
-                    <button class="filter-btn" type="button" data-filter="flagged">Flagged (<span id="filterFlaggedCount">0</span>)</button>
+                    <button class="filter-btn active" type="button" data-filter="all"></button>
+                    <button class="filter-btn" type="button" data-filter="correct"></button>
+                    <button class="filter-btn" type="button" data-filter="incorrect"></button>
+                    <button class="filter-btn" type="button" data-filter="flagged"></button>
                 </div>
 
                 <div class="review-list" id="reviewQuestionsList"></div>
@@ -233,32 +236,32 @@
     <!-- Sign-in dialog -->
     <div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle" aria-hidden="true">
         <div class="modal-content modal-content--form">
-            <div class="modal-title" id="authModalTitle">Sign in to sync your progress</div>
+            <div class="modal-title" id="authModalTitle" data-i18n="auth.title">Sign in to sync your progress</div>
             <div class="auth-tabs" role="tablist">
-                <button class="filter-btn active" type="button" role="tab" data-auth-tab="signin" aria-selected="true">Sign in</button>
-                <button class="filter-btn" type="button" role="tab" data-auth-tab="register" aria-selected="false">Create account</button>
+                <button class="filter-btn active" type="button" role="tab" data-auth-tab="signin" aria-selected="true" data-i18n="auth.tabSignIn">Sign in</button>
+                <button class="filter-btn" type="button" role="tab" data-auth-tab="register" aria-selected="false" data-i18n="auth.tabRegister">Create account</button>
             </div>
             <form id="authForm" novalidate>
                 <div class="form-field" id="authNameField" hidden>
-                    <label for="authName">Name</label>
-                    <input type="text" id="authName" autocomplete="name" maxlength="80">
+                    <label for="authName" data-i18n="auth.name">Name</label>
+                    <input type="text" id="authName" autocomplete="name" maxlength="80" dir="auto">
                 </div>
                 <div class="form-field">
-                    <label for="authEmail">Email</label>
-                    <input type="email" id="authEmail" autocomplete="email" required>
+                    <label for="authEmail" data-i18n="auth.email">Email</label>
+                    <input type="email" id="authEmail" autocomplete="email" dir="ltr" required>
                 </div>
                 <div class="form-field">
-                    <label for="authPassword">Password</label>
-                    <input type="password" id="authPassword" autocomplete="current-password" minlength="6" required>
+                    <label for="authPassword" data-i18n="auth.password">Password</label>
+                    <input type="password" id="authPassword" autocomplete="current-password" minlength="6" dir="ltr" required>
                 </div>
                 <div class="form-message" id="authMessage" role="alert"></div>
                 <button class="btn btn-block" type="submit" id="authSubmitBtn">Sign in</button>
             </form>
-            <div class="auth-divider">or</div>
-            <button class="btn btn-outline btn-block" type="button" id="googleSignInBtn">Continue with Google</button>
+            <div class="auth-divider" data-i18n="auth.or">or</div>
+            <button class="btn btn-outline btn-block" type="button" id="googleSignInBtn" data-i18n="auth.google">Continue with Google</button>
             <div class="auth-footer">
-                <button class="link-btn" type="button" id="authResetBtn">Forgot password?</button>
-                <button class="link-btn" type="button" id="authCloseBtn">Continue as guest</button>
+                <button class="link-btn" type="button" id="authResetBtn" data-i18n="auth.forgot">Forgot password?</button>
+                <button class="link-btn" type="button" id="authCloseBtn" data-i18n="auth.guest">Continue as guest</button>
             </div>
         </div>
     </div>
@@ -266,14 +269,14 @@
     <div class="toast-region" id="toastRegion" aria-live="polite"></div>
 
     <footer>
-        <p>© 2026 DevQuiz Studio. Open source under the MIT License.</p>
+        <p data-i18n="footer.license">© 2026 Gahz جاهز. Open source under the MIT License.</p>
         <div class="footer-links">
             <span id="questionCountLabel"></span>
-            <button class="link-btn" type="button" id="privacyBtn">Privacy</button>
+            <button class="link-btn" type="button" id="privacyBtn" data-i18n="footer.privacy">Privacy</button>
         </div>
     </footer>
 
-    <noscript>DevQuiz Studio needs JavaScript to run.</noscript>
+    <noscript>Gahz needs JavaScript to run. يحتاج جاهز إلى JavaScript ليعمل.</noscript>
     <script type="module" src="./app.ts"></script>
 </body>
 </html>

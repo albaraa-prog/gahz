@@ -1,4 +1,4 @@
-# Builds DevQuiz Studio and deploys it to Firebase Hosting on every merge to main.
+# Builds Gahz and deploys it to Firebase Hosting on every merge to main.
 #
 # One-time setup in GitHub (Settings > Secrets and variables > Actions):
 #   Secret    FIREBASE_SERVICE_ACCOUNT   JSON key of a service account that can deploy Hosting

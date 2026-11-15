@@ -1,7 +1,7 @@
 {
-  "name": "devquiz-studio",
-  "version": "2.0.0",
-  "description": "Open-source practice platform for programming and technical interview preparation.",
+  "name": "gahz",
+  "version": "2.1.0",
+  "description": "Gahz (جاهز): open-source practice platform for programming and technical interview preparation, in English and Arabic.",
   "private": true,
   "type": "module",
   "license": "MIT",

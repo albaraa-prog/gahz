@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// DevQuiz Studio security rules.
+// Gahz security rules.
 //
 //   /users/{uid}                       profile, settings, stats
 //   /users/{uid}/attempts/{attemptId}  one finished quiz per document

@@ -1,0 +1,100 @@
+[
+  {
+    "id": 169,
+    "category": "Fullstack Web Dev",
+    "difficulty": "medium",
+    "question": "What does HTML stand for in web development?",
+    "options": [
+      "HyperText Markup Language",
+      "HighTech Modern Language",
+      "Hyperlink Text Management Layout",
+      "Hyper Transfer Module Listing"
+    ],
+    "correctAnswer": 0,
+    "explanation": "HTML stands for HyperText Markup Language. It is the standard markup language used to structure web pages and define elements like paragraphs, links, headings, and tables."
+  },
+  {
+    "id": 170,
+    "category": "Fullstack Web Dev",
+    "difficulty": "medium",
+    "question": "In the CSS Box Model, what is the space between the element's actual content area and its outer border called?",
+    "options": [
+      "Margin",
+      "Padding",
+      "Outline",
+      "Gap"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Padding is the space inside the border, directly surrounding the element content. Margin is the spacing outside the border, separation between different elements."
+  },
+  {
+    "id": 171,
+    "category": "Fullstack Web Dev",
+    "difficulty": "medium",
+    "question": "Which HTML element is the correct semantic tag to define a line break?",
+    "options": [
+      "<break>",
+      "<lb>",
+      "<br>",
+      "<div class=\"break\">"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The `<br>` tag is the correct HTML element for creating a single line break. It is an empty/self-closing element that requires no closing tag."
+  },
+  {
+    "id": 172,
+    "category": "Fullstack Web Dev",
+    "difficulty": "medium",
+    "question": "What is the primary security benefit of setting the 'HttpOnly' flag on a Session Cookie?",
+    "options": [
+      "It encrypts the cookie data using AES-256.",
+      "It prevents client-side scripts (like JavaScript's `document.cookie`) from accessing the cookie, mitigating Cross-Site Scripting (XSS) session theft.",
+      "It automatically restricts cookie transmission to HTTP protocol and blocks HTTPS.",
+      "It prevents the cookie from expiring."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The 'HttpOnly' flag restricts cookie access from client-side scripts (e.g., JavaScript). This helps protect sensitive session identifiers from being stolen via Cross-Site Scripting (XSS) attacks."
+  },
+  {
+    "id": 173,
+    "category": "Fullstack Web Dev",
+    "difficulty": "medium",
+    "question": "In Web browsers, what does DNS stand for, and what is its primary role?",
+    "options": [
+      "Domain Name System; it resolves human-friendly website names (e.g. google.com) into numeric IP addresses (e.g. 142.250.190.46).",
+      "Dynamic Network Security; it shields browsers from malware downloads.",
+      "Database Node Server; it distributes SQL queries to global mirror pools.",
+      "Digital Net Selector; it matches browser layout engines to device resolutions."
+    ],
+    "correctAnswer": 0,
+    "explanation": "DNS stands for Domain Name System. It acts as the 'phone book' of the Internet, translating alphabetical domain names into numeric IP addresses that computer systems use to route data packets."
+  },
+  {
+    "id": 174,
+    "category": "Fullstack Web Dev",
+    "difficulty": "medium",
+    "question": "In HTTP request headers, what is the purpose of the 'User-Agent' header?",
+    "options": [
+      "To identify the authenticated user's email address.",
+      "To specify the server's backend database version.",
+      "To identify the client application, operating system, vendor, or version making the web request.",
+      "To sign the API payload using cryptographic public keys."
+    ],
+    "correctAnswer": 2,
+    "explanation": "The User-Agent header contains a characteristic string that allows network protocol peers to identify the application type, operating system, software vendor, or software version of the requesting client."
+  },
+  {
+    "id": 175,
+    "category": "Fullstack Web Dev",
+    "difficulty": "medium",
+    "question": "What is the purpose of a Query Parameter in a URL?",
+    "options": [
+      "To execute raw database updates on the API backend.",
+      "To append optional parameters or filters to a URI, typically formatted as key-value pairs following a question mark (e.g., `?sort=desc`).",
+      "To declare TLS certificate handshakes.",
+      "To force a redirection to standard error pages."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Query parameters (e.g., `?category=books&limit=10`) are appended to a URL after a question mark (?) to pass optional parameters, search queries, pagination, or sorting constraints to the server without changing the resource base path."
+  }
+]

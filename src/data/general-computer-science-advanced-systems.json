@@ -1,0 +1,142 @@
+[
+  {
+    "id": 291,
+    "category": "General Computer Science & Advanced Systems",
+    "difficulty": "hard",
+    "question": "Why does appending elements to a dynamic array (like Dart's `List` or C++ `std::vector`) have an Amortized Time Complexity of O(1), despite occasional O(N) reallocation copies?",
+    "options": [
+      "Because memory allocation in RAM is always free.",
+      "When capacity is exceeded, the array doubles its capacity (geometric growth); doubling means copying occurs exponentially less often, distributing the cost of N reallocations across N insertions so each append averages O(1) constant time.",
+      "Because modern CPUs execute O(N) operations in 0 clock cycles.",
+      "Dynamic arrays are linked lists under the hood."
+    ],
+    "correctAnswer": 1,
+    "explanation": "By growing geometrically (doubling capacity $1 \to 2 \to 4 \to 8 \to dots \to N$), the total copy operations after inserting $N$ items is $1 + 2 + 4 + dots + N/2 < N$. Dividing total work $N$ by $N$ insertions yields an amortized cost of $\frac{O(N)}{N} = O(1)$ per append."
+  },
+  {
+    "id": 292,
+    "category": "General Computer Science & Advanced Systems",
+    "difficulty": "hard",
+    "question": "In Hash Table design, what is the difference between 'Separate Chaining' and 'Open Addressing (Linear Probing)' for collision resolution?",
+    "options": [
+      "Separate Chaining is only used in SQL databases; Open Addressing is for NoSQL.",
+      "Separate Chaining stores colliding elements in a linked list or red-black tree at each bucket index; Open Addressing stores all entries directly in the array table and searches for the next available open slot when collisions occur.",
+      "Open Addressing allows infinite key insertions without resizing.",
+      "Separate Chaining disables hash functions."
+    ],
+    "correctAnswer": 1,
+    "explanation": "In **Separate Chaining** (used by Java HashMap), each bucket index points to a linked list or tree holding colliding entries. In **Open Addressing** (Linear/Quadratic Probing, Robin Hood Hashing), all entries reside in the main table array itself; collisions probe subsequent empty slots, requiring a load factor $alpha < 0.7$ to prevent clustering."
+  },
+  {
+    "id": 293,
+    "category": "General Computer Science & Advanced Systems",
+    "difficulty": "hard",
+    "question": "Why do enterprise databases (PostgreSQL, SQLite, MySQL) use multi-way B-Trees and B+Trees for disk indexes rather than binary search trees (AVL or Red-Black Trees)?",
+    "options": [
+      "Binary trees cannot store numbers larger than 255.",
+      "B-Trees have high branching factors (hundreds of keys per node), keeping tree depth extremely shallow (3-4 levels) and matching node sizes to disk block/page sizes (4KB-16KB), minimizing expensive random disk I/O reads.",
+      "B-Trees eliminate the need for primary keys.",
+      "Red-Black trees cannot be serialized to disk."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Disk I/O is millions of times slower than RAM. A binary tree holding 10,000,000 items has a height of $approx 24$, requiring 24 sequential disk seeks. A B-Tree with a branching factor of 500 has a height of only 3, requiring at most 3 disk block reads to locate any record in millions of rows."
+  },
+  {
+    "id": 294,
+    "category": "General Computer Science & Advanced Systems",
+    "difficulty": "hard",
+    "question": "When finding the shortest path in a graph, which algorithm should be selected for unweighted graphs versus non-negative weighted graphs?",
+    "options": [
+      "Unweighted: Dijkstra; Weighted: Breadth-First Search (BFS)",
+      "Unweighted: Breadth-First Search (BFS) in O(V + E) time; Weighted: Dijkstra's Algorithm using a Min-Priority Queue in O((V + E) log V) time.",
+      "Unweighted: Depth-First Search (DFS); Weighted: Bubble Sort",
+      "All graph algorithms require O(V^3) time."
+    ],
+    "correctAnswer": 1,
+    "explanation": "For **unweighted graphs**, Breadth-First Search (BFS) explores vertices level by level, guaranteeing the shortest path in $O(V + E)$ time. For **weighted graphs with non-negative edge costs**, Dijkstra's algorithm greedily expands the lowest cumulative distance node using a binary heap / priority queue in $O((V + E)log V)$ time."
+  },
+  {
+    "id": 295,
+    "category": "General Computer Science & Advanced Systems",
+    "difficulty": "hard",
+    "question": "Which two data structures are combined to implement an LRU (Least Recently Used) Cache with O(1) Get and O(1) Put operations?",
+    "options": [
+      "Array and Binary Search Tree",
+      "HashMap (for O(1) key-to-node lookup) and a Doubly Linked List (for O(1) node removal, head insertion, and tail eviction of stale elements).",
+      "Stack and Queue",
+      "Min-Heap and Trie"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A standard `HashMap` provides $O(1)$ key lookup but cannot track access recency in $O(1)$. A `Doubly Linked List` maintains recency order: accessed nodes are spliced out and moved to the head in $O(1)$, and when capacity is full, the tail node (least recently used) is evicted in $O(1)$."
+  },
+  {
+    "id": 296,
+    "category": "General Computer Science & Advanced Systems",
+    "difficulty": "hard",
+    "question": "What is the core difference between Stack memory allocation and Heap memory allocation in compiled programming languages?",
+    "options": [
+      "Stack memory is located on the SSD; Heap memory is in CPU registers.",
+      "Stack allocation is fast, automatic, follows strict LIFO order, managed directly by CPU pointer adjustments for local variables, but has a fixed size (risking Stack Overflow); Heap allocation is dynamic for runtime-sized objects, requires manual deallocation or garbage collection, and is subject to memory fragmentation.",
+      "Heap memory is destroyed whenever a function returns.",
+      "Stack memory can store gigabytes of dynamic data."
+    ],
+    "correctAnswer": 1,
+    "explanation": "**Stack memory** stores local primitive variables and function call frames in LIFO order; allocation is simply moving the stack pointer register (extremely fast). **Heap memory** holds dynamically sized objects with arbitrary lifespans; allocation searches free lists, and objects persist until explicitly freed or garbage-collected."
+  },
+  {
+    "id": 297,
+    "category": "General Computer Science & Advanced Systems",
+    "difficulty": "hard",
+    "question": "What is the semantic difference between a Mutex and a Counting Semaphore in concurrent programming?",
+    "options": [
+      "A Mutex is for files; a Semaphore is for network sockets.",
+      "A Mutex (Mutual Exclusion) has ownership semantics and allows only 1 thread at a time into a critical section (only the locking thread can unlock it); a Semaphore maintains a counter of available permits and allows up to N threads concurrent access to a resource pool.",
+      "A Semaphore can only be used on single-core CPUs.",
+      "A Mutex disables CPU interrupts permanently."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A **Mutex** is a locking mechanism with ownership: exactly one thread acquires the lock, and only that same thread can release it. A **Semaphore** is a signaling mechanism with an integer counter: it controls access to a finite pool of $N$ identical resources (e.g. a connection pool of 10 database connections), and any thread can signal/release permits."
+  },
+  {
+    "id": 298,
+    "category": "General Computer Science & Advanced Systems",
+    "difficulty": "hard",
+    "question": "Which four Coffman conditions must simultaneously hold true for a Deadlock to occur in a concurrent system?",
+    "options": [
+      "Fast CPU, High RAM, Low Disk, Network Timeout",
+      "1) Mutual Exclusion, 2) Hold and Wait, 3) No Preemption, 4) Circular Wait.",
+      "1) Encryption, 2) Serialization, 3) Compression, 4) Deserialization.",
+      "1) Read Lock, 2) Write Lock, 3) Shared Lock, 4) Schema Lock."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Deadlock requires all 4 **Coffman Conditions**: 1) **Mutual Exclusion** (resources cannot be shared), 2) **Hold and Wait** (threads holding resources request new ones), 3) **No Preemption** (resources cannot be forcibly taken), 4) **Circular Wait** (Thread A waits for B, B waits for A). Breaking *any single condition* (e.g. enforcing strict global lock ordering) prevents deadlocks."
+  },
+  {
+    "id": 299,
+    "category": "General Computer Science & Advanced Systems",
+    "difficulty": "hard",
+    "question": "According to the CAP theorem and PACELC theorem, what fundamental tradeoff must a distributed banking database make during a network partition (P)?",
+    "options": [
+      "It must convert SQL tables to CSV files.",
+      "During a network Partition (P), the system must choose between Consistency (C - reject or delay writes to prevent stale reads) or Availability (A - accept writes on all nodes risking divergent/inconsistent account balances); financial ledger systems strictly choose CP (Consistency & Partition Tolerance).",
+      "It can achieve 100% Consistency, 100% Availability, and 100% Partition tolerance simultaneously at all times.",
+      "It must shut down all internet routers."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The **CAP Theorem** proves that when network partitions ($P$) occur between distributed nodes, you must choose either **Consistency ($C$)** (nodes refuse writes to guarantee all replicas agree on balance) or **Availability ($A$)** (nodes continue accepting transactions independently, risking split-brain balance anomalies). Financial systems always choose **CP**."
+  },
+  {
+    "id": 300,
+    "category": "General Computer Science & Advanced Systems",
+    "difficulty": "hard",
+    "question": "In systems engineering and queueing theory, what is Little's Law ($L = \\lambda W$) and how is it applied to mobile backend capacity?",
+    "options": [
+      "L is CPU frequency, lambda is bus speed, W is power consumption.",
+      "L (Average number of concurrent requests in system) = lambda (Arrival rate of requests per second) x W (Average response time/latency per request); proving that if API latency doubles from 100ms to 200ms, the server must hold twice as many concurrent connections to handle the same traffic.",
+      "L is bandwidth, lambda is packet loss, W is distance.",
+      "Little's Law is only used in quantum physics."
+    ],
+    "correctAnswer": 1,
+    "explanation": "**Little's Law ($L = lambda W$)** states that the average number of concurrent requests $L$ equals the arrival throughput rate $lambda$ multiplied by the average response time $W$. For example, at 1,000 requests/sec with a 200ms latency ($0.2\text{s}$), the server holds $1000 \times 0.2 = 200$ concurrent connections. If latency spikes to 2 seconds, concurrency demands soar to 2,000, exhausting connection pools."
+  }
+]

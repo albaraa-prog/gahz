@@ -1,0 +1,225 @@
+[
+  {
+    "id": 186,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "What happens when this Dart 3.0+ sealed class pattern matching switch expression is compiled?",
+    "codeSnippet": "sealed class PaymentState {}\nclass PaymentInitial extends PaymentState {}\nclass PaymentProcessing extends PaymentState { final double amount; PaymentProcessing(this.amount); }\nclass PaymentSuccess extends PaymentState { final String txId; PaymentSuccess(this.txId); }\nclass PaymentFailure extends PaymentState { final String error; PaymentFailure(this.error); }\n\nString getStatus(PaymentState state) => switch (state) {\n  PaymentInitial() => 'Ready',\n  PaymentProcessing(:final amount) => 'Processing OMR $amount...',\n  PaymentSuccess(:final txId) => 'Paid! Ref: $txId',\n  // Notice: PaymentFailure is omitted\n};",
+    "options": [
+      "It compiles cleanly with a warning and returns null at runtime if passed PaymentFailure.",
+      "It triggers a compile-time error because switch expressions over sealed class hierarchies must be exhaustive.",
+      "It automatically returns an empty string as a default fallback.",
+      "Sealed classes in Dart 3 only support traditional statement switches, not switch expressions."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Dart 3 introduced sealed classes and exhaustive pattern matching. The compiler knows all direct subtypes within the defining library. If any subtype (such as PaymentFailure) is omitted from a switch expression without a wildcard default (`_`), the compiler raises a compile-time exhaustiveness error, preventing unhandled runtime states."
+  },
+  {
+    "id": 187,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "What is the exact execution and print order of the following Dart Event Loop code?",
+    "codeSnippet": "void main() {\n  print('1');\n  Future(() => print('2'));\n  Future.microtask(() => print('3'));\n  scheduleMicrotask(() => print('4'));\n  Future.value('5').then((val) => print(val));\n  print('6');\n}",
+    "options": [
+      "1 -> 6 -> 3 -> 4 -> 5 -> 2",
+      "1 -> 6 -> 2 -> 3 -> 4 -> 5",
+      "1 -> 3 -> 4 -> 5 -> 6 -> 2",
+      "1 -> 6 -> 5 -> 3 -> 4 -> 2"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Dart's Event Loop prioritizes execution in three phases: 1) Synchronous code runs immediately ('1', '6'). 2) The Microtask Queue is completely drained before processing new event queue items ('3' from Future.microtask, '4' from scheduleMicrotask, and '5' from resolved Future.value then callback). 3) Event Queue macrotasks run last ('2' from Future constructor). Hence: 1, 6, 3, 4, 5, 2."
+  },
+  {
+    "id": 188,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "When processing a large 50MB JSON bank transaction history, which statement best describes Dart Isolates and `Isolate.run()`?",
+    "codeSnippet": "Future<List<Transaction>> parseLargeStatement(String rawJson) async {\n  return await Isolate.run(() {\n    final decoded = jsonDecode(rawJson) as List<dynamic>;\n    return decoded.map((e) => Transaction.fromJson(e)).toList();\n  });\n}",
+    "options": [
+      "Isolates share a single unified heap memory using mutexes, allowing instantaneous pointer swaps without memory allocation.",
+      "Each Dart Isolate has its own independent memory heap and single-threaded event loop; objects are copied or transferred via message passing, preventing race conditions and UI jank.",
+      "Isolate.run() runs synchronously on the main UI thread but pauses screen rendering temporarily.",
+      "Isolates are only supported on Android native builds and are disabled on iOS."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Unlike threads in Java/C++ that share memory and require locks, Dart uses an Actor-based concurrency model where each Isolate possesses its own memory heap and event loop. `Isolate.run()` spawns a worker, performs the heavy decoding off the main UI thread, transfers the result back, and terminates, preventing frame drops."
+  },
+  {
+    "id": 189,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "What happens when multiple widgets attempt to listen to a standard single-subscription `StreamController`?",
+    "codeSnippet": "final controller = StreamController<double>();\nfinal stream = controller.stream;\n\nstream.listen((balance) => print('Widget A: $balance'));\nstream.listen((balance) => print('Widget B: $balance'));\n\ncontroller.add(150.0);",
+    "options": [
+      "Both Widget A and Widget B receive 150.0.",
+      "Throws 'StateError: Bad state: Stream has already been listened to.' on the second listen() call.",
+      "The second listener silently replaces the first listener.",
+      "Widget B receives 150.0 while Widget A receives null."
+    ],
+    "correctAnswer": 1,
+    "explanation": "By default, `StreamController<T>()` produces a single-subscription stream intended for 1-to-1 data flow. Calling `.listen()` a second time throws a StateError. To allow multiple listeners across different widgets, you must use `StreamController<T>.broadcast()` or `stream.asBroadcastStream()`."
+  },
+  {
+    "id": 190,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "What is printed by Dart's canonical constant constructor evaluation?",
+    "codeSnippet": "class Currency {\n  final String code;\n  const Currency(this.code);\n}\n\nvoid main() {\n  const c1 = Currency('OMR');\n  const c2 = Currency('OMR');\n  final c3 = Currency('OMR');\n  \n  print('${identical(c1, c2)} ${identical(c1, c3)} ${c1 == c3}');\n}",
+    "options": [
+      "true true true",
+      "true false false",
+      "false false true",
+      "true false true"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Dart canonicalizes compile-time constants: `c1` and `c2` point to the exact same canonical memory instance (`identical(c1, c2)` is `true`). `c3` is instantiated at runtime via `final`, allocating a new object on the heap (`identical(c1, c3)` is `false`). Since `==` is not overridden in `Currency`, it defaults to identity comparison, making `c1 == c3` also `false`."
+  },
+  {
+    "id": 191,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "What is the primary architectural purpose of declaring a mixin with the `on` clause?",
+    "codeSnippet": "abstract class PaymentProcessor {\n  void logAudit(String event);\n}\n\nmixin FraudDetectionMixin on PaymentProcessor {\n  bool checkRisk(double amount) {\n    logAudit('Risk check for $amount');\n    return amount < 1000.0;\n  }\n}",
+    "options": [
+      "It converts the mixin into an abstract class that must be inherited with 'extends'.",
+      "It restricts the mixin so it can only be applied ('with') to classes that extend or implement PaymentProcessor, granting type-safe access to its members (like logAudit).",
+      "It executes checkRisk automatically whenever PaymentProcessor is constructed.",
+      "It prevents the class from using any other mixins."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The `on` clause in a Dart mixin restricts its usage to subclasses of the specified class/interface. This allows the mixin to safely call methods and getters defined in `PaymentProcessor` (like `logAudit`) and call `super.method()`."
+  },
+  {
+    "id": 192,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "What is the output of this Dart 3 Record pattern destructuring code?",
+    "codeSnippet": "(String currency, {double amount, bool isSuccess}) getTransaction() {\n  return ('OMR', amount: 45.500, isSuccess: true);\n}\n\nvoid main() {\n  final (curr, amount: amt, isSuccess: ok) = getTransaction();\n  print('$curr $amt $ok');\n}",
+    "options": [
+      "OMR 45.5 true",
+      "(OMR, amount: 45.5, isSuccess: true) null null",
+      "Compilation Error: Records cannot mix positional and named fields",
+      "Throws NoSuchMethodError at runtime"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Dart 3 Records are anonymous, strongly typed, immutable aggregate types. They support mixing positional fields and named fields. Destructuring binds positional fields by position (`curr`) and named fields by name (`amount: amt, isSuccess: ok`), outputting 'OMR 45.5 true'."
+  },
+  {
+    "id": 193,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "Why does Dart's sound type flow analysis fail to promote the instance field `activeIban` to non-nullable `String` inside the method?",
+    "codeSnippet": "class WalletState {\n  String? activeIban;\n\n  void initiateTransfer() {\n    if (activeIban != null) {\n      sendToBank(activeIban); // Error: The argument type 'String?' cannot be assigned to 'String'\n    }\n  }\n  void sendToBank(String iban) {}\n}",
+    "options": [
+      "Dart flow analysis only supports local variables because instance fields could be overridden by getters in subclasses or mutated concurrently between check and usage.",
+      "Instance fields can only be promoted if marked with the 'dynamic' keyword.",
+      "Sound null safety was deprecated in Dart 3 in favor of optional typing.",
+      "The sendToBank method must be declared static."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Dart cannot guarantee that an instance field won't be mutated by another method/getter between the null-check and the invocation. The standard Dart best practice is copying the field to a local variable: `final iban = activeIban; if (iban != null) sendToBank(iban);`."
+  },
+  {
+    "id": 194,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "How do Flutter's Widget Tree, Element Tree, and RenderObject Tree cooperate during rendering?",
+    "options": [
+      "Widgets are heavy GPU canvas textures, Elements handle network requests, and RenderObjects compile C++ shaders.",
+      "Widgets are lightweight, immutable configuration blueprints; Elements manage lifecycle, state persistence, and diffing; RenderObjects handle layout constraints, sizing, painting, and hit-testing.",
+      "The Element tree is completely destroyed and rebuilt on every setState() call.",
+      "RenderObjects translate Flutter widgets into native Android Views and iOS UIViews."
+    ],
+    "correctAnswer": 1,
+    "explanation": "1) **Widget Tree**: Cheap, immutable blueprints created frequently. 2) **Element Tree**: The persistent skeleton that manages lifecycle, holds State objects, and diffs new widgets against old ones (`Widget.canUpdate`). 3) **RenderObject Tree**: Heavyweight objects that implement the Box layout protocol, paint pixels onto the Skia/Impeller canvas, and handle hit testing."
+  },
+  {
+    "id": 195,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "Why does calling `Provider.of<WalletNotifier>(context)` in this widget throw a `ProviderNotFoundException`?",
+    "codeSnippet": "class WalletScreen extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return ChangeNotifierProvider(\n      create: (_) => WalletNotifier(),\n      child: Scaffold(\n        body: Text('Balance: ${Provider.of<WalletNotifier>(context).balance}'),\n      ),\n    );\n  }\n}",
+    "options": [
+      "ChangeNotifierProvider cannot be used inside a StatelessWidget.",
+      "The 'context' passed into Provider.of() is the ancestor context of ChangeNotifierProvider, so traversal up the Element tree cannot find the newly created provider below it.",
+      "Provider.of requires listen: false in all build methods.",
+      "Scaffold blocks InheritedWidget propagation."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`Provider.of<T>(context)` walks *up* the Element tree from the given context. In this code, `context` is passed into `WalletScreen.build()`, which is an ancestor of `ChangeNotifierProvider`. To resolve it, wrap the child in a `Builder(builder: (childContext) => ...)`, use `Consumer<WalletNotifier>`, or extract the child widget."
+  },
+  {
+    "id": 196,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "In a dynamic transaction list where items can be reordered or dismissed, why is assigning `ValueKey(transaction.id)` essential over using no keys or index-based keys?",
+    "codeSnippet": "ListView.builder(\n  itemCount: transactions.length,\n  itemBuilder: (context, index) {\n    final tx = transactions[index];\n    return TransactionRowWidget(\n      key: ValueKey(tx.id),\n      transaction: tx,\n    );\n  },\n);",
+    "options": [
+      "Keys force the garbage collector to keep deleted transaction items in RAM.",
+      "Keys enable Flutter's element reconciliation algorithm to match new widgets with their corresponding existing State objects by unique identity rather than index position, preventing visual state corruption.",
+      "Keys are required by Android KeyStore for encrypting ListView memory.",
+      "ValueKey automatically triggers API pagination requests."
+    ],
+    "correctAnswer": 1,
+    "explanation": "When reconciling elements (`Widget.canUpdate`), Flutter compares widget `runtimeType` and `key`. Without unique keys (or using array indices), deleting an item causes existing StatefulElements to bind to the wrong data model, resulting in corrupted checkboxes, swipe animations, and text state."
+  },
+  {
+    "id": 197,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "What is the foundational rule of Flutter's Box Layout protocol?",
+    "options": [
+      "Sizes go down, Constraints go up, Child sets position.",
+      "Constraints go down, Sizes go up, Parent sets position.",
+      "Parents choose width, Children choose height, Canvas centers all pixels.",
+      "Layout constraints are resolved asynchronously by the GPU compositor."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Flutter layout follows: 1) **Constraints go down**: Parent passes `BoxConstraints` (min/max width & height) to its child. 2) **Sizes go up**: Child determines its size within those constraints and returns it to parent. 3) **Parent sets position**: Parent decides child's (x, y) offset in its local coordinate system."
+  },
+  {
+    "id": 198,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "Why should an animated QR camera scanner laser line or payment loading indicator be wrapped in a `RepaintBoundary`?",
+    "codeSnippet": "Stack(\n  children: [\n    CameraPreviewWidget(),\n    RepaintBoundary(\n      child: AnimatedScanningLaserLine(),\n    ),\n  ],\n)",
+    "options": [
+      "It converts the vector animation into an MP4 video stream.",
+      "It creates a separate DisplayList layer on the raster cache, isolating high-frequency repaints so the underlying heavy CameraPreviewWidget is not forced to repaint on every 60/120fps tick.",
+      "It bypasses the Flutter layout phase and talks directly to native camera hardware.",
+      "It compresses image frames to reduce network bandwidth."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Without a `RepaintBoundary`, calling `markNeedsPaint()` on an animated child bubbles up and marks the ancestor RenderObject dirty, causing the entire subtree (including the heavy camera feed) to re-paint every frame. `RepaintBoundary` creates a separate paint layer, containing repaints to just the animated widget."
+  },
+  {
+    "id": 199,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "Why is handling `AppLifecycleState.inactive` / `paused` critical for security in a mobile banking app?",
+    "codeSnippet": "@override\nvoid didChangeAppLifecycleState(AppLifecycleState state) {\n  if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {\n    _securityProvider.showPrivacyBlurOverlay();\n  } else if (state == AppLifecycleState.resumed) {\n    _securityProvider.hidePrivacyBlurOverlay();\n  }\n}",
+    "options": [
+      "To prevent the mobile OS from capturing and caching unblurred screenshots of sensitive financial balances and card numbers in the OS App Switcher (multitasking tray).",
+      "To reduce battery consumption by disabling OLED pixels.",
+      "To terminate the Dart isolate and wipe local storage immediately.",
+      "To send an SMS OTP to the customer automatically."
+    ],
+    "correctAnswer": 0,
+    "explanation": "When a user switches apps, receives a phone call, or goes to the home screen, iOS and Android take a visual snapshot of the screen for the multitasking tray. Displaying a privacy blur/overlay on `inactive` or `paused` guarantees sensitive banking data is never visible in app switcher snapshots."
+  },
+  {
+    "id": 200,
+    "category": "Flutter & Dart Core Mastery",
+    "difficulty": "hard",
+    "question": "In custom financial spend chart rendering with `CustomPainter`, what should `shouldRepaint` return for optimal performance?",
+    "codeSnippet": "class SpendingChartPainter extends CustomPainter {\n  final List<double> spendData;\n  SpendingChartPainter(this.spendData);\n\n  @override\n  void paint(Canvas canvas, Size size) { /* Paint logic */ }\n\n  @override\n  bool shouldRepaint(covariant SpendingChartPainter oldDelegate) {\n    // Optimal return expression:\n  }\n}",
+    "options": [
+      "return true; (to guarantee every frame is fresh)",
+      "return !listEquals(spendData, oldDelegate.spendData); (to avoid expensive canvas repaints when data has not changed)",
+      "return spendData.isEmpty;",
+      "return false; (because Flutter detects canvas changes automatically)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`CustomPainter.shouldRepaint` is called whenever a new instance of the CustomPainter widget is created. Returning `!listEquals(spendData, oldDelegate.spendData)` ensures expensive canvas path recalculations and repaints only occur when the underlying data actually changes."
+  }
+]

@@ -1,0 +1,147 @@
+[
+  {
+    "id": 11,
+    "category": "Java",
+    "difficulty": "medium",
+    "question": "What is the output of the following Java program comparing literal Strings and instantiated Strings?",
+    "codeSnippet": "String s1 = \"hello\";\nString s2 = \"hello\";\nString s3 = new String(\"hello\");\n\nSystem.out.println((s1 == s2) + \" \" + (s1 == s3));",
+    "options": [
+      "true true",
+      "true false",
+      "false true",
+      "false false"
+    ],
+    "correctAnswer": 1,
+    "explanation": "s1 and s2 are string literals stored in the String Constant Pool, so they refer to the same object (`s1 == s2` is true). s3 is created on the heap using `new String(...)`, creating a new instance, so `s1 == s3` is false."
+  },
+  {
+    "id": 12,
+    "category": "Java",
+    "difficulty": "medium",
+    "question": "Which of the following is a checked exception in Java?",
+    "options": [
+      "NullPointerException",
+      "IllegalArgumentException",
+      "IOException",
+      "ArithmeticException"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Checked exceptions are subclasses of `java.lang.Exception` (excluding `RuntimeException`). They must be declared in method signatures via `throws` or caught using try-catch blocks. `IOException` is checked, while the others inherit from `RuntimeException` (unchecked)."
+  },
+  {
+    "id": 13,
+    "category": "Java",
+    "difficulty": "medium",
+    "question": "What is the output of executing the following Java inheritance code block?",
+    "codeSnippet": "class Parent {\n    void show() { System.out.print(\"Parent \"); }\n}\nclass Child extends Parent {\n    void show() { System.out.print(\"Child \"); }\n}\n\nParent p = new Child();\np.show();",
+    "options": [
+      "Parent",
+      "Child",
+      "Compilation fails",
+      "Throws a ClassCastException"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Java uses dynamic binding (runtime polymorphism) for instance methods. The type of the actual object (Child) determines which version of the method runs, not the type of the reference variable (Parent)."
+  },
+  {
+    "id": 14,
+    "category": "Java",
+    "difficulty": "medium",
+    "question": "What happens when using the `final` keyword on a class definition in Java?",
+    "codeSnippet": "final class SecurityProvider {\n    // ...\n}",
+    "options": [
+      "All methods in the class automatically become static.",
+      "The class cannot be instantiated using the new keyword.",
+      "The class cannot be extended/subclassed.",
+      "The class will be loaded lazily by the ClassLoader."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Declaring a class `final` prevents inheritance. This is often used for security, immutability, or performance optimization (e.g. `java.lang.String`)."
+  },
+  {
+    "id": 15,
+    "category": "Java",
+    "difficulty": "medium",
+    "question": "Which stream operation in Java is considered an intermediate operation (which is evaluated lazily)?",
+    "codeSnippet": "List<String> list = Arrays.asList(\"a\", \"b\", \"c\");\nlist.stream().filter(s -> s.startsWith(\"a\")).count();",
+    "options": [
+      "count()",
+      "forEach()",
+      "filter()",
+      "collect()"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Intermediate operations (like `filter`, `map`, `sorted`) return a new stream and execute lazily. Terminal operations (like `count`, `collect`, `forEach`) trigger the stream processing and consume it."
+  },
+  {
+    "id": 16,
+    "category": "Java",
+    "difficulty": "medium",
+    "question": "What is the primary heap allocation space where newly created Java objects reside initially?",
+    "options": [
+      "Old Generation",
+      "Survivor Space (S0/S1)",
+      "Eden Space",
+      "Metaspace"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Under generational GC models, new objects are allocated in the Eden Space of the Young Generation. Surviving objects are later copied to Survivor spaces and eventually promoted to the Old Generation."
+  },
+  {
+    "id": 17,
+    "category": "Java",
+    "difficulty": "medium",
+    "question": "If you override the `equals()` method in a Java class, what is the contract regarding `hashCode()`?",
+    "options": [
+      "You must also override hashCode(), ensuring that if a.equals(b) is true, then a.hashCode() == b.hashCode() is also true.",
+      "You must override hashCode(), ensuring that if two objects are not equal, they must return different hashCodes.",
+      "No requirement exists; JVM handles hash calculations independently.",
+      "You should prevent overriding hashCode() to preserve the memory address representation."
+    ],
+    "correctAnswer": 0,
+    "explanation": "The contract states that if two objects are equal according to `equals(Object)`, they must return the same integer hash code. Failing to do so breaks hash-based collections like `HashMap` or `HashSet`."
+  },
+  {
+    "id": 18,
+    "category": "Java",
+    "difficulty": "medium",
+    "question": "Which statement describes the behavior of Java Generics Type Erasure?",
+    "options": [
+      "The JVM allocates specialized classes for each generic parameter type at runtime.",
+      "Type parameters are replaced with their bounds or Object during compilation, meaning type details are lost at runtime.",
+      "Compiler converts generic classes to interface files, enforcing strict casting rules via serialization.",
+      "Generics are resolved via dynamic reflection on every method call."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Java generics are implemented via Type Erasure. The compiler enforces type safety at compile time and removes type parameters, replacing them with raw types or Object. Thus, generic type information is unavailable at runtime."
+  },
+  {
+    "id": 19,
+    "category": "Java",
+    "difficulty": "medium",
+    "question": "Which feature was added to Interfaces in Java 8?",
+    "options": [
+      "Abstract methods",
+      "Private methods",
+      "Default and static methods with implementations",
+      "Instance field state definitions"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Java 8 introduced default methods (using the `default` keyword) and static methods inside interfaces. This allows adding new methods to interfaces without breaking existing implementations."
+  },
+  {
+    "id": 20,
+    "category": "Java",
+    "difficulty": "medium",
+    "question": "What is the output of the following initialization blocks and constructor execution in Java?",
+    "codeSnippet": "class Test {\n    static {\n        System.out.print(\"Static \");\n    }\n    {\n        System.out.print(\"Instance \");\n    }\n    Test() {\n        System.out.print(\"Constructor \");\n    }\n    public static void main(String[] args) {\n        new Test();\n    }\n}",
+    "options": [
+      "Instance Constructor Static",
+      "Static Instance Constructor",
+      "Constructor Instance Static",
+      "Static Constructor Instance"
+    ],
+    "correctAnswer": 1,
+    "explanation": "First, static initializers run when the class is loaded. Then, instance initializers run when the object is instantiated, and finally, the constructor body executes."
+  }
+]

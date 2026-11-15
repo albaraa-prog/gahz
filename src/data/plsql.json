@@ -1,0 +1,144 @@
+[
+  {
+    "id": 51,
+    "category": "PL/SQL",
+    "difficulty": "medium",
+    "question": "Which attribute returns the number of rows fetched by an explicit cursor so far?",
+    "options": [
+      "%FOUND",
+      "%ROWCOUNT",
+      "%ISOPEN",
+      "%ROWTYPE"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`%ROWCOUNT` is a cursor attribute that returns the number of rows fetched so far by explicit cursors, or the number of rows modified by SQL statements for implicit cursors."
+  },
+  {
+    "id": 52,
+    "category": "PL/SQL",
+    "difficulty": "medium",
+    "question": "How can you associate a custom PL/SQL exception with a specific Oracle database error number (ORA-xxxxx)?",
+    "options": [
+      "Using PRAGMA EXCEPTION_INIT",
+      "Using RAISE_APPLICATION_ERROR",
+      "Using PRAGMA AUTONOMOUS_TRANSACTION",
+      "Using EXCEPTION_NUMBER statement"
+    ],
+    "correctAnswer": 0,
+    "explanation": "`PRAGMA EXCEPTION_INIT` links a user-defined exception name to a specific Oracle error code (such as ORA-02292 for constraint violations), allowing clean exception block filtering."
+  },
+  {
+    "id": 53,
+    "category": "PL/SQL",
+    "difficulty": "medium",
+    "question": "What causes the Oracle ORA-04091: 'table is mutating, trigger/function may not see it' error?",
+    "options": [
+      "A row-level trigger attempting to query or modify the same table that fired the trigger.",
+      "Executing DDL operations like ALTER TABLE inside a PL/SQL block.",
+      "Inserting duplicate primary keys in a batch update.",
+      "Trying to access a package variable without initializing it."
+    ],
+    "correctAnswer": 0,
+    "explanation": "A mutating table error occurs when a row-level trigger (e.g. `BEFORE/AFTER INSERT OR UPDATE FOR EACH ROW`) tries to read or write to the table that is undergoing changes, as the table's state is inconsistent."
+  },
+  {
+    "id": 54,
+    "category": "PL/SQL",
+    "difficulty": "medium",
+    "question": "What is a key architectural feature of PL/SQL Packages?",
+    "options": [
+      "They must contain only procedures, never variables or exceptions.",
+      "They separate interface declaration (Specification) from implementation (Body), allowing variables to persist session-wide.",
+      "They compile dynamically on every execute statement, bypassing caching.",
+      "They cannot be modified once stored in the schema database."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Packages bundle related declarations. The specification defines public API signatures, and the body contains the code. Variables declared in the package specification persist as session-level state."
+  },
+  {
+    "id": 55,
+    "category": "PL/SQL",
+    "difficulty": "medium",
+    "question": "What is the primary performance benefit of using BULK COLLECT in PL/SQL?",
+    "codeSnippet": "SELECT employee_id BULK COLLECT INTO emp_ids FROM employees;",
+    "options": [
+      "It automatically creates indexes on the fetched columns.",
+      "It reduces context switching overhead between the PL/SQL engine and the SQL engine by fetching multiple rows in a single batch.",
+      "It bypasses table locking constraints during transactions.",
+      "It forces Oracle to store the result set in the local temp directory."
+    ],
+    "correctAnswer": 1,
+    "explanation": "PL/SQL and SQL run on separate engines. Querying inside a loop incurs significant context switching. `BULK COLLECT` fetches rows in batches, minimizing switches and boosting performance."
+  },
+  {
+    "id": 56,
+    "category": "PL/SQL",
+    "difficulty": "medium",
+    "question": "What does declaring a variable as `%ROWTYPE` do in PL/SQL?",
+    "codeSnippet": "emp_rec employees%ROWTYPE;",
+    "options": [
+      "It represents a single value from the first column of the employees table.",
+      "It defines an array of rows from the employees table.",
+      "It creates a record variable whose structure matches the columns of the specified database table.",
+      "It locks the table employees during execution."
+    ],
+    "correctAnswer": 2,
+    "explanation": "`%ROWTYPE` matches a record variable's fields with the column names and data types of a specific database table or cursor, simplifying records handling."
+  },
+  {
+    "id": 57,
+    "category": "PL/SQL",
+    "difficulty": "medium",
+    "question": "Which of the following operations is generally restricted inside a PL/SQL Function but permitted inside a Procedure?",
+    "options": [
+      "Calling other functions.",
+      "Declaring variables.",
+      "Executing DML operations (INSERT, UPDATE, DELETE) when the function is invoked from a SQL query context.",
+      "Catching exceptions."
+    ],
+    "correctAnswer": 2,
+    "explanation": "When a PL/SQL function is invoked directly inside a SQL query (e.g. `SELECT my_func() FROM table`), it must not execute DML statements that modify database state, as this violates SQL side-effect rules."
+  },
+  {
+    "id": 58,
+    "category": "PL/SQL",
+    "difficulty": "medium",
+    "question": "What is the effect of declaring `PRAGMA AUTONOMOUS_TRANSACTION` inside a procedure?",
+    "options": [
+      "The procedure commits or rolls back its changes independently of the main calling transaction.",
+      "The transaction is automatically rollback-protected and cannot fail.",
+      "It prevents any lock conditions on tables affected by the procedure.",
+      "It runs the procedure on a background worker thread."
+    ],
+    "correctAnswer": 0,
+    "explanation": "An autonomous transaction executes independently. Changes committed or rolled back inside the autonomous procedure have no effect on the outer transaction that invoked it."
+  },
+  {
+    "id": 59,
+    "category": "PL/SQL",
+    "difficulty": "medium",
+    "question": "What is a Strong REF CURSOR in PL/SQL?",
+    "options": [
+      "A cursor variable that has a predefined return type matching a specific record structure.",
+      "A cursor that locks rows dynamically until the session terminates.",
+      "A cursor that can only fetch rows from global temporary tables.",
+      "A cursor with no defined return structure, allowing any select query mapping."
+    ],
+    "correctAnswer": 0,
+    "explanation": "A REF CURSOR is a cursor variable. A 'strong' REF CURSOR declares a specific return type (a record or table row structure), ensuring compile-time type checking. 'Weak' ref cursors have no return type constraint."
+  },
+  {
+    "id": 60,
+    "category": "PL/SQL",
+    "difficulty": "medium",
+    "question": "How does the COALESCE function differ from the NVL function in Oracle PL/SQL?",
+    "options": [
+      "NVL takes multiple arguments; COALESCE takes only two.",
+      "COALESCE evaluates arguments sequentially and stops at the first non-null (short-circuit evaluation); NVL always evaluates both arguments.",
+      "COALESCE can only be used in SQL statements, not in procedural blocks.",
+      "They are exact synonyms, differing only in performance characteristics."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`COALESCE` supports multiple inputs and uses short-circuit evaluation: it evaluates expressions left-to-right and stops as soon as it finds a non-null value. `NVL` always evaluates both arguments, which can be inefficient if the second argument is a function call."
+  }
+]

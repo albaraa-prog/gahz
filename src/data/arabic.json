@@ -1,0 +1,142 @@
+[
+  {
+    "id": 151,
+    "category": "Arabic (الأساسيات والبرمجة)",
+    "difficulty": "easy",
+    "question": "ما هي نتيجة العملية الحسابية التالية في معظم لغات البرمجة: `5 + 2 * 3`؟",
+    "options": [
+      "21",
+      "11",
+      "16",
+      "10"
+    ],
+    "correctAnswer": 1,
+    "explanation": "تتبع لغات البرمجة القواعد الرياضية القياسية لأولوية العمليات (Operator Precedence). يتم حساب عملية الضرب أولاً: 2 * 3 = 6، ثم يُضاف الناتج إلى 5: 5 + 6 = 11."
+  },
+  {
+    "id": 152,
+    "category": "Arabic (الأساسيات والبرمجة)",
+    "difficulty": "easy",
+    "question": "أي من أسماء المتغيرات التالية يُعتبر غير صالح (Invalid) في لغات مثل Python أو JavaScript؟",
+    "options": [
+      "user_name",
+      "userName",
+      "2user",
+      "_user"
+    ],
+    "correctAnswer": 2,
+    "explanation": "تمنع معظم لغات البرمجة بدء أسماء المتغيرات برقم (مثل 2user). يجب أن تبدأ المتغيرات بحرف أو بشرطة سفلية (_)."
+  },
+  {
+    "id": 153,
+    "category": "Arabic (الأساسيات والبرمجة)",
+    "difficulty": "easy",
+    "question": "إذا كانت قيمة `x = true` وقيمة `y = false`، فما هي نتيجة التعبير المنطقي `x && y`؟",
+    "options": [
+      "true",
+      "false",
+      "null",
+      "undefined"
+    ],
+    "correctAnswer": 1,
+    "explanation": "عامل الربط المنطقي AND (رمز &&) يتطلب أن تكون جميع أطراف التعبير صحيحة (true) ليعطي نتيجة true. بما أن y قيمتها false، فإن النتيجة النهائية هي false."
+  },
+  {
+    "id": 154,
+    "category": "Arabic (الأساسيات والبرمجة)",
+    "difficulty": "easy",
+    "question": "كم مرة ستتكرر الحلقة التالية لتنفيذ الكود بداخلها: `for (int i = 0; i < 3; i++)`؟",
+    "options": [
+      "مرتين",
+      "3 مرات",
+      "4 مرات",
+      "لن تتكرر أبداً"
+    ],
+    "correctAnswer": 1,
+    "explanation": "تبدأ الحلقة من القيمة i = 0، ثم تزداد بمقدار 1 في كل دورة. القيم التي يتحقق معها الشرط (i < 3) هي: 0، 1، 2. عندما تصبح قيمة i تساوي 3، يفشل الشرط وتتوقف الحلقة، مما ينتج عنه 3 تكرارات."
+  },
+  {
+    "id": 155,
+    "category": "Arabic (الأساسيات والبرمجة)",
+    "difficulty": "easy",
+    "question": "ما هو هيكل البيانات (Data Structure) الذي يتبع مبدأ 'الداخل أولاً يخرج أولاً' (FIFO)؟",
+    "options": [
+      "المكدس (Stack)",
+      "الطابور (Queue)",
+      "الشجرة (Tree)",
+      "القائمة المترابطة (Linked List)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "الطابور (Queue) يعمل بمبدأ First-In, First-Out (FIFO) حيث أن أول عنصر يدخل فيه هو أول عنصر يتم إخراجه، تماماً مثل صف الانتظار البشري."
+  },
+  {
+    "id": 156,
+    "category": "Arabic (الأساسيات والبرمجة)",
+    "difficulty": "easy",
+    "question": "ما هو المفهوم البرمجي الذي يسمح لفئة (Class) جديدة بوراثة الخصائص والدوال من فئة أخرى؟",
+    "options": [
+      "التغليف (Encapsulation)",
+      "تعدد الأشكال (Polymorphism)",
+      "الوراثة (Inheritance)",
+      "التجريد (Abstraction)"
+    ],
+    "correctAnswer": 2,
+    "explanation": "الوراثة (Inheritance) هي مفهوم أساسي في البرمجة كائنية التوجه (OOP) تتيح لفئة فرعية (Subclass) أن ترث خصائص وسلوكيات فئة رئيسية (Superclass)."
+  },
+  {
+    "id": 157,
+    "category": "Arabic (الأساسيات والبرمجة)",
+    "difficulty": "easy",
+    "question": "أي أمر من أوامر لغة الاستعلامات SQL يُستخدم لاسترجاع البيانات وقراءتها من الجداول؟",
+    "options": [
+      "INSERT",
+      "UPDATE",
+      "DELETE",
+      "SELECT"
+    ],
+    "correctAnswer": 3,
+    "explanation": "يُستخدم الأمر SELECT بشكل أساسي للاستعلام وقراءة البيانات من جداول قواعد البيانات العلائقية."
+  },
+  {
+    "id": 158,
+    "category": "Arabic (الأساسيات والبرمجة)",
+    "difficulty": "easy",
+    "question": "ماذا يعني الاختصار CSS في مجال تطوير وتصميم صفحات الويب؟",
+    "options": [
+      "Cascading Style Sheets",
+      "Creative Style Sheets",
+      "Computer System Security",
+      "Compiled Script sheets"
+    ],
+    "correctAnswer": 0,
+    "explanation": "CSS هي اختصار لـ Cascading Style Sheets، وهي اللغة المستخدمة لوصف وتنسيق مظهر صفحات الويب المكتوبة بلغة HTML."
+  },
+  {
+    "id": 159,
+    "category": "Arabic (الأساسيات والبرمجة)",
+    "difficulty": "easy",
+    "question": "ما هو المكون البرمجي الذي يمنع الدالة التكرارية (Recursive Function) من الاستمرار في استدعاء نفسها إلى ما لا نهاية؟",
+    "options": [
+      "نوع الإرجاع (Return Type)",
+      "الحالة الأساسية / شرط التوقف (Base Case)",
+      "اسم الدالة (Function Name)",
+      "مؤشر الذاكرة (Memory Pointer)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "شرط التوقف أو الحالة الأساسية (Base Case) هو شرط يتم التحقق منه داخل الدالة التكرارية. عندما يصبح صحيحاً، تتوقف الدالة عن استدعاء نفسها وتبدأ في إرجاع القيم، مما يمنع حدوث Stack Overflow."
+  },
+  {
+    "id": 160,
+    "category": "Arabic (الأساسيات والبرمجة)",
+    "difficulty": "easy",
+    "question": "ما هو رقم المنفذ الافتراضي (Default Port) المستخدم لنقل البيانات الآمن عبر بروتوكول HTTPS؟",
+    "options": [
+      "80",
+      "22",
+      "443",
+      "21"
+    ],
+    "correctAnswer": 2,
+    "explanation": "يستخدم بروتوكول HTTPS المنفذ الآمن 443 افتراضياً لتشفير الاتصالات، بينما يستخدم بروتوكول HTTP غير المشفر المنفذ 80."
+  }
+]

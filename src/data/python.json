@@ -1,0 +1,149 @@
+[
+  {
+    "id": 1,
+    "category": "Python",
+    "difficulty": "medium",
+    "question": "What is returned when calling the function `add_item(1)` followed by `add_item(2)`?",
+    "codeSnippet": "def add_item(item, list_=[]):\n    list_.append(item)\n    return list_\n\nprint(add_item(1))\nprint(add_item(2))",
+    "options": [
+      "[1] and [2]",
+      "[1] and [1, 2]",
+      "[1, 2] and [1, 2]",
+      "Throws a NameError at runtime"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Python, default arguments are evaluated once at function definition time, not at function execution time. Therefore, the empty list `[]` is created once and reused as the default argument. Subsequent calls modify this same list instance."
+  },
+  {
+    "id": 2,
+    "category": "Python",
+    "difficulty": "medium",
+    "question": "What is the primary function of the `@functools.wraps` decorator when writing custom decorators?",
+    "codeSnippet": "import functools\n\ndef my_decorator(func):\n    @functools.wraps(func)\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper",
+    "options": [
+      "It executes the wrapped function in a separate thread",
+      "It caches the return value to optimize performance",
+      "It copies docstrings, names, parameter lists, and other metadata from the original function to the wrapper function",
+      "It ensures class instances are instantiated dynamically"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Without `@functools.wraps`, the decorated function inherits the metadata of the `wrapper` function (such as `__name__` = 'wrapper'). Applying wraps ensures metadata reflects the original decorated function, preserving debugging transparency."
+  },
+  {
+    "id": 3,
+    "category": "Python",
+    "difficulty": "medium",
+    "question": "What is the output of the following identity and value comparison expressions in Python?",
+    "codeSnippet": "a = [1, 2, 3]\nb = [1, 2, 3]\nprint(a == b, a is b)",
+    "options": [
+      "True True",
+      "False False",
+      "True False",
+      "False True"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The `==` operator compares the content (values) of the operands, which are identical lists, returning `True`. The `is` operator compares the identity (memory address in CPython) of the objects. Since `a` and `b` are declared separately, they point to separate memory allocations, returning `False`."
+  },
+  {
+    "id": 4,
+    "category": "Python",
+    "difficulty": "medium",
+    "question": "Which statement best describes the behavior of CPython's Global Interpreter Lock (GIL)?",
+    "options": [
+      "It prevents multithreading completely in all Python programs, raising runtime errors.",
+      "It restricts execution of Python code to a single CPU core by preventing multiple threads from executing Python bytecode simultaneously.",
+      "It enforces a strict lock on network sockets to prevent race conditions during I/O operations.",
+      "It automatically partitions CPU-bound execution tasks across all available virtual threads."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The GIL is a mutex that protects access to Python objects, preventing multiple threads from executing Python bytecodes at once. This design keeps CPython thread-safe but limits CPU-bound programs in multithreading to a single core. (I/O-bound threads can release the GIL during blocking operations)."
+  },
+  {
+    "id": 5,
+    "category": "Python",
+    "difficulty": "medium",
+    "question": "What is the result of executing this list comprehension block in Python 3?",
+    "codeSnippet": "x = 'outer'\ny = [x for x in ['a', 'b', 'c']]\nprint(x)",
+    "options": [
+      "'c'",
+      "'outer'",
+      "NameError: name 'x' is not defined",
+      "['a', 'b', 'c']"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Python 3, list comprehensions have their own local scope. The iteration variable `x` does not leak into the enclosing scope and overwrite the outer variable `x`. Thus, print(x) yields 'outer'. (Note: Python 2 behaved differently and would leak 'c')."
+  },
+  {
+    "id": 6,
+    "category": "Python",
+    "difficulty": "medium",
+    "question": "What error is raised when calling `next()` on an exhausted Python generator?",
+    "codeSnippet": "def test_gen():\n    yield 1\n\ng = test_gen()\nnext(g)\nnext(g)",
+    "options": [
+      "IndexError",
+      "GeneratorExit",
+      "StopIteration",
+      "ValueError"
+    ],
+    "correctAnswer": 2,
+    "explanation": "When a generator or iterator has yielded all items, subsequent calls to `next()` raise a `StopIteration` exception. This is standard behavior used internally by Python's loops to gracefully terminate iterations."
+  },
+  {
+    "id": 7,
+    "category": "Python",
+    "difficulty": "medium",
+    "question": "How are duplicate keys resolved when merging dictionaries via unpacking in Python 3.5+?",
+    "codeSnippet": "dict_a = {'x': 1, 'y': 2}\ndict_b = {'y': 3, 'z': 4}\nmerged = {**dict_a, **dict_b}\nprint(merged)",
+    "options": [
+      "{'x': 1, 'y': 2, 'z': 4}",
+      "{'x': 1, 'y': 3, 'z': 4}",
+      "{'x': 1, 'y': [2, 3], 'z': 4}",
+      "Raises a KeyError exception"
+    ],
+    "correctAnswer": 1,
+    "explanation": "During dict unpacking, mappings are added from left to right. Keys from later dictionaries overwrite keys of earlier ones. Hence, `'y': 3` from `dict_b` replaces `'y': 2` from `dict_a`."
+  },
+  {
+    "id": 8,
+    "category": "Python",
+    "difficulty": "medium",
+    "question": "Under Python's Method Resolution Order (MRO), which search algorithm is used to resolve multiple inheritance hierarchies?",
+    "options": [
+      "Depth-First Search (DFS) only",
+      "Breadth-First Search (BFS) only",
+      "C3 Linearization algorithm",
+      "Dijkstra's Shortest Path algorithm"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Python uses the C3 Linearization algorithm to determine the Method Resolution Order (MRO) for class hierarchies. This ensures local precedence ordering and monotonicity properties in multiple inheritance."
+  },
+  {
+    "id": 9,
+    "category": "Python",
+    "difficulty": "medium",
+    "question": "Under what conditions does the `else` block execute in a `try-except-else-finally` block?",
+    "codeSnippet": "try:\n    do_something()\nexcept Exception as e:\n    handle_error(e)\nelse:\n    do_success_action()\nfinally:\n    cleanup()",
+    "options": [
+      "It runs only if an exception is caught and successfully handled.",
+      "It runs only if no exception is raised in the try block.",
+      "It runs every time immediately before the cleanup phase.",
+      "It only runs if the try block triggers an exit condition."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The `else` block in a exception handler executes if and only if the code inside the `try` block completes successfully without raising any exceptions."
+  },
+  {
+    "id": 10,
+    "category": "Python",
+    "difficulty": "medium",
+    "question": "How does CPython's memory management system primarily identify and collect reference cycles?",
+    "options": [
+      "It cannot handle reference cycles; they must be manually managed via weakrefs.",
+      "Using a generational cyclic garbage collector that periodically scans for isolated reference islands.",
+      "Reference counting alone immediately deallocates self-referential groups when they go out of scope.",
+      "It periodically restarts the interpreter thread context."
+    ],
+    "correctAnswer": 1,
+    "explanation": "While reference counting handles the vast majority of cleanups, cyclic references (where objects reference each other but are otherwise root-unreachable) cannot be reclaimed by reference count checks alone. CPython uses an auxiliary generational cyclic garbage collector to scan and clean up these cycles."
+  }
+]

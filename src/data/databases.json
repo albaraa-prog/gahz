@@ -1,0 +1,142 @@
+[
+  {
+    "id": 71,
+    "category": "Databases",
+    "difficulty": "medium",
+    "question": "Which database index structure is optimized for range queries in relational databases like MySQL and Oracle?",
+    "options": [
+      "Hash Index",
+      "B-Tree (Balanced Tree) Index",
+      "Bitmap Index",
+      "Full-Text Index"
+    ],
+    "correctAnswer": 1,
+    "explanation": "B-Tree indexes maintain keys in a sorted, balanced tree structure, making them highly efficient for both exact match searches and range scanning (e.g. `WHERE age BETWEEN 20 AND 30`). Hash indexes only excel at point queries."
+  },
+  {
+    "id": 72,
+    "category": "Databases",
+    "difficulty": "medium",
+    "question": "Which window function assigns unique sequential integers to rows within a partition, ignoring duplicate tie values?",
+    "options": [
+      "RANK()",
+      "DENSE_RANK()",
+      "ROW_NUMBER()",
+      "PERCENT_RANK()"
+    ],
+    "correctAnswer": 2,
+    "explanation": "`ROW_NUMBER()` outputs sequential integers starting at 1, regardless of duplicate values in the sorted order. `RANK()` leaves gaps when duplicates occur. `DENSE_RANK()` does not leave gaps."
+  },
+  {
+    "id": 73,
+    "category": "Databases",
+    "difficulty": "medium",
+    "question": "In database transaction management, what does the 'I' in ACID stand for?",
+    "options": [
+      "Consistency",
+      "Isolation",
+      "Integrity",
+      "Idempotency"
+    ],
+    "correctAnswer": 1,
+    "explanation": "ACID stands for Atomicity, Consistency, Isolation, and Durability. Isolation ensures that concurrently running transactions do not interfere with each other, presenting a clean view of data."
+  },
+  {
+    "id": 74,
+    "category": "Databases",
+    "difficulty": "medium",
+    "question": "Which transaction Isolation Level prevents Dirty Reads but allows Non-Repeatable Reads and Phantom Reads?",
+    "options": [
+      "Read Uncommitted",
+      "Read Committed",
+      "Repeatable Read",
+      "Serializable"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`Read Committed` isolation level ensures that transactions only read committed changes, avoiding dirty reads. However, values can change (non-repeatable reads) or new rows can appear (phantom reads) if queried again during the transaction."
+  },
+  {
+    "id": 75,
+    "category": "Databases",
+    "difficulty": "medium",
+    "question": "What is the logical order of execution for query clauses in SQL?",
+    "options": [
+      "SELECT -> FROM -> WHERE -> GROUP BY -> HAVING -> ORDER BY",
+      "FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY",
+      "FROM -> SELECT -> WHERE -> GROUP BY -> HAVING -> ORDER BY",
+      "WHERE -> FROM -> GROUP BY -> HAVING -> SELECT -> ORDER BY"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Although SELECT is written first, the database executes: FROM (locate target tables), WHERE (filter rows), GROUP BY (aggregate), HAVING (filter aggregates), SELECT (fetch column projections), and finally ORDER BY (sort output)."
+  },
+  {
+    "id": 76,
+    "category": "Databases",
+    "difficulty": "medium",
+    "question": "What happens when using the `ON DELETE SET NULL` constraint action on a foreign key?",
+    "options": [
+      "It raises an error preventing parent row deletions.",
+      "If the parent row is deleted, the corresponding foreign key column values in the child rows are set to NULL.",
+      "It automatically deletes the matching child rows.",
+      "It blocks all database modifications until transactions end."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`ON DELETE SET NULL` ensures that deleting a primary key row updates matching child rows' foreign key fields to NULL (instead of blocking the delete or cascading deletes)."
+  },
+  {
+    "id": 77,
+    "category": "Databases",
+    "difficulty": "medium",
+    "question": "Which SQL command provides a breakdown of how the query optimizer plans to execute a query?",
+    "options": [
+      "SHOW SCHEMAS",
+      "DESCRIBE TABLE",
+      "EXPLAIN / EXPLAIN PLAN",
+      "ANALYZE QUERY"
+    ],
+    "correctAnswer": 2,
+    "explanation": "`EXPLAIN` prepended to SQL queries tells the database engine to output its execution plan, showing table scan methods, index lookups, join orders, and cost estimates."
+  },
+  {
+    "id": 80,
+    "category": "Databases",
+    "difficulty": "medium",
+    "question": "What is a Common Table Expression (CTE) in SQL?",
+    "options": [
+      "A permanent table stored on the disk schema.",
+      "A temporary named result set defined using the 'WITH' clause, which improves query readability.",
+      "A virtual mapping of remote API databases.",
+      "A custom aggregate function defined dynamically."
+    ],
+    "correctAnswer": 1,
+    "explanation": "CTEs are defined using the `WITH query_name AS (SELECT ...)` clause. They act as transient view scopes, improving query structure and supporting recursive parent-child tree traversals."
+  },
+  {
+    "id": 78,
+    "category": "Databases",
+    "difficulty": "medium",
+    "question": "How does a Shared Lock (S) differ from an Exclusive Lock (X) in databases?",
+    "options": [
+      "Multiple transactions can hold a Shared lock on a row to read it; only one transaction can hold an Exclusive lock to modify it, blocking all other locks.",
+      "Shared locks are used for DDL statements; Exclusive locks are used for DML.",
+      "Shared locks are stored on disk; Exclusive locks reside in CPU cache.",
+      "They are identical mechanisms."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Shared locks allow concurrent reads. Multiple read operations can acquire shared locks on the same resource. Exclusive locks prevent any other transactions from reading or writing to the resource, enforcing data consistency during updates."
+  },
+  {
+    "id": 79,
+    "category": "Databases",
+    "difficulty": "medium",
+    "question": "What is the primary difference in how Oracle and MySQL generate auto-incrementing key fields?",
+    "options": [
+      "Oracle uses AUTO_INCREMENT attributes; MySQL uses GUIDs.",
+      "Oracle traditionally relies on Sequence objects (or IDENTITY columns in modern versions); MySQL uses the AUTO_INCREMENT column attribute.",
+      "MySQL uses trigger objects; Oracle uses pointer arrays.",
+      "Oracle automatically computes hash values for every row."
+    ],
+    "correctAnswer": 1,
+    "explanation": "MySQL supports `AUTO_INCREMENT` directly on column specifications. Oracle historically uses separate `SEQUENCE` generator objects accessed via `.NEXTVAL` (though Oracle 12c+ also added support for standard `GENERATED AS IDENTITY` columns)."
+  }
+]

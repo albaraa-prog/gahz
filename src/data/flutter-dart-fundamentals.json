@@ -1,0 +1,149 @@
+[
+  {
+    "id": 251,
+    "category": "Flutter & Dart Fundamentals (Junior to Mid)",
+    "difficulty": "easy",
+    "question": "What is the exact execution sequence of lifecycle methods in a Flutter StatefulWidget when it is first inserted into the widget tree and subsequently rebuilt?",
+    "codeSnippet": "class MyWidget extends StatefulWidget {\n  @override\n  State<MyWidget> createState() => _MyWidgetState();\n}\nclass _MyWidgetState extends State<MyWidget> {\n  // Lifecycle hooks\n}",
+    "options": [
+      "createState() -> didChangeDependencies() -> initState() -> build()",
+      "createState() -> initState() -> didChangeDependencies() -> build()",
+      "initState() -> createState() -> build() -> didUpdateWidget()",
+      "createState() -> build() -> initState() -> didChangeDependencies()"
+    ],
+    "correctAnswer": 1,
+    "explanation": "When a `StatefulWidget` is mounted, Flutter first calls `createState()`. Then `initState()` executes exactly once for one-time initialization. Next, `didChangeDependencies()` runs when the State object's dependencies (e.g. `InheritedWidget` / `Theme` / `MediaQuery`) are first resolved. Finally, `build()` is called to generate the widget subtree."
+  },
+  {
+    "id": 252,
+    "category": "Flutter & Dart Fundamentals (Junior to Mid)",
+    "difficulty": "easy",
+    "question": "Why is instantiating a Future directly inside the `build()` method of a `FutureBuilder` a critical performance bug?",
+    "codeSnippet": "class WalletBalance extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return FutureBuilder<double>(\n      future: apiService.fetchBalance(), // Bug here!\n      builder: (context, snapshot) {\n        if (snapshot.hasData) return Text('${snapshot.data}');\n        return CircularProgressIndicator();\n      },\n    );\n  }\n}",
+    "options": [
+      "FutureBuilder cannot accept asynchronous functions in Dart.",
+      "Every time the parent widget rebuilds (or an animation / theme / keyboard toggles), build() runs again, triggering a new HTTP request and restarting the Future from scratch, causing infinite loading spinners and network thrashing.",
+      "FutureBuilder only works with synchronous Streams.",
+      "It causes a compile-time type error in release mode."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`build()` can be called on every frame during animations or when parent widgets rebuild. If `future: apiService.fetchBalance()` is called inside `build()`, a brand new Future is created on every rebuild, resetting the snapshot and spamming the backend API. Futures should always be stored in a variable in `initState()` of a `StatefulWidget` or managed via a state provider."
+  },
+  {
+    "id": 253,
+    "category": "Flutter & Dart Fundamentals (Junior to Mid)",
+    "difficulty": "easy",
+    "question": "Why is `ListView.builder` preferred over putting a `Column` inside a `SingleChildScrollView` for rendering long lists (e.g. 1,000 transaction rows)?",
+    "options": [
+      "Column does not support touch scrolling.",
+      "A Column inside SingleChildScrollView instantiates and layouts all 1,000 child widgets and their RenderBoxes in memory simultaneously, causing heavy frame drops and Out-Of-Memory (OOM) crashes; ListView.builder lazily builds only the visible items on screen.",
+      "ListView.builder disables GPU rasterization.",
+      "SingleChildScrollView can only display Text widgets."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`SingleChildScrollView + Column` computes layout and retains all child widgets in memory even if they are far off-screen. `ListView.builder` uses a viewport with a sliver protocol that lazily constructs, paints, and recycles only the widgets currently visible within the scroll window (plus a small cache extent), maintaining $O(1)$ memory usage."
+  },
+  {
+    "id": 254,
+    "category": "Flutter & Dart Fundamentals (Junior to Mid)",
+    "difficulty": "easy",
+    "question": "What is the structural difference between `Expanded` and `Flexible` inside a `Row` or `Column`?",
+    "codeSnippet": "Row(\n  children: [\n    Flexible(child: Container(width: 50, color: Colors.red)),\n    Expanded(child: Container(width: 50, color: Colors.blue)),\n  ],\n)",
+    "options": [
+      "Expanded only works in Columns, while Flexible only works in Rows.",
+      "Expanded forces its child to fill all remaining available space (FlexFit.tight), whereas Flexible by default allows its child to be smaller than the available space (FlexFit.loose).",
+      "Flexible converts the child into a scrollable viewport.",
+      "Expanded ignores flex factors."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`Expanded` is literally a subclass of `Flexible` with `fit: FlexFit.tight`. `Flexible(fit: FlexFit.loose)` lets the child widget take up at most the remaining space (respecting the child's natural size), while `Expanded` (tight fit) forces the child to expand and occupy all remaining available flex space."
+  },
+  {
+    "id": 255,
+    "category": "Flutter & Dart Fundamentals (Junior to Mid)",
+    "difficulty": "easy",
+    "question": "What is the behavior of the Dart cascade operator (`..`) and null-aware cascade operator (`?..`)?",
+    "codeSnippet": "final wallet = Wallet()\n  ..setCurrency('OMR')\n  ..deposit(100.0);\n\nWallet? optionalWallet;\noptionalWallet\n  ?..setCurrency('OMR')\n  ..deposit(50.0);",
+    "options": [
+      "It creates a deep clone of the object on every line.",
+      "It performs a sequence of operations on the same object instance and returns the target object itself rather than the return value of the invoked methods.",
+      "It executes the methods concurrently in background worker threads.",
+      "It wraps method calls in automatic try-catch blocks."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The cascade operator (`..`) allows you to make a sequence of operations on the members of the same object. The return value of the chained methods (often `void`) is discarded, and the target object itself is returned, enabling clean builder-style object configuration."
+  },
+  {
+    "id": 256,
+    "category": "Flutter & Dart Fundamentals (Junior to Mid)",
+    "difficulty": "easy",
+    "question": "What happens if a `late` non-nullable variable is accessed before being initialized in Dart?",
+    "codeSnippet": "class PaymentController {\n  late String transactionId;\n\n  void printId() {\n    print(transactionId);\n  }\n}",
+    "options": [
+      "It prints 'null' without throwing an error.",
+      "It compiles cleanly but throws a `LateInitializationError: Field 'transactionId' has not been initialized` at runtime.",
+      "It causes a compile-time syntax error.",
+      "It initializes the variable with an empty string ''."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The `late` modifier tells Dart's sound null-safety compiler: 'Trust me, I will initialize this non-nullable variable before reading it.' If the variable is read before being assigned a value, Dart throws a `LateInitializationError` at runtime."
+  },
+  {
+    "id": 257,
+    "category": "Flutter & Dart Fundamentals (Junior to Mid)",
+    "difficulty": "easy",
+    "question": "What is the difference between a synchronous generator (`sync*`) and an asynchronous generator (`async*`) in Dart?",
+    "codeSnippet": "Iterable<int> countSync(int n) sync* {\n  for (int i = 1; i <= n; i++) yield i;\n}\n\nStream<int> countAsync(int n) async* {\n  for (int i = 1; i <= n; i++) yield i;\n}",
+    "options": [
+      "sync* returns a Future<List<int>>, while async* returns an Isolate.",
+      "sync* returns a lazy Iterable<T> that produces values on demand synchronously, while async* returns a Stream<T> that emits values asynchronously as they become ready.",
+      "async* can only be called from inside a Web Worker.",
+      "There is no difference; sync* is just an alias for async*."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`sync*` functions return a lazy `Iterable<T>` where values are pulled synchronously using `yield`. `async*` functions return a `Stream<T>` where events are pushed asynchronously over time using `yield` and `yield*`."
+  },
+  {
+    "id": 258,
+    "category": "Flutter & Dart Fundamentals (Junior to Mid)",
+    "difficulty": "easy",
+    "question": "Why does `TextEditingController.addListener()` capture programmatic text changes (e.g. `controller.text = '100'`) while `TextField(onChanged: ...)` does not?",
+    "options": [
+      "TextField.onChanged is deprecated in Flutter 3.",
+      "TextField(onChanged:) only fires in response to direct user keyboard input events, whereas TextEditingController.addListener() listens to all mutations on the underlying ValueNotifier model, including programmatic updates.",
+      "addListener runs on a native Android background thread.",
+      "TextField blocks controller listener notifications."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`TextField.onChanged` is designed specifically for direct interactive user input from the virtual keyboard or paste action. Setting `controller.text = 'newValue'` programmatically does not trigger `onChanged`. However, `TextEditingController` extends `ValueNotifier<TextEditingValue>`, so `addListener()` notifies on all value mutations."
+  },
+  {
+    "id": 259,
+    "category": "Flutter & Dart Fundamentals (Junior to Mid)",
+    "difficulty": "easy",
+    "question": "Why does an `InkWell` tap ripple effect fail to show when placed inside an opaque `Container(color: Colors.white)` without a `Material` widget?",
+    "codeSnippet": "Container(\n  color: Colors.white,\n  child: InkWell(\n    onTap: () => print('Tapped'),\n    child: Padding(padding: EdgeInsets.all(16), child: Text('Click')),\n  ),\n)",
+    "options": [
+      "InkWell does not support click events.",
+      "InkWell paints its Material splash ripple on the nearest ancestor Material widget; the opaque Container color paints over the Material layer, obscuring the ripple underneath.",
+      "Container disables all gesture recognizers.",
+      "InkWell requires an active Bluetooth connection."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`InkWell` renders its ink splash animation directly onto the nearest ancestor `Material` canvas. If an intervening `Container` has an opaque background color, it is painted above the `Material` canvas, hiding the ink splash. To fix this, use `Ink(color: Colors.white, child: InkWell(...))` or wrap with `Material(color: Colors.white, child: InkWell(...))`."
+  },
+  {
+    "id": 260,
+    "category": "Flutter & Dart Fundamentals (Junior to Mid)",
+    "difficulty": "easy",
+    "question": "When building a responsive mobile widget, why is `LayoutBuilder` superior to querying `MediaQuery.of(context).size`?",
+    "options": [
+      "MediaQuery cannot be accessed inside StatelessWidget.",
+      "MediaQuery returns the global screen dimensions of the entire device, while LayoutBuilder provides the BoxConstraints of the immediate parent widget, making widgets truly reusable in split-views, dialogs, and embedded cards.",
+      "LayoutBuilder runs on the GPU raster thread.",
+      "MediaQuery causes memory leaks when rotated."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`MediaQuery.of(context).size` gives the total device screen size (e.g. 1080x1920). If your card widget is placed inside a small modal sheet, split-screen tablet view, or drawer, `MediaQuery` still reports the full screen width. `LayoutBuilder` supplies the actual `constraints.maxWidth` allocated to that specific widget by its parent."
+  }
+]

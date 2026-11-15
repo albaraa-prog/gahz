@@ -1,0 +1,100 @@
+rules_version = '2';
+
+// DevQuiz Studio security rules.
+//
+//   /users/{uid}                       profile, settings, stats
+//   /users/{uid}/attempts/{attemptId}  one finished quiz per document
+//
+// A signed-in user can read and write only their own subtree. Every write is
+// shape-checked so a modified client cannot store arbitrary or oversized data.
+// Anything not matched below is denied.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function isOptionalString(data, field, maxLength) {
+      return !(field in data)
+        || data[field] == null
+        || (data[field] is string && data[field].size() <= maxLength);
+    }
+
+    function validSettings(settings) {
+      return settings is map
+        && settings.keys().hasOnly(['theme', 'studyMode', 'customConfig'])
+        && settings.theme in ['dark', 'light']
+        && settings.studyMode is bool
+        && settings.customConfig is map
+        && settings.customConfig.keys().hasOnly(['count', 'minutes', 'categories'])
+        && settings.customConfig.count is int
+        && settings.customConfig.count >= 5 && settings.customConfig.count <= 100
+        && settings.customConfig.minutes is int
+        && settings.customConfig.minutes >= 1 && settings.customConfig.minutes <= 120
+        && (settings.customConfig.categories == null
+            || (settings.customConfig.categories is list && settings.customConfig.categories.size() <= 200));
+    }
+
+    function validStats(stats) {
+      return stats is map
+        && stats.keys().hasOnly(['totalAttempts', 'bestPercent', 'averagePercent',
+                                 'currentStreak', 'longestStreak', 'lastAttemptAt'])
+        && stats.totalAttempts is int && stats.totalAttempts >= 0
+        && stats.bestPercent is int && stats.bestPercent >= 0 && stats.bestPercent <= 100
+        && stats.averagePercent is int && stats.averagePercent >= 0 && stats.averagePercent <= 100
+        && stats.currentStreak is int && stats.currentStreak >= 0
+        && stats.longestStreak is int && stats.longestStreak >= 0
+        && stats.lastAttemptAt is number && stats.lastAttemptAt >= 0;
+    }
+
+    function validProfile(data) {
+      return data.keys().hasOnly(['displayName', 'email', 'settings', 'stats', 'updatedAt'])
+        && data.keys().hasAll(['settings', 'stats', 'updatedAt'])
+        && isOptionalString(data, 'displayName', 100)
+        && isOptionalString(data, 'email', 320)
+        && validSettings(data.settings)
+        && validStats(data.stats)
+        && data.updatedAt == request.time;
+    }
+
+    function validAttempt(data, attemptId) {
+      return data.keys().hasOnly(['id', 'timestamp', 'date', 'mode', 'totalQuestions', 'correct', 'percent',
+                                  'durationSeconds', 'studyMode', 'categoryStats', 'answers', 'createdAt'])
+        && data.keys().hasAll(['id', 'timestamp', 'mode', 'totalQuestions', 'correct', 'percent', 'createdAt'])
+        && data.id == attemptId
+        && data.timestamp is number && data.timestamp >= 0
+        && isOptionalString(data, 'date', 60)
+        && data.mode is string && data.mode.size() > 0 && data.mode.size() <= 120
+        && data.totalQuestions is int && data.totalQuestions >= 1 && data.totalQuestions <= 500
+        && data.correct is int && data.correct >= 0 && data.correct <= data.totalQuestions
+        && data.percent is int && data.percent >= 0 && data.percent <= 100
+        && (!('durationSeconds' in data) || (data.durationSeconds is int && data.durationSeconds >= 0))
+        && (!('studyMode' in data) || data.studyMode is bool)
+        && (!('categoryStats' in data) || (data.categoryStats is list && data.categoryStats.size() <= 100))
+        && (!('answers' in data) || (data.answers is list && data.answers.size() <= 500))
+        && data.createdAt == request.time;
+    }
+
+    match /users/{uid} {
+      allow get: if isOwner(uid);
+      allow create, update: if isOwner(uid) && validProfile(request.resource.data);
+      allow delete: if isOwner(uid);
+
+      match /attempts/{attemptId} {
+        allow get: if isOwner(uid);
+        allow list: if isOwner(uid) && request.query.limit <= 400;
+        // Attempts are an append-only record: they can be created and deleted, never edited.
+        allow create: if isOwner(uid) && validAttempt(request.resource.data, attemptId);
+        allow update: if false;
+        allow delete: if isOwner(uid);
+      }
+    }
+
+    // Deny everything else explicitly.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

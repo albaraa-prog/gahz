@@ -1,0 +1,224 @@
+[
+  {
+    "id": 201,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "According to Clean Architecture principles in Flutter, which layer dependency rule must be strictly preserved?",
+    "options": [
+      "The Domain layer depends directly on the Data layer and Presentation layer to streamline DTO parsing.",
+      "The Domain layer is pure Dart with ZERO dependencies on Data, Presentation, Flutter UI widgets, or external database packages; dependencies only point inward towards the Domain.",
+      "The Presentation layer interacts directly with remote REST API clients, bypassing repositories for speed.",
+      "The Data layer defines UI widgets and state notifiers."
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Clean Architecture, the **Domain Layer** encapsulates core business logic (Entities, Use Cases, Value Objects, Repository Interfaces). It has zero dependencies on Flutter UI frameworks, HTTP clients, or database packages. The **Data** and **Presentation** layers depend on the Domain layer via Dependency Inversion."
+  },
+  {
+    "id": 202,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "Why should `WalletEntity` (Domain) be separated from `WalletModel` (Data DTO) in Clean Architecture?",
+    "codeSnippet": "// domain/entities/wallet_entity.dart\nclass WalletEntity {\n  final String id;\n  final int balanceInBaisa;\n  const WalletEntity({required this.id, required this.balanceInBaisa});\n}\n\n// data/models/wallet_model.dart\nclass WalletModel extends WalletEntity {\n  const WalletModel({required super.id, required super.balanceInBaisa});\n  factory WalletModel.fromJson(Map<String, dynamic> json) => ...\n  Map<String, dynamic> toJson() => ...\n}",
+    "options": [
+      "Because Flutter cannot compile classes that have constructors with JSON annotations.",
+      "It insulates domain business entities from external REST API schema modifications, JSON naming changes, or backend database migrations.",
+      "It allows the UI to render models without compiling Dart bytecode.",
+      "It is a mandatory requirement for Dart sound null-safety."
+    ],
+    "correctAnswer": 1,
+    "explanation": "If a backend changes JSON key names (e.g. `balance_baisa` to `wallet_balance`), only `WalletModel.fromJson` in the Data Layer changes. The `WalletEntity`, domain use cases, and presentation layer remain completely untouched and stable."
+  },
+  {
+    "id": 203,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "What is the primary benefit of returning `Either<Failure, T>` from Repository and Use Case methods in a fintech app?",
+    "codeSnippet": "abstract class WalletRepository {\n  Future<Either<Failure, WalletEntity>> getBalance();\n}\n\n// In Presentation / ViewModel:\nfinal result = await getBalanceUseCase();\nresult.fold(\n  (failure) => emit(WalletError(failure.message)),\n  (wallet) => emit(WalletLoaded(wallet)),\n);",
+    "options": [
+      "It increases JSON parsing speed by 50%.",
+      "It enforces functional error handling in the type system at compile time, requiring explicit branching for both Failure (Left) and Success (Right) without unhandled runtime exceptions.",
+      "It automatically uploads error stack traces to Firebase Crashlytics.",
+      "It encrypts the return value inside the Secure Enclave."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The `Either<L, R>` pattern (from `fpdart` / `dartz`) models a computation that can return a `Failure` (Left) or a success value (Right). It eliminates uncaught runtime exceptions and forces presentation notifiers to explicitly handle failure and success cases via `.fold()`."
+  },
+  {
+    "id": 204,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "In Dart, what language feature allows invoking a Use Case instance directly like a function (`await transferMoney(params);`)?",
+    "codeSnippet": "class TransferMoneyUseCase {\n  final WalletRepository repository;\n  TransferMoneyUseCase(this.repository);\n\n  Future<Either<Failure, Receipt>> call(TransferParams params) async {\n    return await repository.executeTransfer(params);\n  }\n}\n\n// Usage:\nfinal receipt = await transferMoneyUseCase(params);",
+    "options": [
+      "Operator overloading of the '()' invocation operator via the special call() method in Dart.",
+      "The @callable annotation from the meta package.",
+      "Dart reflection through dart:mirrors.",
+      "Implicit type coercion."
+    ],
+    "correctAnswer": 0,
+    "explanation": "In Dart, any class that implements a method named `call()` can be invoked directly as if it were a function (callable class). This enables clean, expressive syntax when orchestrating Domain Use Cases."
+  },
+  {
+    "id": 205,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "In an offline-first fintech app, what is the core responsibility of `WalletRepositoryImpl`?",
+    "codeSnippet": "class WalletRepositoryImpl implements WalletRepository {\n  final WalletRemoteDataSource remoteDataSource;\n  final WalletLocalDataSource localDataSource;\n  final NetworkInfo networkInfo;\n\n  @override\n  Future<Either<Failure, WalletEntity>> getWallet() async {\n    if (await networkInfo.isConnected) {\n      try {\n        final remote = await remoteDataSource.fetchWallet();\n        await localDataSource.cacheWallet(remote);\n        return Right(remote);\n      } on ServerException catch (e) {\n        return Left(ServerFailure(e.message));\n      }\n    } else {\n      try {\n        return Right(await localDataSource.getCachedWallet());\n      } on CacheException {\n        return Left(CacheFailure('No offline wallet cached'));\n      }\n    }\n  }\n}",
+    "options": [
+      "It renders UI widgets directly to the screen.",
+      "It coordinates Remote and Local data sources, manages caching policies, and maps low-level infrastructure exceptions into Domain Failures.",
+      "It handles HTTP TLS handshake certificates.",
+      "It compiles SQLite native drivers."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The Repository implementation in the Data Layer abstracts data retrieval details from the Domain layer. It checks network connectivity, falls back to local cache (Hive/SQLite), saves fresh server data, and translates raw exceptions into strongly typed `Failure` objects."
+  },
+  {
+    "id": 206,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "When configuring Dependency Injection with `GetIt`, when should `registerLazySingleton` be used versus `registerFactory`?",
+    "codeSnippet": "final sl = GetIt.instance;\n\nvoid setup() {\n  sl.registerLazySingleton<Dio>(() => Dio());\n  sl.registerLazySingleton<WalletRepository>(() => WalletRepositoryImpl(sl(), sl(), sl()));\n  sl.registerFactory<TransferViewModel>(() => TransferViewModel(sl()));\n}",
+    "options": [
+      "registerLazySingleton creates a new instance on every call; registerFactory creates one shared instance.",
+      "registerLazySingleton instantiates a single shared instance upon its first request and reuses it; registerFactory creates a fresh, independent instance every time sl<T>() is called.",
+      "registerFactory is exclusively for unit test mocks, while registerLazySingleton is for release builds.",
+      "registerLazySingleton blocks app launch during void main()."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`registerLazySingleton` is ideal for stateless or shared services (like `Dio`, Repositories, SecureStorage) that should only be instantiated when needed and retained. `registerFactory` is used for stateful ViewModels / Controllers that must be created fresh when a user enters a screen and destroyed when they leave."
+  },
+  {
+    "id": 207,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "Why is calling `context.watch<WalletProvider>()` inside an `onPressed` button callback considered an anti-pattern?",
+    "codeSnippet": "ElevatedButton(\n  onPressed: () {\n    // Incorrect usage:\n    context.watch<WalletProvider>().submitPayment();\n  },\n  child: Text('Pay'),\n)",
+    "options": [
+      "context.watch() is only supported in Riverpod, not Provider.",
+      "context.watch() registers the calling widget to rebuild on every state change; calling it inside an event callback throws a runtime assertion or creates unwanted rebuild subscriptions. context.read() should be used instead.",
+      "context.watch() runs in a background isolate.",
+      "onPressed only accepts static functions."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`context.watch<T>()` subscribes the widget to rebuild whenever `notifyListeners()` is called and must ONLY be used inside `build()`. Inside callbacks (like `onPressed`, `onTap`) or lifecycle methods (`initState`, `dispose`), use `context.read<T>()` which reads the value once without creating a rebuild subscription."
+  },
+  {
+    "id": 208,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "How does `Selector<WalletProvider, int>` optimize rebuild performance over `Consumer<WalletProvider>`?",
+    "codeSnippet": "Selector<WalletProvider, int>(\n  selector: (context, provider) => provider.balanceInBaisa,\n  builder: (context, balance, child) {\n    return Text('Balance: OMR ${(balance / 1000).toStringAsFixed(3)}');\n  },\n)",
+    "options": [
+      "It converts the Text widget into an OpenGL shader.",
+      "It only triggers a rebuild of the builder when the specifically selected slice of state (balanceInBaisa) changes, ignoring updates to other fields in WalletProvider.",
+      "It prevents child widgets from playing animations.",
+      "It compiles the builder into WebAssembly."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`Consumer<T>` rebuilds whenever `notifyListeners()` is called. `Selector<T, S>` evaluates the selected value `S` using `==`. If other properties in `WalletProvider` change (like user profile, transaction list, or notification badges), the `Selector` ignores them and prevents unnecessary rebuilds."
+  },
+  {
+    "id": 209,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "When is `ChangeNotifierProxyProvider` required in a Flutter application?",
+    "codeSnippet": "ChangeNotifierProxyProvider<AuthProvider, WalletProvider>(\n  create: (context) => WalletProvider(null),\n  update: (context, auth, wallet) => wallet!..updateAuthToken(auth.token),\n)",
+    "options": [
+      "When proxying network traffic through a proxy server.",
+      "When a ChangeNotifier depends on another provider's state (such as WalletProvider needing dynamic AuthTokens from AuthProvider) and must synchronize when the parent provider updates.",
+      "To convert REST API calls into GraphQL queries.",
+      "When unit testing widgets without a real device."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`ChangeNotifierProxyProvider<A, B>` allows provider `B` to observe and consume state from provider `A`. When `AuthProvider` logs in and receives a new auth token, the `update` callback provides the latest token to `WalletProvider` without recreating the entire provider state."
+  },
+  {
+    "id": 210,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "What causes the error 'FlutterError: A TransferNotifier was used after being disposed' and how is it prevented?",
+    "codeSnippet": "class TransferNotifier extends ChangeNotifier {\n  final PaymentService _service;\n  bool isLoading = false;\n  TransferNotifier(this._service);\n\n  Future<void> pay(TransferParams params) async {\n    isLoading = true;\n    notifyListeners();\n    await _service.process(params);\n    // User popped screen while payment was in-flight\n    isLoading = false;\n    notifyListeners(); // Throws FlutterError\n  }\n}",
+    "options": [
+      "Wrap the app in a global try-catch block in main().",
+      "Check if the notifier is still mounted/has listeners before calling notifyListeners(), or guard with a custom _isDisposed flag.",
+      "Never use async/await inside a ChangeNotifier.",
+      "Disable the hardware back button permanently."
+    ],
+    "correctAnswer": 1,
+    "explanation": "When a screen is popped, Provider automatically calls `dispose()` on the `ChangeNotifier`. If an async task finishes after disposal and calls `notifyListeners()`, Flutter throws an assertion error. Checking `if (!hasListeners) return;` or tracking `_isDisposed` guards against this crash."
+  },
+  {
+    "id": 211,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "In unit testing a Domain Use Case with `mocktail`, what does `verify()` assert?",
+    "codeSnippet": "test('should call executeTransfer on repository with correct params', () async {\n  when(() => mockRepository.executeTransfer(params))\n      .thenAnswer((_) async => Right(receipt));\n\n  final result = await useCase(params);\n\n  expect(result, Right(receipt));\n  verify(() => mockRepository.executeTransfer(params)).called(1);\n  verifyNoMoreInteractions(mockRepository);\n});",
+    "options": [
+      "That the database table has exactly 1 row.",
+      "That the executeTransfer method on the mock repository was invoked exactly once with the specified params, and no other unexpected repository methods were called.",
+      "That the network latency was under 100ms.",
+      "That the test executed on an Android emulator."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`verify(...).called(1)` checks that the mocked dependency was invoked with the exact arguments expected. `verifyNoMoreInteractions(mockRepository)` ensures the Use Case did not trigger any unexpected side effects on the repository."
+  },
+  {
+    "id": 212,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "Why is testing `ChangeNotifier` state transitions using listeners without `WidgetTester` considered best practice for state logic?",
+    "codeSnippet": "test('WalletNotifier sets loading and emits balance on success', () async {\n  final mockRepo = MockWalletRepository();\n  when(() => mockRepo.getBalance()).thenAnswer((_) async => Right(WalletEntity(balanceInBaisa: 5000)));\n  \n  final notifier = WalletNotifier(mockRepo);\n  final states = <bool>[];\n  notifier.addListener(() => states.add(notifier.isLoading));\n\n  await notifier.fetchBalance();\n\n  expect(states, [true, false]);\n  expect(notifier.balance, 5000);\n});",
+    "options": [
+      "Because WidgetTester cannot test asynchronous code.",
+      "Because pure unit tests run in milliseconds without Flutter engine rendering overhead, ensuring fast, deterministic, and isolated testing of business logic.",
+      "Because ChangeNotifier cannot be mounted in widget trees during tests.",
+      "Because mocking is prohibited in widget tests."
+    ],
+    "correctAnswer": 1,
+    "explanation": "State notifiers and ViewModels contain pure presentation logic. Unit testing them directly with listeners is orders of magnitude faster than widget tests, avoids UI layout flakiness, and verifies state mutations deterministically."
+  },
+  {
+    "id": 213,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "What does `await tester.pumpAndSettle()` do in a Flutter widget test?",
+    "codeSnippet": "testWidgets('Tapping Confirm Transfer shows success dialog', (tester) async {\n  await tester.pumpWidget(MaterialApp(home: TransferScreen()));\n  await tester.tap(find.byKey(Key('confirm_btn')));\n  await tester.pumpAndSettle();\n  expect(find.byType(SuccessDialog), findsOneWidget);\n});",
+    "options": [
+      "It restarts the test runner and reboots the emulator.",
+      "It repeatedly calls pump() until all scheduled frames, animations (fade, scale, route transitions), and microtasks have settled into a steady state.",
+      "It makes a live HTTP request to the backend.",
+      "It saves a screenshot of the widget to disk."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`tester.pump()` advances the clock by a single frame or fixed duration. `tester.pumpAndSettle()` repeatedly pumps frames until all animations, timers, and scheduled microtasks have completed, ensuring UI transitions finish before assertions run."
+  },
+  {
+    "id": 214,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "What is the primary role of Golden Tests (Screenshot Regression Tests) in fintech mobile development?",
+    "options": [
+      "To benchmark GPU shader compile speed.",
+      "To render widgets headlessly and compare the rasterized pixel output against approved master baseline images, catching unintended UI regressions across screen sizes and RTL/LTR locales.",
+      "To verify SHA-256 database password hashes.",
+      "To validate Apple Pay merchant certificates."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Golden Tests render widgets and compare them pixel-by-pixel against reference golden image files. This guarantees that complex financial UI cards, receipts, transaction badges, and Arabic RTL layouts maintain visual consistency without breaking across updates."
+  },
+  {
+    "id": 215,
+    "category": "Flutter Clean Architecture & Provider",
+    "difficulty": "hard",
+    "question": "How does Flutter's official `integration_test` package differ from standard `testWidgets` tests?",
+    "options": [
+      "integration_test only runs in desktop web browsers.",
+      "integration_test runs on physical devices or emulators against a full application binary, testing real native platform plugins (Biometrics, Camera, NFC, SecureStorage) and end-to-end flows.",
+      "integration_test replaces Xcode and Android Studio compilation.",
+      "integration_test executes without compiling Dart code."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Standard widget tests run in a simulated headless test environment where native platform channels are mocked. `integration_test` compiles an instrumented APK / iOS Runner app that runs on real hardware, verifying real native plugins, sensors, and full backend integrations."
+  }
+]

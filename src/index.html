@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DevQuiz Studio: open-source practice exams for programming, CS fundamentals and technical interviews, including an Oman and GCC enterprise track.">
+    <meta name="color-scheme" content="dark light">
+    <title>DevQuiz Studio - Professional Dev & IQ Assessment</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/styles/base.css">
+    <link rel="stylesheet" href="./assets/styles/app.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon" aria-hidden="true">DQ</div>
+            <div class="logo-text">
+                <h1>DevQuiz Studio</h1>
+                <p>Advanced Developer Assessment</p>
+            </div>
+        </div>
+        <div class="header-controls">
+            <span class="status-chip" id="syncStatusChip" data-status="guest" hidden></span>
+            <div id="accountSlot"></div>
+            <button class="theme-toggle" id="themeToggleBtn" type="button" aria-label="Toggle theme">🌙</button>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- ================= HOME SCREEN ================= -->
+        <section id="homeScreen" class="screen active">
+            <div id="homeNotices"></div>
+
+            <div class="welcome-card">
+                <h2>🎯 Start Your Practice Exam</h2>
+                <p id="welcomeBlurb">Test your skills with a randomly mixed set of questions from our complete question bank. Every session is randomized!</p>
+
+                <div class="study-mode-wrap">
+                    <label class="study-mode-container">
+                        <input type="checkbox" id="studyModeCheckbox" checked>
+                        <span>📖 <strong>Study Mode:</strong> Show instant correctness and explanations upon selecting an answer</span>
+                    </label>
+                </div>
+
+                <div class="home-actions">
+                    <button class="btn btn-lg" type="button" data-preset="standard" disabled>🚀 Start Randomized Exam (25m)</button>
+                    <button class="btn btn-outline btn-rounded" type="button" id="customConfigToggle" aria-expanded="false" aria-controls="customConfigPanel">⚙️ Custom Categories Drill</button>
+                </div>
+            </div>
+
+            <!-- Custom Config Panel -->
+            <div class="custom-config" id="customConfigPanel">
+                <h3 class="config-title">Configure Custom Quiz</h3>
+                <div class="config-grid">
+                    <div class="config-group">
+                        <label for="customQuestionCount">Questions Count</label>
+                        <input type="number" id="customQuestionCount" min="5" max="100" value="25">
+                    </div>
+                    <div class="config-group">
+                        <label for="customTimer">Time Limit (Minutes)</label>
+                        <input type="number" id="customTimer" min="1" max="120" value="25">
+                    </div>
+                    <div class="config-group config-group--end">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="selectAllCategories" checked>
+                            <strong>Select All Categories</strong>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="config-group">
+                    <span id="categoriesLabel"><strong>Include Categories</strong></span>
+                    <div class="category-selection-grid" id="categoryTogglesContainer" role="group" aria-labelledby="categoriesLabel"></div>
+                </div>
+
+                <div class="config-actions">
+                    <button class="btn btn-outline" type="button" id="customConfigCancel">Cancel</button>
+                    <button class="btn" type="button" id="customConfigStart">Start Custom Quiz</button>
+                </div>
+            </div>
+
+            <!-- Quiz Presets -->
+            <h3 class="section-title">Focused Practice Presets</h3>
+            <div class="quiz-modes" id="presetCards"></div>
+
+            <!-- History Section -->
+            <div class="history-section" id="historySection">
+                <h3>
+                    <span>📊 Performance History</span>
+                    <span class="history-actions">
+                        <span class="streak-chip" id="streakChip" hidden></span>
+                        <button class="btn btn-outline btn-danger btn-sm" type="button" id="clearHistoryBtn">Clear Data</button>
+                    </span>
+                </h3>
+                <div class="history-table-wrapper">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Mode</th>
+                                <th>Questions</th>
+                                <th>Score (%)</th>
+                                <th>Correct</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= QUIZ SCREEN ================= -->
+        <section id="quizScreen" class="screen">
+            <div class="quiz-container">
+                <div class="quiz-main" id="quizMain">
+                    <div class="quiz-meta-info">
+                        <span>
+                            <span class="category-tag" id="currentCategoryTag">Category</span>
+                            <span class="difficulty-tag" id="currentDifficultyTag"></span>
+                        </span>
+                        <div class="timer-container" id="quizTimer" role="timer" aria-label="Time remaining">
+                            ⏱️ <span id="timerDigits">25:00</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="quizProgressBar"></div>
+                    </div>
+
+                    <div class="question-text" id="questionText"></div>
+                    <pre class="code-block" id="questionCodeBlock" hidden></pre>
+                    <div class="options-list" id="optionsContainer"></div>
+                    <div class="explanation-box quiz-explanation" id="quizExplanationBox" hidden></div>
+
+                    <div class="quiz-actions">
+                        <button class="btn btn-outline" type="button" id="prevBtn">← Previous</button>
+                        <button class="btn btn-outline flag-btn" type="button" id="flagBtn" aria-pressed="false">🚩 Flag for Review</button>
+                        <button class="btn" type="button" id="nextBtn">Next →</button>
+                    </div>
+                </div>
+
+                <aside class="quiz-sidebar">
+                    <div class="sidebar-title">
+                        <span>Question Map</span>
+                        <span class="map-progress" id="mapProgressLabel">0/25</span>
+                    </div>
+
+                    <div class="question-grid" id="questionGridMap"></div>
+
+                    <button class="btn btn-danger btn-block mt-1" type="button" id="finishBtn">💾 Finish & Submit Exam</button>
+
+                    <div class="sidebar-study">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="sidebarStudyMode" checked>
+                            <span>📖 Study Mode (Feedback)</span>
+                        </label>
+                    </div>
+
+                    <div class="legend">
+                        <div class="legend-item"><div class="legend-color legend-unanswered"></div><span>Unanswered</span></div>
+                        <div class="legend-item"><div class="legend-color legend-answered"></div><span>Answered</span></div>
+                        <div class="legend-item"><div class="legend-color legend-flagged"></div><span>Flagged</span></div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- ================= RESULTS SCREEN ================= -->
+        <section id="resultsScreen" class="screen">
+            <div class="results-summary">
+                <div class="score-radial-card">
+                    <div class="score-circle-container">
+                        <svg class="score-circle-svg" aria-hidden="true">
+                            <circle class="score-circle-bg" cx="80" cy="80" r="70"></circle>
+                            <circle class="score-circle-fill" id="scoreCircleFill" cx="80" cy="80" r="70"></circle>
+                        </svg>
+                        <div class="score-circle-text" id="scoreCircleText">0%</div>
+                    </div>
+                    <div class="score-badge-desc" id="scoreVerdictBadge"></div>
+                    <p class="score-counts" id="scoreCountsText"></p>
+                    <button class="btn btn-block mt-15" type="button" id="returnHomeBtn">🏠 Try Another Test</button>
+                </div>
+
+                <div class="results-details-card">
+                    <h3 class="results-heading">Domain Analytics</h3>
+                    <p class="results-intro">Understand your topic-specific performance to isolate core areas of improvement.</p>
+                    <div class="performance-bars" id="topicPerformanceBars"></div>
+                </div>
+            </div>
+
+            <div class="review-section">
+                <h3 class="review-heading">
+                    <span>📝 Exam Review</span>
+                    <small>Every question with the correct answer and its explanation</small>
+                </h3>
+
+                <div class="review-filters" id="reviewFilters">
+                    <button class="filter-btn active" type="button" data-filter="all">All Questions (<span id="filterAllCount">0</span>)</button>
+                    <button class="filter-btn" type="button" data-filter="correct">Correct (<span id="filterCorrectCount">0</span>)</button>
+                    <button class="filter-btn" type="button" data-filter="incorrect">Incorrect/Skipped (<span id="filterIncorrectCount">0</span>)</button>
+                    <button class="filter-btn" type="button" data-filter="flagged">Flagged (<span id="filterFlaggedCount">0</span>)</button>
+                </div>
+
+                <div class="review-list" id="reviewQuestionsList"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Shared dialog (confirmations and notices) -->
+    <div class="modal" id="appDialog" role="dialog" aria-modal="true" aria-labelledby="appDialogTitle" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-title" id="appDialogTitle"></div>
+            <div class="modal-body" id="appDialogBody"></div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" type="button" id="appDialogCancel">Go Back</button>
+                <button class="btn" type="button" id="appDialogConfirm">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign-in dialog -->
+    <div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle" aria-hidden="true">
+        <div class="modal-content modal-content--form">
+            <div class="modal-title" id="authModalTitle">Sign in to sync your progress</div>
+            <div class="auth-tabs" role="tablist">
+                <button class="filter-btn active" type="button" role="tab" data-auth-tab="signin" aria-selected="true">Sign in</button>
+                <button class="filter-btn" type="button" role="tab" data-auth-tab="register" aria-selected="false">Create account</button>
+            </div>
+            <form id="authForm" novalidate>
+                <div class="form-field" id="authNameField" hidden>
+                    <label for="authName">Name</label>
+                    <input type="text" id="authName" autocomplete="name" maxlength="80">
+                </div>
+                <div class="form-field">
+                    <label for="authEmail">Email</label>
+                    <input type="email" id="authEmail" autocomplete="email" required>
+                </div>
+                <div class="form-field">
+                    <label for="authPassword">Password</label>
+                    <input type="password" id="authPassword" autocomplete="current-password" minlength="6" required>
+                </div>
+                <div class="form-message" id="authMessage" role="alert"></div>
+                <button class="btn btn-block" type="submit" id="authSubmitBtn">Sign in</button>
+            </form>
+            <div class="auth-divider">or</div>
+            <button class="btn btn-outline btn-block" type="button" id="googleSignInBtn">Continue with Google</button>
+            <div class="auth-footer">
+                <button class="link-btn" type="button" id="authResetBtn">Forgot password?</button>
+                <button class="link-btn" type="button" id="authCloseBtn">Continue as guest</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+
+    <footer>
+        <p>© 2026 DevQuiz Studio. Open source under the MIT License.</p>
+        <div class="footer-links">
+            <span id="questionCountLabel"></span>
+            <span>•</span>
+            <button class="link-btn" type="button" id="privacyBtn">Privacy</button>
+        </div>
+    </footer>
+
+    <noscript>DevQuiz Studio needs JavaScript to run.</noscript>
+    <script type="module" src="./app.ts"></script>
+</body>
+</html>

@@ -75,7 +75,7 @@ export function showDialog(options: DialogOptions): Promise<boolean> {
 
   const cancel = byId<HTMLButtonElement>('appDialogCancel');
   cancel.hidden = options.cancelLabel === null;
-  cancel.textContent = options.cancelLabel ?? 'Go Back';
+  cancel.textContent = options.cancelLabel ?? 'Go back';
 
   return new Promise<boolean>((resolve) => {
     resolveCurrent = resolve;

@@ -33,8 +33,8 @@ const STATUS_HINT: Record<SyncStatus, string> = {
 function renderTheme(): void {
   const button = byId('themeToggleBtn');
   const dark = state.theme === 'dark';
-  button.textContent = dark ? '☀️' : '🌙';
-  button.title = dark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+  button.textContent = dark ? 'Light' : 'Dark';
+  button.title = dark ? 'Switch to the light theme' : 'Switch to the dark theme';
 }
 
 function renderStatus(): void {

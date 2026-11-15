@@ -29,7 +29,7 @@ function renderPresetCards(): void {
     .map((preset) => {
       const card = preset.card!;
       const available = ready ? Math.min(preset.count, preset.pick(all).length) : preset.count;
-      const chips = [`${available} Qs`, `${preset.minutes} Mins`, ...(card.extraChip ? [card.extraChip] : [])];
+      const chips = [`${available} questions`, `${preset.minutes} min`, ...(card.extraChip ? [card.extraChip] : [])];
       const unavailable = ready && available === 0;
       return `
         <div class="mode-card${card.accent ? ` mode-card--${card.accent}` : ''}" role="button" tabindex="0"
@@ -39,7 +39,7 @@ function renderPresetCards(): void {
             <div class="mode-title">${escapeHtml(card.title)}</div>
             <p class="mode-description">${escapeHtml(card.description)}</p>
           </div>
-          <div class="mode-meta">${chips.map((chip) => `<span>${escapeHtml(chip)}</span>`).join('<span>•</span>')}</div>
+          <div class="mode-meta">${chips.map((chip) => `<span>${escapeHtml(chip)}</span>`).join('<span aria-hidden="true">·</span>')}</div>
         </div>`;
     })
     .join('');
@@ -55,7 +55,7 @@ function renderBankState(): void {
   });
 
   byId('welcomeBlurb').textContent = ready
-    ? `Test your skills with a randomly mixed set of questions compiled from our complete database of ${count} technical, CS fundamentals, Networking, REST/GraphQL APIs, logic/IQ, Arabic, Oman enterprise, and Junior-to-Senior Flutter SWE questions. Every session is randomized!`
+    ? `${count} questions across ${state.categories.length} topics: Flutter and fintech, APIs and networking, databases, CS fundamentals, logic, Arabic, and an Oman and GCC enterprise track. Timed, randomized every session, with an explanation for every answer.`
     : 'Loading the question bank…';
   byId('questionCountLabel').textContent = ready ? `${count} questions in ${state.categories.length} categories` : '';
 

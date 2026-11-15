@@ -4,6 +4,7 @@
  */
 
 import { initAuthModal } from './components/authModal';
+import { initConstellation } from './components/constellation';
 import { initCustomConfig } from './components/customConfig';
 import { initHistoryTable } from './components/historyTable';
 import { initHomeScreen } from './components/homeScreen';
@@ -118,6 +119,7 @@ function main(): void {
   initTimer();
   initResultsScreen();
   initRouter();
+  initConstellation();
   initConnectivity();
   initPrivacyNote();
 

@@ -1,0 +1,284 @@
+[
+  {
+    "id": 301,
+    "category": "Oman Enterprise: Backend & ERP Integration",
+    "difficulty": "medium",
+    "question": "A bank in Muscat asks your team of six developers to build a new corporate onboarding portal. One architect proposes starting with twelve Spring Boot microservices, each with its own database. The domain is still being discovered and the bank has no container platform team yet. What is the most defensible recommendation?",
+    "options": [
+      "Go with twelve microservices from day one, because banks always need independent scaling for every feature.",
+      "Start with a well-structured modular monolith with clear module boundaries, and extract a service only when a module has a proven need for independent scaling, release cadence or ownership.",
+      "Build one large codebase with no internal boundaries so that developers can call any class directly and deliver faster.",
+      "Split the system by technical layer, with one microservice for controllers, one for business logic and one for data access."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Microservices buy independent deployment and scaling at the price of distributed transactions, network failures, observability and platform operations. A six-person team with an unstable domain and no platform support would spend most of its time on that overhead. A **modular monolith** keeps one deployable unit but enforces boundaries (separate modules, no shared tables across modules), so services can be extracted later when there is evidence. Splitting by technical layer is the worst of both worlds, because every feature change then touches every service."
+  },
+  {
+    "id": 302,
+    "category": "Oman Enterprise: Backend & ERP Integration",
+    "difficulty": "hard",
+    "question": "A customer sends OMR 250.000 from a mobile banking app. The request reaches the server and the transfer is posted, but the response is lost on a weak mobile connection, so the app retries automatically. How should the transfer API be designed so that the customer is debited only once?",
+    "options": [
+      "Disable retries in the mobile app and show an error whenever the network times out.",
+      "Have the server reject any transfer with the same amount and beneficiary made within five minutes.",
+      "Have the client send a unique idempotency key with each transfer intent; the server stores the key under a unique constraint with the outcome, and a repeat of the same key returns the original result without posting again.",
+      "Wrap the transfer in a longer database transaction so that the retry waits for the first request to finish."
+    ],
+    "correctAnswer": 2,
+    "explanation": "**Idempotency keys** make a retry safe. The client generates one key per user intent (not per HTTP attempt) and the server records it atomically with the transfer, usually with a unique index. A second request with the same key finds the stored result and returns it. Disabling retries leaves the customer unsure whether the money moved. Matching on amount and beneficiary blocks legitimate repeat payments and still misses races. A longer transaction does nothing, because the first request has already committed."
+  },
+  {
+    "id": 303,
+    "category": "Oman Enterprise: Backend & ERP Integration",
+    "difficulty": "medium",
+    "question": "A new .NET Core procurement service must post approved invoices to the company's SAP system. SAP has a weekly maintenance window and occasionally responds slowly at month end. Which integration pattern is the most robust?",
+    "options": [
+      "Write the invoice and an outbox record in the same local transaction, then deliver it to SAP asynchronously through a queue or integration middleware with retries, a dead-letter queue and a reconciliation report.",
+      "Call the SAP interface synchronously inside the user's approval request and show an error to the approver if SAP is unavailable.",
+      "Write directly into SAP's underlying database tables to avoid depending on its interfaces.",
+      "Export a spreadsheet every evening and ask the finance team to upload it into SAP manually."
+    ],
+    "correctAnswer": 0,
+    "explanation": "The approval should not fail because a downstream ERP is in maintenance. The **transactional outbox** pattern guarantees that an approved invoice is never lost: the business change and the outgoing message are committed together, and a relay delivers the message when SAP is reachable. Retries need idempotent posting on the SAP side (for example a unique external reference), failed messages go to a dead-letter queue for support, and reconciliation proves both systems agree. Writing into SAP tables bypasses its business rules and is not supported, and manual uploads do not scale or audit well."
+  },
+  {
+    "id": 304,
+    "category": "Oman Enterprise: Backend & ERP Integration",
+    "difficulty": "medium",
+    "question": "A telecom operator has an in-house mobile team and an external vendor building the backend for a new self-care app. Both must work in parallel to hit the launch date. What does a contract-first approach with OpenAPI look like in practice?",
+    "options": [
+      "The vendor builds the backend first, then generates documentation from the code and shares it with the mobile team once it is stable.",
+      "Each team documents the endpoints it expects in its own wiki page, and differences are resolved during integration testing.",
+      "The mobile team hard-codes sample JSON responses in the app and replaces them once the real API is deployed.",
+      "Both teams agree and review the OpenAPI specification first, the mobile team develops against a mock server generated from it, and CI on both sides fails if the implementation drifts from the specification."
+    ],
+    "correctAnswer": 3,
+    "explanation": "**Contract-first** means the OpenAPI document is the source of truth and is agreed before code is written. From it you can generate a mock server, client SDKs and server stubs, so both teams move in parallel. The important part is enforcement: contract tests or specification linting in CI catch drift early, when it is cheap. Code-first documentation arrives too late for parallel work, and separate wiki pages or hard-coded samples guarantee surprises in integration week."
+  },
+  {
+    "id": 305,
+    "category": "Oman Enterprise: Oracle & PostgreSQL",
+    "difficulty": "medium",
+    "question": "This Oracle query powers the 'today's transactions' screen and has become slow. There is an index on created_at and another on account_id. What is the most likely cause and the best fix?",
+    "codeSnippet": "SELECT txn_id, amount, created_at\nFROM   transactions\nWHERE  account_id = :account_id\nAND    TRUNC(created_at) = DATE '2026-01-15';",
+    "options": [
+      "Oracle cannot use bind variables with dates, so the value should be concatenated into the SQL string.",
+      "The table needs to be rebuilt, because indexes stop working after a table passes one million rows.",
+      "Wrapping created_at in TRUNC() prevents a normal index on that column from being used; rewrite the filter as a range (created_at >= :day AND created_at < :day + 1) and add a composite index on (account_id, created_at).",
+      "The SELECT list should be replaced with SELECT * so that the optimizer can choose any index."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Applying a function to an indexed column makes the predicate **non-sargable**: the index stores created_at values, not TRUNC(created_at) values, so the optimizer cannot do a range scan on it. Rewriting the condition as a half-open range keeps the column bare. A composite index with the equality column first, **(account_id, created_at)**, lets the database jump straight to one account and read one day's rows in order. A function-based index on TRUNC(created_at) would also work, but the range rewrite is simpler and serves more queries. Concatenating values into SQL invites injection and hurts plan caching."
+  },
+  {
+    "id": 306,
+    "category": "Oman Enterprise: Oracle & PostgreSQL",
+    "difficulty": "hard",
+    "question": "A payments table has grown from 40 million to 400 million rows in two years, and it will keep growing. Statement queries for the last three months are slowing down, and purging old data with DELETE takes hours. Which design change addresses both problems?",
+    "options": [
+      "Range-partition the table by month on the transaction date with local indexes, so queries prune to the relevant partitions and old months can be archived or dropped as a partition operation.",
+      "Add an index on every column so that any query can find a matching index.",
+      "Move the table to a faster disk and increase the database server's memory.",
+      "Split the table manually into payments_2024, payments_2025 and so on, and change the application to choose the table name at runtime."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Both Oracle and PostgreSQL support declarative **range partitioning**. When queries filter on the partition key, the planner skips partitions that cannot contain matching rows (partition pruning), so a three-month statement reads three partitions, not the whole table. Retention becomes a metadata operation: detaching or dropping a partition is close to instant and avoids the undo, redo and bloat of a huge DELETE. Indexing every column slows writes and wastes space, hardware only delays the problem, and hand-made yearly tables push partitioning logic into every query. Always confirm with the execution plan that pruning is happening."
+  },
+  {
+    "id": 307,
+    "category": "Oman Enterprise: Oracle & PostgreSQL",
+    "difficulty": "hard",
+    "question": "An account holds OMR 100.000. Two withdrawal requests of OMR 80.000 arrive at the same moment. Each transaction reads the balance, sees 100.000, checks that it is enough and then writes the new balance. Under the default READ COMMITTED isolation level both succeed and the account is overdrawn. What is the correct fix?",
+    "options": [
+      "Add a short random delay before each withdrawal so that the two requests rarely overlap.",
+      "Cache the balance in the application server's memory and check it there before touching the database.",
+      "Switch the isolation level to READ UNCOMMITTED so each transaction can see the other's pending change.",
+      "Lock the row when reading it with SELECT ... FOR UPDATE, or do the check and the debit in one atomic statement such as UPDATE accounts SET balance = balance - 80 WHERE id = :id AND balance >= 80 and verify one row was updated."
+    ],
+    "correctAnswer": 3,
+    "explanation": "This is a **lost update** caused by a read-then-write race. READ COMMITTED only guarantees that you never read uncommitted data; it does not stop another transaction from changing the row between your read and your write. **SELECT ... FOR UPDATE** makes the second transaction wait until the first commits and then read the new balance. The single conditional UPDATE is even simpler, because the check and the write happen atomically under the row lock. Delays only make the bug rarer, an in-memory cache is wrong as soon as there are two servers, and READ UNCOMMITTED (which Oracle and PostgreSQL do not really offer) would make things worse."
+  },
+  {
+    "id": 308,
+    "category": "Oman Enterprise: Oracle & PostgreSQL",
+    "difficulty": "medium",
+    "question": "After a data migration, the customers table contains several rows for the same civil ID number. You must keep only the most recently updated row for each civil ID. Which approach is correct and works in both Oracle and PostgreSQL?",
+    "codeSnippet": "customers(customer_id PK, civil_id, full_name, updated_at)",
+    "options": [
+      "Run SELECT DISTINCT civil_id FROM customers and delete every row that the query does not return.",
+      "Number the rows with ROW_NUMBER() OVER (PARTITION BY civil_id ORDER BY updated_at DESC), delete the rows numbered above 1 by their customer_id, then add a unique constraint on civil_id.",
+      "Use GROUP BY civil_id HAVING COUNT(*) > 1 and delete every row in those groups.",
+      "Sort the table by civil_id and delete rows by hand in a database tool until no duplicates remain."
+    ],
+    "correctAnswer": 1,
+    "explanation": "**ROW_NUMBER()** with PARTITION BY civil_id restarts the numbering for each civil ID, and ORDER BY updated_at DESC gives the newest row number 1. Deleting rows where the number is greater than 1 keeps exactly one survivor per customer. The GROUP BY ... HAVING query finds the duplicated IDs but deleting those groups removes the good row too, and DISTINCT returns values, not row identities. The job is not finished until a **unique constraint** stops the duplicates from coming back. In production you would also back up or stage the rows first and re-point child records before deleting."
+  },
+  {
+    "id": 309,
+    "category": "Oman Enterprise: Incidents & Security Judgment",
+    "difficulty": "hard",
+    "question": "Two days before a mobile banking release, a penetration test shows that changing an account number in one API request returns another customer's statement. The business sponsor says the launch date has been announced and cannot move. What should you do?",
+    "options": [
+      "Release on schedule and plan the fix for the next sprint, since only a skilled attacker would find the flaw.",
+      "Hide the statements button in the app so that the vulnerable endpoint is no longer visible to users.",
+      "Fix it quietly yourself without telling anyone, to avoid alarming management before the launch.",
+      "Escalate immediately to the security and release owners, explain the customer and regulatory impact in plain terms, and offer options such as fixing and retesting before launch or launching without the affected feature."
+    ],
+    "correctAnswer": 3,
+    "explanation": "This is broken object-level authorization (often called **IDOR**), and it exposes customer financial data. That is a release blocker for a bank, with consequences under Oman's Personal Data Protection Law and central bank expectations as well as for customer trust. The decision to accept or reject such a risk does not belong to an individual developer or to the project sponsor alone, so the right move is fast, clear **escalation with options**. Hiding a button does not protect an API that anyone can call directly, and a quiet fix skips the retest and the wider check for the same flaw in other endpoints."
+  },
+  {
+    "id": 310,
+    "category": "Oman Enterprise: Incidents & Security Judgment",
+    "difficulty": "hard",
+    "question": "On salary day, about 3% of requests to an internet banking API fail with HTTP 502 or 504 between 9:00 and 11:00. The errors come from the API gateway, and the application's own logs show no exceptions. What is the most useful first diagnostic step?",
+    "options": [
+      "Restart all application servers every 30 minutes during peak hours until the errors stop.",
+      "Correlate gateway logs with upstream response times and resource metrics for the same requests, checking for timeouts that are shorter upstream than downstream, exhausted thread or connection pools, and unhealthy instances behind the load balancer.",
+      "Increase the gateway timeout to ten minutes so that slow requests eventually succeed.",
+      "Ask customers who complain to clear their browser cache and try again later."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A **502** means the gateway got an invalid or no response from the upstream, and a **504** means the upstream did not answer in time. When the application logs nothing, the request usually never reached application code or was cut off: common causes are a saturated thread or database connection pool, keep-alive timeouts that are shorter on the application than on the gateway, or one unhealthy instance still receiving traffic. Correlating by request ID and time shows which of these it is. Restarts destroy the evidence, a ten-minute timeout hides the symptom while tying up more connections, and the problem is clearly server-side."
+  },
+  {
+    "id": 311,
+    "category": "Oman Enterprise: Incidents & Security Judgment",
+    "difficulty": "medium",
+    "question": "Twenty minutes after a production deployment, bill payments start failing for a large share of customers. You have a theory about the cause but have not confirmed it. What is the right order of actions?",
+    "options": [
+      "Restore service first by rolling back or disabling the change, keep the logs and evidence, then run a blameless root-cause analysis and agree on preventive actions.",
+      "Keep production as it is while you debug, because rolling back would destroy the chance to find the root cause.",
+      "Write a quick patch based on your theory and deploy it straight to production without review, since time matters.",
+      "Wait for more customer complaints to confirm the problem is real before acting."
+    ],
+    "correctAnswer": 0,
+    "explanation": "During an incident the priority is to **stop customer impact**, and the fastest safe mitigation is usually to roll back the change that preceded the failure. Root cause comes second, and it does not require a broken production system: logs, metrics, traces and the failing build can be studied afterwards or reproduced in a test environment. An unreviewed patch based on a guess risks a second incident. The root-cause analysis should be **blameless** and produce concrete actions, such as a missing test, a canary release step or an alert that would have caught the problem sooner."
+  },
+  {
+    "id": 312,
+    "category": "Oman Enterprise: Incidents & Security Judgment",
+    "difficulty": "medium",
+    "question": "During a code review you notice that a colleague committed a production database password to the team's Git repository three weeks ago. What is the correct response?",
+    "options": [
+      "Delete the line in a new commit and say nothing, since the repository is private.",
+      "Rewrite the Git history to remove the commit, which makes the password safe to keep using.",
+      "Report it, treat the password as compromised and rotate it immediately, move the secret to a vault or environment configuration, and check access logs and the rest of the history for other secrets.",
+      "Rename the variable that holds the password so that automated scanners no longer detect it."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Once a secret is in Git it lives in every clone, fork, CI cache and backup, so removing the line or rewriting history does not make it secret again. The only real fix is **rotation**: issue a new credential and revoke the old one. Then remove the cause by loading secrets from a vault or the deployment environment, and add secret scanning to pre-commit hooks and CI. Reporting matters, because the security team needs to review database access during the exposure window. Handling it openly and without blame also makes it more likely that the next mistake gets reported quickly."
+  },
+  {
+    "id": 313,
+    "category": "Oman Enterprise: Resilience & Scalability",
+    "difficulty": "medium",
+    "question": "A public 'send OTP' endpoint is being abused: scripts trigger thousands of SMS messages, which costs money and annoys customers. The API runs on four application instances behind a load balancer. How should rate limiting be designed?",
+    "options": [
+      "Use a token bucket or sliding window counter held in a shared store such as Redis, keyed by phone number and by client IP, and return HTTP 429 with a Retry-After header when a limit is exceeded.",
+      "Keep a counter in each application instance's memory and block a caller after five requests.",
+      "Add a CAPTCHA image to the mobile app's login screen and rely on that alone.",
+      "Reduce the number of application instances to one so that counting requests is simpler."
+    ],
+    "correctAnswer": 0,
+    "explanation": "With several instances, an in-memory counter lets a caller make five requests per instance, and the count is lost on every restart. A **shared store** gives one consistent count. Limiting by phone number protects each customer from SMS flooding, while limiting by IP or device slows down scripts that rotate numbers. The **token bucket** algorithm allows short bursts but caps the sustained rate. Returning **429 with Retry-After** lets well-behaved clients back off. A CAPTCHA can help but does not protect an API that is called directly, and running one instance trades an abuse problem for an availability problem."
+  },
+  {
+    "id": 314,
+    "category": "Oman Enterprise: Resilience & Scalability",
+    "difficulty": "hard",
+    "question": "A banking app calls a third-party bill payment aggregator. When the aggregator becomes slow, requests pile up waiting for it, every worker thread is consumed, and unrelated features such as balance inquiry stop responding too. Which combination of measures prevents one slow dependency from taking down the whole app?",
+    "options": [
+      "Increase the thread pool size and the timeout so that more requests can wait for the aggregator.",
+      "Retry each failed aggregator call immediately up to ten times.",
+      "Set short timeouts on the aggregator call, wrap it in a circuit breaker, give it its own limited connection or thread pool (a bulkhead), and show a clear 'bill payment is temporarily unavailable' message when the circuit is open.",
+      "Call the aggregator from the mobile app directly so that the backend is not involved."
+    ],
+    "correctAnswer": 2,
+    "explanation": "The failure spreads because a slow call holds a thread for a long time. A **timeout** bounds how long any call can wait. A **circuit breaker** stops calling a dependency that keeps failing, so requests fail fast, and it probes periodically to close again when the dependency recovers. A **bulkhead** caps how many threads or connections one dependency may use, so balance inquiries keep their own capacity. Together they turn a full outage into graceful degradation of one feature. Bigger pools and longer timeouts make the pile-up larger, immediate retries add load to a struggling system, and calling a payment provider from the app would expose credentials."
+  },
+  {
+    "id": 315,
+    "category": "Oman Enterprise: Resilience & Scalability",
+    "difficulty": "medium",
+    "question": "At month end, heavy reporting queries from the finance dashboard run on the same PostgreSQL database that processes customer transactions, and transfers slow down noticeably. What is the most appropriate way to separate the read and write paths?",
+    "options": [
+      "Ask the finance team to run their reports only after midnight.",
+      "Send reporting and dashboard queries to a read replica or a dedicated reporting store, keep writes and balance-critical reads on the primary, and make the acceptable replication lag explicit to report users.",
+      "Add more indexes to the transaction tables so that the reports run faster.",
+      "Move all customer transactions to a document database and keep reports on PostgreSQL."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Reporting and transaction processing have opposite needs: long scans over large ranges versus short, latency-sensitive writes. Routing reports to a **read replica** (or a warehouse fed from it) removes that contention without changing the system of record. The trade-off is **replication lag**: a replica may be seconds behind, which is fine for a dashboard but not for checking a balance before a debit, so those reads stay on the primary. Extra indexes speed up some reads but slow every write, restricting report hours is a workaround that breaks as soon as someone needs a daytime report, and a database migration is a far larger risk than the problem justifies."
+  },
+  {
+    "id": 316,
+    "category": "Oman Enterprise: Resilience & Scalability",
+    "difficulty": "hard",
+    "question": "A request passes through a mobile gateway, an orchestration service and a core banking adapter. Each layer retries a failed call three times. During a brief core banking slowdown, load on the core system multiplies and the slowdown becomes a full outage. What is the right fix?",
+    "options": [
+      "Increase every layer to five retries so that requests are more likely to succeed eventually.",
+      "Remove all timeouts so that requests are never counted as failed and never retried.",
+      "Add a fixed one-second pause before every retry at every layer.",
+      "Retry at one layer only, use exponential backoff with jitter and a retry budget, and retry only operations that are idempotent."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Stacked retries multiply: three attempts at each of three layers can turn one request into 27 calls on the system that is already struggling, which is a **retry storm**. Retrying in a single layer removes the multiplication. **Exponential backoff** spaces attempts out, **jitter** stops clients from retrying in synchronized waves, and a **retry budget** (for example, retries may add at most 10% extra load) keeps retries from overwhelming a slow dependency. Only idempotent operations should be retried, otherwise a retried payment may post twice. A fixed pause still produces synchronized waves, and removing timeouts just moves the pile-up into the callers."
+  },
+  {
+    "id": 317,
+    "category": "Oman Enterprise: Stakeholder Communication",
+    "difficulty": "medium",
+    "question": "Six weeks before a fixed launch date, the business sponsor of a government e-service asks for three additional features. Your estimate shows the team can deliver at most one of them without risking the date. How should you respond?",
+    "options": [
+      "Agree to all three to keep the sponsor happy and ask the team to work weekends until launch.",
+      "Reply that the scope is frozen and no changes will be considered until after launch.",
+      "Present two or three concrete options with their consequences in business terms, for example the full original scope plus one new feature on the date with the other two in a follow-up release four weeks later, recommend one, and let the sponsor decide.",
+      "Accept the features, say nothing about the risk, and report the delay when it becomes unavoidable."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Scope, time and quality trade off against each other, and the sponsor owns that decision. The engineer's job is to make the trade-off visible: **options, consequences and a recommendation**, expressed as outcomes the sponsor cares about (what citizens can do on launch day, what moves to the next release, what the risk is). Saying yes to everything hides the risk until it is too late to manage, and a flat no ignores that business priorities can legitimately change. Phased delivery is often the answer that protects both the date and the relationship."
+  },
+  {
+    "id": 318,
+    "category": "Oman Enterprise: Stakeholder Communication",
+    "difficulty": "easy",
+    "question": "A tester at a consulting firm finds that a client's loan calculator sometimes shows the wrong monthly instalment. Which bug report gives the development team the best chance of fixing it quickly?",
+    "options": [
+      "'The loan calculator is broken, please fix it urgently.'",
+      "'Instalment amounts look wrong for some customers. I think the interest formula is the problem.'",
+      "A screenshot of the wrong result sent in a chat message, with no other details.",
+      "A clear title, the exact steps and input values to reproduce it, the expected and actual results, the environment and build version, the time it occurred, supporting logs or screenshots, and an assessment of severity and customer impact."
+    ],
+    "correctAnswer": 3,
+    "explanation": "A developer needs to **reproduce** a bug before fixing it, so the most valuable parts of a report are the exact steps and inputs, followed by **expected versus actual** results. Environment, build version and timestamp let the team find the matching logs and rule out problems that are already fixed. Severity and impact help the product owner prioritize. A guess about the cause can be useful as a note, but it does not replace the observable facts, and a report with no details usually costs a round trip of questions before any work can start."
+  },
+  {
+    "id": 319,
+    "category": "Oman Enterprise: Stakeholder Communication",
+    "difficulty": "medium",
+    "question": "You need the head of operations, who has no technical background, to approve three weeks of work to replace an unsupported library in the payments system. Nothing is visibly broken today. Which explanation is most likely to get an informed decision?",
+    "options": [
+      "'We must refactor the persistence layer and upgrade our dependencies because the code has a lot of technical debt.'",
+      "'The component that processes payments no longer receives security fixes. If a flaw is found we cannot patch it quickly, which risks an outage or an audit finding. Three weeks now removes that risk; here is what we would delay to make room.'",
+      "'Trust us, this is a technical matter and the engineering team knows best.'",
+      "'Every modern company has already upgraded, so we are falling behind the industry.'"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Non-technical decision makers weigh **risk, cost and benefit**, so the request has to be translated into those terms: what could happen, how likely and how costly it is, what the fix costs, and what is being traded away. Jargon like 'refactor the persistence layer' gives them nothing to evaluate, and 'trust us' asks for approval without understanding. Linking the work to things the operations head is accountable for, such as service availability and audit results, turns invisible maintenance into a decision they can defend."
+  },
+  {
+    "id": 320,
+    "category": "Oman Enterprise: Stakeholder Communication",
+    "difficulty": "medium",
+    "question": "A card payment outage is in progress and the cause is not yet known. Senior management asks for an update. Which message is the most appropriate?",
+    "options": [
+      "'Card payments at point-of-sale terminals have been failing since 10:40; ATM and online transfers are working. The team is investigating the switch connection and has engaged the vendor. No cause is confirmed yet. Next update at 11:30 or sooner if anything changes.'",
+      "'We are looking into some issues and will let you know when everything is fixed.'",
+      "'It is almost certainly the vendor's fault and should be fixed within ten minutes.'",
+      "A long technical message with stack traces, server names and thread dumps so that management has every detail."
+    ],
+    "correctAnswer": 0,
+    "explanation": "A good incident update answers four questions: **what is affected, what is not, what is being done, and when the next update will come**. It states facts and is honest about what is still unknown. Promising a fix time or blaming a party before the cause is confirmed damages credibility when it turns out to be wrong. A vague message forces management to chase for details, and raw technical output buries the information they need to brief customers, branches and the regulator."
+  }
+]

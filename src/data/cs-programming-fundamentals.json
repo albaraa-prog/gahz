@@ -1,0 +1,352 @@
+[
+  {
+    "id": 116,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "What is the worst-case time complexity of searching for an element in an unbalanced Binary Search Tree (BST)?",
+    "options": [
+      "O(1)",
+      "O(log n)",
+      "O(n)",
+      "O(n log n)"
+    ],
+    "correctAnswer": 2,
+    "explanation": "In the worst case, an unbalanced BST can become a degenerate tree (essentially a singly linked list), where each node has only one child. Searching in this case requires visiting all nodes, which takes O(n) time."
+  },
+  {
+    "id": 117,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Which operations are typically faster in a Singly Linked List compared to a dynamic array (like ArrayList)?",
+    "options": [
+      "Accessing an element at a random index",
+      "Inserting an element at the beginning",
+      "Sorting the elements in-place",
+      "Performing binary search"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Inserting an element at the beginning of a Singly Linked List only requires allocating a new node and updating its next pointer, which runs in O(1) constant time. In contrast, a dynamic array requires shifting all existing elements, which runs in O(n) time."
+  },
+  {
+    "id": 118,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Which object-oriented programming (OOP) concept is defined as binding data and the methods that manipulate that data together into a single unit, while restricting direct access to some of the object's components?",
+    "options": [
+      "Abstraction",
+      "Inheritance",
+      "Encapsulation",
+      "Polymorphism"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Encapsulation is the practice of wrapping data (variables) and behavior (methods) together into a single unit (a class) and restricting direct access to the state (e.g. using private fields and public getters/setters)."
+  },
+  {
+    "id": 119,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "What runtime error is typically raised when a recursive function fails to hit or define a base case?",
+    "options": [
+      "Out of Memory Error",
+      "Stack Overflow Error",
+      "Null Pointer Exception",
+      "Divide By Zero Error"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Each recursive call pushes an execution frame onto the call stack. Without a base case to stop the recursion, the calls continue until the stack runs out of allocated space, triggering a Stack Overflow."
+  },
+  {
+    "id": 120,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Mathematically, what is the result of shifting a positive integer to the left by 1 position (e.g., `x << 1`) using bitwise operations?",
+    "options": [
+      "Dividing the number by 2",
+      "Multiplying the number by 2",
+      "Adding 2 to the number",
+      "Squaring the number"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In binary representation, shifting bits to the left by 1 position moves each bit to the next power of 2, which effectively multiplies the number by 2. (Conversely, shifting right `>> 1` divides by 2)."
+  },
+  {
+    "id": 121,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "What is the primary difference in execution behavior between a Compiler and an Interpreter?",
+    "options": [
+      "Compilers run code line-by-line; Interpreters translate it all at once.",
+      "Compilers translate the entire source code into machine code/bytecode before execution; Interpreters translate and execute code line-by-line at runtime.",
+      "Compilers are only used for web scripts; Interpreters are only used for operating systems.",
+      "Compilers do not perform syntax checking, whereas interpreters do."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Compilers convert the entire high-level program into machine instructions or bytecodes prior to execution (producing an executable file). Interpreters read, parse, and execute the source code dynamically line-by-line during runtime."
+  },
+  {
+    "id": 122,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "In a Hash Map/Table, what is a 'collision' and how is it commonly resolved?",
+    "options": [
+      "When the hash function raises a DivisionByZero error; resolved by retrying the request.",
+      "When two different keys generate the exact same hash index; resolved by techniques like chaining (linked lists) or open addressing.",
+      "When the server memory gets filled up; resolved by running the garbage collector.",
+      "When keys are overwritten by duplicate values; resolved by raising a key constraint exception."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A collision occurs when two distinct keys produce the same index from the hash function. Common resolutions include Chaining (linking collision elements in a list at that index) or Open Addressing (searching for the next empty slot)."
+  },
+  {
+    "id": 123,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "What is the decimal value of the binary representation `00001101`?",
+    "options": [
+      "11",
+      "13",
+      "15",
+      "26"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The binary value is calculated as: (0*128) + (0*64) + (0*32) + (0*16) + (1*8) + (1*4) + (0*2) + (1*1) = 8 + 4 + 1 = 13."
+  },
+  {
+    "id": 124,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Which sorting algorithm has a worst-case time complexity of O(n^2) but is popular due to its O(n log n) average-case speed and low in-place memory overhead?",
+    "options": [
+      "Merge Sort",
+      "Bubble Sort",
+      "Quick Sort",
+      "Insertion Sort"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Quick Sort partitions arrays around pivots in-place. If the pivot choices are poor (e.g. sorted arrays without random pivots), its worst-case is O(n^2). However, on average, it runs in O(n log n) and requires very little memory."
+  },
+  {
+    "id": 125,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "What does the 'S' in the SOLID principles of software design stand for?",
+    "options": [
+      "System Integration Principle",
+      "State Synchronization Principle",
+      "Single Responsibility Principle",
+      "Static Scope Principle"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The Single Responsibility Principle (SRP) states that a class should have one, and only one, reason to change. This means it should perform a single job or focus on a single piece of functionality."
+  },
+  {
+    "id": 126,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "What is the function of a Pointer variable in programming languages like C or C++?",
+    "options": [
+      "It points to compile errors inside code IDEs.",
+      "It stores the direct memory address of another variable rather than a literal value.",
+      "It automatically registers objects with the garbage collector.",
+      "It acts as a temporary iterator in loops."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A pointer is a variable that references a specific memory location. Its value is the hexadecimal address of another object, enabling low-level memory access and reference sharing."
+  },
+  {
+    "id": 127,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "What is a primary distinction between a Process and a Thread in operating systems?",
+    "options": [
+      "Processes run on CPUs; Threads run on hard drives.",
+      "Threads run in completely isolated memory spaces; Processes share memory spaces.",
+      "Processes run in separate, isolated memory blocks; Threads belonging to the same process share that process's memory space and resources.",
+      "Threads cannot execute code concurrently, whereas processes can."
+    ],
+    "correctAnswer": 2,
+    "explanation": "A process is an independent executing program with its own memory space allocated by the OS. A thread is a lightweight path of execution inside a process. Multiple threads of a single process share its code, data, and system resources."
+  },
+  {
+    "id": 128,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Which graph traversal algorithm uses a Queue (FIFO) data structure to explore nodes level-by-level?",
+    "options": [
+      "Depth-First Search (DFS)",
+      "Breadth-First Search (BFS)",
+      "Dijkstra's Algorithm",
+      "Kruskal's Algorithm"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Breadth-First Search (BFS) explores all neighbors of a node before moving to the next level of nodes. It implements this behavior using a Queue to keep track of nodes to visit next."
+  },
+  {
+    "id": 129,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "In the Model-View-Controller (MVC) architectural pattern, what is the role of the Controller?",
+    "options": [
+      "To store and represent database rows.",
+      "To render visual templates and pages to users.",
+      "To accept user inputs, process them, coordinate updates on the Model, and determine the View representation to display.",
+      "To act as a physical firewall layer on servers."
+    ],
+    "correctAnswer": 2,
+    "explanation": "The Controller accepts inputs from the user (via HTTP requests), interacts with the Model to retrieve/modify data, and feeds that data into the View to render the response."
+  },
+  {
+    "id": 130,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Which data structure acts as a Last-In, First-Out (LIFO) stack of objects?",
+    "options": [
+      "Queue",
+      "Stack",
+      "Linked List",
+      "Binary Tree"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A Stack is a standard LIFO data structure. Elements are inserted (push) and removed (pop) from the same end, meaning the most recently added item is the first one to be removed."
+  },
+  {
+    "id": 176,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Which SOLID design principle states that software entities (classes, modules, functions) should be open for extension, but closed for modification?",
+    "options": [
+      "Single Responsibility Principle (SRP)",
+      "Open/Closed Principle (OCP)",
+      "Liskov Substitution Principle (LSP)",
+      "Interface Segregation Principle (ISP)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The Open/Closed Principle (OCP) states that software components should be structured in a way that allows their behavior to be extended (e.g., through inheritance, composition, or polymorphism) without modifying their original source code, preventing regressions."
+  },
+  {
+    "id": 177,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Which SOLID design principle states that objects of a superclass should be replaceable with objects of its subclasses without altering the correctness or breaking the application?",
+    "options": [
+      "Interface Segregation Principle (ISP)",
+      "Single Responsibility Principle (SRP)",
+      "Dependency Inversion Principle (DIP)",
+      "Liskov Substitution Principle (LSP)"
+    ],
+    "correctAnswer": 3,
+    "explanation": "The Liskov Substitution Principle (LSP) ensures that a subclass can stand in for its parent class without breaking client code. It requires subclasses to adhere to the contract established by the parent class."
+  },
+  {
+    "id": 178,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Which SOLID design principle advises that clients should not be forced to depend on interfaces (or methods) that they do not use?",
+    "options": [
+      "Interface Segregation Principle (ISP)",
+      "Open/Closed Principle (OCP)",
+      "Single Responsibility Principle (SRP)",
+      "Liskov Substitution Principle (LSP)"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The Interface Segregation Principle (ISP) states that it is better to have many small, specific interfaces rather than a single, bloated general-purpose interface, so that implementing classes only implement methods they care about."
+  },
+  {
+    "id": 179,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "The Dependency Inversion Principle (DIP) in SOLID states that high-level modules should not depend on low-level modules; both should depend on:",
+    "options": [
+      "Concrete implementations",
+      "Abstractions",
+      "Global static helper files",
+      "External network servers"
+    ],
+    "correctAnswer": 1,
+    "explanation": "DIP states that code should depend on abstractions (interfaces or abstract classes) rather than concrete implementations. This decouples high-level policy code from low-level detail code."
+  },
+  {
+    "id": 180,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Which software design principle advises keeping code structures as simple and straightforward as possible, avoiding unnecessary complexity and over-engineering?",
+    "options": [
+      "DRY (Don't Repeat Yourself)",
+      "KISS (Keep It Simple, Stupid)",
+      "YAGNI (You Aren't Gonna Need It)",
+      "Separation of Concerns"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The KISS principle emphasizes simplicity as a key goal in design. Keeping code simple makes it easier to write, read, maintain, debug, and scale, avoiding unnecessary abstractions."
+  },
+  {
+    "id": 181,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Which programming principle advises developers not to implement features or write code until it is absolutely necessary for the current requirements?",
+    "options": [
+      "YAGNI (You Aren't Gonna Need It)",
+      "KISS (Keep It Simple, Stupid)",
+      "DRY (Don't Repeat Yourself)",
+      "Composition over Inheritance"
+    ],
+    "correctAnswer": 0,
+    "explanation": "YAGNI stands for 'You Aren't Gonna Need It'. It advises against writing speculative code for anticipated future requirements, reducing code clutter and saving developer time."
+  },
+  {
+    "id": 182,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "What does the 'Separation of Concerns' (SoC) design principle advocate in system architecture?",
+    "options": [
+      "Bundling database tables, client UI code, and server logic in a single file to maximize data speeds.",
+      "Splitting a software application into distinct features where each section manages a unique aspect of functionality (e.g. data access vs business logic vs presentation).",
+      "Requiring all database queries to be written using stored procedures.",
+      "Keeping developers isolated from testing teams."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Separation of Concerns (SoC) is a design principle for separating a computer program into distinct sections, such that each section addresses a separate concern or responsibility (e.g. MVC, layered architecture)."
+  },
+  {
+    "id": 183,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "In Object-Oriented Design, why is 'Composition over Inheritance' often preferred?",
+    "options": [
+      "Because inheritance is slow and consumes more hardware cache.",
+      "Because composition allows classes to inherit multiple concrete variables directly from parent templates.",
+      "Because it creates loosely coupled systems by combining simple objects with defined interfaces rather than building deep, rigid subclass hierarchies.",
+      "Because composition forces compile-time static type-checking."
+    ],
+    "correctAnswer": 2,
+    "explanation": "'Composition over Inheritance' encourages design models where classes achieve polymorphic and reusable behavior by containing instances of other classes (has-a) rather than inheriting from parent classes (is-a), yielding more flexible, decoupled code."
+  },
+  {
+    "id": 184,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "In clean code architecture, what is the ideal design relationship between Coupling and Cohesion?",
+    "options": [
+      "High coupling and Low cohesion",
+      "Low coupling and High cohesion",
+      "High coupling and High cohesion",
+      "Low coupling and Low cohesion"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The goal is 'Low Coupling' (modules have minimal dependencies on each other, making them easy to change independently) and 'High Cohesion' (elements inside a module are closely related and focused on a single task)."
+  },
+  {
+    "id": 185,
+    "category": "CS & Programming Fundamentals",
+    "difficulty": "medium",
+    "question": "Which object-oriented design guideline (also called the 'Principle of Least Knowledge') states that a module should not know about the internal details of the objects it manipulates, often summarized as 'talk only to your immediate friends'?",
+    "options": [
+      "Law of Demeter (LoD)",
+      "Liskov Substitution Principle",
+      "Single Responsibility Principle",
+      "Interface Segregation Principle"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The Law of Demeter (LoD) states that a method of an object should only call methods on: the object itself, its parameters, any objects it creates, or its direct component objects. It discourages chaining calls like `a.getB().getC().doSomething()`."
+  }
+]

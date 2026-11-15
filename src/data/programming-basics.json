@@ -1,0 +1,282 @@
+[
+  {
+    "id": 131,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "If `x = 5`, `y = x`, and then `x = 10`, what is the value of `y` in most procedural programming languages?",
+    "options": [
+      "10",
+      "5",
+      "15",
+      "undefined"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In standard procedural languages, variables are assigned by value for primitive numbers. When `y = x` runs, `y` receives a copy of the current value of `x` (which is 5). Changing `x` to 10 later does not affect `y`."
+  },
+  {
+    "id": 132,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "What is the logical result of the boolean expression `true AND false`?",
+    "options": [
+      "true",
+      "false",
+      "null",
+      "error"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The logical AND operator requires all operands to be true. Since one operand is false, the expression evaluates to false."
+  },
+  {
+    "id": 133,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "What is the logical result of the boolean expression `true OR false`?",
+    "options": [
+      "true",
+      "false",
+      "null",
+      "undefined"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The logical OR operator evaluates to true if at least one of the operands is true. Since the first operand is true, the entire expression evaluates to true."
+  },
+  {
+    "id": 134,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "What does the expression `10 % 3` evaluate to in programming?",
+    "options": [
+      "3",
+      "1",
+      "0.33",
+      "0"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The modulo operator (%) returns the remainder of the integer division. 10 divided by 3 is 3 with a remainder of 1. Hence, 10 % 3 = 1."
+  },
+  {
+    "id": 135,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "If `a = \"Hello\"` and `b = \"World\"`, what is the result of the concatenation expression `a + \" \" + b`?",
+    "options": [
+      "\"HelloWorld\"",
+      "\"Hello World\"",
+      "\"Hello+World\"",
+      "TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Concatenating string 'a', a literal space ' ', and string 'b' joins their characters sequentially, yielding 'Hello World'."
+  },
+  {
+    "id": 136,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "Suppose `age = 18`. Which text is printed by the following conditional block?\n`if (age >= 18) { print(\"Adult\") } else { print(\"Minor\") }`",
+    "options": [
+      "\"Adult\"",
+      "\"Minor\"",
+      "Both \"Adult\" and \"Minor\"",
+      "Nothing is printed"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The condition `age >= 18` is evaluated. Since 18 is equal to 18, it is true, and the code executes the branch inside the `if` block, printing 'Adult'."
+  },
+  {
+    "id": 137,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "In zero-based indexing array models, what is the index position of the first element in the array?",
+    "options": [
+      "1",
+      "0",
+      "-1",
+      "It varies dynamically"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In zero-based indexing (used by C, Java, Python, JavaScript, C#), array items are index-tracked starting at 0. So the first item is at index 0."
+  },
+  {
+    "id": 138,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "How many times will the loop structure `for (int i = 0; i < 5; i++)` execute its body?",
+    "options": [
+      "4 times",
+      "5 times",
+      "6 times",
+      "Infinitely"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The loop variable `i` starts at 0. It increments by 1 on each step. The loop body runs for values: 0, 1, 2, 3, 4. When `i` becomes 5, the condition `5 < 5` fails, and the loop exits. This yields exactly 5 runs."
+  },
+  {
+    "id": 139,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "Which basic data type is specifically designed to store only a true or false value?",
+    "options": [
+      "String",
+      "Integer",
+      "Boolean",
+      "Char"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The Boolean data type represents logical binary states: true and false."
+  },
+  {
+    "id": 140,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "In integer arithmetic division, what is the result of `5 / 2` in languages like Java, C#, or C?",
+    "options": [
+      "2.5",
+      "2",
+      "3",
+      "Throws a DivisionByZero error"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Dividing two integers in strongly typed static languages (Java, C, C#) performs integer division, discarding the fractional remainder. Thus, 5 / 2 = 2. (To preserve decimals, float casting `5.0 / 2` is required)."
+  },
+  {
+    "id": 141,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "What is the primary characteristic of a Constant variable?",
+    "options": [
+      "Its value changes automatically on every loop iteration.",
+      "Its value cannot be modified or reassigned after initialization.",
+      "It is stored in temporary CPU registers only.",
+      "It does not consume memory space."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Constants (e.g. `const` in JS, `final` in Java) are variables whose value is fixed upon initialization and cannot be altered or reassigned throughout the program's lifecycle."
+  },
+  {
+    "id": 142,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "A variable declared inside the body of a function is known as a:",
+    "options": [
+      "Global variable",
+      "Static variable",
+      "Local variable",
+      "Constant variable"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A local variable is declared within the block scope of a function or method. It is only accessible inside that function and is destroyed when execution completes."
+  },
+  {
+    "id": 143,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "What condition leads to an Infinite Loop in programming?",
+    "options": [
+      "When the loop's continuation condition evaluates to true permanently.",
+      "When the computer has low memory capacity.",
+      "When loops are nested more than 10 levels deep.",
+      "When the compiler optimization flags are disabled."
+    ],
+    "correctAnswer": 0,
+    "explanation": "An infinite loop occurs when the logical test controlling loop termination never evaluates to false, causing execution to repeat indefinitely."
+  },
+  {
+    "id": 144,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "Why do developers include comments (e.g. `//` or `#`) in their source code?",
+    "options": [
+      "To explain code design and functionality to human readers; they are ignored by compilers.",
+      "To speed up execution by caching functions.",
+      "To define global database security rules.",
+      "To check for type-safety errors at compile time."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Comments are readable annotations intended for human programmers. Compilers and interpreters ignore them entirely during compilation or execution."
+  },
+  {
+    "id": 145,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "In software engineering, what does the term 'Debugging' refer to?",
+    "options": [
+      "Translating high-level source code to binary code.",
+      "The process of locating, analyzing, and resolving errors or defects in a program.",
+      "Installing operating systems on web servers.",
+      "Adding new style colors to user interfaces."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Debugging is the process of resolving issues, errors, or bugs in software code to restore intended execution behavior."
+  },
+  {
+    "id": 146,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "What is the primary difference in numeric representations between an Integer type and a Float type?",
+    "options": [
+      "Integers store decimals; Floats store whole numbers.",
+      "Integers store whole numbers; Floats can store fractional numbers containing decimals.",
+      "Integers are only positive; Floats are only negative.",
+      "They are identical representation types."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Integers (e.g. 5, -12, 100) store positive or negative whole numbers. Floats (e.g. 3.14, -0.005) represent fractional values containing decimal points."
+  },
+  {
+    "id": 147,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "What does the programming design principle acronym 'DRY' stand for?",
+    "options": [
+      "Data Routing Yield",
+      "Do Routing Yesterday",
+      "Don't Repeat Yourself",
+      "Dynamic Resource Yield"
+    ],
+    "correctAnswer": 2,
+    "explanation": "DRY stands for 'Don't Repeat Yourself'. It emphasizes reducing duplication in code blocks by packaging repetitive patterns into reusable functions or modules."
+  },
+  {
+    "id": 148,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "What is the difference between a function's Parameter and its Argument?",
+    "options": [
+      "A parameter is the placeholder variable in the function definition; an argument is the actual value passed to the function when called.",
+      "An argument is defined inside loops; a parameter is defined globally.",
+      "They are exact synonyms and have no logical difference.",
+      "Parameters are used in HTML; arguments are used in databases."
+    ],
+    "correctAnswer": 0,
+    "explanation": "The variables declared in the function definition are parameters. The actual values you pass into the function during execution are the arguments."
+  },
+  {
+    "id": 149,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "What does the value `null` (or `None` in Python) typically represent in programming languages?",
+    "options": [
+      "An infinite numerical loop.",
+      "The intentional absence of any value, object reference, or pointer.",
+      "A system variable that stores network configurations.",
+      "A string containing the characters 'null'."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`null` or `None` is a special value representing empty references or a variable that has been declared but holds no active object mapping."
+  },
+  {
+    "id": 150,
+    "category": "Programming Basics",
+    "difficulty": "easy",
+    "question": "What is a key difference in choosing between a `for` loop and a `while` loop?",
+    "options": [
+      "For loops can only run in backward directions.",
+      "A for loop is usually preferred when the number of iterations is known in advance; a while loop is preferred when iterating until a condition dynamically shifts.",
+      "While loops are faster because they bypass variable declarations.",
+      "For loops only support boolean evaluations."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Use `for` loops when you know the limits (e.g. iterating over a collection or range). Use `while` loops when looping is governed by a state condition (e.g. waiting for user input or connection changes)."
+  }
+]

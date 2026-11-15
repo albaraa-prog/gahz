@@ -1,0 +1,146 @@
+[
+  {
+    "id": 31,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "What is the primary storage allocation difference between a C# `struct` and a C# `class`?",
+    "options": [
+      "Structs are stored on the LOH (Large Object Heap), whereas classes are stored on the Stack.",
+      "Structs are value types (generally stored on the stack), whereas classes are reference types (stored on the heap).",
+      "Structs cannot have constructors, while classes can.",
+      "Structs are thread-safe by default, while classes are not."
+    ],
+    "correctAnswer": 1,
+    "explanation": "In C#, structs are value types and are stored directly where they are declared (often on the stack or inlined in containing reference types). Classes are reference types, which allocate memory on the Managed Heap and are accessed via pointers/references."
+  },
+  {
+    "id": 32,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "What is the outcome of using Deferred Execution in C# LINQ?",
+    "codeSnippet": "var list = new List<int> { 1, 2, 3 };\nvar query = list.Select(x => x * 2);\nlist.Add(4);\n\nConsole.WriteLine(query.Count());",
+    "options": [
+      "3",
+      "4",
+      "Throws a InvalidOperationException",
+      "0"
+    ],
+    "correctAnswer": 1,
+    "explanation": "LINQ query definitions do not execute immediately when declared. Instead, they execute when the query is iterated over (e.g. calling `Count()`, `ToList()`, or `foreach`). Since `list.Add(4)` occurs before `query.Count()`, the element is processed, outputting 4."
+  },
+  {
+    "id": 33,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "What is the purpose of using `.ConfigureAwait(false)` in C# asynchronous programming?",
+    "codeSnippet": "await MyMethodAsync().ConfigureAwait(false);",
+    "options": [
+      "It executes the task synchronously.",
+      "It tells the awaiter not to marshal the continuation back to the original SynchronizationContext (preventing deadlocks in UI/Sync contexts).",
+      "It suppresses exceptions thrown by the async task.",
+      "It forces the task to run on the main UI thread."
+    ],
+    "correctAnswer": 1,
+    "explanation": "By default, `await` captures the current SynchronizationContext to resume execution on the same thread context. In non-UI applications (like Web API), using `.ConfigureAwait(false)` avoids this overhead and prevents deadlocks if a synchronous block blocks the thread."
+  },
+  {
+    "id": 34,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "Under the C# Garbage Collector (GC), in which generation are large objects (> 85,000 bytes) allocated?",
+    "options": [
+      "Generation 0",
+      "Generation 1",
+      "Generation 2 / Large Object Heap (LOH)",
+      "Ephemeral Generation"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Objects larger than 85,000 bytes are allocated directly on the Large Object Heap (LOH). The LOH is collected only during Generation 2 sweeps because compacting large blocks of memory is computationally expensive."
+  },
+  {
+    "id": 35,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "What is the result of using the null-coalescing assignment operator `??=` in C#?",
+    "codeSnippet": "List<int> numbers = null;\nnumbers ??= new List<int>();",
+    "options": [
+      "It throws a NullReferenceException if numbers is null.",
+      "It assigns the right-hand value to numbers only if numbers is currently null.",
+      "It compares numbers to the right-hand list and returns a boolean.",
+      "It compiles to an immutable constant definition."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The `??=` operator assigns the value of its right-hand operand to its left-hand operand only if the left-hand operand evaluates to null."
+  },
+  {
+    "id": 36,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "How does C# distinguish between Explicit and Implicit interface implementations?",
+    "codeSnippet": "interface IControl { void Paint(); }\nclass Component : IControl {\n    void IControl.Paint() { /* ... */ }\n}",
+    "options": [
+      "Explicit implementations require public access modifiers.",
+      "Explicit implementations can only be called through a reference cast to the interface type.",
+      "Implicit implementations are slower due to dynamic compilation.",
+      "Explicit implementations prevent the class from defining static fields."
+    ],
+    "correctAnswer": 1,
+    "explanation": "When implementing an interface explicitly (e.g. `void IControl.Paint()`), the method cannot be accessed directly via a class instance reference. You must cast the instance to the interface type (`IControl c = instance; c.Paint();`) first. This avoids name collisions."
+  },
+  {
+    "id": 37,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "What is the difference between `Func<T>` and `Action<T>` delegates in C#?",
+    "options": [
+      "`Func<T>` returns a value; `Action<T>` returns void.",
+      "`Func<T>` is async; `Action<T>` is synchronous.",
+      "`Func<T>` requires value types; `Action<T>` requires reference types.",
+      "They are identical and interchangeable."
+    ],
+    "correctAnswer": 0,
+    "explanation": "`Func` represents a delegate that returns a value (the last type parameter is the return type). `Action` represents a delegate that does not return a value (void return)."
+  },
+  {
+    "id": 38,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "Which generic constraint restricts type parameter `T` to have a public parameterless constructor?",
+    "options": [
+      "where T : struct",
+      "where T : new()",
+      "where T : default()",
+      "where T : class"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The `new()` constraint specifies that any type argument in a generic class declaration must have a public parameterless constructor, allowing the class to instantiate type `T` via `new T()`."
+  },
+  {
+    "id": 39,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "What is a key benefit of using a `readonly struct` in C#?",
+    "options": [
+      "It prevents the struct from being initialized.",
+      "It tells the compiler that the struct is immutable, allowing optimizations that avoid defensive copies.",
+      "It forces the struct to be allocated on the heap.",
+      "It allows the struct to inherit from abstract classes."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A `readonly struct` guarantees that all its fields are read-only and immutable. This allows the compiler to pass the struct by reference (e.g., using `in` parameters) without making defensive copies, improving execution speed."
+  },
+  {
+    "id": 40,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "What is required to define a custom Extension Method in C#?",
+    "options": [
+      "The method must be defined inside a static class and use the 'this' keyword as a modifier for the first parameter.",
+      "The method must override an interface method dynamically.",
+      "The class must inherit from System.Extension.",
+      "The method must use the virtual keyword."
+    ],
+    "correctAnswer": 0,
+    "explanation": "C# extension methods must be declared as static methods within a non-generic static class. The first parameter must represent the type being extended and must be prefixed with the `this` modifier."
+  }
+]

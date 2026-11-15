@@ -1,0 +1,142 @@
+[
+  {
+    "id": 91,
+    "category": "Fullstack",
+    "difficulty": "medium",
+    "question": "Which cookie attribute prevents client-side scripts (like Javascript `document.cookie`) from reading the cookie value, mitigating XSS theft?",
+    "options": [
+      "Secure",
+      "HttpOnly",
+      "SameSite",
+      "Domain"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The `HttpOnly` flag prevents client-side scripts from reading session cookies. This protects authentication tokens from being stolen if an XSS vulnerability exists."
+  },
+  {
+    "id": 92,
+    "category": "Fullstack",
+    "difficulty": "medium",
+    "question": "What is the difference between Cross-Site Scripting (XSS) and Cross-Site Request Forgery (CSRF)?",
+    "options": [
+      "XSS forces a logged-in user to perform actions they didn't intend; CSRF injects malicious script code to run in the victim's browser.",
+      "XSS injects malicious script code to execute in the victim's browser; CSRF tricks a victim's browser into performing unauthorized actions on a trusted site where the user is authenticated.",
+      "XSS attacks network routers; CSRF attacks local hard drives.",
+      "They are synonyms for database SQL injection."
+    ],
+    "correctAnswer": 1,
+    "explanation": "XSS is a code-injection attack targeting users (executing scripts to steal cookies or manipulate the DOM). CSRF relies on cookie transit: it tricks a browser into sending authenticated requests to a third-party server."
+  },
+  {
+    "id": 93,
+    "category": "Fullstack",
+    "difficulty": "medium",
+    "question": "Which Cache-Control header directive forces caches to submit requests to the origin server for validation before using a cached copy?",
+    "options": [
+      "no-store",
+      "no-cache",
+      "public",
+      "max-age=3600"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`no-cache` tells the browser/CDNs that they can store the cached response, but they must validate it with the origin server (using ETag or Last-Modified) before using it. `no-store` completely bans caching."
+  },
+  {
+    "id": 94,
+    "category": "Fullstack",
+    "difficulty": "medium",
+    "question": "What is the storage capacity difference between LocalStorage and Cookies?",
+    "options": [
+      "LocalStorage stores up to 4KB; Cookies store up to 5MB.",
+      "LocalStorage stores up to 5MB (typically); Cookies store up to 4KB.",
+      "They have identical storage capacities of 100KB.",
+      "Cookies are stored in memory; LocalStorage is stored on databases."
+    ],
+    "correctAnswer": 1,
+    "explanation": "LocalStorage offers around 5MB to 10MB of storage per origin. Cookies are limited to 4KB and are sent with every HTTP request, making large cookie payloads inefficient."
+  },
+  {
+    "id": 95,
+    "category": "Fullstack",
+    "difficulty": "medium",
+    "question": "What are the three core sections of a JSON Web Token (JWT)?",
+    "options": [
+      "Name, Value, Signature",
+      "Header, Payload, Signature",
+      "Key, Payload, Certificate",
+      "Metadata, Body, EncryptionKey"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A JWT is a base64url-encoded string composed of: 1. Header (describes algorithm and token type), 2. Payload (contains claims/user info), and 3. Signature (verifies integrity)."
+  },
+  {
+    "id": 96,
+    "category": "Fullstack",
+    "difficulty": "medium",
+    "question": "Which HTTP header is used by servers in CORS configuration to specify which web domains are allowed to access resources?",
+    "options": [
+      "Access-Control-Allow-Origin",
+      "Access-Control-Allow-Headers",
+      "Access-Control-Allow-Credentials",
+      "Access-Control-Request-Method"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The `Access-Control-Allow-Origin` header specifies which origins (domains, protocols, ports) are allowed to access the resource."
+  },
+  {
+    "id": 97,
+    "category": "Fullstack",
+    "difficulty": "medium",
+    "question": "What is the difference between Server-Side Rendering (SSR) and Static Site Generation (SSG)?",
+    "options": [
+      "SSR generates pages at build time; SSG generates pages dynamically on every client request.",
+      "SSR generates HTML dynamically on every request; SSG pre-renders HTML pages once at build time.",
+      "SSR only supports PHP; SSG only supports React.",
+      "They are identical rendering models."
+    ],
+    "correctAnswer": 1,
+    "explanation": "SSR builds HTML at request time, which is good for dynamic dashboards. SSG builds pages once at build time, yielding fast load times via CDNs."
+  },
+  {
+    "id": 98,
+    "category": "Fullstack",
+    "difficulty": "medium",
+    "question": "What does the `SameSite=Lax` cookie attribute do?",
+    "options": [
+      "It blocks cookies from being sent in all cross-origin requests.",
+      "It allows cookies to be sent on safe top-level navigations (e.g. clicking a link), but blocks them on cross-site requests (like images/frames).",
+      "It disables SSL requirements for cookie transmission.",
+      "It permits cookies to be sent across all domains without restrictions."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`SameSite=Lax` is the modern browser default. It balances security and usability by withholding cookies on sub-resource requests (like cross-origin images or AJAX calls) but allowing them when clicking standard links."
+  },
+  {
+    "id": 99,
+    "category": "Fullstack",
+    "difficulty": "medium",
+    "question": "What is the primary role of a bundler like Webpack or Vite in frontend development?",
+    "options": [
+      "It compiles SQL database scripts dynamically.",
+      "It bundles module files, dependencies, assets, and stylesheets into a few optimized assets (JS, CSS) for browser execution.",
+      "It handles user authentication and session states.",
+      "It acts as a reverse proxy gateway."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Frontend bundlers compile modular code structures, run transpilations (Babel/TS), minify assets, optimize images, and output optimized static bundles for browsers."
+  },
+  {
+    "id": 100,
+    "category": "Fullstack",
+    "difficulty": "medium",
+    "question": "What is a main mitigation strategy against SQL Injection?",
+    "options": [
+      "Using HttpOnly cookies.",
+      "Using parameterized queries (prepared statements).",
+      "Encrypting local storage values.",
+      "Using HTTPS transport layer."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Parameterized queries separate the query structure from the data parameters. This prevents the database from executing user inputs as SQL instructions."
+  }
+]

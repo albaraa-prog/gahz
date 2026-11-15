@@ -1,0 +1,142 @@
+[
+  {
+    "id": 81,
+    "category": "CS & Networks",
+    "difficulty": "medium",
+    "question": "Which property is a key differentiator of UDP compared to TCP?",
+    "options": [
+      "UDP guarantees packet delivery order.",
+      "UDP is connectionless and does not perform handshakes or acknowledge delivery, offering lower latency.",
+      "UDP establishes 3-way handshakes prior to streaming.",
+      "UDP encrypts headers dynamically at the Transport Layer."
+    ],
+    "correctAnswer": 1,
+    "explanation": "UDP (User Datagram Protocol) is connectionless, fast, and does not guarantee packet delivery or order. This makes it ideal for real-time video/gaming streams where speed is preferred over complete reliability."
+  },
+  {
+    "id": 82,
+    "category": "CS & Networks",
+    "difficulty": "medium",
+    "question": "Under the OSI Model, which layer is responsible for IP addressing and routing packets across networks?",
+    "options": [
+      "Data Link Layer (Layer 2)",
+      "Transport Layer (Layer 4)",
+      "Network Layer (Layer 3)",
+      "Physical Layer (Layer 1)"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The Network Layer (Layer 3) handles logical addressing (IP addresses), packet routing, and subnet management. Routers operate at this layer."
+  },
+  {
+    "id": 83,
+    "category": "CS & Networks",
+    "difficulty": "medium",
+    "question": "What is the correct order of DNS lookup steps when visiting a new website?",
+    "options": [
+      "Root Name Server -> TLD Server -> Authoritative Name Server",
+      "Authoritative Name Server -> Root Name Server -> TLD Server",
+      "TLD Server -> Root Name Server -> Authoritative Name Server",
+      "ISP Gateway -> Authoritative Name Server -> Root Name Server"
+    ],
+    "correctAnswer": 0,
+    "explanation": "If not cached, the lookup queries: 1. Root Server (finds the TLD server, e.g. .com), 2. TLD Server (finds the domain's registrar name server), and 3. Authoritative Name Server (returns the actual IP address mapping)."
+  },
+  {
+    "id": 84,
+    "category": "CS & Networks",
+    "difficulty": "medium",
+    "question": "What is the network IP address classification of the range `192.168.0.0` to `192.168.255.255`?",
+    "options": [
+      "Public Class A network",
+      "Private Class C IP range",
+      "Loopback interface range",
+      "Multicast broadcast range"
+    ],
+    "correctAnswer": 1,
+    "explanation": "RFC 1918 defines private IP ranges: `10.0.0.0/8` (Class A), `172.16.0.0/12` (Class B), and `192.168.0.0/16` (Class C). These IPs are not routable on the public internet."
+  },
+  {
+    "id": 85,
+    "category": "CS & Networks",
+    "difficulty": "medium",
+    "question": "What cryptographic operation occurs during the TLS/SSL handshake in HTTPS?",
+    "options": [
+      "Symmetric encryption is used to negotiate asymmetric keys.",
+      "Asymmetric cryptography is used to authenticate the server and securely exchange a symmetric session key for encrypting data transport.",
+      "Data is hashed iteratively using MD5 algorithms without key exchanges.",
+      "The client imports a static password database directly from the server."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Asymmetric cryptography (RSA/Elliptic Curve) is slow but secure for key exchange and identity verification. Once verified, client and server agree on a symmetric key (AES), which encrypts the actual communication stream efficiently."
+  },
+  {
+    "id": 86,
+    "category": "CS & Networks",
+    "difficulty": "medium",
+    "question": "What is the difference between a load balancer's Round Robin and Least Connections routing algorithms?",
+    "options": [
+      "Round Robin routes traffic based on server geographic distance; Least Connections uses round-trip latency.",
+      "Round Robin distributes requests sequentially across servers; Least Connections routes traffic to the server with the fewest active sessions.",
+      "Least Connections is only used for static content caching.",
+      "They are identical routing strategies."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Round Robin routes requests sequentially. Least Connections evaluates active server sessions and directs traffic to the least loaded server, preventing performance degradation."
+  },
+  {
+    "id": 87,
+    "category": "CS & Networks",
+    "difficulty": "medium",
+    "question": "What is a key difference between Hashing and Encryption?",
+    "options": [
+      "Hashing is two-way (can be decrypted); Encryption is one-way.",
+      "Hashing is one-way (irreversible mapping to fixed-size string); Encryption is two-way (can be decrypted back to original text using keys).",
+      "Hashing requires network handshakes; Encryption runs offline.",
+      "Hashing is only used for file compression."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Hashing is a one-way mathematical function (e.g. SHA-256) designed to produce a fixed-length signature. It cannot be reversed. Encryption is a two-way process designed to keep data confidential, which can be decrypted using the correct key."
+  },
+  {
+    "id": 88,
+    "category": "CS & Networks",
+    "difficulty": "medium",
+    "question": "What is the difference between Git Merge and Git Rebase?",
+    "options": [
+      "Git Merge deletes files; Git Rebase clones repositories.",
+      "Git Merge creates a new commit combining branch histories; Git Rebase reapplies commits on top of another base tip, creating a linear history.",
+      "Merge only works on local branches; Rebase works on remote branches.",
+      "They are exact synonyms."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Merge preserves the branching history by creating a 'merge commit'. Rebase integrates changes by moving the branch's starting point to the target branch tip, rewrite-committing the local commits for a clean, linear git graph."
+  },
+  {
+    "id": 89,
+    "category": "CS & Networks",
+    "difficulty": "medium",
+    "question": "Which network ports are standard defaults for DNS and SSH protocols respectively?",
+    "options": [
+      "80 and 443",
+      "53 and 22",
+      "25 and 110",
+      "3306 and 1521"
+    ],
+    "correctAnswer": 1,
+    "explanation": "DNS queries primarily run over Port 53 (UDP/TCP). SSH (Secure Shell) runs over Port 22."
+  },
+  {
+    "id": 90,
+    "category": "CS & Networks",
+    "difficulty": "medium",
+    "question": "What is the role of Network Address Translation (NAT)?",
+    "options": [
+      "It translates domain names into IP addresses.",
+      "It translates private local IP addresses inside a local network to a single public IP address for internet routing.",
+      "It converts IPv4 formats to IPv6 formats dynamically.",
+      "It encrypts transport packets at the physical layer."
+    ],
+    "correctAnswer": 1,
+    "explanation": "NAT enables multiple devices in a local area network to share a single public IP address. The router tracks outbound connections, mapping responses back to the correct local IP."
+  }
+]

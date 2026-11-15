@@ -1,0 +1,224 @@
+[
+  {
+    "id": 236,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "To achieve smooth 60fps and 120fps (ProMotion / High Refresh Rate) jank-free performance, what are the respective frame budgets for Flutter UI and Raster threads?",
+    "options": [
+      "60fps: 16.6ms per frame; 120fps: 8.33ms per frame.",
+      "60fps: 50ms per frame; 120fps: 25ms per frame.",
+      "60fps: 100ms per frame; 120fps: 50ms per frame.",
+      "60fps: 1.0ms per frame; 120fps: 0.5ms per frame."
+    ],
+    "correctAnswer": 0,
+    "explanation": "At 60Hz, 1000ms / 60 frames = 16.67ms per frame. At 120Hz displays, 1000ms / 120 frames = 8.33ms per frame. If work on either the UI Thread (Dart build/layout) or Raster Thread (GPU Skia/Impeller draw commands) exceeds this budget, frames are dropped, causing noticeable visual stutter (jank)."
+  },
+  {
+    "id": 237,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "Which strategy most effectively reduces Flutter Time To First Frame (TTFF) on cold start in a large mobile application?",
+    "options": [
+      "Executing all API calls and database seeding synchronously inside void main().",
+      "Keeping main() minimal, displaying a native splash screen immediately, and using lazy initialization (e.g. GetIt.registerLazySingleton) so non-critical services (Analytics, Crashlytics, Bluetooth, Hive boxes) initialize asynchronously after the first frame renders.",
+      "Disabling sound null safety.",
+      "Loading all high-resolution asset images into memory at app launch."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Heavy synchronous initialization in `main()` blocks the Flutter Engine from rendering the first frame, resulting in long white/black splash delays. Deferring service initialization, lazily loading singletons on demand, and keeping the initial route lightweight drastically speeds up cold start."
+  },
+  {
+    "id": 238,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "What resource cleanup must be executed in `dispose()` to prevent memory leaks in long-running Flutter widgets?",
+    "codeSnippet": "class TransactionFeedState extends State<TransactionFeedWidget> {\n  late StreamSubscription _sub;\n  late TextEditingController _searchController;\n  late AnimationController _animController;\n\n  @override\n  void dispose() {\n    // Cleanup operations:\n    super.dispose();\n  }\n}",
+    "options": [
+      "eventBus.clear();",
+      "_sub.cancel(); _searchController.dispose(); _animController.dispose();",
+      "setState(() {});",
+      "exit(0);"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Failing to cancel `StreamSubscription` keeps a reference to the `State` object in the stream listener list, permanently preventing the garbage collector from reclaiming the widget and its associated memory. `TextEditingController` and `AnimationController` also hold references to TickerProviders and listeners and must be explicitly disposed."
+  },
+  {
+    "id": 239,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "Why is setting `cacheWidth` and `cacheHeight` critical when displaying merchant logos in list views?",
+    "codeSnippet": "Image.network(\n  merchant.logoUrl, // 4000x4000 high-res image (16 megapixels)\n  width: 50,\n  height: 50,\n  cacheWidth: 100, // 2x device pixel ratio for 50dp\n  cacheHeight: 100,\n)",
+    "options": [
+      "It compresses the PNG on the server.",
+      "Without cacheWidth, Flutter decodes the full 16-megapixel image into uncompressed RGBA pixel memory (~64MB RAM for 1 image); cacheWidth instructs the engine to decode and resize the bitmap to 100x100 in memory (~40KB RAM), preventing Out-Of-Memory (OOM) crashes.",
+      "It forces images to be displayed in grayscale.",
+      "It enables image caching in the device's SIM card."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Flutter decodes images into raw uncompressed RGBA byte buffers in RAM (Width × Height × 4 bytes). A single 4000×4000 image consumes `4000 * 4000 * 4 = 64 MB` of RAM even if displayed in a 50×50 box! `cacheWidth`/`cacheHeight` resizes the image *during decoding*, reducing memory consumption by over 99.9%."
+  },
+  {
+    "id": 240,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "What are the two mandatory rules when modifying `@HiveType` models across app updates to avoid data corruption?",
+    "codeSnippet": "@HiveType(typeId: 1)\nclass TransactionRecord extends HiveObject {\n  @HiveField(0)\n  final String id;\n  \n  @HiveField(1)\n  final int amountInBaisa;\n  \n  // Adding new field in app version 2.0:\n  @HiveField(2, defaultValue: 'OMR')\n  final String currency;\n}",
+    "options": [
+      "Always delete old Hive box files and recreate them on app start.",
+      "Never change or reorder existing @HiveField(index) numbers, never delete existing field indices, and provide default values for new fields when reading older records.",
+      "All @HiveField numbers must be negative integers.",
+      "Hive models cannot be modified once published to the App Store."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Hive relies on binary field index tags (`@HiveField(0)`, `@HiveField(1)`) to read and write bytes. Changing the index of an existing field or reusing an index from a deleted field corrupts binary deserialization. New fields must be assigned new incremental indices with default values to seamlessly parse older cached database records."
+  },
+  {
+    "id": 241,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "In SQLite migrations with `sqflite`, why is using cumulative incremental `if (oldVersion < X)` conditions in `onUpgrade` essential?",
+    "codeSnippet": "Future<Database> initDb() async {\n  return await openDatabase(\n    'thawani.db',\n    version: 3,\n    onCreate: (db, version) async {\n      await db.execute('CREATE TABLE transactions (id TEXT PRIMARY KEY, amount INTEGER);');\n    },\n    onUpgrade: (db, oldVersion, newVersion) async {\n      if (oldVersion < 2) {\n        await db.execute('ALTER TABLE transactions ADD COLUMN merchant_name TEXT;');\n      }\n      if (oldVersion < 3) {\n        await db.execute('CREATE TABLE beneficiaries (id TEXT PRIMARY KEY, iban TEXT);');\n      }\n    },\n  );\n}",
+    "options": [
+      "It enables multithreading in SQLite.",
+      "Users upgrading from version 1 directly to version 3 will cleanly execute both step 2 and step 3 migrations in sequence, ensuring their existing database schema upgrades without data loss or crashes.",
+      "It prevents users from backing up the database.",
+      "It converts SQLite to PostgreSQL automatically."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Mobile users do not update apps on every intermediate release; a user may upgrade from v1.0 directly to v3.0. Cascading `if (oldVersion < 2)` and `if (oldVersion < 3)` guarantees that regardless of which previous version the user was on, all necessary schema migrations execute in strict sequential order."
+  },
+  {
+    "id": 242,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "How do Flutter Flavors with `applicationIdSuffix` benefit the QA and development lifecycle?",
+    "codeSnippet": "// In android/app/build.gradle:\nflavorDimensions \"default\"\nproductFlavors {\n  dev { dimension \"default\"; applicationIdSuffix \".dev\"; resValue \"string\", \"app_name\", \"Thawani Dev\" }\n  uat { dimension \"default\"; applicationIdSuffix \".uat\"; resValue \"string\", \"app_name\", \"Thawani UAT\" }\n  prod { dimension \"default\"; resValue \"string\", \"app_name\", \"Thawani\" }\n}",
+    "options": [
+      "They allow running Flutter apps without compiling native code.",
+      "They allow installing Dev, UAT, and Production builds side-by-side on the same physical device simultaneously without overwriting each other, each pointed to its respective backend environment.",
+      "They automatically publish the app to Google Play Store on every git commit.",
+      "They remove the need for app icons."
+    ],
+    "correctAnswer": 1,
+    "explanation": "By appending an `applicationIdSuffix` (e.g. `om.thawani.app.dev` vs `om.thawani.app`), the OS treats them as distinct independent applications. QA engineers and developers can install and test the `dev` or `uat` build without replacing or corrupting their production `prod` wallet app."
+  },
+  {
+    "id": 243,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "Why is compile-time `--dart-define-from-file` with `const String.fromEnvironment` superior to loading environment configuration from runtime JSON assets?",
+    "codeSnippet": "// Command: flutter build appbundle --dart-define-from-file=config/prod.json\n\nclass AppConfig {\n  static const String baseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: 'https://dev.api.thawani.om');\n  static const bool enableLogging = bool.fromEnvironment('ENABLE_LOGGING', defaultValue: true);\n}",
+    "options": [
+      "It encrypts the network cable with AES-256.",
+      "The values are resolved at compile time and inlined as true constants; dead code trees (e.g. debug logging blocks guarded by if (AppConfig.enableLogging)) are completely tree-shaken and stripped from the release binary by the compiler.",
+      "It allows changing environment variables after the app is installed without recompiling.",
+      "It enables runtime reflection."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`String.fromEnvironment` and `bool.fromEnvironment` are compile-time constants. The Dart compiler evaluates them during Ahead-Of-Time (AOT) compilation. If `enableLogging` is `false`, the compiler's tree-shaker identifies debug logging branches as unreachable dead code and completely removes them from the production binary."
+  },
+  {
+    "id": 244,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "What is the purpose of `--obfuscate --split-debug-info` and why must JNI platform channel method names be protected in `proguard-rules.pro`?",
+    "codeSnippet": "flutter build appbundle --obfuscate --split-debug-info=./build/app/outputs/symbols",
+    "options": [
+      "It compresses PNG images; JNI methods must be protected so images render in color.",
+      "Obfuscation replaces class, method, and field names with meaningless symbols to prevent reverse-engineering; native platform channel methods must be kept (-keepclassmembers) so native Android/iOS reflection can locate and invoke MethodChannel handlers.",
+      "It disables Google Play Protect warnings.",
+      "It bypasses Apple's App Review process."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`--obfuscate` scrambles Dart identifiers, making decompiled code nearly unreadable to hackers. `--split-debug-info` extracts symbol mapping files so stack traces can be de-obfuscated in Crashlytics. On the native side, R8/ProGuard rules must `-keep` Kotlin/Java classes invoked via `MethodChannel` or JNI, or else method names will be minified and throw `MissingPluginException` at runtime."
+  },
+  {
+    "id": 245,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "Why is `EventChannel` preferred over `MethodChannel` for receiving continuous real-time data (like NFC tag scans or battery level changes) from native Kotlin/Swift?",
+    "codeSnippet": "// In Dart:\nstatic const EventChannel _nfcChannel = EventChannel('om.thawani/nfc_stream');\n\nStream<String> get nfcTagStream {\n  return _nfcChannel.receiveBroadcastStream().map((e) => e as String);\n}",
+    "options": [
+      "MethodChannel does not support Android devices.",
+      "MethodChannel is designed for request-response RPC (1-to-1 call and return); EventChannel establishes a persistent event stream from platform to Dart via EventSink, matching Dart Stream architecture.",
+      "EventChannel bypasses the Dart Event Loop.",
+      "EventChannel automatically writes data to Hive."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`MethodChannel` is designed for asynchronous point-to-point invocations (like a function call). When the native platform produces continuous, asynchronous events over time (such as NFC tag scans, GPS location streams, or battery state changes), `EventChannel` provides an `EventSink` on native that pipes data directly into a Dart `Stream`."
+  },
+  {
+    "id": 246,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "Why is `withContext(Dispatchers.Main)` required before calling `result.success(data)` when performing background work in an Android Kotlin MethodChannel?",
+    "codeSnippet": "// In Kotlin MainActivity.kt:\nMethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->\n  if (call.method == \"scanNfc\") {\n    CoroutineScope(Dispatchers.IO).launch {\n      val data = executeHeavyNfcScan()\n      withContext(Dispatchers.Main) {\n        result.success(data)\n      }\n    }\n  }\n}",
+    "options": [
+      "Because SQLite requires main thread writes.",
+      "Flutter platform channels (MethodChannel.Result) are not thread-safe and MUST be invoked on the Platform UI Thread (Android Main Looper); calling result.success() from a background worker thread crashes the app.",
+      "Because background coroutines cannot access String objects.",
+      "To ensure the NFC chip is powered off."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Flutter's `BinaryMessenger` and platform channel dispatcher expect all replies to be posted on the platform main/UI thread. Calling `result.success()` or `result.error()` from a background thread (`Dispatchers.IO` or worker thread) violates thread affinity and crashes the app with a thread violation exception."
+  },
+  {
+    "id": 247,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "What primary problem does Flutter's official `pigeon` tool solve for native platform channels?",
+    "options": [
+      "It converts Flutter widgets into React Native components.",
+      "It replaces dynamic string-based MethodChannel names and untyped Map<dynamic, dynamic> arguments with compile-time type-safe interfaces and data classes in Dart, Kotlin, Java, and Swift.",
+      "It compiles Dart directly to GPU assembly.",
+      "It automates App Store screenshot submissions."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Standard `MethodChannel` relies on string matching (e.g. `channel.invokeMethod('getPaymentStatus')`) and dynamic argument serialization, which are prone to runtime typos, type mismatch crashes, and maintenance headaches. `Pigeon` takes an interface definition file and generates strongly-typed Dart, Kotlin, and Swift code with compile-time error checking."
+  },
+  {
+    "id": 248,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "Why is the `@pragma('vm:entry-point')` annotation mandatory on background push notification handler functions?",
+    "codeSnippet": "@pragma('vm:entry-point')\nFuture<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {\n  await Firebase.initializeApp();\n  print('Handling background message: ${message.messageId}');\n}\n\nvoid main() {\n  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);\n  runApp(MyApp());\n}",
+    "options": [
+      "To allow the function to run without compiling null safety.",
+      "When the app is in the background or killed, the Flutter Engine spawns a dedicated background isolate to execute the message; the AOT compiler would tree-shake and discard this top-level function in release builds unless marked as an entry-point.",
+      "It grants the app root superuser privileges.",
+      "It encrypts the notification text."
+    ],
+    "correctAnswer": 1,
+    "explanation": "When a push notification arrives while the app is terminated, Android/iOS wakes up the background service and launches a new headless Dart VM isolate. During release compilation (AOT / tree-shaking), the compiler removes unreferenced top-level functions unless `@pragma('vm:entry-point')` explicitly informs the compiler that this function is invoked externally by native engine code."
+  },
+  {
+    "id": 249,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "Why are BOTH `FlutterError.onError` and `PlatformDispatcher.instance.onError` necessary for comprehensive crash reporting?",
+    "codeSnippet": "void main() async {\n  WidgetsFlutterBinding.ensureInitialized();\n  await Firebase.initializeApp();\n\n  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;\n\n  PlatformDispatcher.instance.onError = (error, stack) {\n    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);\n    return true;\n  };\n\n  runApp(MyApp());\n}",
+    "options": [
+      "FlutterError.onError is for Android, while PlatformDispatcher.instance.onError is for iOS.",
+      "FlutterError.onError only catches errors thrown within the Flutter widget layout/build framework; errors thrown in asynchronous Futures, microtasks, or background isolates outside the widget tree are caught by PlatformDispatcher.instance.onError.",
+      "PlatformDispatcher.instance.onError is only active in Debug mode.",
+      "Neither is required because Firebase automatically intercepts all errors at the OS kernel level."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`FlutterError.onError` intercepts errors occurring inside the Flutter framework (e.g. layout bounds overflow, widget build exceptions). However, unhandled errors inside asynchronous code (e.g. an un-awaited Future in a network service or repository) bypass `FlutterError`. `PlatformDispatcher.instance.onError` captures all unhandled platform isolate errors, ensuring 100% crash report coverage."
+  },
+  {
+    "id": 250,
+    "category": "Flutter Performance, Storage & Native Integrations",
+    "difficulty": "hard",
+    "question": "Why is `EdgeInsetsDirectional.only(start: 16.0, end: 8.0)` preferred over `EdgeInsets.only(left: 16.0, right: 8.0)` for Arabic/English bi-lingual apps in Oman & GCC?",
+    "codeSnippet": "Container(\n  padding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),\n  child: Row(\n    children: [\n      Icon(Icons.account_balance_wallet),\n      const SizedBox(width: 8),\n      Text(NumberFormat.currency(locale: 'ar_OM', symbol: 'ر.ع.').format(balanceInOmr)),\n    ],\n  ),\n)",
+    "options": [
+      "EdgeInsetsDirectional uses 50% less CPU memory.",
+      "EdgeInsetsDirectional automatically adapts to the active Directionality (LTR vs RTL); in English start is left, while in Arabic start is right, providing automatic layout mirroring without writing conditional code.",
+      "EdgeInsets is deprecated in Flutter 3.",
+      "EdgeInsetsDirectional is required by the Apple App Store for Arabic apps."
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Arabic (RTL), layouts are mirrored: leading icons and margins start on the right side of the screen. Using `Directional` geometry (`EdgeInsetsDirectional`, `AlignmentDirectional`, `BorderRadiusDirectional`) ensures padding and margins flip automatically based on the active locale (`Directionality.of(context)`), guaranteeing pristine UI for both Arabic and English users in Oman and GCC markets."
+  }
+]

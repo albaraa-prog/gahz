@@ -1,0 +1,293 @@
+[
+  {
+    "id": 216,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "In a high-security fintech app like Thawani, why is Public Key Pinning (SPKI) preferred over Leaf Certificate Pinning?",
+    "options": [
+      "Public Key Pinning disables TLS encryption to speed up API calls.",
+      "Leaf certificates expire frequently (e.g. every 90 days), which would break deployed mobile apps upon renewal; pinning the Public Key (SPKI) allows certificate renewals using the same key pair without forcing app updates.",
+      "Public Key Pinning does not require HTTPS.",
+      "Leaf Certificate Pinning is forbidden by Apple App Store guidelines."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Leaf certificates have short lifespans. If an app pins the full leaf certificate and the server renews it, all deployed mobile apps fail TLS validation and crash until users download an app update. Pinning the Subject Public Key Info (SPKI) allows certificate renewals using the same private key without breaking deployed apps."
+  },
+  {
+    "id": 217,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "What critical security vulnerability is introduced if `badCertificateCallback: (cert, host, port) => true;` is shipped to production?",
+    "codeSnippet": "final dio = Dio();\n(dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {\n  final client = HttpClient();\n  client.badCertificateCallback = (cert, host, port) => true; // Dev proxy bypass\n  return client;\n};",
+    "options": [
+      "The app crashes with an OutOfMemoryError.",
+      "It completely disables TLS certificate validation, exposing all user credentials, OTPs, and payment data to Man-In-The-Middle (MITM) interception on public or compromised Wi-Fi networks.",
+      "It prevents Android devices from using 5G networks.",
+      "It forces all network requests to be logged in Google Play Console."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Returning `true` in `badCertificateCallback` instructs the HTTP client to trust any certificate, including self-signed or fraudulent certificates. An attacker on the same local network or Wi-Fi can intercept, read, and tamper with all encrypted financial traffic."
+  },
+  {
+    "id": 218,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "How does `flutter_secure_storage` safeguard sensitive tokens (like JWT refresh tokens) on Android and iOS under the hood?",
+    "options": [
+      "It writes plaintext JSON strings to SharedPreferences and NSUserDefaults.",
+      "On Android, it uses hardware-backed Android KeyStore master keys with EncryptedSharedPreferences (AES-256 GCM); on iOS, it stores data in the iOS Keychain secured with kSecAttrAccessible.",
+      "It uploads credentials to a private Firebase Firestore collection.",
+      "It saves encrypted files to the external SD card."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`flutter_secure_storage` delegates storage to platform-native secure hardware enclaves: on Android, it uses Android KeyStore-backed AES keys with `EncryptedSharedPreferences`; on iOS, it leverages the Keychain Services API with hardware-backed encryption accessible only when the device is unlocked."
+  },
+  {
+    "id": 219,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "For authorizing a high-value wallet transfer (e.g. OMR 1,000), why is cryptographic biometric signing superior to a simple `await auth.authenticate()` boolean return?",
+    "options": [
+      "Boolean checks consume more battery than cryptographic signatures.",
+      "A simple boolean return can be easily bypassed by runtime hooking tools (like Frida) flipping the return value in RAM; cryptographic auth uses the Secure Enclave to sign a server-generated nonce with a hardware private key, which the backend verifies.",
+      "Cryptographic signing only works on Android devices with face recognition.",
+      "Boolean checks require an active SMS connection."
+    ],
+    "correctAnswer": 1,
+    "explanation": "In a naive boolean check, a reverse engineer using Frida can hook `authenticate()` and force it to return `true`. In cryptographic authentication, a key pair is generated in the Secure Enclave/TEE. Biometric verification unlocks the private key to sign a single-use server challenge/nonce. The backend validates the signature, ensuring non-repudiation."
+  },
+  {
+    "id": 220,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "Why should banking apps configure biometric keys with `setInvalidatedByBiometricEnrollment(true)` on Android KeyStore and `kSecAccessControlBiometryAny` on iOS?",
+    "options": [
+      "To allow users to share their wallet with multiple family members.",
+      "To permanently invalidate the cryptographic key if an unauthorized person who knows the phone passcode enrolls a new fingerprint/face in device system settings.",
+      "To avoid paying licensing fees to biometric sensor manufacturers.",
+      "To speed up fingerprint recognition by 200%."
+    ],
+    "correctAnswer": 1,
+    "explanation": "If an unauthorized person gains access to an unlocked phone or passcode, they could add their own fingerprint in system settings. Setting keys to invalidate upon new biometric enrollment guarantees that adding a fingerprint deletes the encryption key, requiring the user to re-authenticate with their primary password/PIN."
+  },
+  {
+    "id": 221,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "When multiple parallel API calls fail with 401 Unauthorized simultaneously upon token expiration, why is `QueuedInterceptor` with request locking critical in Dio?",
+    "codeSnippet": "class AuthInterceptor extends QueuedInterceptor {\n  final Dio dio;\n  final SecureStorageService storage;\n  AuthInterceptor(this.dio, this.storage);\n\n  @override\n  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {\n    if (err.response?.statusCode == 401) {\n      // Token refresh logic with request queue locking\n    }\n    return handler.next(err);\n  }\n}",
+    "options": [
+      "It compresses HTTP headers using Brotli.",
+      "It queues incoming requests and pauses execution while a single refresh token request executes; once the new token is acquired, it replays all queued requests with the fresh token, avoiding race conditions with single-use refresh token rotation.",
+      "It redirects all 401 errors to the Google Play Store.",
+      "It switches network traffic from Wi-Fi to cellular data."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Modern OAuth implementations use Refresh Token Rotation (each refresh token can only be used once). If 5 simultaneous requests fail with 401 and all 5 attempt to refresh concurrently, the first succeeds and the others fail with an invalidated refresh token, logging the user out. `QueuedInterceptor` locks the queue, runs 1 refresh, updates storage, and replays the waiting requests."
+  },
+  {
+    "id": 222,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "How does sending an `X-Idempotency-Key` header prevent duplicate customer charges during mobile network dropouts?",
+    "codeSnippet": "Future<PaymentResponse> transferMoney(TransferRequest request) async {\n  final idempotencyKey = Uuid().v4(); // Unique UUID per user intent\n  return await api.post(\n    '/api/v1/transfers',\n    data: request.toJson(),\n    options: Options(headers: {'X-Idempotency-Key': idempotencyKey}),\n  );\n}",
+    "options": [
+      "It encrypts the payload using quantum encryption.",
+      "If the connection drops before receiving the response and the app retries the transfer, the server recognizes the idempotency key, skips executing a second debit, and returns the cached result of the original transaction.",
+      "It forces the transaction to execute in offline mode.",
+      "It waives bank transfer fees."
+    ],
+    "correctAnswer": 1,
+    "explanation": "If an HTTP POST transfer succeeds on the server but the mobile connection drops before the HTTP 200 response reaches the client, the client may retry. With an `X-Idempotency-Key`, the backend recognizes the duplicate request and returns the existing transaction result without charging the user a second time."
+  },
+  {
+    "id": 223,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "Why must `double` (IEEE 754 floating point) NEVER be used for monetary balances and calculations in a fintech application?",
+    "codeSnippet": "void checkBalance() {\n  double total = 0.1 + 0.2;\n  print(total == 0.3); // Prints: false! (0.30000000000000004)\n}",
+    "options": [
+      "double is not supported on 64-bit ARM processors.",
+      "Binary floating point representation cannot precisely represent many base-10 decimal fractions, resulting in accumulated rounding errors that corrupt financial balances; developers must use integer minor units (e.g. Baisa/cents) or exact Decimal packages.",
+      "double variables cannot be serialized to JSON.",
+      "double calculations take 10x longer than string operations."
+    ],
+    "correctAnswer": 1,
+    "explanation": "In IEEE 754 floating point arithmetic, decimal fractions like `0.1` and `0.2` cannot be represented exactly in binary, leading to `0.30000000000000004`. In banking (where 1 OMR = 1000 Baisa), monetary values should always be stored and manipulated as integers representing the lowest denomination (e.g. `int balanceInBaisa = 300;`) or using exact decimal types."
+  },
+  {
+    "id": 224,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "What encoding format does the international EMVCo QR code payment specification use for payload tags?",
+    "codeSnippet": "// Sample EMVCo Payload: 00020101021226580010A00000072701200006OM.THAWANI540510.5053035125802OM...",
+    "options": [
+      "XML with SOAP wrappers.",
+      "Tag-Length-Value (TLV), where each data object starts with a 2-character ID (Tag), a 2-character Length, followed by the Value.",
+      "Base64-encoded Protobuf strings.",
+      "URL-encoded CSV strings."
+    ],
+    "correctAnswer": 1,
+    "explanation": "EMVCo QR specifications (used by Thawani, OmanNet, and global payment networks) structure data using Tag-Length-Value (TLV). For example, `540510.50` represents Tag `54` (Transaction Amount), Length `05`, and Value `10.50`."
+  },
+  {
+    "id": 225,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "What is the primary difference between a Static QR code and a Dynamic QR code at a payment checkout?",
+    "options": [
+      "Static QR codes change colors on every scan; Dynamic QR codes are black and white.",
+      "Static QR codes encode only the merchant's identifier (requiring the payer to manually enter the amount); Dynamic QR codes encode a specific invoice reference, exact amount, expiry timestamp, and signature.",
+      "Static QR codes can only be scanned with NFC.",
+      "Dynamic QR codes do not require internet access on the customer's phone."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A Static QR code (e.g. printed sticker on a counter) contains merchant info; the customer scans and manually types the payment amount. A Dynamic QR code is generated in real-time by a POS/checkout for a specific order with the exact amount, invoice ID, and expiry timestamp embedded."
+  },
+  {
+    "id": 226,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "In contactless NFC mobile payments (ISO/IEC 7816-4), what does APDU stand for and what is its structure?",
+    "codeSnippet": "// APDU command to SELECT Payment Application (AID)\nfinal selectAidApdu = [0x00, 0xA4, 0x04, 0x00, 0x07, 0xA0, 0x00, 0x00, 0x00, 0x04, 0x10, 0x10, 0x00];",
+    "options": [
+      "Asynchronous Payment Data Unit; consists of Header and Footer.",
+      "Application Protocol Data Unit; consists of Command APDU (CLA, INS, P1, P2, Lc, Data, Le) and Response APDU (Data, SW1, SW2 status bytes).",
+      "Android Payment Distribution Utility; consists of Public Key and Private Key.",
+      "Apple Protocol Data URL; consists of Domain and Token."
+    ],
+    "correctAnswer": 1,
+    "explanation": "In smart cards and NFC communication, messages are formatted as APDUs (Application Protocol Data Units). The mobile terminal sends a **Command APDU** (Class, Instruction, Parameters, Length, Data) and the secure element answers with a **Response APDU** containing payload and two status word bytes (`SW1 SW2`, such as `0x90 0x00` for Success)."
+  },
+  {
+    "id": 227,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "What does enabling `WindowManager.LayoutParams.FLAG_SECURE` accomplish on Android in a fintech app?",
+    "codeSnippet": "// In MainActivity.kt:\nwindow.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)",
+    "options": [
+      "It encrypts all network requests with HTTPS.",
+      "It blocks screenshots, screen recordings, HDMI casting, and hides screen content from the OS recent apps switcher preview.",
+      "It requires the user to enter their biometric fingerprint before every button tap.",
+      "It enables Vulkan GPU acceleration."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`FLAG_SECURE` treats the window content as secure, preventing screenshots, video recordings, screen mirrors, or the OS recent tasks thumbnail from capturing sensitive balance or PIN information."
+  },
+  {
+    "id": 228,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "Why is Google's SMS Retriever API preferred for OTP auto-verification over requesting `READ_SMS` permission?",
+    "options": [
+      "READ_SMS permission is mandatory on Android 14.",
+      "The SMS Retriever API allows the app to automatically read only its own verification SMS matching an 11-character hash without requesting dangerous READ_SMS permissions, complying with Google Play Store privacy policies.",
+      "SMS Retriever API sends SMS messages for free.",
+      "SMS User Consent API only works in Airplane mode."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Google Play strictly restricts access to `READ_SMS` permissions and rejects apps that request them unless they are the default SMS app. The **SMS Retriever API** uses an 11-character app hash embedded at the end of the SMS, allowing the app to read only its own verification message with zero user permission prompts."
+  },
+  {
+    "id": 229,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "Which combination of heuristics is standard for detecting rooted Android devices or jailbroken iPhones in mobile security SDKs?",
+    "options": [
+      "Checking if battery is above 90% and Wi-Fi is active.",
+      "Checking for su/daemonsu binaries, Cydia/Magisk/Frida packages, checking if /system is writable, and checking Build.TAGS for 'test-keys'.",
+      "Checking if WhatsApp or Spotify is installed.",
+      "Checking if device screen brightness is at maximum."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Root and jailbreak detection inspects known root binaries (`/system/bin/su`), superuser apps (Magisk, SuperSU, Cydia, Sileo), test-keys OS builds, writable system directories, and Frida/Xposed hooking frameworks to prevent running financial transactions on compromised devices."
+  },
+  {
+    "id": 230,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "Under PCI-DSS standards, what is the maximum unmasked card number display permissible when logging or rendering a customer's payment card?",
+    "options": [
+      "Show all 16 digits as long as CVV is hidden.",
+      "Show at most the first 6 digits (BIN/IIN) and last 4 digits (e.g. 4111 22XX XXXX 1234), masking all middle digits.",
+      "Show only the middle 6 digits.",
+      "Show all digits in base64 encoding."
+    ],
+    "correctAnswer": 1,
+    "explanation": "PCI-DSS Requirement 3.3 mandates that Primary Account Numbers (PAN) must be masked when displayed, with at most the first six digits (identifying the issuing bank) and last four digits visible. Full PAN, CVV/CVC, and PINs must never be logged in analytics or crash reports."
+  },
+  {
+    "id": 231,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "In a 3D-Secure (3DS) bank OTP webview flow, why is `NavigationDecision.prevent` used on the final payment callback URL?",
+    "codeSnippet": "NavigationDecision handle3dsNavigation(NavigationRequest request) {\n  if (request.url.startsWith('https://checkout.thawani.om/pay/callback')) {\n    final uri = Uri.parse(request.url);\n    final status = uri.queryParameters['status'];\n    final txId = uri.queryParameters['transaction_id'];\n    _completePayment(status: status, txId: txId);\n    return NavigationDecision.prevent;\n  }\n  return NavigationDecision.navigate;\n}",
+    "options": [
+      "To crash the webview and free RAM.",
+      "To intercept the bank's final redirect URL, extract the payment status parameters, close the webview, and transition directly to the native Flutter receipt screen without loading the web landing page.",
+      "To prevent the bank from charging payment processing fees.",
+      "To disable JavaScript execution on the bank portal."
+    ],
+    "correctAnswer": 1,
+    "explanation": "When 3DS authentication completes, the bank redirects to the merchant callback URL. Intercepting this URL via `NavigationDelegate` prevents the webview from rendering unnecessary web pages and allows native Flutter code to extract transaction tokens and transition immediately to the native receipt screen."
+  },
+  {
+    "id": 232,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "Which two configuration files and locations are required to enable verified Universal Links (iOS) and Android App Links (Android) without browser picker dialogs?",
+    "options": [
+      "iOS: apple-app-site-association at https://domain/.well-known/apple-app-site-association; Android: assetlinks.json at https://domain/.well-known/assetlinks.json.",
+      "iOS: manifest.json; Android: google-services.json at root directory.",
+      "iOS: Info.plist; Android: AndroidManifest.xml hosted on GitHub.",
+      "iOS: universal_links.json; Android: app_links.json hosted on AWS S3 with HTTP."
+    ],
+    "correctAnswer": 0,
+    "explanation": "iOS requires the `apple-app-site-association` file served over HTTPS at `/.well-known/apple-app-site-association`. Android requires `assetlinks.json` containing the app's package name and SHA-256 fingerprint hosted at `/.well-known/assetlinks.json`. Both files verify domain ownership so links open directly in the app."
+  },
+  {
+    "id": 233,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "What does attaching an HMAC-SHA256 signature in the `X-Signature` request header protect against in financial APIs?",
+    "codeSnippet": "String generateSignature({\n  required String secret,\n  required String method,\n  required String path,\n  required int timestamp,\n  required String body,\n}) {\n  final payload = '$method|$path|$timestamp|$body';\n  final hmac = Hmac(sha256, utf8.encode(secret));\n  return hmac.convert(utf8.encode(payload)).toString();\n}",
+    "options": [
+      "It compresses large JSON payloads by 80%.",
+      "It protects against request tampering and replay attacks; if an attacker alters the transfer amount or payload in transit, the server's calculated HMAC will not match, rejecting the request.",
+      "It prevents users from taking screenshots.",
+      "It enables offline database synchronization."
+    ],
+    "correctAnswer": 1,
+    "explanation": "HMAC-SHA256 creates a cryptographic hash using a shared secret and request elements (method, URL, timestamp, payload). If any parameter (such as modifying transfer amount) is tampered with in transit, the signature validation fails on the backend."
+  },
+  {
+    "id": 234,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "What widget should wrap an `InactivityWatcher` to detect all user interactions (taps, drags, pinches) without blocking child widget gestures?",
+    "codeSnippet": "class InactivityWatcher extends StatefulWidget {\n  final Widget child;\n  final VoidCallback onTimeout;\n  // ...\n}",
+    "options": [
+      "GestureDetector(onTap: resetTimer)",
+      "Listener(behavior: HitTestBehavior.translucent, onPointerDown: (_) => resetTimer(), child: child)",
+      "AbsorbPointer(child: child)",
+      "InkWell(onTap: resetTimer, child: child)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`GestureDetector` participates in gesture arena competitions and can consume or compete with child button taps/scrolls. `Listener` operates at the lower `PointerEvent` level and with `HitTestBehavior.translucent` passively observes all raw pointer down events across the entire screen without interfering with child widget gestures."
+  },
+  {
+    "id": 235,
+    "category": "Fintech Mobile Security, QR & Payments",
+    "difficulty": "hard",
+    "question": "Why is combining `FlutterSecureStorage` with `HiveAesCipher` the recommended practice for local transaction caching in fintech?",
+    "codeSnippet": "Future<Box<TransactionRecord>> openEncryptedBox() async {\n  final secureStorage = FlutterSecureStorage();\n  String? keyString = await secureStorage.read(key: 'hive_key');\n  if (keyString == null) {\n    final key = Hive.generateSecureKey();\n    await secureStorage.write(key: 'hive_key', value: base64UrlEncode(key));\n    keyString = base64UrlEncode(key);\n  }\n  return await Hive.openBox<TransactionRecord>(\n    'transactions',\n    encryptionCipher: HiveAesCipher(base64Url.decode(keyString)),\n  );\n}",
+    "options": [
+      "Because Hive cannot open boxes on Android without encryption.",
+      "Hive provides fast NoSQL read/writes while HiveAesCipher encrypts all records on disk with AES-256; storing the 256-bit key in FlutterSecureStorage safeguards it inside hardware-backed KeyStore/Keychain.",
+      "It automatically sends transactions to the bank via Bluetooth.",
+      "It reduces app binary size by 15MB."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Storing financial histories in plaintext SQLite/Hive files violates security standards. Generating a random 256-bit key, securing that key inside the hardware KeyStore/Keychain via `FlutterSecureStorage`, and using it with `HiveAesCipher` guarantees that local cached records cannot be extracted even if a device is dumped."
+  }
+]

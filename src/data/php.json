@@ -1,0 +1,145 @@
+[
+  {
+    "id": 41,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "How does PHP handle traits name collisions when two traits define a method with the same name?",
+    "codeSnippet": "trait TraitA { function test() { echo 'A'; } }\ntrait TraitB { function test() { echo 'B'; } }\nclass MyClass {\n    use TraitA, TraitB;\n}",
+    "options": [
+      "TraitB overrides TraitA automatically.",
+      "It causes a fatal error during compilation/parsing.",
+      "PHP resolves it by checking the alphabetical order of traits.",
+      "Both methods are merged, executing one after the other."
+    ],
+    "correctAnswer": 1,
+    "explanation": "If two traits insert a method with the same name, a fatal error is produced. To resolve this collision, the class developer must explicitly configure precedence using the `insteadof` operator or define an alias using `as`."
+  },
+  {
+    "id": 42,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "Which PHP magic method is invoked when calling an inaccessible or undefined method on an object instance?",
+    "options": [
+      "__invoke()",
+      "__get()",
+      "__call()",
+      "__construct()"
+    ],
+    "correctAnswer": 2,
+    "explanation": "`__call(string $name, array $arguments)` is triggered when invoking an overloaded method on an object context that does not exist or is invisible."
+  },
+  {
+    "id": 43,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "What is the effect of using `declare(strict_types=1);` in a PHP script?",
+    "options": [
+      "It forces PHP to encrypt all outputs sent to the client.",
+      "It strict-checks parameter and return types of functions, throwing a TypeError if arguments do not match expected types exactly.",
+      "It disables array coercion, preventing indexes from containing strings.",
+      "It converts all variables to read-only constants."
+    ],
+    "correctAnswer": 1,
+    "explanation": "By declaring `strict_types=1`, PHP enforces strict type checking on function calls within that file. If there's a type mismatch (e.g. passing a string float to a float parameter), PHP throws a `TypeError` rather than coercing the value."
+  },
+  {
+    "id": 44,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "Which hash mechanism is recommended by PHP's modern standard for secure password storage?",
+    "options": [
+      "md5()",
+      "sha1()",
+      "password_hash()",
+      "crypt()"
+    ],
+    "correctAnswer": 2,
+    "explanation": "`password_hash()` is the modern standard, which defaults to using strong, salt-supported algorithms like bcrypt or Argon2. It manages secure salting internally, making it resistant to rainbow tables."
+  },
+  {
+    "id": 45,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "How can you prevent Session Fixation vulnerabilities in PHP applications?",
+    "options": [
+      "By storing session IDs in cookies rather than URLs.",
+      "By calling session_regenerate_id(true) upon user login.",
+      "By setting session.gc_maxlifetime to 0.",
+      "By encrypting the $_SESSION array manually before script ends."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Session Fixation occurs when an attacker forces a victim to use a known session ID. Regenerating the session ID upon authentication changes the session token and invalidates the old one, neutralizing the attack."
+  },
+  {
+    "id": 46,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "What is the security advantage of using PDO Prepared Statements over raw query concatenation?",
+    "options": [
+      "They execute queries faster by bypassing database compilation steps.",
+      "They automatically bind parameters and separate SQL instruction logic from input data, preventing SQL Injection.",
+      "They allow developers to execute shell commands directly inside SQL.",
+      "They compress data structures before transport."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Prepared statements send the query template to the database separately from the parameters. The database compiles the template first. Since parameters are bound afterward, user input is never parsed as executable SQL commands, removing SQL injection risks."
+  },
+  {
+    "id": 47,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "Under PSR-4 autoloading standards, how are namespaces and directory structures mapped?",
+    "options": [
+      "Fully qualified class name namespaces map directly to subdirectories and class filenames on the disk.",
+      "All classes must be registered manually in a single database file.",
+      "PHP dynamically reads class contents at startup, regardless of namespace.",
+      "Classes must be loaded via require_once in alphabetical order."
+    ],
+    "correctAnswer": 0,
+    "explanation": "PSR-4 defines a structure where namespace prefixes map to base directories, and class names map directly to matching filenames (e.g. `App\\Models\\User` resolves to `src/Models/User.php`). This facilitates automated loaders."
+  },
+  {
+    "id": 48,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "What is the key coercion behavior for PHP arrays when a float or string float is used as a key?",
+    "codeSnippet": "$arr = [];\n$arr[1.5] = 'a';\n$arr['1'] = 'b';\nprint_r($arr);",
+    "options": [
+      "[1.5 => 'a', '1' => 'b']",
+      "[1 => 'b']",
+      "Raises a Fatal Type Error",
+      "[1 => 'a', '1' => 'b']"
+    ],
+    "correctAnswer": 1,
+    "explanation": "PHP arrays coerce numerical strings and float keys to integers if they look like integers or fit. Here, `1.5` is cast to integer `1`, storing `'a'`. Next, the string key `'1'` is also coerced to integer `1`, overwriting the value with `'b'`. Thus, the array becomes `[1 => 'b']`."
+  },
+  {
+    "id": 49,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "How must variables from the outer scope be imported into a PHP anonymous function/closure?",
+    "codeSnippet": "$message = 'hello';\n$say = function() use ($message) {\n    echo $message;\n};",
+    "options": [
+      "They are automatically imported and accessible.",
+      "Via the global keyword inside the closure.",
+      "Using the `use` clause in the function signature.",
+      "By passing them as arguments during function declaration."
+    ],
+    "correctAnswer": 2,
+    "explanation": "PHP closures do not automatically inherit scope. You must explicitly list outer scope variables that the closure needs to capture using the `use` keyword."
+  },
+  {
+    "id": 50,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "What PHP 8 feature allows declaring properties and constructor parameters in a single line?",
+    "options": [
+      "Attributes",
+      "Match expressions",
+      "Constructor Property Promotion",
+      "Named Arguments"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Constructor Property Promotion allows developers to combine property declaration, type-hinting, parameter matching, and assignment into a single constructor signature line (e.g. `public function __construct(private string $name) {}`)."
+  }
+]

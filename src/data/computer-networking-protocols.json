@@ -1,0 +1,212 @@
+[
+  {
+    "id": 276,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "In the 7-Layer OSI Model, which layer is responsible for end-to-end reliability, segmentation, and flow control (e.g. TCP/UDP)?",
+    "options": [
+      "Layer 2 - Data Link Layer",
+      "Layer 3 - Network Layer (IP)",
+      "Layer 4 - Transport Layer (TCP/UDP)",
+      "Layer 7 - Application Layer (HTTP)"
+    ],
+    "correctAnswer": 2,
+    "explanation": "**Layer 4 (Transport Layer)** manages end-to-end communication, segmenting data, managing port numbers (e.g. port 443), flow control (sliding window), error checking, and reliability (TCP handshakes, ACKs, retransmissions). Layer 3 (Network) handles IP packet routing across routers."
+  },
+  {
+    "id": 277,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "What is the correct packet sequence for establishing a TCP connection (3-Way Handshake) and terminating it (4-Way Teardown)?",
+    "options": [
+      "Establish: SYN -> SYN-ACK -> ACK ; Terminate: FIN -> ACK -> FIN -> ACK",
+      "Establish: ACK -> SYN -> SYN-ACK ; Terminate: RST -> RST-ACK",
+      "Establish: PING -> PONG -> ACK ; Terminate: BYE -> BYE-ACK",
+      "Establish: SYN -> ACK ; Terminate: FIN -> ACK"
+    ],
+    "correctAnswer": 0,
+    "explanation": "To establish a TCP connection: 1) Client sends `SYN`, 2) Server responds with `SYN-ACK`, 3) Client replies with `ACK`. To gracefully close the bidirectional connection: 1) Client sends `FIN`, 2) Server replies `ACK`, 3) Server sends its own `FIN`, 4) Client replies `ACK` (entering `TIME_WAIT` to ensure ACK delivery)."
+  },
+  {
+    "id": 278,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "Why is UDP (User Datagram Protocol) chosen over TCP for VoIP calls, live video streaming, and online multiplayer games?",
+    "options": [
+      "UDP uses 256-bit encryption by default.",
+      "UDP is connectionless with zero handshake overhead (8-byte header vs 20-byte TCP) and does NOT perform retransmissions or head-of-line blocking; in live media, dropping a late frame is preferable to delaying the entire real-time stream for a retransmission.",
+      "UDP is guaranteed to deliver 100% of packets in order.",
+      "TCP is blocked on 4G/5G mobile networks."
+    ],
+    "correctAnswer": 1,
+    "explanation": "TCP guarantees reliable, ordered delivery through retransmissions and congestion control. If a packet is lost in TCP, all subsequent packets must wait (Head-Of-Line blocking), causing audio stutter. UDP sends lightweight datagrams without waiting for ACKs or retransmitting lost packets, making it ideal for low-latency live media."
+  },
+  {
+    "id": 279,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "What major latency improvement was introduced in TLS 1.3 compared to TLS 1.2 during the cryptographic handshake?",
+    "options": [
+      "TLS 1.3 completely eliminates encryption.",
+      "TLS 1.3 reduced the full cryptographic handshake from 2 roundtrips (2-RTT) to 1 roundtrip (1-RTT), and introduced 0-RTT Early Data resumption for returning mobile clients, drastically reducing connection latency.",
+      "TLS 1.3 requires 5 roundtrips for maximum security.",
+      "TLS 1.3 only works with RSA-1024 certificates."
+    ],
+    "correctAnswer": 1,
+    "explanation": "In TLS 1.2, establishing an encrypted session required 2 full roundtrips (2-RTT) of client/server hello and key exchange messages before application data could flow. TLS 1.3 combines the cipher negotiation and Diffie-Hellman key exchange into a single roundtrip (1-RTT) and allows returning clients to send encrypted data on the first flight (0-RTT)."
+  },
+  {
+    "id": 280,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "How does HTTP/3 (built on QUIC over UDP) solve the TCP Head-of-Line (HOL) blocking problem when a mobile device switches from Wi-Fi to cellular data?",
+    "options": [
+      "HTTP/3 downloads the entire internet into device flash storage.",
+      "In HTTP/2, all multiplexed streams share 1 single TCP connection; a single lost TCP packet pauses ALL streams. HTTP/3 runs over QUIC (UDP) where each stream is tracked independently (loss on stream A does not block stream B), and QUIC Connection IDs allow seamless network migration (Wi-Fi to 5G) without tearing down connections.",
+      "HTTP/3 requires physical fiber optic cables.",
+      "HTTP/3 only works in Chrome desktop browsers."
+    ],
+    "correctAnswer": 1,
+    "explanation": "In HTTP/2, multiplexing happens above TCP. If 1 packet drops, TCP halts all streams until the missing packet is retransmitted (TCP HOL blocking). **HTTP/3 uses QUIC over UDP**, implementing independent stream recovery so lost packets only delay that single request. Furthermore, QUIC uses 64-bit Connection IDs rather than (IP:Port) tuples, allowing mobile phones to switch from Wi-Fi to 5G without breaking in-flight API calls."
+  },
+  {
+    "id": 281,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "What is the complete resolution path when a mobile app queries the DNS address for `api.thawani.om`?",
+    "options": [
+      "Device -> Root Server -> ISP -> Database -> API",
+      "Local DNS Cache -> Recursive Resolver -> Root Nameserver ('.') -> TLD Nameserver ('.om') -> Authoritative Nameserver ('thawani.om') -> Returns A/AAAA IP record.",
+      "Direct peer-to-peer query to Google DNS only.",
+      "DNS queries are broadcast to all devices on the cellular tower."
+    ],
+    "correctAnswer": 1,
+    "explanation": "When resolving a domain: 1) Client checks local cache / OS resolver. 2) The **Recursive Resolver** (ISP/Cloudflare 1.1.1.1) asks the **Root Server** (`.`), which points to the **TLD Server** (`.om`). 3) The `.om` TLD server points to Thawani's **Authoritative Nameserver**. 4) The Authoritative server returns the final `A` (IPv4) or `AAAA` (IPv6) IP address."
+  },
+  {
+    "id": 282,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "What is MTU (Maximum Transmission Unit), and what happens if an IP packet exceeds the standard 1500-byte Ethernet MTU with the `DF` (Don't Fragment) flag set?",
+    "options": [
+      "The packet is automatically compressed by the router.",
+      "MTU is the largest link-layer frame size (typically 1500 bytes); if a packet exceeds MTU and DF=1, the router drops the packet and sends back an ICMP 'Destination Unreachable - Fragmentation Needed' message, enabling Path MTU Discovery (PMTUD).",
+      "The router converts the packet into an SMS message.",
+      "The packet is duplicated across all network ports."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Ethernet MTU is 1500 bytes. If a packet size exceeds the link MTU and the `DF` (Don't Fragment) bit in the IP header is set to 1, the intermediate router cannot split the packet and drops it, returning an ICMP Type 3 Code 4 error with the next-hop MTU. The sending host uses this to discover the Path MTU (PMTUD) and adjust its TCP MSS."
+  },
+  {
+    "id": 283,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "Which IPv4 address blocks are defined by RFC 1918 as non-routable Private IP Address spaces for internal networks?",
+    "options": [
+      "8.8.8.0/24, 1.1.1.0/24, and 127.0.0.0/8",
+      "10.0.0.0/8 (10.0.0.0 - 10.255.255.255), 172.16.0.0/12 (172.16.0.0 - 172.31.255.255), and 192.168.0.0/16 (192.168.0.0 - 192.168.255.255)",
+      "224.0.0.0/4 (Multicast range)",
+      "169.254.0.0/16 (APIPA link-local only)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "RFC 1918 reserves three private IPv4 blocks for local networks: **Class A: `10.0.0.0/8`**, **Class B: `172.16.0.0/12`**, and **Class C: `192.168.0.0/16`**. Routers on the public internet immediately drop packets with private source/destination addresses, requiring NAT (Network Address Translation) to communicate externally."
+  },
+  {
+    "id": 284,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "How does Anycast BGP routing enable Content Delivery Networks (CDNs) to route mobile users to the nearest geographical edge server?",
+    "options": [
+      "By assigning every mobile phone its own dedicated satellite.",
+      "The same single IP address is announced simultaneously from hundreds of global Edge PoPs via BGP; the internet's BGP routing automatically routes client packets along the shortest autonomous system (AS) network path to the physically closest edge server.",
+      "By scanning the mobile user's GPS coordinates on every packet.",
+      "Anycast only routes traffic through undersea cables."
+    ],
+    "correctAnswer": 1,
+    "explanation": "In **Anycast**, multiple servers across different data centers globally share the identical IP address. Border Gateway Protocol (BGP) advertises this IP from all locations. When a user in Muscat or Dubai sends a request, internet routers automatically direct traffic to the closest PoP based on BGP routing metrics, minimizing roundtrip latency."
+  },
+  {
+    "id": 285,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "Why is disabling Nagle's Algorithm (`TCP_NODELAY = true`) critical for ultra-low-latency financial trading and payment POS terminals?",
+    "options": [
+      "Nagle's algorithm encrypts data with weak DES ciphers.",
+      "Nagle's algorithm buffers small outgoing packets and delays sending until previous data is ACKed or a full MSS buffer accumulates; disabling it (TCP_NODELAY) forces small payloads (like financial trade commands or POS swipes) to be transmitted immediately without 40-200ms buffering delays.",
+      "Nagle's algorithm disconnects clients after 5 seconds.",
+      "TCP_NODELAY reduces bandwidth costs by 90%."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Nagle's algorithm was designed in 1984 to prevent tiny packet congestion on slow links by coalescing small writes into larger segments. However, combined with TCP Delayed ACKs, it creates artificial 40ms to 200ms latency spikes. Setting `socket.setOption(SocketOption.tcpNoDelay, true)` disables buffering and sends small packets instantaneously."
+  },
+  {
+    "id": 286,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "What is the core technical difference between a Layer 4 Load Balancer and a Layer 7 Load Balancer?",
+    "options": [
+      "Layer 4 load balancers only work with HTTP; Layer 7 only works with raw binary bytes.",
+      "Layer 4 load balancers route traffic at the Transport layer (IP and Port) without inspecting packet payloads, offering extreme throughput; Layer 7 load balancers inspect Application layer data (HTTP headers, URL paths, cookies, TLS certificates), enabling smart routing, SSL termination, and rate limiting.",
+      "Layer 7 load balancers cannot handle HTTPS traffic.",
+      "Layer 4 load balancers require custom mobile hardware."
+    ],
+    "correctAnswer": 1,
+    "explanation": "**Layer 4 (L4)** (e.g. AWS NLB, IPVS) operates at TCP/UDP level based purely on IP/Port with near-zero latency and millions of packets/sec. **Layer 7 (L7)** (e.g. NGINX, HAProxy, AWS ALB) terminates TCP and decrypts TLS to inspect HTTP headers, URI paths (`/api/v1/checkout` vs `/api/v1/static`), enabling intelligent routing, cookie affinity, and JWT inspection."
+  },
+  {
+    "id": 287,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "Why is WireGuard considered a superior modern VPN protocol compared to legacy OpenVPN and IPsec?",
+    "options": [
+      "WireGuard uses unencrypted plain text for maximum speed.",
+      "WireGuard runs directly in kernel space with an extremely lean codebase (~4,000 lines vs 100,000+ in OpenVPN), uses modern state-of-the-art cryptography (Noise protocol, ChaCha20-Poly1305, Curve25519), and handles mobile IP roaming seamlessly without connection renegotiation.",
+      "WireGuard only works on Windows 98.",
+      "WireGuard requires a physical hardware dongle."
+    ],
+    "correctAnswer": 1,
+    "explanation": "WireGuard replaced massive legacy codebases with ~4,000 lines of highly auditable C code running inside the Linux kernel. It utilizes modern cryptographic primitives (ChaCha20-Poly1305, Curve25519) and stateless peer binding, enabling mobile devices to switch between Wi-Fi and 5G with instantaneous zero-handshake reconnection."
+  },
+  {
+    "id": 288,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "What is the structural distinction between a Forward Proxy and a Reverse Proxy?",
+    "options": [
+      "Forward proxies only handle UDP; Reverse proxies only handle TCP.",
+      "A Forward Proxy sits in front of clients (hiding client identities, enforcing corporate web filters, caching outgoing traffic); a Reverse Proxy sits in front of origin servers (hiding server IPs, load balancing incoming traffic, terminating SSL, and defending against DDoS attacks).",
+      "Reverse proxies are installed on the client's smartphone.",
+      "There is no difference; they are identical terms."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A **Forward Proxy** acts on behalf of the *client* (e.g. corporate proxy checking employee web browsing). A **Reverse Proxy** (e.g. Cloudflare, NGINX) acts on behalf of the *servers*, receiving incoming internet traffic, offloading SSL/TLS handshakes, load-balancing requests across backend clusters, and caching responses."
+  },
+  {
+    "id": 289,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "In local area networks (LAN), what is the function of the Address Resolution Protocol (ARP)?",
+    "options": [
+      "To assign DNS names to web servers.",
+      "To map a known Layer 3 IPv4 address to a physical Layer 2 MAC address on the local Ethernet/Wi-Fi link using ARP broadcast requests and unicast replies.",
+      "To encrypt Wi-Fi passwords with WPA3.",
+      "To convert IPv4 addresses into IPv6 addresses."
+    ],
+    "correctAnswer": 1,
+    "explanation": "When a device wants to send an IP packet to `192.168.1.50` on the same subnet, Ethernet hardware requires the physical 48-bit MAC address. It broadcasts an ARP request: 'Who has 192.168.1.50? Tell 192.168.1.1'. The target device replies with its MAC address (`00:1A:2B:3C:4D:5E`), which is cached in the ARP table."
+  },
+  {
+    "id": 290,
+    "category": "Computer Networking & Protocols",
+    "difficulty": "medium",
+    "question": "How does the `traceroute` network diagnostic tool discover each router hop between your mobile phone and a remote banking server?",
+    "options": [
+      "By querying Google Maps for network fiber cables.",
+      "By sending a series of packets with incrementally increasing IP Time-To-Live values (TTL=1, TTL=2, TTL=3...); each intermediate router decrements TTL to 0, drops the packet, and returns an ICMP 'Time Exceeded' message containing the router's IP address and round-trip time.",
+      "By establishing SSH connections to all intermediate routers.",
+      "By reading the routing table from the mobile SIM card."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`traceroute` exploits the IP header's **TTL (Time To Live)** field. It sends a packet with `TTL=1`. The first router decrements TTL to 0 and sends back `ICMP Type 11 (Time Exceeded)`, revealing Hop 1. It repeats with `TTL=2`, `TTL=3`, and so on, until the packet reaches the final destination, mapping the entire network path hop by hop."
+  }
+]

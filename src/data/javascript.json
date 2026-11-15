@@ -1,0 +1,147 @@
+[
+  {
+    "id": 21,
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "What is the output of the following Javascript code demonstrating closure behavior in loops?",
+    "codeSnippet": "for (var i = 0; i < 3; i++) {\n    setTimeout(function() {\n        console.log(i);\n    }, 100);\n}",
+    "options": [
+      "0 1 2",
+      "3 3 3",
+      "2 2 2",
+      "Undefined Undefined Undefined"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Because `var` is function-scoped rather than block-scoped, the loop variable `i` is shared across all iterations. By the time the asynchronous `setTimeout` callbacks execute (after 100ms), the loop has fully terminated, and the value of `i` is 3."
+  },
+  {
+    "id": 22,
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "What is the correct order of output for this JavaScript Event Loop simulation?",
+    "codeSnippet": "console.log('Start');\nsetTimeout(() => console.log('Timeout'), 0);\nPromise.resolve().then(() => console.log('Promise'));\nconsole.log('End');",
+    "options": [
+      "Start -> Timeout -> Promise -> End",
+      "Start -> End -> Timeout -> Promise",
+      "Start -> End -> Promise -> Timeout",
+      "Start -> Promise -> Timeout -> End"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Synchronous operations ('Start', 'End') run first. When the call stack is clear, the microtask queue (Promise reactions) is emptied before processing the macrotask queue (setTimeout callbacks). So, 'Promise' prints before 'Timeout'."
+  },
+  {
+    "id": 23,
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "What is the difference between `__proto__` and `prototype` in JavaScript?",
+    "options": [
+      "They are identical and can be used interchangeably on any object.",
+      "`prototype` is a property of constructor functions used to build `__proto__` on instances; `__proto__` is the actual active prototype link of an object.",
+      "`__proto__` is only supported on servers; `prototype` is only supported in browsers.",
+      "`prototype` defines private class fields, whereas `__proto__` defines public static variables."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Constructor functions (like `Array`, `Function`, or custom functions) have a `prototype` property. When you instantiate objects from them, the object's internal prototype pointer `__proto__` (standardized as `Object.getPrototypeOf()`) is linked to that constructor's `prototype` object."
+  },
+  {
+    "id": 24,
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "What does the `this` keyword refer to inside an ES6 Arrow Function?",
+    "codeSnippet": "const obj = {\n    val: 42,\n    getVal: () => this.val\n};",
+    "options": [
+      "The object `obj` on which the method was defined.",
+      "The global scope or enclosing execution context where the object was created.",
+      "The function `getVal` itself.",
+      "It will throw a SyntaxError."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Arrow functions do not have their own `this` binding. Instead, they capture the lexical `this` of the enclosing execution context at the time they are defined. Here, that refers to the outer scope (e.g. `window` or global object), where `val` is undefined."
+  },
+  {
+    "id": 25,
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "What is the output of the following loose vs strict comparisons in JavaScript?",
+    "codeSnippet": "console.log([] == ![]);",
+    "options": [
+      "true",
+      "false",
+      "TypeError: cannot compare array with logical NOT",
+      "undefined"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The Logical NOT operator `!` has higher precedence than `==`. `![]` evaluates to `false`. Next, the comparison `[] == false` triggers type coercion: both operands are coerced to numbers. `[]` becomes `0`, and `false` becomes `0`. Since `0 == 0`, the expression returns `true`."
+  },
+  {
+    "id": 26,
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "What is the Temporal Dead Zone (TDZ) in JavaScript?",
+    "options": [
+      "The latency period during AJAX network calls.",
+      "The window of time during which asynchronous code executes in the event loop.",
+      "The region from the start of a block until a `let` or `const` variable is declared, during which accessing it raises a ReferenceError.",
+      "The period during which the garbage collector freezes execution."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Variables declared with `let` and `const` are hoisted but not initialized. The Temporal Dead Zone is the period from the entry into the block scope until the declaration statement is executed, where accessing the variable is illegal."
+  },
+  {
+    "id": 27,
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "What happens when using `Promise.all()` if one of the promises is rejected?",
+    "options": [
+      "It waits for all other promises to resolve and ignores the failed one.",
+      "It rejects immediately with the error of the failed promise, discarding any other successful results.",
+      "It returns an array containing both errors and successful values.",
+      "It retries the rejected promise three times automatically."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`Promise.all` follows an 'all-or-nothing' approach. If any input promise rejects, the returned promise immediately rejects with that reason, failing fast. (Contrast this with `Promise.allSettled` which gathers all outcomes)."
+  },
+  {
+    "id": 28,
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "What is the primary difference between debounce and throttle patterns?",
+    "options": [
+      "Debounce executes a function periodically, whereas throttle delays it until a button click.",
+      "Debounce groups multiple calls into one execution after a period of inactivity, whereas throttle limits execution to once per specified time interval.",
+      "Debounce works on client side; throttle works on server side.",
+      "They are synonyms for the same scheduling function."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Debounce delays execution until a certain amount of time has elapsed since the last call (ideal for typing search suggestions). Throttle limits calls to a maximum rate of once per period (ideal for scroll listeners)."
+  },
+  {
+    "id": 29,
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "What happens to variables that are assigned values without being declared (e.g. `x = 10`) under Strict Mode (`'use strict'`)?",
+    "options": [
+      "They are implicitly declared as global variables.",
+      "They are garbage collected immediately after the script runs.",
+      "It throws a ReferenceError.",
+      "They are coerced to constants."
+    ],
+    "correctAnswer": 2,
+    "explanation": "In non-strict mode, assigning a value to an undeclared variable implicitly creates a property on the global object. Under strict mode, this is prevented, throwing a ReferenceError to catch potential typos."
+  },
+  {
+    "id": 30,
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "What is the output of the following spread operator nested evaluation?",
+    "codeSnippet": "const original = { a: 1, b: { c: 2 } };\nconst copy = { ...original };\ncopy.b.c = 99;\nconsole.log(original.b.c);",
+    "options": [
+      "2",
+      "99",
+      "undefined",
+      "Throws a TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The spread operator (`...`) creates a shallow copy. While the root property `a` is cloned, the nested object `b` is copied by reference. Therefore, modifying `copy.b.c` also alters the shared reference, affecting `original.b.c`."
+  }
+]

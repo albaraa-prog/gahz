@@ -1,0 +1,30 @@
+{
+  "name": "devquiz-studio",
+  "version": "2.0.0",
+  "description": "Open-source practice platform for programming and technical interview preparation.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run validate:data && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "validate:data": "node scripts/validate-questions.mjs",
+    "test": "vitest run",
+    "check": "npm run validate:data && npm run typecheck && npm run test",
+    "deploy": "npm run build && firebase deploy --only hosting,firestore:rules"
+  },
+  "dependencies": {
+    "firebase": "^13.3.0"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  }
+}

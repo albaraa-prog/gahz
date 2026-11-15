@@ -1,0 +1,254 @@
+[
+  {
+    "id": 61,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "Which HTTP request method is considered safe and idempotent?",
+    "options": [
+      "POST",
+      "GET",
+      "PATCH",
+      "DELETE"
+    ],
+    "correctAnswer": 1,
+    "explanation": "An HTTP method is 'safe' if it doesn't modify database state (read-only like GET, HEAD). It is 'idempotent' if making multiple identical requests has the same effect as a single request. GET is both. DELETE is idempotent but not safe. POST is neither."
+  },
+  {
+    "id": 62,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "Which HTTP Status code should be returned by an API to indicate that the client must provide authentication credentials before proceeding?",
+    "options": [
+      "403 Forbidden",
+      "400 Bad Request",
+      "401 Unauthorized",
+      "405 Method Not Allowed"
+    ],
+    "correctAnswer": 2,
+    "explanation": "HTTP 401 Unauthorized indicates that the request lacks valid credentials. HTTP 403 Forbidden indicates the server understands who the client is, but they lack permissions for that resource."
+  },
+  {
+    "id": 63,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "What is the primary document used in SOAP to describe available operations, protocols, and data formats of a web service?",
+    "options": [
+      "JSON Schema",
+      "WSDL (Web Services Description Language)",
+      "WADL (Web Application Description Language)",
+      "Swagger / OpenAPI specification"
+    ],
+    "correctAnswer": 1,
+    "explanation": "SOAP services use WSDL files (XML-based documents) to formally define endpoints, messages, data models, and port mappings for the service."
+  },
+  {
+    "id": 64,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "What does the REST constraint of 'Statelessness' require of API requests?",
+    "options": [
+      "The client must not store cookies or authentication tokens.",
+      "Each request from a client must contain all necessary information/context to understand and process the request, without relying on stored session context on the server.",
+      "The server must clear database tables after returning responses.",
+      "API responses must never be cached by CDN gateways."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Statelessness means the server does not store session state about client progress. Every request must be fully self-contained (carrying JWT tokens, request query filters, etc.) so that any server instance can handle it."
+  },
+  {
+    "id": 65,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "Which protocol specification does SOAP rely on exclusively for structured messaging exchange?",
+    "options": [
+      "JSON",
+      "XML",
+      "Protocol Buffers (Protobuf)",
+      "YAML"
+    ],
+    "correctAnswer": 1,
+    "explanation": "SOAP (Simple Object Access Protocol) messages must be formatted exclusively as XML documents. They consist of an Envelope, Header, and Body."
+  },
+  {
+    "id": 66,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "What is a common practice for implementing API Versioning via Content Negotiation?",
+    "options": [
+      "Modifying the URI path (e.g. /v2/users).",
+      "Using custom request headers or Accept Headers (e.g. Accept: application/vnd.company.v2+json).",
+      "Changing the subdomain address (e.g. v2.api.company.com).",
+      "Re-mapping DNS routes dynamically."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Versioning via content negotiation involves using the `Accept` or `Content-Type` headers to specify which version of the resource representation is requested, keeping the resource URI clean."
+  },
+  {
+    "id": 67,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "What happens during a CORS preflight request?",
+    "options": [
+      "The browser sends an HTTP GET request to fetch CSS styling.",
+      "The browser sends an HTTP OPTIONS request to verify that the target origin permits the cross-origin request before sending the actual request.",
+      "The server checks if the client's API keys are blacklisted.",
+      "The network router verifies IP packets routing paths."
+    ],
+    "correctAnswer": 1,
+    "explanation": "For 'non-simple' requests (e.g. custom headers, PUT/DELETE methods), browsers automatically send an OPTIONS request to the server first to check if cross-origin resource sharing headers allow the transaction."
+  },
+  {
+    "id": 68,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "What REST architectural concept is represented by the abbreviation HATEOAS?",
+    "options": [
+      "Hypermedia As The Engine Of Application State",
+      "Hypertext Authentication Transmitted Over Active Sockets",
+      "Host Address Transfer Except On Authorized Servers",
+      "Handshake Agreement To Encrypt Outgoing Application Streams"
+    ],
+    "correctAnswer": 0,
+    "explanation": "HATEOAS stands for Hypermedia As The Engine Of Application State. It specifies that REST responses should contain links to other resources, allowing the client to dynamically discover APIs."
+  },
+  {
+    "id": 69,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "Which SOAP sub-element is used inside the Body block to report errors and exceptions?",
+    "options": [
+      "SOAP Exception",
+      "SOAP Fault",
+      "SOAP ErrorCode",
+      "SOAP StackTrace"
+    ],
+    "correctAnswer": 1,
+    "explanation": "SOAP specifications define the `<soap:Fault>` element within the body block to convey error status, messages, actor location, and technical stack details."
+  },
+  {
+    "id": 70,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "Under REST principles, what is the key difference between PUT and PATCH requests?",
+    "options": [
+      "PUT is safe, while PATCH is not.",
+      "PUT replaces the entire resource representation with the payload; PATCH performs partial updates on the resource fields.",
+      "PUT is only used for inserts; PATCH is only used for updates.",
+      "PUT is asynchronous; PATCH is synchronous."
+    ],
+    "correctAnswer": 1,
+    "explanation": "PUT is designed to perform a full replacement of the target resource. If some fields are missing from the PUT payload, they may be cleared or defaulted. PATCH applies partial modifications to the resource."
+  },
+  {
+    "id": 161,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "Which HTTP status code is standard for a successful request that also results in the creation of a new resource?",
+    "options": [
+      "200 OK",
+      "201 Created",
+      "202 Accepted",
+      "204 No Content"
+    ],
+    "correctAnswer": 1,
+    "explanation": "HTTP 201 Created is the standard response status code indicating that the request has succeeded and has led to the creation of a new resource, typically returned after a POST request."
+  },
+  {
+    "id": 162,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "Which of the following describes the 'Stateless' constraint of the REST architectural style?",
+    "options": [
+      "The server must not store any session state about the client connection; each request from client to server must contain all the information necessary to understand and complete the request.",
+      "The client must not store any caching data.",
+      "The API must not use databases for storage.",
+      "The connection should remain open indefinitely without timeouts."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Statelessness in REST means that each HTTP request is completely isolated. The server does not store any context or session about the client between requests, forcing the client to send all needed auth/state details in every request."
+  },
+  {
+    "id": 163,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "In Web Service architecture, what does WSDL stand for?",
+    "options": [
+      "Web Services Description Language",
+      "Web Systems Design Layout",
+      "Web Security Definition Logic",
+      "Wide Scope Database Linker"
+    ],
+    "correctAnswer": 0,
+    "explanation": "WSDL stands for Web Services Description Language. It is an XML-based document format used to describe the endpoints, operations, messages, and parameters of a SOAP web service."
+  },
+  {
+    "id": 164,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "Which HTTP method is designed to be idempotent and is specifically used to fully replace or update an existing resource representation?",
+    "options": [
+      "POST",
+      "PATCH",
+      "PUT",
+      "DELETE"
+    ],
+    "correctAnswer": 2,
+    "explanation": "PUT is designed to be idempotent and fully replace/update a resource at a specific URI. Calling it multiple times with the same payload will result in the same state, unlike POST which is non-idempotent."
+  },
+  {
+    "id": 165,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "Every SOAP message is composed of a mandatory XML structure. What is the root element of a SOAP XML document?",
+    "options": [
+      "Envelope",
+      "Header",
+      "Body",
+      "Fault"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The Envelope is the root element of every SOAP message. It defines the XML document as a SOAP message and encapsulates the optional Header and mandatory Body elements."
+  },
+  {
+    "id": 166,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "What HTTP header is sent by a REST client to specify the media type (e.g., application/json) that it wants to receive from the server?",
+    "options": [
+      "Content-Type",
+      "Accept",
+      "Authorization",
+      "User-Agent"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The 'Accept' header is used by HTTP clients to tell the server what content formats (e.g., JSON, XML) they can parse in the response. The 'Content-Type' header, on the other hand, describes the media type of the current request body."
+  },
+  {
+    "id": 167,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "Which HTTP status code should a REST API return if the client tries to access a protected endpoint without providing valid authentication credentials?",
+    "options": [
+      "400 Bad Request",
+      "401 Unauthorized",
+      "403 Forbidden",
+      "405 Method Not Allowed"
+    ],
+    "correctAnswer": 1,
+    "explanation": "HTTP 401 Unauthorized indicates that the request has not been completed because it lacks valid authentication credentials for the target resource."
+  },
+  {
+    "id": 168,
+    "category": "REST & SOAP",
+    "difficulty": "medium",
+    "question": "What is a major protocol difference between SOAP and REST?",
+    "options": [
+      "SOAP can only run over HTTPS, while REST is limited to FTP.",
+      "SOAP requires binary serialization, while REST requires plaintext assembly.",
+      "SOAP is a strict protocol defining XML messaging structures and interfaces; REST is an architectural style utilizing standard HTTP methods and arbitrary media types like JSON.",
+      "REST is strictly stateful, while SOAP is completely stateless."
+    ],
+    "correctAnswer": 2,
+    "explanation": "SOAP is a formal, highly specified protocol with strict XML specifications (Envelope, Header, Body, WSDL). REST is a flexible architectural style that leverages existing HTTP capabilities (verbs, caching, status codes) and supports multiple formats (JSON, XML, HTML, plain text)."
+  }
+]

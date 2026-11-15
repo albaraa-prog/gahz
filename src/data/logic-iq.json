@@ -1,0 +1,212 @@
+[
+  {
+    "id": 101,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "Find the missing number in this sequence: 2, 6, 12, 20, 30, ?",
+    "options": [
+      "38",
+      "40",
+      "42",
+      "44"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The pattern represents additions of consecutive even numbers: \n2 + 4 = 6\n6 + 6 = 12\n12 + 8 = 20\n20 + 10 = 30\n30 + 12 = 42.\nAlternatively, the sequence is n*(n+1) starting at n=1 (1*2=2, 2*3=6, 3*4=12, 4*5=20, 5*6=30, 6*7=42)."
+  },
+  {
+    "id": 102,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "If it takes 5 machines 5 minutes to make 5 widgets, how long would it take 100 machines to make 100 widgets?",
+    "options": [
+      "100 minutes",
+      "20 minutes",
+      "5 minutes",
+      "50 minutes"
+    ],
+    "correctAnswer": 2,
+    "explanation": "If 5 machines make 5 widgets in 5 minutes, it means 1 machine makes 1 widget in 5 minutes. Therefore, if 100 machines work concurrently, they can make 100 widgets in that same 5-minute window."
+  },
+  {
+    "id": 103,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "Read the statements: 'All programmers are thinkers. Some thinkers are writers. No writers are musicians.' Which of the following conclusions must be true?",
+    "options": [
+      "Some programmers are musicians.",
+      "Some programmers are writers.",
+      "No musician is a writer.",
+      "All thinkers are programmers."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Since 'No writers are musicians', it must be true that 'No musician is a writer' (mutual exclusion). The other assertions are possibilities but not logical necessities."
+  },
+  {
+    "id": 104,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "A developer completes a task in 3 hours. Another developer takes 6 hours to complete the same task. If they work together at their respective rates, how long will it take them to complete the task?",
+    "options": [
+      "4.5 hours",
+      "2.5 hours",
+      "2 hours",
+      "1.8 hours"
+    ],
+    "correctAnswer": 2,
+    "explanation": "First developer rate = 1/3 tasks/hour. Second developer rate = 1/6 tasks/hour. Combined rate = 1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2 tasks/hour. Time required = 1 / (1/2) = 2 hours."
+  },
+  {
+    "id": 105,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "Identify the word association: 'Stack is to LIFO' as 'Queue is to ?'",
+    "options": [
+      "FILO",
+      "FIFO",
+      "LILO",
+      "RANDOM"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A Stack is a Last-In, First-Out (LIFO) structure. A Queue is a First-In, First-Out (FIFO) structure."
+  },
+  {
+    "id": 106,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "Four programmers (A, B, C, D) sit in a row. A is to the left of B. C is to the right of B. D is between B and C. Who is sitting on the far left?",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Let's arrange them based on relations: \n1. A is left of B: A ... B\n2. C is right of B: A ... B ... C\n3. D is between B and C: A ... B ... D ... C.\nThe resulting order is A, B, D, C. A sits on the far left."
+  },
+  {
+    "id": 107,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "If 1 = 5, 2 = 25, 3 = 125, 4 = 625, then 5 = ?",
+    "options": [
+      "3125",
+      "1",
+      "5",
+      "None of these"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The first statement explicitly states '1 = 5'. Therefore, by identity symmetry, '5 = 1'. (Though it looks like a power progression 5^n, the literal equivalence is established first)."
+  },
+  {
+    "id": 108,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "A father is currently three times as old as his daughter. In 12 years, he will be twice as old as his daughter. How old is the daughter now?",
+    "options": [
+      "8 years old",
+      "10 years old",
+      "12 years old",
+      "15 years old"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Let daughter be D, father be F. \nF = 3D.\nIn 12 years: F + 12 = 2(D + 12).\nSubstitute F: 3D + 12 = 2D + 24.\nSubtract 2D and 12: D = 12. The daughter is 12."
+  },
+  {
+    "id": 109,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "An index search contains a target with a 90% accuracy rate. To double-check, we run it through an independent checker with an 80% accuracy rate. What is the probability that both checkers correctly identify the target?",
+    "options": [
+      "90%",
+      "85%",
+      "72%",
+      "50%"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Since the checkers are independent, we multiply their probabilities: 0.90 * 0.80 = 0.72 or 72% probability that both identify it correctly."
+  },
+  {
+    "id": 110,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "Three boxes are labeled: 'Apples', 'Oranges', and 'Apples and Oranges'. Every box is labeled incorrectly. You can draw one fruit from one box. Which box should you draw from to label all boxes correctly?",
+    "options": [
+      "The 'Apples' box",
+      "The 'Oranges' box",
+      "The 'Apples and Oranges' box",
+      "It is mathematically impossible"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Draw from 'Apples and Oranges'. Since it is mislabeled, it must contain either *only* Apples or *only* Oranges. If you draw an apple, it is the 'Apples' box. Since all labels are wrong, the box labeled 'Oranges' cannot be oranges, it must be the mixed box. The box labeled 'Apples' is therefore 'Oranges'."
+  },
+  {
+    "id": 111,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "Find the next item in the logical letter series: ACE, GIK, MOQ, ?",
+    "options": [
+      "RTV",
+      "SUW",
+      "STU",
+      "SUT"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Each letter is skipped by one position: A (b) C (d) E -> skip F -> G (h) I (j) K -> skip L -> M (n) O (p) Q -> skip R -> S (t) U (v) W. Result is SUW."
+  },
+  {
+    "id": 112,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "A compiler engineer walks 10 meters East, turns right and walks 5 meters, turns right and walks 10 meters, then turns left and walks 5 meters. How far is the engineer from the starting point?",
+    "options": [
+      "10 meters",
+      "15 meters",
+      "5 meters",
+      "0 meters"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Let's plot coordinates starting at (0,0):\n1. 10m East -> (10, 0)\n2. Turn right (South) 5m -> (10, -5)\n3. Turn right (West) 10m -> (0, -5)\n4. Turn left (South) 5m -> (0, -10).\nThe distance from (0,0) to (0, -10) is 10 meters."
+  },
+  {
+    "id": 113,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "A light bulb flashes every 6 seconds, and another flashes every 9 seconds. If they just flashed together, how many seconds will pass before they flash together again?",
+    "options": [
+      "15 seconds",
+      "18 seconds",
+      "54 seconds",
+      "12 seconds"
+    ],
+    "correctAnswer": 1,
+    "explanation": "We need the Least Common Multiple (LCM) of 6 and 9. \nMultiples of 6: 6, 12, 18, 24...\nMultiples of 9: 9, 18, 27...\nThe LCM is 18 seconds."
+  },
+  {
+    "id": 114,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "Which word does not belong with the others?",
+    "options": [
+      "Compiler",
+      "Linker",
+      "Interpreter",
+      "Keyboard"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Compiler, Linker, and Interpreter are software tools related to code processing and compilation. Keyboard is a physical hardware input peripheral."
+  },
+  {
+    "id": 115,
+    "category": "Logic & IQ",
+    "difficulty": "medium",
+    "question": "There are 3 keys that open 3 locks. What is the maximum number of trials needed to match all keys with their respective locks?",
+    "options": [
+      "3 trials",
+      "6 trials",
+      "4 trials",
+      "9 trials"
+    ],
+    "correctAnswer": 0,
+    "explanation": "For the first key, you try Lock 1. If it doesn't open, try Lock 2. If it doesn't open either, it must match Lock 3 (no trial needed for Lock 3). This takes at most 2 trials. \nFor the second key, try Lock 1 of the remaining locks. If it doesn't open, it must open Lock 2. This takes at most 1 trial. \nThe final key matches the remaining lock automatically (0 trials needed). \nTotal maximum trials = 2 + 1 = 3 trials."
+  }
+]

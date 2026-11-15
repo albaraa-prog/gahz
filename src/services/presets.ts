@@ -1,25 +1,29 @@
 /**
- * Exam presets. To add one, append an entry here: the home screen renders a
- * card for every preset with `card` set, and the quiz engine uses `pick` to
- * build the question pool.
+ * Exam presets. To add one:
+ *   1. append an entry here,
+ *   2. add `preset.<id>.title` and `preset.<id>.desc` (and optionally
+ *      `preset.<id>.chip`) to both dictionaries in utils/i18n.ts.
+ * The home screen renders a card for every preset with `card` set, and the
+ * quiz engine uses `pick` to build the question pool.
  */
 
 import type { Question } from '../types';
+import { hasKey, t } from '../utils/i18n';
 
 export interface Preset {
   id: string;
-  /** Shown in the history table. */
+  /**
+   * Stored with each attempt. Kept in English so history stays comparable
+   * across languages; `displayMode` translates it for the screen.
+   */
   modeLabel: string;
   count: number;
   minutes: number;
   pick: (all: readonly Question[]) => Question[];
   /** Presets without a card are started from elsewhere (the main button). */
   card?: {
-    title: string;
-    description: string;
-    extraChip?: string;
-    accent?: 'blue' | 'violet' | 'oman';
-    rtl?: boolean;
+    /** The card's own text is Arabic in every interface language. */
+    alwaysArabic?: boolean;
   };
 }
 
@@ -42,13 +46,7 @@ export const PRESETS: readonly Preset[] = [
     count: 20,
     minutes: 25,
     pick: inBank('oman-enterprise'),
-    card: {
-      title: 'Oman Enterprise & Banking Tech',
-      description:
-        'Scenario-based interview questions modelled on what banks, telecom operators, consulting firms and government entities in Oman and the GCC look for: enterprise backends and ERP integration, Oracle and PostgreSQL, production incidents and security judgment, resilience, and stakeholder communication.',
-      extraChip: 'GCC interview track',
-      accent: 'oman',
-    },
+    card: {},
   },
   {
     id: 'flutter_fintech',
@@ -63,13 +61,7 @@ export const PRESETS: readonly Preset[] = [
       'Flutter Performance, Storage & Native Integrations',
       'APIs & Data Integration (REST, GraphQL, WebSockets)',
     ]),
-    card: {
-      title: 'Senior Flutter Engineer (Thawani Fintech)',
-      description:
-        'Complete mastery pack: Junior-to-Senior Flutter/Dart, Clean Architecture, Provider, Mobile Security (SSL Pinning, Biometrics, JWT), Hive/SQLite, QR/NFC Payments, Deep Links, Flavors, and Performance.',
-      extraChip: 'Fintech special',
-      accent: 'blue',
-    },
+    card: {},
   },
   {
     id: 'networking_apis',
@@ -82,12 +74,7 @@ export const PRESETS: readonly Preset[] = [
       'REST & SOAP',
       'CS & Networks',
     ]),
-    card: {
-      title: 'APIs, REST & Networking Protocols',
-      description:
-        'Master RESTful design, HTTP/2 & HTTP/3, WebSockets, gRPC, TLS 1.3, TCP/IP, DNS, Caching, CORS, Rate Limiting, and Webhooks.',
-      accent: 'violet',
-    },
+    card: {},
   },
   {
     id: 'cs_basics',
@@ -100,11 +87,7 @@ export const PRESETS: readonly Preset[] = [
       'Programming Basics',
       'Databases',
     ]),
-    card: {
-      title: 'CS Fundamentals & Systems',
-      description:
-        'Core foundations: algorithms, data structures (Trees, Graphs, HashTables), memory allocation, concurrency, and OOP principles.',
-    },
+    card: {},
   },
   {
     id: 'iq',
@@ -112,25 +95,50 @@ export const PRESETS: readonly Preset[] = [
     count: 15,
     minutes: 15,
     pick: inCategories(['Logic & IQ']),
-    card: {
-      title: 'Logic & IQ Drill',
-      description: 'Test your problem-solving speed with 15 logical reasoning and puzzle questions.',
-    },
+    card: {},
   },
   {
     id: 'arabic',
-    modeLabel: 'الأسئلة باللغة العربية',
+    modeLabel: 'Arabic Questions',
     count: 10,
     minutes: 10,
     pick: (all) => all.filter((q) => q.category.includes('Arabic')),
-    card: {
-      title: 'الأسئلة باللغة العربية',
-      description: 'أسئلة تدريبية ممزوجة باللغة العربية تختبر أساسيات البرمجة وعلم الحاسوب.',
-      rtl: true,
-    },
+    card: { alwaysArabic: true },
   },
 ];
 
 export function findPreset(id: string): Preset | undefined {
   return PRESETS.find((preset) => preset.id === id);
+}
+
+/** Text for a preset card in the active language. */
+export function presetText(preset: Preset): { title: string; description: string; chip: string | null } {
+  const key = (suffix: string): string => `preset.${preset.id}.${suffix}`;
+  const read = (suffix: string): string | null => {
+    const k = key(suffix);
+    return hasKey(k) ? t(k) : null;
+  };
+  return {
+    title: read('title') ?? preset.modeLabel,
+    description: read('desc') ?? '',
+    chip: read('chip'),
+  };
+}
+
+const CUSTOM_MODE = /^Custom \((\d+) Qs\)$/;
+
+export function customModeLabel(count: number): string {
+  return `Custom (${count} Qs)`;
+}
+
+/** Translates the mode stored with an attempt for display. Unknown values are shown as they are. */
+export function displayMode(mode: string): string {
+  const custom = CUSTOM_MODE.exec(mode);
+  if (custom) return t('mode.custom', { n: custom[1] ?? '' });
+
+  // "standard" is what the original single-file app stored for the mixed exam.
+  const preset = PRESETS.find((p) => p.modeLabel === mode) ?? (mode === 'standard' ? findPreset('standard') : undefined);
+  if (!preset) return mode;
+  if (preset.id === 'standard') return t('preset.standard.mode');
+  return presetText(preset).title;
 }

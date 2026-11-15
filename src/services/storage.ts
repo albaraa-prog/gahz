@@ -8,9 +8,13 @@
  */
 
 import { reportError } from '../utils/errors';
+import { t } from '../utils/i18n';
 
+// The "devquiz-" prefix is the app's original name. It is kept so existing
+// users do not lose their history and settings after the rename to Gahz.
 export const STORAGE_KEYS = {
   theme: 'devquiz-theme',
+  locale: 'devquiz-lang',
   history: 'devquiz-history',
   activeSession: 'devquiz-active-state',
   preferences: 'devquiz-prefs',
@@ -68,9 +72,9 @@ export function writeString(key: StorageKey, value: string): boolean {
     return true;
   } catch (error) {
     if (isQuotaError(error)) {
-      reportError(error, 'Browser storage is full. New progress may not be saved on this device.');
+      reportError(error, t('error.storageFull'));
     } else {
-      reportError(error, 'Could not save to browser storage.');
+      reportError(error, t('error.storageWrite'));
     }
     return false;
   }
@@ -109,7 +113,7 @@ export function writeJson(key: StorageKey, value: unknown): boolean {
   try {
     serialized = JSON.stringify(value);
   } catch (error) {
-    reportError(error, 'Could not save to browser storage.');
+    reportError(error, t('error.storageWrite'));
     return false;
   }
   return writeString(key, serialized);

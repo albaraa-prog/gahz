@@ -1,6 +1,6 @@
 /**
- * DevQuiz Studio entry point: wires services and components together and
- * switches between the three screens (home, quiz, results).
+ * Gahz entry point: wires services and components together and switches
+ * between the three screens (home, quiz, results).
  */
 
 import { initAuthModal } from './components/authModal';
@@ -18,13 +18,14 @@ import { initToasts, toast } from './components/toast';
 import { initAuth } from './services/auth';
 import { initHistory } from './services/history';
 import { initPreferences } from './services/preferences';
-import { QuestionBankError, listCategories, loadQuestionBanks } from './services/questionLoader';
+import { listCategories, loadQuestionBanks } from './services/questionLoader';
 import { discardSavedSession, loadSavedSession, onTimeUp, resumeQuiz } from './services/quizEngine';
 import { isPersistent } from './services/storage';
 import { initSync } from './services/sync';
 import type { Screen } from './types';
 import { byId } from './utils/dom';
 import { guarded, installGlobalErrorHandlers, reportError } from './utils/errors';
+import { applyStaticTranslations, t } from './utils/i18n';
 import { state, store } from './utils/state';
 import { initTheme } from './utils/theme';
 
@@ -43,27 +44,18 @@ function initRouter(): void {
 }
 
 async function loadBank(): Promise<void> {
-  store.set({ bankStatus: 'loading', bankError: null });
+  store.set({ bankStatus: 'loading', failedBanks: [] });
   try {
     const { questions, failedBanks } = await loadQuestionBanks();
     store.set({
       allQuestions: questions,
       categories: listCategories(questions),
       bankStatus: 'ready',
-      bankError:
-        failedBanks.length > 0
-          ? `Some topics could not be loaded (${failedBanks.join(', ')}). The rest of the question bank is available.`
-          : null,
+      failedBanks,
     });
   } catch (error) {
-    console.error('[DevQuiz] question bank failed to load', error);
-    store.set({
-      bankStatus: 'error',
-      bankError:
-        error instanceof QuestionBankError || !state.online
-          ? 'The question bank could not be loaded. Check your connection and try again.'
-          : 'The question bank could not be loaded. Please try again.',
-    });
+    console.error('[Gahz] question bank failed to load', error);
+    store.set({ bankStatus: 'error' });
   }
 }
 
@@ -71,10 +63,10 @@ async function offerResume(): Promise<void> {
   const session = loadSavedSession();
   if (!session) return;
   const resume = await showDialog({
-    title: 'Resume your quiz?',
-    body: 'You have an unfinished quiz attempt in progress. Would you like to resume it?',
-    confirmLabel: 'Resume',
-    cancelLabel: 'Discard',
+    title: t('resume.title'),
+    body: t('resume.body'),
+    confirmLabel: t('resume.confirm'),
+    cancelLabel: t('resume.discard'),
   });
   if (resume) resumeQuiz(session);
   else discardSavedSession();
@@ -92,11 +84,7 @@ function initConnectivity(): void {
 
 function initPrivacyNote(): void {
   byId('privacyBtn').addEventListener('click', () => {
-    void showDialog({
-      title: 'Privacy',
-      body: 'As a guest, your attempts and settings are saved only in this browser. If you sign in, your attempt history, settings and stats are also stored in your own private cloud record so you can use them on other devices. Nobody else can read them.',
-      cancelLabel: null,
-    });
+    void showDialog({ title: t('privacy.title'), body: t('privacy.body'), cancelLabel: null });
   });
 }
 
@@ -105,7 +93,10 @@ function main(): void {
   initToasts();
   initDialog();
 
+  // Language first, so everything below renders in the right one.
   initPreferences();
+  applyStaticTranslations();
+  store.subscribe(() => applyStaticTranslations(), ['locale']);
   initTheme();
   initHistory();
 
@@ -124,16 +115,10 @@ function main(): void {
   initPrivacyNote();
 
   onTimeUp(() => {
-    void showDialog({
-      title: "Time's up!",
-      body: 'Your exam was submitted automatically.',
-      cancelLabel: null,
-    });
+    void showDialog({ title: t('timeUp.title'), body: t('timeUp.body'), cancelLabel: null });
   });
 
-  if (!isPersistent()) {
-    toast('Browser storage is unavailable, so progress will not be kept after you close this tab.', 'warning', 10_000);
-  }
+  if (!isPersistent()) toast(t('error.storageUnavailable'), 'warning', 10_000);
 
   initSync();
   void initAuth();

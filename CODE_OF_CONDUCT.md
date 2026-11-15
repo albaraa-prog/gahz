@@ -2,7 +2,7 @@
 
 ## Our pledge
 
-DevQuiz Studio exists to help people learn. We want everyone to be able to take part in this project
+Gahz (جاهز) exists to help people learn. We want everyone to be able to take part in this project
 without harassment, whatever their age, body size, disability, ethnicity, gender identity and expression,
 level of experience, education, nationality, personal appearance, race, religion, or sexual identity and
 orientation.

@@ -1,6 +1,7 @@
 /** Loads user preferences into the store and writes them back when they change. */
 
 import type { CustomQuizConfig, Theme, UserPreferences } from '../types';
+import { detectLocale, parseLocale, setActiveLocale, type Locale } from '../utils/i18n';
 import { clamp, isRecord } from '../utils/helpers';
 import { DEFAULT_CUSTOM_CONFIG, state, store } from '../utils/state';
 import { STORAGE_KEYS, readJson, readString, writeJson, writeString } from './storage';
@@ -35,14 +36,27 @@ export function currentPreferences(): UserPreferences {
   return { theme: state.theme, studyMode: state.studyMode, customConfig: state.customConfig };
 }
 
+/** Switches the interface language and remembers it on this device. */
+export function setLocale(locale: Locale): void {
+  setActiveLocale(locale); // before the store write, so subscribers render with the new language
+  state.locale = locale;
+  writeString(STORAGE_KEYS.locale, locale);
+}
+
 export function initPreferences(): void {
+  // Saved choice first, then the browser's language, then English.
+  const locale =
+    parseLocale(readString(STORAGE_KEYS.locale)) ??
+    detectLocale(typeof navigator === 'undefined' ? [] : (navigator.languages ?? [navigator.language]));
+  setActiveLocale(locale);
+
   // The theme keeps the storage key used by the original app, so returning users keep their choice.
   const theme = parseTheme(readString(STORAGE_KEYS.theme)) ?? 'dark';
   const stored = readJson<StoredPreferences>(STORAGE_KEYS.preferences, parseStored, {
     studyMode: true,
     customConfig: DEFAULT_CUSTOM_CONFIG,
   });
-  store.set({ theme, studyMode: stored.studyMode, customConfig: stored.customConfig });
+  store.set({ locale, theme, studyMode: stored.studyMode, customConfig: stored.customConfig });
 
   store.subscribe(() => writeString(STORAGE_KEYS.theme, state.theme), ['theme']);
   store.subscribe(

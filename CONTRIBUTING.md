@@ -1,4 +1,4 @@
-# Contributing to DevQuiz Studio
+# Contributing to Gahz جاهز
 
 Thanks for helping people learn programming and prepare for interviews. The most valuable contribution is
 a good question, and you do not need to touch any code to add one.

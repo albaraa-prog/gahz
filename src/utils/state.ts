@@ -1,6 +1,7 @@
 import type { AppState, CustomQuizConfig } from '../types';
 import { createStore } from './store';
 import { reportError } from './errors';
+import { t } from './i18n';
 
 export const DEFAULT_CUSTOM_CONFIG: CustomQuizConfig = { count: 25, minutes: 25, categories: null };
 
@@ -8,7 +9,7 @@ const initialState: AppState = {
   screen: 'home',
 
   bankStatus: 'loading',
-  bankError: null,
+  failedBanks: [],
   allQuestions: [],
   categories: [],
 
@@ -23,6 +24,7 @@ const initialState: AppState = {
   lastReport: null,
   reviewFilter: 'all',
 
+  locale: 'en',
   theme: 'dark',
   studyMode: true,
   customConfig: DEFAULT_CUSTOM_CONFIG,
@@ -35,7 +37,7 @@ const initialState: AppState = {
 
 /** The app-wide store. Components subscribe to the keys they render. */
 export const store = createStore<AppState>(initialState, {
-  onError: (error) => reportError(error, 'A part of the page failed to update.'),
+  onError: (error) => reportError(error, t('error.view')),
 });
 
 export const state = store.state;

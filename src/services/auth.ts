@@ -6,6 +6,7 @@
 import type { User } from 'firebase/auth';
 import type { AuthUser } from '../types';
 import { reportError } from '../utils/errors';
+import { t, type TranslationKey } from '../utils/i18n';
 import { state } from '../utils/state';
 import { track } from './analytics';
 import { getFirebase, isFirebaseConfigured } from './firebase';
@@ -15,27 +16,27 @@ function toAuthUser(user: User): AuthUser {
   return { uid: user.uid, displayName: user.displayName, email: user.email };
 }
 
-const MESSAGES: Record<string, string> = {
-  'auth/invalid-email': 'That email address does not look right.',
-  'auth/missing-password': 'Please enter your password.',
-  'auth/invalid-credential': 'Email or password is incorrect.',
-  'auth/wrong-password': 'Email or password is incorrect.',
-  'auth/user-not-found': 'Email or password is incorrect.',
-  'auth/user-disabled': 'This account has been disabled.',
-  'auth/email-already-in-use': 'An account with this email already exists. Try signing in.',
-  'auth/weak-password': 'Please choose a password with at least 6 characters.',
-  'auth/too-many-requests': 'Too many attempts. Please wait a few minutes and try again.',
-  'auth/network-request-failed': 'No connection. Check your internet and try again.',
-  'auth/popup-blocked': 'Your browser blocked the sign-in window. Allow pop-ups for this site and try again.',
-  'auth/operation-not-allowed': 'This sign-in method is not enabled for this project yet.',
-  'auth/unauthorized-domain': 'This domain is not authorized for sign-in in the Firebase console.',
+const MESSAGES: Record<string, TranslationKey> = {
+  'auth/invalid-email': 'authError.invalidEmail',
+  'auth/missing-password': 'authError.missingPassword',
+  'auth/invalid-credential': 'authError.invalidCredential',
+  'auth/wrong-password': 'authError.invalidCredential',
+  'auth/user-not-found': 'authError.invalidCredential',
+  'auth/user-disabled': 'authError.userDisabled',
+  'auth/email-already-in-use': 'authError.emailInUse',
+  'auth/weak-password': 'authError.weakPassword',
+  'auth/too-many-requests': 'authError.tooManyRequests',
+  'auth/network-request-failed': 'authError.network',
+  'auth/popup-blocked': 'authError.popupBlocked',
+  'auth/operation-not-allowed': 'authError.notAllowed',
+  'auth/unauthorized-domain': 'authError.unauthorizedDomain',
 };
 
 /** Returns null for errors the user caused on purpose (closing the popup). */
 export function describeAuthError(error: unknown): string | null {
   const code = typeof error === 'object' && error !== null && 'code' in error ? String(error.code) : '';
   if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return null;
-  return MESSAGES[code] ?? 'Sign-in failed. Please try again.';
+  return t(MESSAGES[code] ?? 'authError.generic');
 }
 
 /** Starts listening for the signed-in user. Safe to call without Firebase credentials. */
@@ -58,7 +59,7 @@ export async function initAuth(): Promise<void> {
           handleSignedOut();
         }
       },
-      (error) => reportError(error, 'Could not check your sign-in status.'),
+      (error) => reportError(error, t('authError.status')),
     );
   } catch (error) {
     // SDK failed to download (offline first visit): stay in guest mode.

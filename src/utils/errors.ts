@@ -3,6 +3,8 @@
  * details and shows the user one short, non-technical message.
  */
 
+import { t } from './i18n';
+
 type Notifier = (message: string, kind: 'error' | 'warning') => void;
 
 let notify: Notifier = (message) => console.warn(message);
@@ -14,8 +16,8 @@ export function setErrorNotifier(fn: Notifier): void {
   notify = fn;
 }
 
-export function reportError(error: unknown, userMessage = 'Something went wrong. Your progress is still saved.'): void {
-  console.error('[DevQuiz]', error);
+export function reportError(error: unknown, userMessage: string = t('error.generic')): void {
+  console.error('[Gahz]', error);
   // Do not stack identical toasts (for example a failing write every second).
   const now = Date.now();
   if (userMessage === lastMessage && now - lastShownAt < 10_000) return;

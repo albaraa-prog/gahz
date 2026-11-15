@@ -1,6 +1,6 @@
 # Gahz جاهز
 
-[![Live demo](https://img.shields.io/badge/demo-live-04AA6D)](https://gahz-4e276.web.app)
+[![Live demo](https://img.shields.io/badge/demo-live-04AA6D)](https://gahz.web.app)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Deploy](https://github.com/albaraa-prog/gahz/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/albaraa-prog/gahz/actions/workflows/firebase-hosting-merge.yml)
 
@@ -120,8 +120,8 @@ npm run build
 firebase deploy --only hosting,firestore:rules
 ```
 
-`npm run deploy` runs the last two steps together. The site is served at
-`https://<project-id>.web.app`.
+`npm run deploy` runs the last two steps together. The site is served at https://gahz.web.app. The address comes from the `site` entry in `firebase.json`;
+remove that line to deploy to a project's default site (`https://<project-id>.web.app`).
 
 To preview exactly what will be deployed, including the security headers:
 

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://gahz-4e276.web.app/schema/question-bank.json",
+  "$id": "https://gahz.web.app/schema/question-bank.json",
   "title": "Gahz question bank",
   "description": "A question bank file is a JSON array of multiple-choice questions.",
   "type": "array",

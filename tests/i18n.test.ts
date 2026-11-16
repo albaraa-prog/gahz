@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { PRESETS, customModeLabel, displayMode, presetText } from '../src/services/presets';
-import { LOCALES, detectLocale, isRtl, parseLocale, setActiveLocale, t, type TranslationKey } from '../src/utils/i18n';
+import { LOCALES, countNoun, detectLocale, isRtl, parseLocale, setActiveLocale, t, type TranslationKey } from '../src/utils/i18n';
 
 afterEach(() => setActiveLocale('en'));
 
@@ -23,7 +23,7 @@ const SAMPLE_KEYS: TranslationKey[] = [
   'footer.count',
 ];
 
-const placeholders = (text: string): string[] => [...text.matchAll(/\{(\w+)\}/g)].map((m) => m[1] ?? '').sort();
+const placeholders = (text: string): string[] => [...text.matchAll(/\{(\w+)(?::\w+)?\}/g)].map((m) => m[1] ?? '').sort();
 
 describe('translations', () => {
   it('uses the same placeholders in every language', () => {
@@ -76,6 +76,38 @@ describe('preset text and stored modes', () => {
     setActiveLocale('ar');
     expect(displayMode('Oman Enterprise & Banking Tech')).toBe('تقنيات المؤسسات والبنوك في عُمان');
     expect(displayMode('Standard Mixed Exam')).toBe('اختبار منوّع');
-    expect(displayMode(customModeLabel(6))).toBe('مخصص (6 سؤالاً)');
+    expect(displayMode(customModeLabel(6))).toBe('مخصص (6 أسئلة)');
+  });
+});
+
+describe('countNoun', () => {
+  it('follows the Arabic number rules', () => {
+    expect(countNoun('question', 1, 'ar')).toBe('سؤال واحد');
+    expect(countNoun('question', 2, 'ar')).toBe('سؤالان');
+    expect(countNoun('question', 3, 'ar')).toBe('3 أسئلة');
+    expect(countNoun('question', 10, 'ar')).toBe('10 أسئلة');
+    expect(countNoun('question', 11, 'ar')).toBe('11 سؤالاً');
+    expect(countNoun('question', 99, 'ar')).toBe('99 سؤالاً');
+    expect(countNoun('question', 100, 'ar')).toBe('100 سؤال');
+    expect(countNoun('question', 103, 'ar')).toBe('103 أسئلة');
+    expect(countNoun('question', 320, 'ar')).toBe('320 سؤالاً');
+    expect(countNoun('minute', 10, 'ar')).toBe('10 دقائق');
+    expect(countNoun('minute', 25, 'ar')).toBe('25 دقيقة');
+    expect(countNoun('day', 5, 'ar')).toBe('5 أيام');
+  });
+
+  it('handles English singular and plural', () => {
+    expect(countNoun('question', 1, 'en')).toBe('1 question');
+    expect(countNoun('category', 28, 'en')).toBe('28 categories');
+  });
+
+  it('is used by templates through {name:noun}', () => {
+    setActiveLocale('ar');
+    expect(t('chip.questions', { n: 10 })).toBe('10 أسئلة');
+    expect(t('chip.minutes', { n: 10 })).toBe('10 دقائق');
+    expect(t('footer.count', { count: 320, topics: 28 })).toBe('320 سؤالاً في 28 فئة');
+    setActiveLocale('en');
+    expect(t('chip.questions', { n: 20 })).toBe('20 questions');
+    expect(t('chip.minutes', { n: 25 })).toBe('25 min');
   });
 });

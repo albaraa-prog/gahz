@@ -208,7 +208,7 @@ export function customModeLabel(count: number): string {
 /** Translates the mode stored with an attempt for display. Unknown values are shown as they are. */
 export function displayMode(mode: string): string {
   const custom = CUSTOM_MODE.exec(mode);
-  if (custom) return t('mode.custom', { n: custom[1] ?? '' });
+  if (custom) return t('mode.custom', { n: Number(custom[1]) });
   if (mode === MISTAKES_MODE) return t('mistakes.title');
   const step = parseRoadmapMode(mode);
   if (step) return t('roadmap.mode', { step: t(`step.${step}.title`) });

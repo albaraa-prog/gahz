@@ -109,6 +109,8 @@ export interface AuthUser {
   uid: string;
   displayName: string | null;
   email: string | null;
+  /** Profile picture from the sign-in provider (Google). Null for email accounts. */
+  photoURL: string | null;
 }
 
 /**

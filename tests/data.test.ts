@@ -3,7 +3,7 @@ import { mergeAttempts, parseAttempt } from '../src/services/history';
 import { PRESETS } from '../src/services/presets';
 import { listCategories, loadQuestionBanks, parseQuestion } from '../src/services/questionLoader';
 import { parseSavedSession } from '../src/services/quizEngine';
-import { formatRichText } from '../src/utils/helpers';
+import { formatRichText, initialOf, shortName } from '../src/utils/helpers';
 
 describe('question banks', () => {
   it('loads every bank with no failures', async () => {
@@ -112,5 +112,23 @@ describe('stored data recovery', () => {
 describe('formatRichText', () => {
   it('escapes HTML before applying bold and code markup', () => {
     expect(formatRichText('Use **<b>** and `a < b`')).toBe('Use <strong>&lt;b&gt;</strong> and <code>a &lt; b</code>');
+  });
+});
+
+describe('account badge helpers', () => {
+  it('finds a visible initial in any script', () => {
+    expect(initialOf('albaraa')).toBe('A');
+    expect(initialOf('البراء أحمد')).toBe('ا');
+    expect(initialOf('  \u200f😀 سارة')).toBe('س');
+    expect(initialOf(null, 'user@example.com')).toBe('U');
+    expect(initialOf('', null)).toBe('?');
+  });
+
+  it('shortens a full name to something readable instead of clipping it', () => {
+    expect(shortName('Al-Baraa Al Saadi', 'a@example.com')).toBe('Al-Baraa');
+    expect(shortName('البراء بن أحمد السعدي', null)).toBe('البراء');
+    expect(shortName('A. Rahman', null)).toBe('A. Rahman');
+    expect(shortName(null, 'someone@example.com')).toBe('someone');
+    expect(shortName('   ', null)).toBe('');
   });
 });

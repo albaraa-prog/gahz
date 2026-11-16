@@ -70,6 +70,35 @@ export function dayKey(timestamp: number): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+/**
+ * First letter or digit of a name, for an avatar. Works on whole characters,
+ * so names that start with an emoji, a space or an invisible direction mark
+ * still produce a visible initial.
+ */
+export function initialOf(...candidates: Array<string | null | undefined>): string {
+  for (const candidate of candidates) {
+    const match = /[\p{L}\p{N}]/u.exec(candidate ?? '');
+    if (match) return match[0].toLocaleUpperCase();
+  }
+  return '?';
+}
+
+/**
+ * A short, readable name for tight spaces: the first name, or the part of the
+ * email before the @. Avoids cutting a full name off with an ellipsis, which
+ * reads badly in Arabic and mixed-direction text.
+ */
+export function shortName(displayName: string | null | undefined, email: string | null | undefined): string {
+  const words = (displayName ?? '').trim().split(/\s+/).filter(Boolean);
+  const first = words[0];
+  if (first) {
+    // "A. Rahman" or "م. أحمد": a lone initial is not a name, so keep the next word too.
+    const isInitial = first.replace(/[^\p{L}\p{N}]/gu, '').length < 2;
+    return isInitial && words[1] ? `${first} ${words[1]}` : first;
+  }
+  return (email ?? '').split('@')[0] ?? '';
+}
+
 export function createId(): string {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;

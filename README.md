@@ -213,6 +213,13 @@ the user's own Firestore record, readable only by them. Signing out removes the 
 returns on the next sign-in. Analytics events are sent only if a measurement ID is configured, and never
 include question content or answers.
 
+## Contributors
+
+- **Al-Baraa** ([@albaraa-prog](https://github.com/albaraa-prog)): creator and maintainer
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) to add questions, translations or code, and the
+[contributors graph](https://github.com/albaraa-prog/gahz/graphs/contributors) for everyone who has helped.
+
 ## License
 
 [MIT](LICENSE)

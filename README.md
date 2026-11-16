@@ -145,7 +145,9 @@ In the GitHub repository settings (Secrets and variables > Actions) add:
   `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID` and, optionally,
   `VITE_FIREBASE_MEASUREMENT_ID`.
 
-The workflow deploys Hosting only. After changing `firestore.rules`, run
+The workflow deploys Hosting and then `firestore.rules`. For the rules step the service account also needs
+the *Firebase Rules Admin* and *Service Usage Consumer* roles (Google Cloud console > IAM); without them that
+step fails after the site is already live. To deploy the rules by hand, run
 `firebase deploy --only firestore:rules`.
 
 ## Adding questions

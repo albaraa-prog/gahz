@@ -40,6 +40,16 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string' && item.length > 0);
 }
 
+/** True for a permutation of 0..length-1, as written by `shuffleOptions`. */
+function isOptionOrder(value: unknown, length: number): value is number[] {
+  return (
+    Array.isArray(value) &&
+    value.length === length &&
+    new Set(value).size === length &&
+    value.every((item) => Number.isInteger(item) && item >= 0 && item < length)
+  );
+}
+
 /**
  * Validates one question. Also accepts the field names used by the original
  * single-file app (q / code / correct), so a quiz saved by that version can
@@ -72,6 +82,7 @@ export function parseQuestion(value: unknown, bank: string): Question | null {
     bank: typeof value.bank === 'string' ? value.bank : bank,
   };
   if (typeof code === 'string' && code.trim().length > 0) question.codeSnippet = code;
+  if (isOptionOrder(value.optionOrder, options.length)) question.optionOrder = value.optionOrder;
   return question;
 }
 

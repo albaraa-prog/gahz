@@ -5,10 +5,10 @@
     "difficulty": "hard",
     "question": "Why does appending elements to a dynamic array (like Dart's `List` or C++ `std::vector`) have an Amortized Time Complexity of O(1), despite occasional O(N) reallocation copies?",
     "options": [
-      "Because memory allocation in RAM is always free.",
+      "When capacity is exceeded, the array grows by exactly one slot and copies its elements with a single memmove, which the CPU performs in constant time whatever the length, so every append is genuinely O(1) rather than O(1) on average.",
       "When capacity is exceeded, the array doubles its capacity (geometric growth); doubling means copying occurs exponentially less often, distributing the cost of N reallocations across N insertions so each append averages O(1) constant time.",
-      "Because modern CPUs execute O(N) operations in 0 clock cycles.",
-      "Dynamic arrays are linked lists under the hood."
+      "The array never copies its elements: on overflow it allocates a new block and links it to the previous one, so indexing walks the chain of blocks while appending only ever writes into the newest block in constant time.",
+      "When capacity is exceeded, the runtime reserves a fixed 10 extra slots; because reallocation then happens only once in every 10 appends, the copying cost is divided by a constant and each append averages O(1) time."
     ],
     "correctAnswer": 1,
     "explanation": "By growing geometrically (doubling capacity $1 \to 2 \to 4 \to 8 \to dots \to N$), the total copy operations after inserting $N$ items is $1 + 2 + 4 + dots + N/2 < N$. Dividing total work $N$ by $N$ insertions yields an amortized cost of $\frac{O(N)}{N} = O(1)$ per append."
@@ -33,10 +33,10 @@
     "difficulty": "hard",
     "question": "Why do enterprise databases (PostgreSQL, SQLite, MySQL) use multi-way B-Trees and B+Trees for disk indexes rather than binary search trees (AVL or Red-Black Trees)?",
     "options": [
-      "Binary trees cannot store numbers larger than 255.",
+      "B-Trees keep every key in sorted order while binary search trees do not, so only a B-Tree can answer range queries and ORDER BY; an AVL or Red-Black tree would need a full table scan for every such query.",
       "B-Trees have high branching factors (hundreds of keys per node), keeping tree depth extremely shallow (3-4 levels) and matching node sizes to disk block/page sizes (4KB-16KB), minimizing expensive random disk I/O reads.",
-      "B-Trees eliminate the need for primary keys.",
-      "Red-Black trees cannot be serialized to disk."
+      "B-Trees never need rebalancing after an insert or delete, whereas AVL and Red-Black trees must rewrite the entire index file on each rotation, which makes writes to a binary tree index far too slow for production tables.",
+      "B-Trees give O(1) lookups because each node is a hash table of its keys, while balanced binary trees are limited to O(log N); that constant-time access is what makes them suitable for very large on-disk indexes."
     ],
     "correctAnswer": 1,
     "explanation": "Disk I/O is millions of times slower than RAM. A binary tree holding 10,000,000 items has a height of $approx 24$, requiring 24 sequential disk seeks. A B-Tree with a branching factor of 500 has a height of only 3, requiring at most 3 disk block reads to locate any record in millions of rows."
@@ -61,10 +61,10 @@
     "difficulty": "hard",
     "question": "Which two data structures are combined to implement an LRU (Least Recently Used) Cache with O(1) Get and O(1) Put operations?",
     "options": [
-      "Array and Binary Search Tree",
+      "A sorted Array (for binary-search lookup of keys) and a Binary Search Tree (for ordering nodes by last access time and evicting the leftmost one).",
       "HashMap (for O(1) key-to-node lookup) and a Doubly Linked List (for O(1) node removal, head insertion, and tail eviction of stale elements).",
-      "Stack and Queue",
-      "Min-Heap and Trie"
+      "A Stack (to push the most recently used key on top) and a Queue (to evict the oldest key from the front when capacity is exceeded).",
+      "A Min-Heap keyed by last-access timestamp (for evicting the smallest entry) and a Trie (for looking keys up by their characters)."
     ],
     "correctAnswer": 1,
     "explanation": "A standard `HashMap` provides $O(1)$ key lookup but cannot track access recency in $O(1)$. A `Doubly Linked List` maintains recency order: accessed nodes are spliced out and moved to the head in $O(1)$, and when capacity is full, the tail node (least recently used) is evicted in $O(1)$."
@@ -75,10 +75,10 @@
     "difficulty": "hard",
     "question": "What is the core difference between Stack memory allocation and Heap memory allocation in compiled programming languages?",
     "options": [
-      "Stack memory is located on the SSD; Heap memory is in CPU registers.",
+      "Stack memory is shared by all threads of a process and is freed by the garbage collector; Heap memory is private to each thread, has a small fixed size set at compile time, and is released automatically when the function that used it returns.",
       "Stack allocation is fast, automatic, follows strict LIFO order, managed directly by CPU pointer adjustments for local variables, but has a fixed size (risking Stack Overflow); Heap allocation is dynamic for runtime-sized objects, requires manual deallocation or garbage collection, and is subject to memory fragmentation.",
-      "Heap memory is destroyed whenever a function returns.",
-      "Stack memory can store gigabytes of dynamic data."
+      "Stack allocation is used for objects whose size is only known at run time and can grow without limit; Heap allocation is reserved for local variables and return addresses, and is always the faster of the two because it is a single pointer move.",
+      "Both are managed in the same way by the operating system and differ only in location: the Stack is kept in the CPU cache for speed and the Heap in main memory, which is why stack data remains valid after its function returns."
     ],
     "correctAnswer": 1,
     "explanation": "**Stack memory** stores local primitive variables and function call frames in LIFO order; allocation is simply moving the stack pointer register (extremely fast). **Heap memory** holds dynamically sized objects with arbitrary lifespans; allocation searches free lists, and objects persist until explicitly freed or garbage-collected."
@@ -89,10 +89,10 @@
     "difficulty": "hard",
     "question": "What is the semantic difference between a Mutex and a Counting Semaphore in concurrent programming?",
     "options": [
-      "A Mutex is for files; a Semaphore is for network sockets.",
+      "A Mutex lets any number of reader threads into a critical section and blocks only writers; a Semaphore is a binary flag that any thread may set, used purely for signalling between processes rather than for protecting shared resources.",
       "A Mutex (Mutual Exclusion) has ownership semantics and allows only 1 thread at a time into a critical section (only the locking thread can unlock it); a Semaphore maintains a counter of available permits and allows up to N threads concurrent access to a resource pool.",
-      "A Semaphore can only be used on single-core CPUs.",
-      "A Mutex disables CPU interrupts permanently."
+      "A Mutex is a counter of available permits that any thread may release, allowing up to N threads in at once; a Semaphore is owned by the single thread that acquired it and can only be released by that same thread.",
+      "A Mutex spins in a busy loop and never puts the waiting thread to sleep, so it suits long waits; a Semaphore always suspends the thread through the kernel, so it suits very short critical sections and cannot count above one."
     ],
     "correctAnswer": 1,
     "explanation": "A **Mutex** is a locking mechanism with ownership: exactly one thread acquires the lock, and only that same thread can release it. A **Semaphore** is a signaling mechanism with an integer counter: it controls access to a finite pool of $N$ identical resources (e.g. a connection pool of 10 database connections), and any thread can signal/release permits."
@@ -117,10 +117,10 @@
     "difficulty": "hard",
     "question": "According to the CAP theorem and PACELC theorem, what fundamental tradeoff must a distributed banking database make during a network partition (P)?",
     "options": [
-      "It must convert SQL tables to CSV files.",
+      "During a network Partition (P), the system must give up Partition tolerance: it keeps both Consistency (C) and Availability (A) by ignoring the unreachable nodes and merging their writes later, which is why financial ledger systems are classed as CA.",
       "During a network Partition (P), the system must choose between Consistency (C - reject or delay writes to prevent stale reads) or Availability (A - accept writes on all nodes risking divergent/inconsistent account balances); financial ledger systems strictly choose CP (Consistency & Partition Tolerance).",
-      "It can achieve 100% Consistency, 100% Availability, and 100% Partition tolerance simultaneously at all times.",
-      "It must shut down all internet routers."
+      "During a network Partition (P), the system must choose between Latency (L - answer quickly from memory and risk losing writes on a crash) or Durability (D - flush every write to disk first); financial ledger systems choose low latency.",
+      "A network Partition (P) only affects reads, so the system keeps accepting writes on every node and reconciles conflicting account balances afterwards with last-write-wins timestamps; financial ledger systems choose AP because eventual consistency is enough for money."
     ],
     "correctAnswer": 1,
     "explanation": "The **CAP Theorem** proves that when network partitions ($P$) occur between distributed nodes, you must choose either **Consistency ($C$)** (nodes refuse writes to guarantee all replicas agree on balance) or **Availability ($A$)** (nodes continue accepting transactions independently, risking split-brain balance anomalies). Financial systems always choose **CP**."
@@ -131,10 +131,10 @@
     "difficulty": "hard",
     "question": "In systems engineering and queueing theory, what is Little's Law ($L = \\lambda W$) and how is it applied to mobile backend capacity?",
     "options": [
-      "L is CPU frequency, lambda is bus speed, W is power consumption.",
+      "L (Maximum requests per second a server can accept) = lambda (Number of CPU cores) x W (Requests each core completes per second); proving that doubling the cores doubles throughput regardless of how long each individual request takes.",
       "L (Average number of concurrent requests in system) = lambda (Arrival rate of requests per second) x W (Average response time/latency per request); proving that if API latency doubles from 100ms to 200ms, the server must hold twice as many concurrent connections to handle the same traffic.",
-      "L is bandwidth, lambda is packet loss, W is distance.",
-      "Little's Law is only used in quantum physics."
+      "L (Average latency per request) = lambda (Arrival rate of requests per second) x W (Number of requests waiting in the queue); proving that response time grows in proportion to queue length, so halving the queue always halves the latency.",
+      "L (Number of packets lost) = lambda (Bandwidth of the network link) x W (Round-trip time between client and server); proving that a backend reached over a slower mobile network loses proportionally more requests and needs more retries."
     ],
     "correctAnswer": 1,
     "explanation": "**Little's Law ($L = lambda W$)** states that the average number of concurrent requests $L$ equals the arrival throughput rate $lambda$ multiplied by the average response time $W$. For example, at 1,000 requests/sec with a 200ms latency ($0.2\text{s}$), the server holds $1000 \times 0.2 = 200$ concurrent connections. If latency spikes to 2 seconds, concurrency demands soar to 2,000, exhausting connection pools."

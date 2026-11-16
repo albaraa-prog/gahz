@@ -11,6 +11,7 @@ import type {
   UserStats,
   VerdictLevel,
 } from '../types';
+import { randomSample } from '../utils/helpers';
 import { dayKey } from '../utils/helpers';
 
 export const PASS_PERCENT = 70;
@@ -48,10 +49,43 @@ export function gradeQuiz(questions: readonly Question[], answers: AnswerMap): S
   return { total, correct, percent, verdict: verdictFor(percent), categoryStats: [...byCategory.values()] };
 }
 
+/**
+ * Options that refer to the other options ("All of the above") only make
+ * sense in their written position, so shuffling leaves them where they are.
+ */
+const POSITIONAL_OPTION =
+  /\b(all|none|both|neither|any)\s+(of\s+)?(the\s+)?(above|these|those|options|answers)\b|\b[A-D]\s+(and|or|&)\s+[A-D]\b|كل ما سبق|جميع ما سبق|لا شيء مما سبق/i;
+
+/**
+ * Returns a copy of the question with its options in a random order and
+ * `correctAnswer` pointing at the new position. The bank files tend to keep
+ * the right answer in the same slot, so every quiz reshuffles them.
+ */
+export function shuffleOptions(question: Question, random: () => number = Math.random): Question {
+  const movable = question.options.map((_, index) => index).filter((index) => !POSITIONAL_OPTION.test(question.options[index] ?? ''));
+  const shuffled = randomSample(movable, movable.length, random);
+  const order = question.options.map((_, index) => index);
+  movable.forEach((slot, i) => {
+    order[slot] = shuffled[i] as number;
+  });
+  return {
+    ...question,
+    options: order.map((original) => question.options[original] as string),
+    correctAnswer: order.indexOf(question.correctAnswer),
+    optionOrder: order,
+  };
+}
+
+/** The index in the bank file of the option shown at `shown`. */
+function originalOptionIndex(question: Question, shown: number): number {
+  return question.optionOrder?.[shown] ?? shown;
+}
+
 export function buildAttemptAnswers(questions: readonly Question[], answers: AnswerMap, flags: FlagMap): AttemptAnswer[] {
   return questions.map((question) => ({
     questionId: question.id,
-    selected: answers[question.id] ?? null,
+    // Stored as the bank-file index so history means the same thing across quizzes.
+    selected: answers[question.id] === undefined ? null : originalOptionIndex(question, answers[question.id] as number),
     correct: isCorrect(question, answers),
     flagged: Boolean(flags[question.id]),
   }));

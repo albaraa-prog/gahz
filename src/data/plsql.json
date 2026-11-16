@@ -91,10 +91,10 @@
     "difficulty": "medium",
     "question": "Which of the following operations is generally restricted inside a PL/SQL Function but permitted inside a Procedure?",
     "options": [
-      "Calling other functions.",
-      "Declaring variables.",
+      "Calling other stored functions or procedures from inside the body, including recursive calls to the function itself.",
+      "Declaring local variables, constants and cursors in the declaration section before the BEGIN keyword.",
       "Executing DML operations (INSERT, UPDATE, DELETE) when the function is invoked from a SQL query context.",
-      "Catching exceptions."
+      "Catching exceptions in an EXCEPTION block and re-raising them to the caller with RAISE_APPLICATION_ERROR."
     ],
     "correctAnswer": 2,
     "explanation": "When a PL/SQL function is invoked directly inside a SQL query (e.g. `SELECT my_func() FROM table`), it must not execute DML statements that modify database state, as this violates SQL side-effect rules."

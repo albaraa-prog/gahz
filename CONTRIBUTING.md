@@ -40,7 +40,9 @@ What makes a good question:
 - **Your own words.** Do not copy questions from books, courses, paid question banks or real exams.
 - **Accurate.** If the answer depends on a version, say which one.
 
-Mix the position of the correct answer; do not always put it second.
+Options are shuffled every time a quiz starts, so the position of the correct answer does not matter. Keep
+all four options about the same length and level of detail: when the right answer is the only long, specific
+one, it can be picked without knowing the topic. An option such as "None of these" stays where you put it.
 
 ## Adding a preset
 

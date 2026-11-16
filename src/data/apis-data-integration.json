@@ -5,10 +5,10 @@
     "difficulty": "medium",
     "question": "In RESTful HTTP API specifications (RFC 7231), which statement correctly classifies HTTP method 'Safety' and 'Idempotency'?",
     "options": [
-      "POST is safe and idempotent; GET is neither safe nor idempotent.",
+      "GET and POST are Safe because they never delete data; PUT and DELETE are neither Safe nor Idempotent, since repeating them changes server state every time; PATCH is Idempotent because it only touches the fields that are sent.",
       "GET, HEAD, and OPTIONS are Safe (read-only with no side effects); GET, HEAD, PUT, DELETE, and OPTIONS are Idempotent (multiple identical requests have the same server state as a single request); POST and PATCH are non-idempotent.",
-      "DELETE is safe but not idempotent.",
-      "All HTTP methods are inherently idempotent."
+      "Every Idempotent method is also Safe: GET, PUT, and DELETE can all be repeated without side effects, so proxies may cache and retry them freely; only POST is both unsafe and non-idempotent, and PATCH behaves like PUT.",
+      "Safety and Idempotency are properties of status codes rather than methods: any request answered with 2xx is Safe and any answered with 3xx or 4xx is Idempotent, whether it was sent as GET, POST, PUT, or DELETE."
     ],
     "correctAnswer": 1,
     "explanation": "A **Safe** method does not modify server state (`GET`, `HEAD`, `OPTIONS`). An **Idempotent** method produces the same result on the server whether executed 1 time or 10 times (`GET`, `PUT` replacing a resource, `DELETE` removing a resource). `POST` (creating records) and `PATCH` (partial delta updates like appending/incrementing) are non-idempotent by default."
@@ -19,10 +19,10 @@
     "difficulty": "medium",
     "question": "What is the exact semantic difference between HTTP status codes `401 Unauthorized` and `403 Forbidden`?",
     "options": [
-      "401 means the server crashed; 403 means the database is full.",
+      "401 Unauthorized means the user is authenticated but lacks the role or permission for the requested resource; 403 Forbidden means no valid credentials were sent, so the client should prompt the user to log in again and then retry.",
       "401 Unauthorized means the client lacks valid authentication credentials (unauthenticated / missing or expired token); 403 Forbidden means the server understands who the user is, but the user does not have permission/role to access the requested resource.",
-      "401 is for mobile clients; 403 is for web browsers.",
-      "401 requires HTTPS; 403 requires HTTP/2."
+      "401 Unauthorized is returned when the access token is missing and 403 Forbidden when it has expired; in both cases the client should call the token refresh endpoint and repeat the original request with the new token.",
+      "401 Unauthorized means the client's IP address is blocked by a firewall or rate limiter; 403 Forbidden means the resource exists but the HTTP method used is not allowed on it, so the client should switch from POST to GET."
     ],
     "correctAnswer": 1,
     "explanation": "`401 Unauthorized` means 'You are not authenticated' (provide or refresh your bearer token). `403 Forbidden` means 'You are authenticated, but you are not allowed here' (e.g. a regular customer trying to call an admin refund endpoint). Retrying a 403 with the same credentials will never succeed."
@@ -34,10 +34,10 @@
     "question": "In a high-frequency banking transaction feed, why is Cursor-Based Pagination superior to Offset-Based Pagination (`limit` & `offset`)?",
     "codeSnippet": "// Cursor Request: GET /api/v1/transactions?limit=20&after_cursor=tx_98742\n// Offset Request: GET /api/v1/transactions?limit=20&offset=40",
     "options": [
-      "Offset pagination cannot return JSON arrays.",
+      "Offset pagination forces the server to hold a database cursor open between requests, so every client occupies a pooled connection until it finishes paging; Cursor pagination is stateless and releases the connection after each page.",
       "Offset pagination suffers from the 'skipping/duplicate items' anomaly when new transactions are inserted in real time, and degrades to O(N) database scans at high offsets; Cursor pagination uses indexed keyset comparisons (WHERE id < cursor) providing O(1) performance and stable pages.",
-      "Cursor pagination disables database caching.",
-      "Offset pagination is blocked by firewalls."
+      "Cursor pagination lets the client jump straight to any page number, while Offset pagination can only move forward one page at a time, which makes infinite scrolling impossible on large transaction tables.",
+      "Offset pagination returns rows in random order unless every column is indexed, whereas a cursor makes the database cache the full result set in memory so that later pages are served without touching the table."
     ],
     "correctAnswer": 1,
     "explanation": "If a user is viewing page 1 (offset 0) and 2 new transactions arrive, offset 20 on page 2 will re-read the last 2 items from page 1 (duplicate item bug). Furthermore, `OFFSET 100000` forces the DB to read and discard 100,000 rows. Keyset/Cursor pagination (`WHERE id < 'tx_98742' ORDER BY id DESC LIMIT 20`) uses direct B-Tree index seeks in $O(1)$ time with zero pagination drift."
@@ -63,10 +63,10 @@
     "difficulty": "medium",
     "question": "When choosing a real-time protocol for a payment terminal's live status update (waiting -> processing -> paid), how do WebSockets compare to Server-Sent Events (SSE)?",
     "options": [
-      "WebSockets only work over UDP; SSE works over Bluetooth.",
+      "WebSockets are unidirectional (server-to-client only) and reconnect automatically; SSE is full-duplex and lets the terminal send commands on the same stream, so SSE is required whenever the client also needs to talk to the server.",
       "WebSockets provide full-duplex bidirectional communication over a persistent TCP connection; SSE provides lightweight unidirectional (server-to-client only) streaming over standard HTTP with built-in reconnection, ideal when the client only listens for status updates.",
-      "SSE requires custom binary serializers, while WebSockets only support plain text.",
-      "WebSockets are blocked by all cellular carrier networks."
+      "WebSockets poll the server with a new HTTP request every few seconds, while SSE keeps a raw UDP socket open and pushes binary frames over it; SSE is therefore faster, but it loses updates whenever a packet is dropped.",
+      "WebSockets guarantee exactly-once delivery with built-in acknowledgements and replay, while SSE gives no ordering guarantee and may deliver events out of sequence, so SSE cannot be used for payment status updates at all."
     ],
     "correctAnswer": 1,
     "explanation": "If the mobile client only needs to receive live status updates from the server (one-way push), **Server-Sent Events (SSE)** is simpler, runs over standard HTTP/2, traverses corporate firewalls effortlessly, and supports automatic reconnection. **WebSockets** is full-duplex (two-way), ideal for interactive chat or multiplayer trading where both client and server continuously stream messages."
@@ -77,10 +77,10 @@
     "difficulty": "medium",
     "question": "What primary client-side problems does GraphQL solve compared to traditional REST APIs?",
     "options": [
-      "It replaces TLS encryption with blockchain verification.",
+      "It removes the need for API versioning and authentication, because every query is validated against the schema, and it guarantees that responses are cached by CDNs and browsers exactly as REST GET requests are.",
       "It eliminates Over-fetching (downloading unnecessary fields) and Under-fetching (requiring multiple waterfall API calls to assemble related data) by allowing the mobile client to specify the exact shape of data needed in a single query.",
-      "It converts JSON responses into native Dart widgets automatically.",
-      "It removes the need for backend databases."
+      "It replaces HTTP with a dedicated binary protocol on a persistent socket, so queries skip the header overhead, and it lets the mobile client write directly to database tables without going through backend resolvers.",
+      "It makes every request smaller by sending a numeric endpoint ID in place of a URL, and it lets the server decide which fields each client receives, so client code never has to describe the data it needs."
     ],
     "correctAnswer": 1,
     "explanation": "In REST, `/users/1` might return 50 fields when the mobile app only needs `name` and `avatar` (Over-fetching), and fetching a user's wallet and bills requires 3 separate roundtrips (Under-fetching). GraphQL lets the client query `{ user(id: 1) { name avatar wallet { balance } } }` in one single network roundtrip."
@@ -91,10 +91,10 @@
     "difficulty": "medium",
     "question": "Why is gRPC with Protocol Buffers (Protobuf) significantly faster than REST over JSON for internal banking microservices?",
     "options": [
-      "gRPC does not use TCP or IP networking.",
+      "gRPC bypasses TCP and sends Protobuf messages as raw UDP datagrams without acknowledgements, and it skips TLS inside the data centre, so calls avoid both the handshake and the encryption overhead that REST has to pay.",
       "Protobuf encodes data into compact binary formats rather than verbose text-based JSON, and gRPC leverages HTTP/2 multiplexing, header compression (HPACK), and strongly-typed compile-time contracts, resulting in much smaller payloads and faster serialization.",
-      "gRPC executes on GPU graphics cards.",
-      "JSON parsers are intentionally throttled by the Linux kernel."
+      "Protobuf messages are plain text like JSON but gzip-compressed by default, and gRPC opens a fresh HTTP/1.1 connection for each call so that requests never queue behind one another on a shared connection.",
+      "gRPC caches every response on the client and replays it for identical requests, and Protobuf needs no schema, so services skip validation and code generation and spend less CPU time on each call."
     ],
     "correctAnswer": 1,
     "explanation": "JSON is text-based and verbose (field names repeated on every object, slow string parsing). Protocol Buffers compiles `.proto` schemas into efficient, compact binary wire formats with integer field tags. Combined with HTTP/2 multiplexed streams, gRPC achieves up to 7-10x faster serialization and lower network overhead."
@@ -133,10 +133,10 @@
     "difficulty": "medium",
     "question": "How does the Token Bucket rate-limiting algorithm regulate bursty mobile traffic while protecting payment backend APIs?",
     "options": [
-      "It blocks all requests between 12:00 AM and 6:00 AM.",
+      "Requests enter a fixed-size queue and leave it at a strictly constant rate R, one at a time; bursts are never passed through, and when the queue is full the oldest waiting request is dropped to make room for the newest one.",
       "Tokens are added to a bucket of capacity B at a constant refill rate R; each incoming request consumes 1 token. If the bucket is empty, the request is rejected with 429 Too Many Requests; allowing short bursts up to capacity B while enforcing average rate R.",
-      "It queues all requests on the mobile client's SIM card.",
-      "It charges the user 1 OMR per HTTP request."
+      "A counter per client is reset at the start of every fixed window (for example each minute); once it reaches the limit, all requests receive 429 until the window ends, so a client can never exceed the limit around a window boundary.",
+      "Every request must carry a signed token issued by the auth server with a limited number of uses; when the uses run out the client has to log in again, which spreads bursty traffic across authentication sessions."
     ],
     "correctAnswer": 1,
     "explanation": "The Token Bucket algorithm allows controlled traffic bursts (up to bucket capacity $B$) while strictly enforcing a sustainable average throughput ($R$ tokens/sec). If a burst empties the bucket, excess requests receive `HTTP 429 Too Many Requests` with a `Retry-After` header until new tokens are refilled."
@@ -147,10 +147,10 @@
     "difficulty": "medium",
     "question": "Why do Cross-Origin Resource Sharing (CORS) errors occur in web browsers, and why do native Flutter mobile apps (iOS/Android) NEVER trigger CORS errors?",
     "options": [
-      "CORS is an encryption protocol that mobile operating systems do not support.",
+      "CORS is a server-side firewall rule that rejects requests from unknown IP addresses; native mobile apps are exempt because the app stores register each app's IP range with the API provider when the app is published.",
       "CORS is a browser-enforced security sandbox mechanism preventing web scripts from reading unauthorized cross-domain responses; native mobile apps make direct OS socket HTTP requests without a browser security origin context.",
-      "Mobile apps use HTTP/3 which disables CORS.",
-      "CORS errors only occur on Linux servers."
+      "CORS is a step of the TLS handshake in which the server verifies the domain of the caller; native mobile apps skip it because they pin the server certificate, which proves their origin in a stronger way.",
+      "CORS blocks any request that carries cookies from one domain to another; native mobile apps avoid it because they cannot store cookies at all and have to send credentials in the URL query string instead."
     ],
     "correctAnswer": 1,
     "explanation": "CORS is strictly a **Same-Origin Policy security sandbox implemented by Web Browsers** (like Chrome/Safari) to protect users from malicious scripts on one website making authenticated requests to another. Native iOS and Android Flutter apps use native OS sockets (Darwin/Linux) and are not subject to browser origin restrictions."
@@ -161,10 +161,10 @@
     "difficulty": "medium",
     "question": "How does HTTP Content Negotiation with `Accept-Encoding: gzip, br` optimize mobile app data usage?",
     "options": [
-      "It converts images into vector SVGs.",
+      "The mobile client informs the server which character sets it can read (UTF-8, ISO-8859-1); the server strips unsupported characters and whitespace from the JSON body, which is where the 70-80% reduction in payload size comes from.",
       "The mobile client informs the server which compression algorithms it supports (Gzip, Brotli); the server compresses the JSON response body and returns 'Content-Encoding: br', reducing payload size over the wire by up to 70-80%.",
-      "It encrypts the TCP payload with RSA keys.",
-      "It forces the cellular modem to stay in sleep mode."
+      "The mobile client compresses its own request body with Gzip or Brotli before sending and the server must answer in the same encoding; responses themselves stay uncompressed, so the saving applies to uploads only.",
+      "The header asks the server to send only the fields that changed since the previous request as a binary diff, returning '304 Not Modified' when nothing changed, so that most responses carry no body at all."
     ],
     "correctAnswer": 1,
     "explanation": "By sending `Accept-Encoding: gzip, br`, the mobile HTTP client signals support for Brotli and Gzip compression. The server compresses the JSON payload, headers are sent with `Content-Encoding: br`, and the client decompresses it in memory, saving massive cellular data bandwidth and speeding up response parsing."
@@ -175,10 +175,10 @@
     "difficulty": "medium",
     "question": "Why is `multipart/form-data` streaming superior to Base64-encoded JSON strings for uploading customer KYC identity documents (e.g. 5MB ID card photos)?",
     "options": [
-      "Base64 encoding is forbidden on Android devices.",
+      "Base64 encoding is lossy and recompresses the photo, so fine details needed for KYC checks are lost; multipart/form-data sends the pixels unchanged, which is the only way the server can verify that the document is genuine.",
       "Base64 encoding increases file payload size by ~33% and requires holding the entire uncompressed string in RAM; multipart/form-data streams raw binary bytes directly from disk in chunks with minimal RAM allocation.",
-      "Multipart uploads do not require HTTPS.",
-      "Base64 encoding degrades image resolution to 72 DPI."
+      "JSON bodies are limited to 1MB by the HTTP specification, so a 5MB photo has to be split across several requests; multipart/form-data lifts the limit by encrypting each part separately with its own boundary key.",
+      "Base64 strings cannot be sent over HTTPS without being encrypted twice, which doubles CPU use on the device; multipart/form-data compresses the image by about 33% during upload, so less data crosses the mobile network."
     ],
     "correctAnswer": 1,
     "explanation": "Base64 converts 3 binary bytes into 4 ASCII characters, inflating payload size by 33% (a 5MB photo becomes 6.7MB over cellular data). Furthermore, creating large Base64 strings in Dart creates huge memory spikes. `multipart/form-data` streams raw binary chunks directly from disk into the HTTP connection with near-zero memory footprint."
@@ -190,10 +190,10 @@
     "question": "How does Optimistic Concurrency Control using the HTTP `If-Match` header prevent the 'Lost Update' anomaly in wallet settings?",
     "codeSnippet": "// Client A & B read profile with ETag: \"v1\"\n// Client A updates: PUT /profile (If-Match: \"v1\") -> 200 OK (New ETag: \"v2\")\n// Client B updates: PUT /profile (If-Match: \"v1\") -> 412 Precondition Failed",
     "options": [
-      "It locks the database table exclusively for 24 hours.",
+      "The server takes a pessimistic row lock when Client A reads the profile and holds it until A sends its PUT; Client B's read blocks in the meantime, so the two clients can never hold the same version at once.",
       "The client sends the resource version in 'If-Match'; if another client updated the resource in the meantime (changing the ETag to v2), the server rejects the second update with '412 Precondition Failed', preventing Client B from silently overwriting Client A's changes.",
-      "It merges the two updates using Git rebase.",
-      "It reboots the API gateway."
+      "The server compares both request bodies field by field and merges the non-conflicting changes automatically, returning 200 OK to both clients with a combined ETag that reflects the merged result.",
+      "The header makes the PUT idempotent, so the server applies whichever request carries the latest client timestamp and silently discards the other one (last write wins) without reporting an error."
     ],
     "correctAnswer": 1,
     "explanation": "Optimistic locking avoids heavy database row locks. By requiring `If-Match: <current_etag>`, the server verifies that the client is modifying the latest version of the resource. If another user or device modified it first, the server returns `412 Precondition Failed`, prompting the client to refresh and resolve conflicts."
@@ -204,10 +204,10 @@
     "difficulty": "medium",
     "question": "In microservices architecture, what is the primary purpose of the Backend-For-Frontend (BFF) pattern for mobile apps?",
     "options": [
-      "To replace mobile developers with backend engineers.",
+      "To move all business rules out of the microservices and into the mobile app itself, so that the backend becomes a thin data store and each client platform implements its own validation, pricing and authorization logic.",
       "To provide a dedicated gateway layer tailored specifically to mobile client needs—aggregating multiple microservice calls, filtering unneeded fields, handling mobile push/auth tokens, and minimizing cellular roundtrips.",
-      "To compile Flutter apps in the cloud.",
-      "To eliminate the need for SQL databases."
+      "To give every microservice its own public endpoint that the mobile app calls directly, removing any gateway from the path so that requests take fewer network hops and each service can be scaled on its own.",
+      "To keep one generic API that web, mobile and partner clients all share unchanged, so that every consumer receives the same full payloads and the backend team maintains a single contract for all of them."
     ],
     "correctAnswer": 1,
     "explanation": "In enterprise architectures with dozens of microservices (Accounts, Wallets, Cards, Loyalty, Fraud), having mobile clients make 10 separate cellular requests drains battery and degrades performance. A Mobile BFF aggregates these backend microservices into a single mobile-optimized REST/GraphQL endpoint tailored for mobile screen layouts."

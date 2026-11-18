@@ -21,6 +21,8 @@ const initialState: AppState = {
   totalSeconds: 0,
   activeMode: 'Standard Mixed Exam',
 
+  roadmapPath: 'foundations',
+
   lastReport: null,
   reviewFilter: 'all',
 

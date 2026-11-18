@@ -10,6 +10,7 @@
 import type { Question } from '../types';
 import { hasKey, t } from '../utils/i18n';
 import { MISTAKES_MODE } from './mistakes';
+import { parseRoadmapMode } from './roadmap';
 
 export interface Preset {
   id: string;
@@ -137,6 +138,8 @@ export function displayMode(mode: string): string {
   const custom = CUSTOM_MODE.exec(mode);
   if (custom) return t('mode.custom', { n: custom[1] ?? '' });
   if (mode === MISTAKES_MODE) return t('mistakes.title');
+  const step = parseRoadmapMode(mode);
+  if (step) return t('roadmap.mode', { step: t(`step.${step}.title`) });
 
   // "standard" is what the original single-file app stored for the mixed exam.
   const preset = PRESETS.find((p) => p.modeLabel === mode) ?? (mode === 'standard' ? findPreset('standard') : undefined);

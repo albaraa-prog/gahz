@@ -27,7 +27,7 @@ export type FlagMap = Record<number, boolean>;
 
 export type Theme = 'dark' | 'light';
 export type { Locale } from './utils/i18n';
-export type Screen = 'home' | 'quiz' | 'results';
+export type Screen = 'home' | 'roadmap' | 'quiz' | 'results';
 export type ReviewFilter = 'all' | 'correct' | 'incorrect' | 'flagged';
 
 export interface CategoryStat {
@@ -138,6 +138,10 @@ export interface AppState {
   secondsRemaining: number;
   totalSeconds: number;
   activeMode: string;
+
+  // Learning roadmap
+  /** The path shown on the roadmap screen. */
+  roadmapPath: import('./services/roadmap').PathId;
 
   // Results
   lastReport: ScoreReport | null;

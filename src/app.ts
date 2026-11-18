@@ -1,6 +1,6 @@
 /**
  * Gahz entry point: wires services and components together and switches
- * between the three screens (home, quiz, results).
+ * between the screens (home, roadmap, lesson, quiz, results).
  */
 
 import { initAuthModal } from './components/authModal';
@@ -8,6 +8,7 @@ import { initConstellation } from './components/constellation';
 import { initCustomConfig } from './components/customConfig';
 import { initHistoryTable } from './components/historyTable';
 import { initHomeScreen } from './components/homeScreen';
+import { initLessonScreen } from './components/lessonScreen';
 import { initDialog, showDialog } from './components/modal';
 import { initNavbar } from './components/navbar';
 import { initQuestionCard } from './components/questionCard';
@@ -18,6 +19,7 @@ import { initTimer } from './components/timer';
 import { initToasts, toast } from './components/toast';
 import { initAuth } from './services/auth';
 import { initHistory } from './services/history';
+import { initLessons } from './services/lessonPlayer';
 import { initPreferences } from './services/preferences';
 import { listCategories, loadQuestionBanks } from './services/questionLoader';
 import { ensureQuestionTranslations } from './services/questionText';
@@ -31,7 +33,7 @@ import { applyStaticTranslations, t } from './utils/i18n';
 import { state, store } from './utils/state';
 import { initTheme } from './utils/theme';
 
-const SCREENS: readonly Screen[] = ['home', 'roadmap', 'quiz', 'results'];
+const SCREENS: readonly Screen[] = ['home', 'roadmap', 'lesson', 'quiz', 'results'];
 
 /** Router: exactly one <section class="screen"> is active at a time. */
 function initRouter(): void {
@@ -104,6 +106,7 @@ function main(): void {
   store.subscribe(() => void ensureQuestionTranslations(), ['locale']);
   initTheme();
   initHistory();
+  initLessons();
 
   initNavbar();
   initAuthModal();
@@ -115,6 +118,7 @@ function main(): void {
   initTimer();
   initResultsScreen();
   initRoadmapScreen();
+  initLessonScreen();
   initRouter();
   initConstellation();
   initConnectivity();

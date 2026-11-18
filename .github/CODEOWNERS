@@ -1,0 +1,6 @@
+# Every change needs a review from the maintainer.
+*                    @albaraa-prog
+
+# Changes here can affect user data or the deploy credentials.
+/firestore.rules     @albaraa-prog
+/.github/            @albaraa-prog

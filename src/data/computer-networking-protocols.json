@@ -33,10 +33,10 @@
     "difficulty": "medium",
     "question": "Why is UDP (User Datagram Protocol) chosen over TCP for VoIP calls, live video streaming, and online multiplayer games?",
     "options": [
-      "UDP uses 256-bit encryption by default.",
+      "UDP guarantees in-order delivery through sequence numbers but skips the three-way handshake, so packets arrive reliably and sooner than with TCP; the time saved on the handshake is what keeps voice and video in sync.",
       "UDP is connectionless with zero handshake overhead (8-byte header vs 20-byte TCP) and does NOT perform retransmissions or head-of-line blocking; in live media, dropping a late frame is preferable to delaying the entire real-time stream for a retransmission.",
-      "UDP is guaranteed to deliver 100% of packets in order.",
-      "TCP is blocked on 4G/5G mobile networks."
+      "UDP has built-in congestion control that lowers the bitrate smoothly when the network is busy, whereas TCP reacts to congestion by closing the connection, which would end the call or drop the player out of the match.",
+      "UDP datagrams are encrypted and compressed by the protocol itself, so media needs less bandwidth than it would over TCP, and routers on mobile networks give UDP traffic priority over TCP by default."
     ],
     "correctAnswer": 1,
     "explanation": "TCP guarantees reliable, ordered delivery through retransmissions and congestion control. If a packet is lost in TCP, all subsequent packets must wait (Head-Of-Line blocking), causing audio stutter. UDP sends lightweight datagrams without waiting for ACKs or retransmitting lost packets, making it ideal for low-latency live media."
@@ -47,10 +47,10 @@
     "difficulty": "medium",
     "question": "What major latency improvement was introduced in TLS 1.3 compared to TLS 1.2 during the cryptographic handshake?",
     "options": [
-      "TLS 1.3 completely eliminates encryption.",
+      "TLS 1.3 keeps the 2-roundtrip (2-RTT) handshake of TLS 1.2 but compresses the certificates and drops the Finished messages, so each roundtrip carries less data and completes sooner on slow mobile networks.",
       "TLS 1.3 reduced the full cryptographic handshake from 2 roundtrips (2-RTT) to 1 roundtrip (1-RTT), and introduced 0-RTT Early Data resumption for returning mobile clients, drastically reducing connection latency.",
-      "TLS 1.3 requires 5 roundtrips for maximum security.",
-      "TLS 1.3 only works with RSA-1024 certificates."
+      "TLS 1.3 moved the handshake from TCP to UDP so it no longer waits for the three-way handshake, and it reuses the server's static RSA key for every session, which removes the key-exchange step altogether.",
+      "TLS 1.3 performs the handshake once per device and stores the session keys permanently, so later connections to the same server skip key exchange and certificate validation for as long as the app stays installed."
     ],
     "correctAnswer": 1,
     "explanation": "In TLS 1.2, establishing an encrypted session required 2 full roundtrips (2-RTT) of client/server hello and key exchange messages before application data could flow. TLS 1.3 combines the cipher negotiation and Diffie-Hellman key exchange into a single roundtrip (1-RTT) and allows returning clients to send encrypted data on the first flight (0-RTT)."
@@ -61,10 +61,10 @@
     "difficulty": "medium",
     "question": "How does HTTP/3 (built on QUIC over UDP) solve the TCP Head-of-Line (HOL) blocking problem when a mobile device switches from Wi-Fi to cellular data?",
     "options": [
-      "HTTP/3 downloads the entire internet into device flash storage.",
+      "HTTP/3 opens a separate TCP connection for each stream, so a lost packet only stalls one of them; when the network changes, the browser replays its TLS session ticket to rebuild all the connections in a single round trip.",
       "In HTTP/2, all multiplexed streams share 1 single TCP connection; a single lost TCP packet pauses ALL streams. HTTP/3 runs over QUIC (UDP) where each stream is tracked independently (loss on stream A does not block stream B), and QUIC Connection IDs allow seamless network migration (Wi-Fi to 5G) without tearing down connections.",
-      "HTTP/3 requires physical fiber optic cables.",
-      "HTTP/3 only works in Chrome desktop browsers."
+      "HTTP/3 keeps one TCP connection but adds forward error correction, so lost packets are rebuilt from parity data without retransmission; after a network switch the server recognises the client by its source IP address and port.",
+      "HTTP/3 turns multiplexing off and sends requests strictly one after another over UDP, so there is no shared queue to block; switching networks still needs a full new handshake, but it completes faster because UDP has no slow start."
     ],
     "correctAnswer": 1,
     "explanation": "In HTTP/2, multiplexing happens above TCP. If 1 packet drops, TCP halts all streams until the missing packet is retransmitted (TCP HOL blocking). **HTTP/3 uses QUIC over UDP**, implementing independent stream recovery so lost packets only delay that single request. Furthermore, QUIC uses 64-bit Connection IDs rather than (IP:Port) tuples, allowing mobile phones to switch from Wi-Fi to 5G without breaking in-flight API calls."
@@ -89,10 +89,10 @@
     "difficulty": "medium",
     "question": "What is MTU (Maximum Transmission Unit), and what happens if an IP packet exceeds the standard 1500-byte Ethernet MTU with the `DF` (Don't Fragment) flag set?",
     "options": [
-      "The packet is automatically compressed by the router.",
+      "MTU is the largest TCP window a receiver advertises (typically 1500 bytes); if a packet exceeds it and DF=1, the router compresses the payload until it fits and forwards it, setting a header flag so the receiver knows to decompress it.",
       "MTU is the largest link-layer frame size (typically 1500 bytes); if a packet exceeds MTU and DF=1, the router drops the packet and sends back an ICMP 'Destination Unreachable - Fragmentation Needed' message, enabling Path MTU Discovery (PMTUD).",
-      "The router converts the packet into an SMS message.",
-      "The packet is duplicated across all network ports."
+      "MTU is the largest link-layer frame size (typically 1500 bytes); if a packet exceeds MTU and DF=1, the router splits it into fragments anyway and the destination host reassembles them, which is how Path MTU Discovery (PMTUD) works.",
+      "MTU is the maximum number of hops a packet may cross (typically 1500); if it is exceeded and DF=1, the router drops the packet silently and the sender only finds out when its TCP retransmission timer expires."
     ],
     "correctAnswer": 1,
     "explanation": "Ethernet MTU is 1500 bytes. If a packet size exceeds the link MTU and the `DF` (Don't Fragment) bit in the IP header is set to 1, the intermediate router cannot split the packet and drops it, returning an ICMP Type 3 Code 4 error with the next-hop MTU. The sending host uses this to discover the Path MTU (PMTUD) and adjust its TCP MSS."
@@ -117,10 +117,10 @@
     "difficulty": "medium",
     "question": "How does Anycast BGP routing enable Content Delivery Networks (CDNs) to route mobile users to the nearest geographical edge server?",
     "options": [
-      "By assigning every mobile phone its own dedicated satellite.",
+      "Each Edge PoP is given its own unique IP address and the CDN's DNS server returns the one nearest to the user, based on GPS coordinates sent by the device; BGP is used only to detect a failed PoP and withdraw its DNS record.",
       "The same single IP address is announced simultaneously from hundreds of global Edge PoPs via BGP; the internet's BGP routing automatically routes client packets along the shortest autonomous system (AS) network path to the physically closest edge server.",
-      "By scanning the mobile user's GPS coordinates on every packet.",
-      "Anycast only routes traffic through undersea cables."
+      "The single IP address is announced from one central data centre, which inspects the source address of each incoming packet and tunnels it over the CDN's private backbone to the edge server closest to that user.",
+      "Every client is handed a list of all edge server addresses and measures the latency to each one with ICMP probes; the browser then opens its connection to the fastest server and repeats the measurement every few minutes."
     ],
     "correctAnswer": 1,
     "explanation": "In **Anycast**, multiple servers across different data centers globally share the identical IP address. Border Gateway Protocol (BGP) advertises this IP from all locations. When a user in Muscat or Dubai sends a request, internet routers automatically direct traffic to the closest PoP based on BGP routing metrics, minimizing roundtrip latency."
@@ -131,10 +131,10 @@
     "difficulty": "medium",
     "question": "Why is disabling Nagle's Algorithm (`TCP_NODELAY = true`) critical for ultra-low-latency financial trading and payment POS terminals?",
     "options": [
-      "Nagle's algorithm encrypts data with weak DES ciphers.",
+      "Nagle's algorithm sends every small packet twice to guard against loss, doubling the traffic; disabling it halves the number of packets on the wire, which is what lowers latency for trade commands and POS swipes.",
       "Nagle's algorithm buffers small outgoing packets and delays sending until previous data is ACKed or a full MSS buffer accumulates; disabling it (TCP_NODELAY) forces small payloads (like financial trade commands or POS swipes) to be transmitted immediately without 40-200ms buffering delays.",
-      "Nagle's algorithm disconnects clients after 5 seconds.",
-      "TCP_NODELAY reduces bandwidth costs by 90%."
+      "Nagle's algorithm adds a checksum-verification pause on the receiver for each segment; TCP_NODELAY skips that verification so the application reads the payload sooner, at the cost of occasionally accepting corrupted data.",
+      "Nagle's algorithm closes connections that stay idle for 200ms, forcing a new three-way handshake for each message; TCP_NODELAY keeps the socket open permanently so terminals avoid repeated connection setup."
     ],
     "correctAnswer": 1,
     "explanation": "Nagle's algorithm was designed in 1984 to prevent tiny packet congestion on slow links by coalescing small writes into larger segments. However, combined with TCP Delayed ACKs, it creates artificial 40ms to 200ms latency spikes. Setting `socket.setOption(SocketOption.tcpNoDelay, true)` disables buffering and sends small packets instantaneously."
@@ -145,10 +145,10 @@
     "difficulty": "medium",
     "question": "What is the core technical difference between a Layer 4 Load Balancer and a Layer 7 Load Balancer?",
     "options": [
-      "Layer 4 load balancers only work with HTTP; Layer 7 only works with raw binary bytes.",
+      "Layer 4 load balancers read HTTP headers, URL paths, and cookies to make their routing decisions; Layer 7 load balancers see only IP addresses and ports, which makes them faster but unable to terminate TLS or route requests by content.",
       "Layer 4 load balancers route traffic at the Transport layer (IP and Port) without inspecting packet payloads, offering extreme throughput; Layer 7 load balancers inspect Application layer data (HTTP headers, URL paths, cookies, TLS certificates), enabling smart routing, SSL termination, and rate limiting.",
-      "Layer 7 load balancers cannot handle HTTPS traffic.",
-      "Layer 4 load balancers require custom mobile hardware."
+      "Layer 4 load balancers distribute traffic between data centres by rewriting DNS records; Layer 7 load balancers work inside a single server, spreading requests across the CPU cores and threads of one application process.",
+      "Layer 4 load balancers handle only UDP traffic such as DNS and video streams; Layer 7 load balancers handle only TCP traffic such as HTTP and databases, so most architectures need both, one for each transport protocol."
     ],
     "correctAnswer": 1,
     "explanation": "**Layer 4 (L4)** (e.g. AWS NLB, IPVS) operates at TCP/UDP level based purely on IP/Port with near-zero latency and millions of packets/sec. **Layer 7 (L7)** (e.g. NGINX, HAProxy, AWS ALB) terminates TCP and decrypts TLS to inspect HTTP headers, URI paths (`/api/v1/checkout` vs `/api/v1/static`), enabling intelligent routing, cookie affinity, and JWT inspection."
@@ -159,10 +159,10 @@
     "difficulty": "medium",
     "question": "Why is WireGuard considered a superior modern VPN protocol compared to legacy OpenVPN and IPsec?",
     "options": [
-      "WireGuard uses unencrypted plain text for maximum speed.",
+      "WireGuard negotiates the cipher suite per connection from a much larger catalogue than IPsec, so administrators can choose the algorithm for each peer, and it runs entirely in user space, which makes it portable across operating systems.",
       "WireGuard runs directly in kernel space with an extremely lean codebase (~4,000 lines vs 100,000+ in OpenVPN), uses modern state-of-the-art cryptography (Noise protocol, ChaCha20-Poly1305, Curve25519), and handles mobile IP roaming seamlessly without connection renegotiation.",
-      "WireGuard only works on Windows 98.",
-      "WireGuard requires a physical hardware dongle."
+      "WireGuard tunnels over TCP port 443 by default so that it passes through restrictive firewalls, and it authenticates users with X.509 certificates and usernames from a central directory rather than with static public keys.",
+      "WireGuard keeps a stateful session alive with keepalives every second, which lets the server detect a roaming client and force a full renegotiation, and it relies on the long-proven OpenSSL library for all of its cryptography."
     ],
     "correctAnswer": 1,
     "explanation": "WireGuard replaced massive legacy codebases with ~4,000 lines of highly auditable C code running inside the Linux kernel. It utilizes modern cryptographic primitives (ChaCha20-Poly1305, Curve25519) and stateless peer binding, enabling mobile devices to switch between Wi-Fi and 5G with instantaneous zero-handshake reconnection."
@@ -173,10 +173,10 @@
     "difficulty": "medium",
     "question": "What is the structural distinction between a Forward Proxy and a Reverse Proxy?",
     "options": [
-      "Forward proxies only handle UDP; Reverse proxies only handle TCP.",
+      "A Forward Proxy sits in front of origin servers and distributes incoming requests across them; a Reverse Proxy sits in front of clients inside a corporate network and filters or caches the websites that employees are allowed to visit.",
       "A Forward Proxy sits in front of clients (hiding client identities, enforcing corporate web filters, caching outgoing traffic); a Reverse Proxy sits in front of origin servers (hiding server IPs, load balancing incoming traffic, terminating SSL, and defending against DDoS attacks).",
-      "Reverse proxies are installed on the client's smartphone.",
-      "There is no difference; they are identical terms."
+      "A Forward Proxy passes traffic through unchanged at the network layer like a router, without terminating connections; a Reverse Proxy rewrites responses on the client device before the browser renders them, typically as a browser extension.",
+      "A Forward Proxy handles only outbound HTTP requests and a Reverse Proxy handles only the matching HTTP responses, so every connection passes through both of them, one for each direction, usually on the same machine."
     ],
     "correctAnswer": 1,
     "explanation": "A **Forward Proxy** acts on behalf of the *client* (e.g. corporate proxy checking employee web browsing). A **Reverse Proxy** (e.g. Cloudflare, NGINX) acts on behalf of the *servers*, receiving incoming internet traffic, offloading SSL/TLS handshakes, load-balancing requests across backend clusters, and caching responses."
@@ -201,10 +201,10 @@
     "difficulty": "medium",
     "question": "How does the `traceroute` network diagnostic tool discover each router hop between your mobile phone and a remote banking server?",
     "options": [
-      "By querying Google Maps for network fiber cables.",
+      "By asking the destination server for its routing table over SNMP; the server replies with the list of routers it used to reach the phone, and traceroute then measures the delay to each of them with a separate ping.",
       "By sending a series of packets with incrementally increasing IP Time-To-Live values (TTL=1, TTL=2, TTL=3...); each intermediate router decrements TTL to 0, drops the packet, and returns an ICMP 'Time Exceeded' message containing the router's IP address and round-trip time.",
-      "By establishing SSH connections to all intermediate routers.",
-      "By reading the routing table from the mobile SIM card."
+      "By sending packets with a steadily decreasing TCP window size; each router that cannot forward the smaller window replies with a TCP RST carrying its own address, which reveals the hops in order from the nearest to the farthest.",
+      "By querying DNS for PTR records along the path; each router registers itself with the resolver when it forwards a packet, so the resolver can return the ordered list of hop names together with their response times."
     ],
     "correctAnswer": 1,
     "explanation": "`traceroute` exploits the IP header's **TTL (Time To Live)** field. It sends a packet with `TTL=1`. The first router decrements TTL to 0 and sends back `ICMP Type 11 (Time Exceeded)`, revealing Hop 1. It repeats with `TTL=2`, `TTL=3`, and so on, until the packet reaches the final destination, mapping the entire network path hop by hop."

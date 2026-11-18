@@ -6,7 +6,7 @@ import { setLocale } from '../services/preferences';
 import { retrySync } from '../services/sync';
 import { byId } from '../utils/dom';
 import { guarded } from '../utils/errors';
-import { escapeHtml } from '../utils/helpers';
+import { escapeHtml, initialOf, shortName } from '../utils/helpers';
 import { t, type TranslationKey } from '../utils/i18n';
 import { state, store } from '../utils/state';
 import { toggleTheme } from '../utils/theme';
@@ -71,11 +71,17 @@ function renderAccount(): void {
     slot.innerHTML = `<button class="btn btn-outline btn-sm" type="button" data-account="signin">${escapeHtml(t('nav.signIn'))}</button>`;
     return;
   }
-  const name = user.displayName || user.email || t('nav.account');
+  const fullName = user.displayName?.trim() || user.email || t('nav.account');
+  const name = shortName(user.displayName, user.email) || t('nav.account');
+  const initial = escapeHtml(initialOf(user.displayName, user.email));
+  // The initial sits underneath; the photo covers it once it has loaded and is removed if it fails.
+  const photo = user.photoURL
+    ? `<img class="user-photo" src="${escapeHtml(user.photoURL)}" alt="" referrerpolicy="no-referrer" decoding="async">`
+    : '';
   slot.innerHTML = `
-    <span class="user-badge">
-      <span class="user-avatar" aria-hidden="true">${escapeHtml(name.charAt(0).toUpperCase())}</span>
-      <span class="user-name" dir="auto" title="${escapeHtml(user.email ?? name)}">${escapeHtml(name)}</span>
+    <span class="user-badge" title="${escapeHtml(user.email ? `${fullName} · ${user.email}` : fullName)}">
+      <span class="user-avatar" aria-hidden="true"><span class="user-initial">${initial}</span>${photo}</span>
+      <bdi class="user-name">${escapeHtml(name)}</bdi>
       <button class="btn btn-outline btn-sm" type="button" data-account="signout">${escapeHtml(t('nav.signOut'))}</button>
     </span>`;
 }
@@ -94,6 +100,16 @@ async function confirmSignOut(): Promise<void> {
 
 export function initNavbar(): void {
   byId('themeToggleBtn').addEventListener('click', toggleTheme);
+
+  // Image errors do not bubble, so listen in the capture phase. A broken or blocked
+  // profile photo is removed and the initial underneath shows instead.
+  byId('accountSlot').addEventListener(
+    'error',
+    (event) => {
+      if (event.target instanceof HTMLImageElement) event.target.remove();
+    },
+    true,
+  );
   byId('languageToggleBtn').addEventListener('click', () => setLocale(state.locale === 'ar' ? 'en' : 'ar'));
 
   byId('accountSlot').addEventListener('click', (event) => {

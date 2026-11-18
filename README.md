@@ -149,7 +149,9 @@ In the GitHub repository settings (Secrets and variables > Actions) add:
   `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID` and, optionally,
   `VITE_FIREBASE_MEASUREMENT_ID`.
 
-The workflow deploys Hosting only. After changing `firestore.rules`, run
+The workflow deploys Hosting and then `firestore.rules`. For the rules step the service account also needs
+the *Firebase Rules Admin* and *Service Usage Consumer* roles (Google Cloud console > IAM); without them that
+step fails after the site is already live. To deploy the rules by hand, run
 `firebase deploy --only firestore:rules`.
 
 ## Adding questions
@@ -216,6 +218,13 @@ Guests: everything stays in the browser. Signed-in users: attempt history, setti
 the user's own Firestore record, readable only by them. Signing out removes the history from the device; it
 returns on the next sign-in. Analytics events are sent only if a measurement ID is configured, and never
 include question content or answers.
+
+## Contributors
+
+- **Al-Baraa** ([@albaraa-prog](https://github.com/albaraa-prog)): creator and maintainer
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) to add questions, translations or code, and the
+[contributors graph](https://github.com/albaraa-prog/gahz/graphs/contributors) for everyone who has helped.
 
 ## License
 

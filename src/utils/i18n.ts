@@ -54,13 +54,13 @@ const en = {
   'home.headline': 'Be ready before you walk in.',
   'home.loading': 'Loading the question bank…',
   'home.lead':
-    '{count} questions across {topics} topics: Flutter and fintech, APIs and networking, databases, CS fundamentals, AI and prompt engineering, logic, Arabic, and an Oman and GCC enterprise track. Timed, randomized every session, with an explanation for every answer.',
+    '{count:question} across {topics:topic}: Flutter and fintech, APIs and networking, databases, CS fundamentals, AI and prompt engineering, logic, Arabic, and an Oman and GCC enterprise track. Timed, randomized every session, with an explanation for every answer.',
   'home.studyLabel': 'Study mode.',
   'home.studyText': 'Show whether you were right, and why, as soon as you answer.',
   'home.start': 'Start mixed exam · 25 min',
   'home.custom': 'Build a custom quiz',
   'home.focused': 'Focused practice',
-  'chip.questions': '{n} questions',
+  'chip.questions': '{n:question}',
   'chip.minutes': '{n} min',
   'bank.error': 'The question bank could not be loaded. Check your connection and try again.',
   'bank.partial': 'Some topics could not be loaded ({list}). The rest of the question bank is available.',
@@ -121,7 +121,7 @@ const en = {
   'preset.iq.desc': 'Test your problem-solving speed with 15 logical reasoning and puzzle questions.',
   'preset.arabic.title': 'الأسئلة باللغة العربية',
   'preset.arabic.desc': 'أسئلة تدريبية باللغة العربية تختبر أساسيات البرمجة وعلم الحاسوب.',
-  'mode.custom': 'Custom ({n} questions)',
+  'mode.custom': 'Custom ({n:question})',
 
   // Practice my mistakes
   'mistakes.title': 'Practice my mistakes',
@@ -410,7 +410,7 @@ const en = {
 
   // Footer
   'footer.license': '© 2026 Gahz جاهز. Open source under the MIT License.',
-  'footer.count': '{count} questions in {topics} categories',
+  'footer.count': '{count:question} in {topics:category}',
   'footer.privacy': 'Privacy',
   'privacy.title': 'Privacy',
   'privacy.body':
@@ -452,14 +452,14 @@ const ar: Record<TranslationKey, string> = {
   'home.headline': 'كن جاهزاً قبل أن تدخل المقابلة.',
   'home.loading': 'جارٍ تحميل بنك الأسئلة…',
   'home.lead':
-    '{count} سؤالاً في {topics} موضوعاً: Flutter والتقنية المالية، واجهات البرمجة والشبكات، قواعد البيانات، أساسيات علوم الحاسوب، الذكاء الاصطناعي وهندسة الأوامر، المنطق، أسئلة بالعربية، ومسار خاص بمؤسسات عُمان والخليج. اختبارات مؤقتة وعشوائية في كل مرة، مع شرح لكل إجابة.',
+    '{count:question} في {topics:topic}: Flutter والتقنية المالية، واجهات البرمجة والشبكات، قواعد البيانات، أساسيات علوم الحاسوب، الذكاء الاصطناعي وهندسة الأوامر، المنطق، أسئلة بالعربية، ومسار خاص بمؤسسات عُمان والخليج. اختبارات مؤقتة وعشوائية في كل مرة، مع شرح لكل إجابة.',
   'home.studyLabel': 'وضع الدراسة.',
   'home.studyText': 'اعرف إن كانت إجابتك صحيحة، ولماذا، فور اختيارها.',
   'home.start': 'ابدأ اختباراً منوّعاً · 25 دقيقة',
   'home.custom': 'أنشئ اختباراً مخصصاً',
   'home.focused': 'تدريب مركّز',
-  'chip.questions': '{n} سؤالاً',
-  'chip.minutes': '{n} دقيقة',
+  'chip.questions': '{n:question}',
+  'chip.minutes': '{n:minute}',
   'bank.error': 'تعذّر تحميل بنك الأسئلة. تحقّق من اتصالك ثم أعد المحاولة.',
   'bank.partial': 'تعذّر تحميل بعض المواضيع ({list}). بقية بنك الأسئلة متاحة.',
   'bank.retry': 'إعادة المحاولة',
@@ -518,7 +518,7 @@ const ar: Record<TranslationKey, string> = {
   'preset.iq.desc': 'اختبر سرعتك في حل المشكلات عبر 15 سؤالاً في الاستدلال المنطقي والألغاز.',
   'preset.arabic.title': 'الأسئلة باللغة العربية',
   'preset.arabic.desc': 'أسئلة تدريبية باللغة العربية تختبر أساسيات البرمجة وعلم الحاسوب.',
-  'mode.custom': 'مخصص ({n} سؤالاً)',
+  'mode.custom': 'مخصص ({n:question})',
 
   'mistakes.title': 'تدرّب على أخطائي',
   'mistakes.desc': 'اختبار من الأسئلة التي أخطأت فيها في آخر إجابة لك فقط. أجب عن السؤال إجابة صحيحة في أي اختبار فيخرج من القائمة.',
@@ -690,7 +690,7 @@ const ar: Record<TranslationKey, string> = {
   'history.result': 'الحالة',
   'history.pass': 'ناجح',
   'history.fail': 'لم ينجح',
-  'history.streak': 'سلسلة {n} يوم',
+  'history.streak': 'سلسلة {n:day}',
   'history.clearTitle': 'مسح السجل؟',
   'history.clearLocal': 'هل أنت متأكد من مسح السجل المحفوظ على هذا الجهاز؟ لا يمكن التراجع عن ذلك.',
   'history.clearCloud': 'سيُحذف سجل محاولاتك نهائياً من هذا الجهاز ومن حسابك السحابي.',
@@ -798,7 +798,7 @@ const ar: Record<TranslationKey, string> = {
   'start.noMistakes': 'لا توجد أخطاء للتدرّب عليها الآن.',
 
   'footer.license': '© 2026 جاهز Gahz. مفتوح المصدر برخصة MIT.',
-  'footer.count': '{count} سؤالاً في {topics} فئة',
+  'footer.count': '{count:question} في {topics:category}',
   'footer.privacy': 'الخصوصية',
   'privacy.title': 'الخصوصية',
   'privacy.body':
@@ -839,10 +839,62 @@ export function hasKey(key: string): key is TranslationKey {
   return key in en;
 }
 
+/** Nouns that can follow a number. A template counts one with `{name:noun}`, e.g. `{n:question}`. */
+export type CountNoun = 'question' | 'topic' | 'category' | 'minute' | 'day';
+
+/**
+ * The forms a counted noun takes, keyed by the CLDR plural category of the
+ * number. `{n}` is the number; forms without it spell the number out.
+ * Arabic: 1 and 2 have their own forms, 3 to 10 take the plural, 11 to 99 the
+ * accusative singular, and hundreds the plain singular.
+ */
+const COUNT_FORMS: Record<Locale, Record<CountNoun, Partial<Record<Intl.LDMLPluralRule, string>> & { other: string }>> = {
+  en: {
+    question: { one: '{n} question', other: '{n} questions' },
+    topic: { one: '{n} topic', other: '{n} topics' },
+    category: { one: '{n} category', other: '{n} categories' },
+    minute: { one: '{n} minute', other: '{n} minutes' },
+    day: { one: '{n} day', other: '{n} days' },
+  },
+  ar: {
+    question: { one: 'سؤال واحد', two: 'سؤالان', few: '{n} أسئلة', many: '{n} سؤالاً', other: '{n} سؤال' },
+    topic: { one: 'موضوع واحد', two: 'موضوعان', few: '{n} مواضيع', many: '{n} موضوعاً', other: '{n} موضوع' },
+    category: { one: 'فئة واحدة', two: 'فئتان', few: '{n} فئات', many: '{n} فئة', other: '{n} فئة' },
+    minute: { one: 'دقيقة واحدة', two: 'دقيقتان', few: '{n} دقائق', many: '{n} دقيقة', other: '{n} دقيقة' },
+    day: { one: 'يوم واحد', two: 'يومان', few: '{n} أيام', many: '{n} يوماً', other: '{n} يوم' },
+  },
+};
+
+const pluralRules = new Map<Locale, Intl.PluralRules>();
+
+/** "3 questions" / "3 أسئلة": a number with its noun in the right grammatical form. */
+export function countNoun(noun: CountNoun, n: number, locale: Locale = active): string {
+  let rules = pluralRules.get(locale);
+  if (!rules) {
+    rules = new Intl.PluralRules(locale);
+    pluralRules.set(locale, rules);
+  }
+  const forms = COUNT_FORMS[locale][noun];
+  return (forms[rules.select(n)] ?? forms.other).replace('{n}', String(n));
+}
+
+function isCountNoun(value: string): value is CountNoun {
+  return value in COUNT_FORMS.en;
+}
+
+/**
+ * Looks up a string and fills its placeholders: `{name}` inserts the value,
+ * `{name:noun}` inserts the value as a counted noun (see `countNoun`).
+ */
 export function t(key: TranslationKey, params?: Record<string, string | number>): string {
   const template = DICTIONARIES[active][key] ?? en[key];
   if (!params) return template;
-  return template.replace(/\{(\w+)\}/g, (match, name: string) => (name in params ? String(params[name]) : match));
+  return template.replace(/\{(\w+)(?::(\w+))?\}/g, (match, name: string, noun?: string) => {
+    if (!(name in params)) return match;
+    const value = params[name];
+    if (noun && isCountNoun(noun) && typeof value === 'number') return countNoun(noun, value);
+    return String(value);
+  });
 }
 
 /**

@@ -18,6 +18,11 @@ export interface RawQuestion {
 /** A question after loading: the loader adds the bank (file name) it came from. */
 export interface Question extends RawQuestion {
   bank: string;
+  /**
+   * Set when the options were shuffled for a quiz: `optionOrder[shown]` is the
+   * option's index in the bank file. Absent means the options are in bank order.
+   */
+  optionOrder?: number[];
 }
 
 /** question id -> selected option index */
@@ -109,6 +114,8 @@ export interface AuthUser {
   uid: string;
   displayName: string | null;
   email: string | null;
+  /** Profile picture from the sign-in provider (Google). Null for email accounts. */
+  photoURL: string | null;
 }
 
 /**

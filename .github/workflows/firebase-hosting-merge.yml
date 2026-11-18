@@ -1,4 +1,4 @@
-# Builds Gahz and deploys it to Firebase Hosting on every merge to main.
+# Builds Gahz and deploys it to Firebase Hosting, with the Firestore rules, on every merge to main.
 #
 # One-time setup in GitHub (Settings > Secrets and variables > Actions):
 #   Secret    FIREBASE_SERVICE_ACCOUNT   JSON key of a service account that can deploy Hosting
@@ -6,8 +6,9 @@
 #   Variable  FIREBASE_PROJECT_ID        your Firebase project ID
 #   Variables VITE_FIREBASE_*            the web app config values listed in .env.example
 #
-# Firestore rules are not deployed here. After changing firestore.rules run:
-#   firebase deploy --only firestore:rules
+# Firestore rules are deployed too, after Hosting. For that the same service account also needs
+# the "Firebase Rules Admin" and "Service Usage Consumer" roles (Google Cloud console > IAM).
+# Until it has them the rules step fails, but the site is already live by then.
 
 name: Deploy to Firebase Hosting on merge
 
@@ -59,3 +60,16 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           channelId: live
           projectId: ${{ vars.FIREBASE_PROJECT_ID }}
+
+      - name: Deploy Firestore rules
+        run: |
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
+          npx --yes firebase-tools@latest deploy --only firestore:rules --project "$FIREBASE_PROJECT_ID" --non-interactive
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-service-account.json
+
+      - name: Remove the service account key
+        if: always()
+        run: rm -f "$RUNNER_TEMP/firebase-service-account.json"

@@ -95,10 +95,10 @@
     "question": "Why is calling `context.watch<WalletProvider>()` inside an `onPressed` button callback considered an anti-pattern?",
     "codeSnippet": "ElevatedButton(\n  onPressed: () {\n    // Incorrect usage:\n    context.watch<WalletProvider>().submitPayment();\n  },\n  child: Text('Pay'),\n)",
     "options": [
-      "context.watch() is only supported in Riverpod, not Provider.",
+      "context.watch() returns a stale copy of the provider captured at build time, so submitPayment() would run against old state; context.select() should be used in callbacks because it always fetches the latest instance.",
       "context.watch() registers the calling widget to rebuild on every state change; calling it inside an event callback throws a runtime assertion or creates unwanted rebuild subscriptions. context.read() should be used instead.",
-      "context.watch() runs in a background isolate.",
-      "onPressed only accepts static functions."
+      "context.watch() is asynchronous and must be awaited, so calling it in a synchronous onPressed callback returns a Future instead of the provider and the method call fails; context.read() is its synchronous equivalent.",
+      "context.watch() creates a brand-new WalletProvider on every call, so the payment would be submitted on an empty instance outside the widget tree; Provider.of(context, listen: true) should be used instead."
     ],
     "correctAnswer": 1,
     "explanation": "`context.watch<T>()` subscribes the widget to rebuild whenever `notifyListeners()` is called and must ONLY be used inside `build()`. Inside callbacks (like `onPressed`, `onTap`) or lifecycle methods (`initState`, `dispose`), use `context.read<T>()` which reads the value once without creating a rebuild subscription."
@@ -199,10 +199,10 @@
     "difficulty": "hard",
     "question": "What is the primary role of Golden Tests (Screenshot Regression Tests) in fintech mobile development?",
     "options": [
-      "To benchmark GPU shader compile speed.",
+      "To run the app on real devices and record frame timings while scrolling, failing the build when the average rasterization time rises above the approved baseline for any supported screen size.",
       "To render widgets headlessly and compare the rasterized pixel output against approved master baseline images, catching unintended UI regressions across screen sizes and RTL/LTR locales.",
-      "To verify SHA-256 database password hashes.",
-      "To validate Apple Pay merchant certificates."
+      "To replay recorded API responses against the widgets and check that the displayed balances and amounts match approved values exactly, catching rounding and currency-formatting regressions.",
+      "To drive the full app through login and payment flows on an emulator and compare the final navigation state with an approved script, catching broken routes across RTL/LTR locales."
     ],
     "correctAnswer": 1,
     "explanation": "Golden Tests render widgets and compare them pixel-by-pixel against reference golden image files. This guarantees that complex financial UI cards, receipts, transaction badges, and Arabic RTL layouts maintain visual consistency without breaking across updates."

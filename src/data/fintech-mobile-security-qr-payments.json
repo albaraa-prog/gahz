@@ -48,10 +48,10 @@
     "difficulty": "hard",
     "question": "For authorizing a high-value wallet transfer (e.g. OMR 1,000), why is cryptographic biometric signing superior to a simple `await auth.authenticate()` boolean return?",
     "options": [
-      "Boolean checks consume more battery than cryptographic signatures.",
+      "A boolean result is only valid for 30 seconds before the operating system revokes it; cryptographic auth keeps the session authenticated for the rest of the day, so the user is not asked for a fingerprint again on every large transfer.",
       "A simple boolean return can be easily bypassed by runtime hooking tools (like Frida) flipping the return value in RAM; cryptographic auth uses the Secure Enclave to sign a server-generated nonce with a hardware private key, which the backend verifies.",
-      "Cryptographic signing only works on Android devices with face recognition.",
-      "Boolean checks require an active SMS connection."
+      "A boolean result proves that a fingerprint matched but not whose it was; cryptographic auth uploads the biometric template to the backend, which compares it with the one stored at registration to confirm it is the same person.",
+      "A boolean check only works while the device is online, because the match is performed by the OS vendor's servers; cryptographic auth verifies the biometric fully offline, so transfers can be approved without any connection."
     ],
     "correctAnswer": 1,
     "explanation": "In a naive boolean check, a reverse engineer using Frida can hook `authenticate()` and force it to return `true`. In cryptographic authentication, a key pair is generated in the Secure Enclave/TEE. Biometric verification unlocks the private key to sign a single-use server challenge/nonce. The backend validates the signature, ensuring non-repudiation."
@@ -77,10 +77,10 @@
     "question": "When multiple parallel API calls fail with 401 Unauthorized simultaneously upon token expiration, why is `QueuedInterceptor` with request locking critical in Dio?",
     "codeSnippet": "class AuthInterceptor extends QueuedInterceptor {\n  final Dio dio;\n  final SecureStorageService storage;\n  AuthInterceptor(this.dio, this.storage);\n\n  @override\n  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {\n    if (err.response?.statusCode == 401) {\n      // Token refresh logic with request queue locking\n    }\n    return handler.next(err);\n  }\n}",
     "options": [
-      "It compresses HTTP headers using Brotli.",
+      "It cancels every in-flight request the moment the first 401 arrives and sends the user to the login screen, because a refresh token cannot be used while other requests are pending; the user signs in again to continue.",
       "It queues incoming requests and pauses execution while a single refresh token request executes; once the new token is acquired, it replays all queued requests with the fresh token, avoiding race conditions with single-use refresh token rotation.",
-      "It redirects all 401 errors to the Google Play Store.",
-      "It switches network traffic from Wi-Fi to cellular data."
+      "It lets each failed request call the refresh endpoint independently and in parallel, then keeps whichever access token comes back last; this is the fastest approach and is safe because a refresh token can be reused any number of times.",
+      "It retries each 401 request on a timer with exponential backoff until the server accepts the old access token again, which avoids calling the refresh endpoint at all during short token expiry windows."
     ],
     "correctAnswer": 1,
     "explanation": "Modern OAuth implementations use Refresh Token Rotation (each refresh token can only be used once). If 5 simultaneous requests fail with 401 and all 5 attempt to refresh concurrently, the first succeeds and the others fail with an invalidated refresh token, logging the user out. `QueuedInterceptor` locks the queue, runs 1 refresh, updates storage, and replays the waiting requests."
@@ -92,10 +92,10 @@
     "question": "How does sending an `X-Idempotency-Key` header prevent duplicate customer charges during mobile network dropouts?",
     "codeSnippet": "Future<PaymentResponse> transferMoney(TransferRequest request) async {\n  final idempotencyKey = Uuid().v4(); // Unique UUID per user intent\n  return await api.post(\n    '/api/v1/transfers',\n    data: request.toJson(),\n    options: Options(headers: {'X-Idempotency-Key': idempotencyKey}),\n  );\n}",
     "options": [
-      "It encrypts the payload using quantum encryption.",
+      "The server uses the key to encrypt the request body, so a retried request that was intercepted on the network cannot be read or replayed by an attacker; without the matching key the payload is rejected.",
       "If the connection drops before receiving the response and the app retries the transfer, the server recognizes the idempotency key, skips executing a second debit, and returns the cached result of the original transaction.",
-      "It forces the transaction to execute in offline mode.",
-      "It waives bank transfer fees."
+      "The app stores the key locally and refuses to send a second request until the first response arrives, so retries are blocked on the device and the server never has to remember which transfers it has already processed.",
+      "The key tells the server to wrap the debit in a database transaction that rolls back automatically if the client disconnects, so a dropped connection always leaves the balance untouched and a retry starts from a clean state."
     ],
     "correctAnswer": 1,
     "explanation": "If an HTTP POST transfer succeeds on the server but the mobile connection drops before the HTTP 200 response reaches the client, the client may retry. With an `X-Idempotency-Key`, the backend recognizes the duplicate request and returns the existing transaction result without charging the user a second time."
@@ -107,10 +107,10 @@
     "question": "Why must `double` (IEEE 754 floating point) NEVER be used for monetary balances and calculations in a fintech application?",
     "codeSnippet": "void checkBalance() {\n  double total = 0.1 + 0.2;\n  print(total == 0.3); // Prints: false! (0.30000000000000004)\n}",
     "options": [
-      "double is not supported on 64-bit ARM processors.",
+      "A double holds only about 7 significant decimal digits, so any balance above roughly ten million overflows and wraps around to a negative number; developers must use 64-bit integers to store larger amounts.",
       "Binary floating point representation cannot precisely represent many base-10 decimal fractions, resulting in accumulated rounding errors that corrupt financial balances; developers must use integer minor units (e.g. Baisa/cents) or exact Decimal packages.",
-      "double variables cannot be serialized to JSON.",
-      "double calculations take 10x longer than string operations."
+      "Arithmetic on double is not deterministic: the same calculation on the same device can return a different result on each run, so two ledgers computed from identical transactions can never be reconciled.",
+      "JSON has no floating-point type, so every double is converted to a string in transit and loses its fractional part when the server parses it; integers survive serialization, which is why minor units are used."
     ],
     "correctAnswer": 1,
     "explanation": "In IEEE 754 floating point arithmetic, decimal fractions like `0.1` and `0.2` cannot be represented exactly in binary, leading to `0.30000000000000004`. In banking (where 1 OMR = 1000 Baisa), monetary values should always be stored and manipulated as integers representing the lowest denomination (e.g. `int balanceInBaisa = 300;`) or using exact decimal types."
@@ -122,10 +122,10 @@
     "question": "What encoding format does the international EMVCo QR code payment specification use for payload tags?",
     "codeSnippet": "// Sample EMVCo Payload: 00020101021226580010A00000072701200006OM.THAWANI540510.5053035125802OM...",
     "options": [
-      "XML with SOAP wrappers.",
+      "A minified JSON object encoded as Base64, where each key is a 2-character field ID and each value is a string.",
       "Tag-Length-Value (TLV), where each data object starts with a 2-character ID (Tag), a 2-character Length, followed by the Value.",
-      "Base64-encoded Protobuf strings.",
-      "URL-encoded CSV strings."
+      "Fixed-width positional fields, where each value sits at a known character offset and is zero-padded to its full length.",
+      "URL query-string pairs (id=value) joined by ampersands, with the CRC checksum appended as the final parameter."
     ],
     "correctAnswer": 1,
     "explanation": "EMVCo QR specifications (used by Thawani, OmanNet, and global payment networks) structure data using Tag-Length-Value (TLV). For example, `540510.50` represents Tag `54` (Transaction Amount), Length `05`, and Value `10.50`."
@@ -180,10 +180,10 @@
     "difficulty": "hard",
     "question": "Why is Google's SMS Retriever API preferred for OTP auto-verification over requesting `READ_SMS` permission?",
     "options": [
-      "READ_SMS permission is mandatory on Android 14.",
+      "The SMS Retriever API reads the whole inbox just as READ_SMS does, but on Google's servers instead of the device, so the permission dialog is shown once by Google Play Services and then shared by every app the user installs.",
       "The SMS Retriever API allows the app to automatically read only its own verification SMS matching an 11-character hash without requesting dangerous READ_SMS permissions, complying with Google Play Store privacy policies.",
-      "SMS Retriever API sends SMS messages for free.",
-      "SMS User Consent API only works in Airplane mode."
+      "The SMS Retriever API delivers the OTP through a push notification instead of an SMS, so no message is ever stored on the phone and the flow works without a SIM card, which is why no permission is needed.",
+      "READ_SMS has been removed from Android entirely, so the SMS Retriever API is the only way to read any message; it lists every incoming SMS and asks the user to tap the one they want to share with the app."
     ],
     "correctAnswer": 1,
     "explanation": "Google Play strictly restricts access to `READ_SMS` permissions and rejects apps that request them unless they are the default SMS app. The **SMS Retriever API** uses an 11-character app hash embedded at the end of the SMS, allowing the app to read only its own verification message with zero user permission prompts."
@@ -223,10 +223,10 @@
     "question": "In a 3D-Secure (3DS) bank OTP webview flow, why is `NavigationDecision.prevent` used on the final payment callback URL?",
     "codeSnippet": "NavigationDecision handle3dsNavigation(NavigationRequest request) {\n  if (request.url.startsWith('https://checkout.thawani.om/pay/callback')) {\n    final uri = Uri.parse(request.url);\n    final status = uri.queryParameters['status'];\n    final txId = uri.queryParameters['transaction_id'];\n    _completePayment(status: status, txId: txId);\n    return NavigationDecision.prevent;\n  }\n  return NavigationDecision.navigate;\n}",
     "options": [
-      "To crash the webview and free RAM.",
+      "To block the bank's page from opening external links and pop-ups during the OTP step, keeping the user inside the webview until the bank's script has written the session cookie to secure storage.",
       "To intercept the bank's final redirect URL, extract the payment status parameters, close the webview, and transition directly to the native Flutter receipt screen without loading the web landing page.",
-      "To prevent the bank from charging payment processing fees.",
-      "To disable JavaScript execution on the bank portal."
+      "To stop the webview from loading the callback over plain HTTP, forcing the bank to send it again over HTTPS; the webview then loads the secured page and shows the bank's own receipt to the user.",
+      "To cancel the payment when the user presses the back button during the OTP step, sending a reversal request to the bank so that the card is not charged for a transaction the user abandoned."
     ],
     "correctAnswer": 1,
     "explanation": "When 3DS authentication completes, the bank redirects to the merchant callback URL. Intercepting this URL via `NavigationDelegate` prevents the webview from rendering unnecessary web pages and allows native Flutter code to extract transaction tokens and transition immediately to the native receipt screen."
@@ -252,10 +252,10 @@
     "question": "What does attaching an HMAC-SHA256 signature in the `X-Signature` request header protect against in financial APIs?",
     "codeSnippet": "String generateSignature({\n  required String secret,\n  required String method,\n  required String path,\n  required int timestamp,\n  required String body,\n}) {\n  final payload = '$method|$path|$timestamp|$body';\n  final hmac = Hmac(sha256, utf8.encode(secret));\n  return hmac.convert(utf8.encode(payload)).toString();\n}",
     "options": [
-      "It compresses large JSON payloads by 80%.",
+      "It encrypts the request body so that nobody on the network can read the transfer amount or the account numbers; only the server holding the shared secret can decrypt the payload and process the request.",
       "It protects against request tampering and replay attacks; if an attacker alters the transfer amount or payload in transit, the server's calculated HMAC will not match, rejecting the request.",
-      "It prevents users from taking screenshots.",
-      "It enables offline database synchronization."
+      "It proves the identity of the user rather than the integrity of the request: the signature replaces the access token, so the server no longer checks sessions, and the same signature can be reused for later requests.",
+      "It protects against denial-of-service attacks; requests without a signature are dropped by the load balancer before they reach the API, and the timestamp lets the server throttle clients that send too often."
     ],
     "correctAnswer": 1,
     "explanation": "HMAC-SHA256 creates a cryptographic hash using a shared secret and request elements (method, URL, timestamp, payload). If any parameter (such as modifying transfer amount) is tampered with in transit, the signature validation fails on the backend."

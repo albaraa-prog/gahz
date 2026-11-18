@@ -21,10 +21,10 @@
     "question": "Why is instantiating a Future directly inside the `build()` method of a `FutureBuilder` a critical performance bug?",
     "codeSnippet": "class WalletBalance extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return FutureBuilder<double>(\n      future: apiService.fetchBalance(), // Bug here!\n      builder: (context, snapshot) {\n        if (snapshot.hasData) return Text('${snapshot.data}');\n        return CircularProgressIndicator();\n      },\n    );\n  }\n}",
     "options": [
-      "FutureBuilder cannot accept asynchronous functions in Dart.",
+      "A Future created inside build() is garbage-collected as soon as build() returns, so the FutureBuilder never receives its result and stays in the waiting state forever, even though the HTTP request itself is sent only once.",
       "Every time the parent widget rebuilds (or an animation / theme / keyboard toggles), build() runs again, triggering a new HTTP request and restarting the Future from scratch, causing infinite loading spinners and network thrashing.",
-      "FutureBuilder only works with synchronous Streams.",
-      "It causes a compile-time type error in release mode."
+      "The Future completes before FutureBuilder has subscribed to it, so the builder misses the value and reports hasError; keeping the Future in a field delays the request until the widget is actually visible on screen.",
+      "build() has to return synchronously, so creating a Future there blocks the UI thread until the HTTP response arrives, and the whole app freezes for the length of the request each time the widget is built."
     ],
     "correctAnswer": 1,
     "explanation": "`build()` can be called on every frame during animations or when parent widgets rebuild. If `future: apiService.fetchBalance()` is called inside `build()`, a brand new Future is created on every rebuild, resetting the snapshot and spamming the backend API. Futures should always be stored in a variable in `initState()` of a `StatefulWidget` or managed via a state provider."
@@ -35,10 +35,10 @@
     "difficulty": "easy",
     "question": "Why is `ListView.builder` preferred over putting a `Column` inside a `SingleChildScrollView` for rendering long lists (e.g. 1,000 transaction rows)?",
     "options": [
-      "Column does not support touch scrolling.",
+      "A Column cannot be scrolled by touch even inside a SingleChildScrollView, so users only reach the rows that fit on the first screen; ListView.builder adds the scroll physics and gesture handling that long lists need.",
       "A Column inside SingleChildScrollView instantiates and layouts all 1,000 child widgets and their RenderBoxes in memory simultaneously, causing heavy frame drops and Out-Of-Memory (OOM) crashes; ListView.builder lazily builds only the visible items on screen.",
-      "ListView.builder disables GPU rasterization.",
-      "SingleChildScrollView can only display Text widgets."
+      "A Column rebuilds all of its children on every frame while scrolling, whereas ListView.builder marks each row const automatically and keeps all 1,000 built rows cached in memory after the first pass so they are never built again.",
+      "SingleChildScrollView lays its child out on the raster thread and blocks the GPU; ListView.builder moves the layout of all 1,000 rows into a background isolate so the UI thread stays free during scrolling."
     ],
     "correctAnswer": 1,
     "explanation": "`SingleChildScrollView + Column` computes layout and retains all child widgets in memory even if they are far off-screen. `ListView.builder` uses a viewport with a sliver protocol that lazily constructs, paints, and recycles only the widgets currently visible within the scroll window (plus a small cache extent), maintaining $O(1)$ memory usage."
@@ -109,10 +109,10 @@
     "difficulty": "easy",
     "question": "Why does `TextEditingController.addListener()` capture programmatic text changes (e.g. `controller.text = '100'`) while `TextField(onChanged: ...)` does not?",
     "options": [
-      "TextField.onChanged is deprecated in Flutter 3.",
+      "TextField(onChanged:) is debounced by the framework and reports only the final value once the user stops typing, whereas addListener() fires on each keystroke; programmatic assignments are too fast for the debounce and are dropped.",
       "TextField(onChanged:) only fires in response to direct user keyboard input events, whereas TextEditingController.addListener() listens to all mutations on the underlying ValueNotifier model, including programmatic updates.",
-      "addListener runs on a native Android background thread.",
-      "TextField blocks controller listener notifications."
+      "Assigning controller.text replaces the controller with a new instance, so the TextField's onChanged stays bound to the old one, whereas listeners registered through addListener() are copied over to the new controller automatically.",
+      "TextField(onChanged:) runs before the value is written to the controller and addListener() runs after it; a programmatic assignment skips the first phase because it is treated as input that has already been validated."
     ],
     "correctAnswer": 1,
     "explanation": "`TextField.onChanged` is designed specifically for direct interactive user input from the virtual keyboard or paste action. Setting `controller.text = 'newValue'` programmatically does not trigger `onChanged`. However, `TextEditingController` extends `ValueNotifier<TextEditingValue>`, so `addListener()` notifies on all value mutations."
@@ -124,10 +124,10 @@
     "question": "Why does an `InkWell` tap ripple effect fail to show when placed inside an opaque `Container(color: Colors.white)` without a `Material` widget?",
     "codeSnippet": "Container(\n  color: Colors.white,\n  child: InkWell(\n    onTap: () => print('Tapped'),\n    child: Padding(padding: EdgeInsets.all(16), child: Text('Click')),\n  ),\n)",
     "options": [
-      "InkWell does not support click events.",
+      "InkWell only receives taps when it is the direct child of a Scaffold; inside a Container the gesture arena awards the tap to the Container first, so onTap never fires and no ripple is ever started.",
       "InkWell paints its Material splash ripple on the nearest ancestor Material widget; the opaque Container color paints over the Material layer, obscuring the ripple underneath.",
-      "Container disables all gesture recognizers.",
-      "InkWell requires an active Bluetooth connection."
+      "The ripple is always drawn in the same colour as the nearest background, so on a white Container it is painted white on white; setting splashColor on the InkWell is the only way to make it visible.",
+      "A Container without an explicit width and height gives the InkWell zero size, so the ripple has no area to paint in; wrapping the InkWell in a SizedBox restores the effect without any Material widget."
     ],
     "correctAnswer": 1,
     "explanation": "`InkWell` renders its ink splash animation directly onto the nearest ancestor `Material` canvas. If an intervening `Container` has an opaque background color, it is painted above the `Material` canvas, hiding the ink splash. To fix this, use `Ink(color: Colors.white, child: InkWell(...))` or wrap with `Material(color: Colors.white, child: InkWell(...))`."
@@ -138,10 +138,10 @@
     "difficulty": "easy",
     "question": "When building a responsive mobile widget, why is `LayoutBuilder` superior to querying `MediaQuery.of(context).size`?",
     "options": [
-      "MediaQuery cannot be accessed inside StatelessWidget.",
+      "MediaQuery reads the screen size once at app start and never updates on rotation or split-screen, while LayoutBuilder listens for orientation changes, making it the only one of the two that stays correct after the device rotates.",
       "MediaQuery returns the global screen dimensions of the entire device, while LayoutBuilder provides the BoxConstraints of the immediate parent widget, making widgets truly reusable in split-views, dialogs, and embedded cards.",
-      "LayoutBuilder runs on the GPU raster thread.",
-      "MediaQuery causes memory leaks when rotated."
+      "MediaQuery triggers a rebuild of the entire widget tree every time it is read, while LayoutBuilder computes its constraints at compile time and never rebuilds, which makes it far cheaper inside long scrolling lists.",
+      "LayoutBuilder reports the physical pixel size of the whole display, while MediaQuery only gives logical pixels for the current route, so LayoutBuilder is required for layouts that must be exact on high-density screens."
     ],
     "correctAnswer": 1,
     "explanation": "`MediaQuery.of(context).size` gives the total device screen size (e.g. 1080x1920). If your card widget is placed inside a small modal sheet, split-screen tablet view, or drawer, `MediaQuery` still reports the full screen width. `LayoutBuilder` supplies the actual `constraints.maxWidth` allocated to that specific widget by its parent."

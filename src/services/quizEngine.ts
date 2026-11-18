@@ -13,7 +13,7 @@ import { MISTAKES_MAX_QUESTIONS, MISTAKES_MODE, mistakeQuestions } from './mista
 import { customModeLabel, findPreset } from './presets';
 import { parseQuestion } from './questionLoader';
 import { type PathId, type StepId, masteredQuestionIds, pickStepQuestions, roadmapMode } from './roadmap';
-import { buildAttemptAnswers, gradeQuiz } from './scoring';
+import { buildAttemptAnswers, gradeQuiz, shuffleOptions } from './scoring';
 import { STORAGE_KEYS, readJson, remove, writeJson } from './storage';
 
 export class QuizStartError extends Error {}
@@ -132,8 +132,9 @@ function startTimer(): void {
 
 // -------------------------------------------------------------------- actions
 
-function begin(questions: Question[], minutes: number, modeLabel: string): void {
-  if (questions.length === 0) throw new QuizStartError(t('start.noQuestions'));
+function begin(picked: Question[], minutes: number, modeLabel: string): void {
+  if (picked.length === 0) throw new QuizStartError(t('start.noQuestions'));
+  const questions = picked.map((question) => shuffleOptions(question));
   const totalSeconds = Math.round(minutes * 60);
   store.set({
     questions,

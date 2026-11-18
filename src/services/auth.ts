@@ -13,7 +13,7 @@ import { getFirebase, isFirebaseConfigured } from './firebase';
 import { handleSignedIn, handleSignedOut } from './sync';
 
 function toAuthUser(user: User): AuthUser {
-  return { uid: user.uid, displayName: user.displayName, email: user.email };
+  return { uid: user.uid, displayName: user.displayName, email: user.email, photoURL: user.photoURL };
 }
 
 const MESSAGES: Record<string, TranslationKey> = {

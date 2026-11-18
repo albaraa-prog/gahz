@@ -172,6 +172,14 @@ export const PRESETS: readonly Preset[] = [
     card: {},
   },
   {
+    id: 'job_test',
+    modeLabel: 'Job Test Practice',
+    count: 20,
+    minutes: 25,
+    pick: inCategories(['Job Test: Aptitude & Reasoning', 'Job Test: IT & Information Systems']),
+    card: {},
+  },
+  {
     id: 'arabic',
     modeLabel: 'Arabic Questions',
     count: 10,

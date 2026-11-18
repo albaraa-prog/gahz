@@ -119,6 +119,10 @@ const en = {
   'preset.networks.chip': 'Networks',
   'preset.iq.title': 'Logic & IQ Drill',
   'preset.iq.desc': 'Test your problem-solving speed with 15 logical reasoning and puzzle questions.',
+  'preset.job_test.title': 'Job Test Practice',
+  'preset.job_test.desc':
+    'Practice for written job tests in Oman: math word problems and reasoning, plus IT, information systems and security basics.',
+  'preset.job_test.chip': 'Job tests',
   'preset.arabic.title': 'الأسئلة باللغة العربية',
   'preset.arabic.desc': 'أسئلة تدريبية باللغة العربية تختبر أساسيات البرمجة وعلم الحاسوب.',
   'mode.custom': 'Custom ({n:question})',
@@ -214,6 +218,9 @@ const en = {
   'path.game.desc': 'Programming basics and C#, then building games with Unity and the algorithms games rely on.',
   'path.networks.title': 'Networks',
   'path.networks.desc': 'Addressing and subnetting, the devices that move traffic, then the protocols and APIs that run on top.',
+  'path.job_test.title': 'Job test preparation',
+  'path.job_test.desc':
+    'Get ready for the written tests in public-sector and university hiring in Oman: aptitude and reasoning first, then IT and networking basics.',
   'path.interview.title': 'GCC enterprise interview',
   'path.interview.desc':
     'Get ready for banks, telecom operators and government employers in Oman and the GCC: reasoning, systems, then real enterprise scenarios.',
@@ -253,6 +260,10 @@ const en = {
   'step.backend_frameworks.desc': 'Spring Boot, ASP.NET Core and Laravel: dependency injection, data access and request handling.',
   'step.networking_fundamentals.title': 'Networking fundamentals',
   'step.networking_fundamentals.desc': 'IP addressing and subnetting, DHCP, DNS records, switches, routers and VLANs.',
+  'step.job_aptitude.title': 'Aptitude and reasoning',
+  'step.job_aptitude.desc': 'Word problems on age, money, time and percentages, and reasoning puzzles like those in written job tests.',
+  'step.job_it.title': 'IT and information systems',
+  'step.job_it.desc': 'Computer basics, information systems, security, cloud and software development, as asked in IT job tests.',
   'step.flutter_basics.title': 'Flutter and Dart fundamentals',
   'step.flutter_basics.desc': 'Widget lifecycle, layout and asynchronous Dart.',
   'step.flutter_core.title': 'Flutter and Dart core mastery',
@@ -516,6 +527,10 @@ const ar: Record<TranslationKey, string> = {
   'preset.networks.chip': 'الشبكات',
   'preset.iq.title': 'تمرين المنطق والذكاء',
   'preset.iq.desc': 'اختبر سرعتك في حل المشكلات عبر 15 سؤالاً في الاستدلال المنطقي والألغاز.',
+  'preset.job_test.title': 'التدريب على اختبارات التوظيف',
+  'preset.job_test.desc':
+    'تدرّب على اختبارات التوظيف التحريرية في عُمان: مسائل رياضية واستدلال منطقي، وأساسيات تقنية المعلومات ونظم المعلومات والأمن.',
+  'preset.job_test.chip': 'اختبارات التوظيف',
   'preset.arabic.title': 'الأسئلة باللغة العربية',
   'preset.arabic.desc': 'أسئلة تدريبية باللغة العربية تختبر أساسيات البرمجة وعلم الحاسوب.',
   'mode.custom': 'مخصص ({n:question})',
@@ -609,6 +624,9 @@ const ar: Record<TranslationKey, string> = {
   'path.game.desc': 'أساسيات البرمجة و C#، ثم بناء الألعاب بـUnity والخوارزميات التي تعتمد عليها الألعاب.',
   'path.networks.title': 'الشبكات',
   'path.networks.desc': 'العنونة وتقسيم الشبكات، والأجهزة التي تنقل البيانات، ثم البروتوكولات وواجهات API التي تعمل فوقها.',
+  'path.job_test.title': 'الاستعداد لاختبارات التوظيف',
+  'path.job_test.desc':
+    'استعدّ للاختبارات التحريرية في التوظيف الحكومي والجامعي في عُمان: القدرات والاستدلال أولًا، ثم أساسيات تقنية المعلومات والشبكات.',
   'path.interview.title': 'مقابلات المؤسسات في الخليج',
   'path.interview.desc':
     'استعدّ لمقابلات البنوك وشركات الاتصالات والجهات الحكومية في عُمان والخليج: التفكير المنطقي، ثم الأنظمة، ثم مواقف واقعية من بيئة المؤسسات.',
@@ -648,6 +666,10 @@ const ar: Record<TranslationKey, string> = {
   'step.backend_frameworks.desc': 'Spring Boot و ASP.NET Core و Laravel: حقن الاعتماديات والوصول إلى البيانات ومعالجة الطلبات.',
   'step.networking_fundamentals.title': 'أساسيات الشبكات',
   'step.networking_fundamentals.desc': 'عناوين IP وتقسيم الشبكات، و DHCP، وسجلات DNS، والـswitches والـrouters والـVLAN.',
+  'step.job_aptitude.title': 'القدرات والاستدلال',
+  'step.job_aptitude.desc': 'مسائل كلامية في الأعمار والمال والوقت والنسب، وألغاز استدلال مثل التي تأتي في اختبارات التوظيف.',
+  'step.job_it.title': 'تقنية المعلومات ونظم المعلومات',
+  'step.job_it.desc': 'أساسيات الحاسوب ونظم المعلومات والأمن والحوسبة السحابية وتطوير البرمجيات، كما تأتي في اختبارات وظائف تقنية المعلومات.',
   'step.flutter_basics.title': 'أساسيات Flutter و Dart',
   'step.flutter_basics.desc': 'دورة حياة الودجت والتخطيط والبرمجة غير المتزامنة في Dart.',
   'step.flutter_core.title': 'إتقان Flutter و Dart',

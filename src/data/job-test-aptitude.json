@@ -1,0 +1,366 @@
+[
+  {
+    "id": 1051,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "Sara is 18 years old, which is three times her brother's age. How old will Sara be when she is exactly twice her brother's age?",
+    "options": [
+      "30",
+      "36",
+      "27",
+      "24"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Her brother is 18 / 3 = 6. After x years: 18 + x = 2(6 + x), so 18 + x = 12 + 2x and x = 6. Sara will then be 18 + 6 = 24 (and her brother 12)."
+  },
+  {
+    "id": 1052,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "Ahmed had some dates. He ate one, gave half of what was left to his sister, ate one more, then gave half of what was left to his brother. He now has 4 dates. How many did he start with?",
+    "options": [
+      "19",
+      "37",
+      "17",
+      "18"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Work backwards: before giving half to his brother he had 4 × 2 = 8; before eating one he had 9; before giving half to his sister he had 18; before eating the first one he had 19. Check: 19 → 18 → 9 → 8 → 4."
+  },
+  {
+    "id": 1053,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "hard",
+    "question": "If it were 3 hours later than it is now, the time left until midnight would be one third of the time left if it were only 1 hour later. What time is it now?",
+    "options": [
+      "20:00",
+      "21:00",
+      "19:00",
+      "18:00"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Let t be the hours left until midnight now. Then t − 3 = (t − 1) / 3, so 3t − 9 = t − 1 and t = 4. Four hours before midnight is 20:00. Check: at 23:00 one hour is left, at 21:00 three hours are left, and 1 is one third of 3."
+  },
+  {
+    "id": 1054,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "hard",
+    "question": "One of three employees, A, B or C, took the office key. Exactly one of them is lying. A says: \"B took it.\" B says: \"C took it.\" C says: \"B is lying.\" Who took the key?",
+    "options": [
+      "It cannot be determined",
+      "C",
+      "B",
+      "A"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Test each case. If A took it, A and B are both lying (two liars). If C took it, A is lying and C is lying too, because B told the truth (two liars). If B took it, only B is lying, and A and C tell the truth. So B took the key."
+  },
+  {
+    "id": 1055,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "easy",
+    "question": "Today is Thursday. Which day is 4 days before the day after tomorrow?",
+    "options": [
+      "Wednesday",
+      "Sunday",
+      "Monday",
+      "Tuesday"
+    ],
+    "correctAnswer": 3,
+    "explanation": "The day after tomorrow is Saturday. Counting 4 days back from Saturday: Friday, Thursday, Wednesday, Tuesday."
+  },
+  {
+    "id": 1056,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "easy",
+    "question": "A hen has 3 chicks, and each chick eats 6 grains of wheat a day. How many grains does the hen need to collect for her chicks for 4 days?",
+    "options": [
+      "24",
+      "54",
+      "72",
+      "96"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Per day: 3 × 6 = 18 grains. For 4 days: 18 × 4 = 72 grains."
+  },
+  {
+    "id": 1057,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "There are two birds in front of a bird, two birds behind a bird, and one bird between two birds. What is the smallest number of birds this can describe?",
+    "options": [
+      "4",
+      "5",
+      "3",
+      "7"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Three birds in a line are enough: the last bird has two birds in front of it, the first bird has two birds behind it, and the middle bird is between two birds."
+  },
+  {
+    "id": 1058,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "What is the smallest whole number greater than 1 that leaves a remainder of 1 when divided by 2, by 3 and by 5?",
+    "options": [
+      "31",
+      "11",
+      "61",
+      "16"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The number minus 1 must be divisible by 2, 3 and 5, so it is a multiple of their least common multiple, 30. The smallest such number greater than 1 is 30 + 1 = 31. 61 also works but is larger; 16 and 11 fail (16 is even, 11 leaves 2 when divided by 3)."
+  },
+  {
+    "id": 1059,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "A positive whole number multiplied by the next whole number equals the sum of the two numbers plus 19. What is the number?",
+    "options": [
+      "4",
+      "5",
+      "6",
+      "3"
+    ],
+    "correctAnswer": 1,
+    "explanation": "n(n + 1) = n + (n + 1) + 19 gives n² + n = 2n + 20, so n² − n − 20 = 0 = (n − 5)(n + 4). The positive answer is 5. Check: 5 × 6 = 30 and 5 + 6 + 19 = 30."
+  },
+  {
+    "id": 1060,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "easy",
+    "question": "A shop has three times as many pens as notebooks, and twice as many notebooks as books. If there are 2 books, how many pens are there?",
+    "options": [
+      "24",
+      "6",
+      "12",
+      "8"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Notebooks = 2 × 2 = 4. Pens = 3 × 4 = 12."
+  },
+  {
+    "id": 1061,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "easy",
+    "question": "Which positive number, when you square it and then add the number itself, gives 42?",
+    "options": [
+      "4",
+      "6",
+      "7",
+      "5"
+    ],
+    "correctAnswer": 1,
+    "explanation": "6² + 6 = 36 + 6 = 42. For comparison, 7² + 7 = 56 and 5² + 5 = 30."
+  },
+  {
+    "id": 1062,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "Which deal makes more profit: buying a phone for 400 rials and selling it at a 15% profit, or buying a laptop for 1,200 rials and selling it at a 5% profit?",
+    "options": [
+      "It cannot be determined",
+      "The phone",
+      "Both make the same profit",
+      "The laptop"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Phone: 15% of 400 = 60 rials. Laptop: 5% of 1,200 = 60 rials. A higher percentage does not mean a bigger profit; compare the amounts."
+  },
+  {
+    "id": 1063,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "Seven people meet, and every person shakes hands with every other person exactly once. How many handshakes take place?",
+    "options": [
+      "21",
+      "49",
+      "42",
+      "14"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Each handshake is a pair of people: 7 × 6 / 2 = 21. Counting 7 × 6 = 42 counts every handshake twice."
+  },
+  {
+    "id": 1064,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "hard",
+    "question": "How many times do the hour and minute hands of a clock point in exactly the same direction during one full day (24 hours)?",
+    "options": [
+      "11",
+      "12",
+      "24",
+      "22"
+    ],
+    "correctAnswer": 3,
+    "explanation": "In 12 hours the minute hand laps the hour hand 11 times (the hands meet about every 65.45 minutes, and the meeting at 12:00 is shared by both halves). So in 24 hours they meet 22 times, not 24."
+  },
+  {
+    "id": 1065,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "easy",
+    "question": "Omar is taller than Yousef. Nasser is shorter than Omar, but taller than Yousef. Which statement must be true?",
+    "options": [
+      "Nasser is the tallest",
+      "Nasser and Yousef are the same height",
+      "Yousef is the tallest",
+      "Nasser is taller than Yousef"
+    ],
+    "correctAnswer": 3,
+    "explanation": "The order from tallest is Omar, Nasser, Yousef. So Nasser is taller than Yousef, and Omar is the tallest."
+  },
+  {
+    "id": 1066,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "A wall clock was set correctly at 8:00 in the morning, but it gains 15 minutes every hour. What time does it show when the real time is 2:00 in the afternoon the same day?",
+    "options": [
+      "3:30 PM",
+      "3:00 PM",
+      "2:15 PM",
+      "3:45 PM"
+    ],
+    "correctAnswer": 0,
+    "explanation": "From 8:00 AM to 2:00 PM is 6 hours. The clock gains 6 × 15 = 90 minutes, so it shows 2:00 PM + 1 h 30 min = 3:30 PM."
+  },
+  {
+    "id": 1067,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "A class has 35 students. 20 take part in sports, 18 in the art club, and 8 in both. How many students take part in neither activity?",
+    "options": [
+      "5",
+      "13",
+      "3",
+      "8"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Students in at least one activity: 20 + 18 − 8 = 30 (the 8 are counted twice otherwise). Neither: 35 − 30 = 5."
+  },
+  {
+    "id": 1068,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "A trader sold a car for 6,000 rials and made a 20% profit on what he paid. How much did he pay for the car?",
+    "options": [
+      "4,800 rials",
+      "5,200 rials",
+      "7,200 rials",
+      "5,000 rials"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Selling price = 120% of the cost, so cost = 6,000 / 1.2 = 5,000. Taking 20% off the selling price (4,800) is the common mistake, because the profit is a percentage of the cost, not of the price."
+  },
+  {
+    "id": 1069,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "easy",
+    "question": "What is the next number in the sequence: 3, 6, 11, 18, 27, ?",
+    "options": [
+      "40",
+      "39",
+      "38",
+      "36"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The differences are 3, 5, 7, 9, so the next difference is 11: 27 + 11 = 38. (Each term is n² + 2.)"
+  },
+  {
+    "id": 1070,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "What is the next number in the sequence: 5, 10, 8, 16, 14, ?",
+    "options": [
+      "32",
+      "28",
+      "12",
+      "18"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The rule alternates: multiply by 2, then subtract 2. 5 × 2 = 10, 10 − 2 = 8, 8 × 2 = 16, 16 − 2 = 14, 14 × 2 = 28."
+  },
+  {
+    "id": 1071,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "easy",
+    "question": "Three workers build a wall in 12 days. Working at the same rate, how many days would 9 workers need to build the same wall?",
+    "options": [
+      "36",
+      "6",
+      "4",
+      "3"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The job takes 3 × 12 = 36 worker-days. With 9 workers: 36 / 9 = 4 days. More workers means fewer days, so the answer cannot be 36."
+  },
+  {
+    "id": 1072,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "A product costs 80 rials. Its price rises by 25%, and later the new price falls by 20%. What is the final price?",
+    "options": [
+      "80 rials",
+      "84 rials",
+      "76 rials",
+      "85 rials"
+    ],
+    "correctAnswer": 0,
+    "explanation": "80 × 1.25 = 100, then 100 × 0.80 = 80. The 20% decrease is taken from the higher price, so it cancels the 25% increase exactly."
+  },
+  {
+    "id": 1073,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "medium",
+    "question": "The average of five numbers is 12. After one number is removed, the average of the remaining four is 10. Which number was removed?",
+    "options": [
+      "20",
+      "2",
+      "22",
+      "12"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Sum of five numbers: 5 × 12 = 60. Sum of the remaining four: 4 × 10 = 40. The removed number is 60 − 40 = 20."
+  },
+  {
+    "id": 1074,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "easy",
+    "question": "A car travels at a constant 90 km/h. How far does it go in 40 minutes?",
+    "options": [
+      "60 km",
+      "45 km",
+      "50 km",
+      "36 km"
+    ],
+    "correctAnswer": 0,
+    "explanation": "40 minutes is 2/3 of an hour, so the distance is 90 × 2/3 = 60 km."
+  },
+  {
+    "id": 1075,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "easy",
+    "question": "A box of sweets costs 35 rials. The decorated gift case costs 12 rials less than the sweets. How much do the sweets cost if you buy them in the gift case?",
+    "options": [
+      "23 rials",
+      "58 rials",
+      "47 rials",
+      "70 rials"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The case costs 35 − 12 = 23 rials, so sweets plus case cost 35 + 23 = 58 rials. 23 is only the case, and 47 adds 12 instead of the case price."
+  },
+  {
+    "id": 1076,
+    "category": "Job Test: Aptitude & Reasoning",
+    "difficulty": "easy",
+    "question": "The 3rd day of a month is a Monday. Which day of the week is the 24th of the same month?",
+    "options": [
+      "Wednesday",
+      "Monday",
+      "Sunday",
+      "Tuesday"
+    ],
+    "correctAnswer": 1,
+    "explanation": "From the 3rd to the 24th is 21 days, which is exactly 3 weeks, so the 24th falls on the same weekday: Monday."
+  }
+]

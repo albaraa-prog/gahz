@@ -1,0 +1,152 @@
+{
+  "201": {
+    "question": "وفق مبادئ Clean Architecture في Flutter، أي قاعدة اعتماد بين الطبقات يجب الالتزام بها بدقة؟",
+    "options": [
+      "طبقة Domain تعتمد مباشرة على طبقة Data وطبقة Presentation لتسهيل تحليل الـ DTO.",
+      "طبقة Domain مكتوبة بـ Dart خالصة بلا أي اعتماد على Data أو Presentation أو Flutter UI widgets أو حزم قواعد البيانات الخارجية؛ والاعتماديات تتجه إلى الداخل نحو الـ Domain فقط.",
+      "طبقة Presentation تتعامل مباشرة مع عملاء REST API البعيدة متجاوزةً الـ repositories طلباً للسرعة.",
+      "طبقة Data تعرّف UI widgets وstate notifiers."
+    ],
+    "explanation": "في Clean Architecture تضمّ **طبقة Domain** منطق العمل الأساسي (Entities وUse Cases وValue Objects وواجهات الـ Repository). وليس لها أي اعتماد على إطار واجهات Flutter أو عملاء HTTP أو حزم قواعد البيانات. وطبقتا **Data** و**Presentation** تعتمدان على طبقة Domain عبر Dependency Inversion."
+  },
+  "202": {
+    "question": "لماذا ينبغي فصل `WalletEntity` (في Domain) عن `WalletModel` (الـ DTO في Data) في Clean Architecture؟",
+    "options": [
+      "لأن Flutter لا يستطيع تصريف أصناف لها دوال بانية مع JSON annotations.",
+      "لأنه يعزل كيانات العمل في الـ Domain عن تغييرات مخطط REST API الخارجية أو تغيير أسماء JSON أو ترحيل قواعد البيانات في الخادم.",
+      "لأنه يسمح للواجهة بعرض النماذج دون تصريف Dart bytecode.",
+      "لأنه شرط إلزامي في sound null-safety بلغة Dart."
+    ],
+    "explanation": "إذا غيّر الخادم أسماء مفاتيح JSON (مثل `balance_baisa` إلى `wallet_balance`) فلا يتغيّر إلا `WalletModel.fromJson` في طبقة Data. أما `WalletEntity` والـ use cases في الـ Domain وطبقة Presentation فتبقى كما هي ومستقرة تماماً."
+  },
+  "203": {
+    "question": "ما الفائدة الأساسية من إرجاع `Either<Failure, T>` من دوال الـ Repository والـ Use Case في تطبيق تقنية مالية؟",
+    "options": [
+      "يزيد سرعة تحليل JSON بنسبة 50%.",
+      "يفرض معالجة الأخطاء بأسلوب وظيفي في نظام الأنواع وقت التصريف، فيُلزم بتفريع صريح لحالتَي الفشل (Left) والنجاح (Right) دون استثناءات غير معالَجة وقت التشغيل.",
+      "يرفع تتبّع الأخطاء تلقائياً إلى Firebase Crashlytics.",
+      "يشفّر القيمة المعادة داخل Secure Enclave."
+    ],
+    "explanation": "نمط `Either<L, R>` (من `fpdart` أو `dartz`) يمثّل عملية قد تعيد `Failure` (Left) أو قيمة نجاح (Right). وهو يلغي الاستثناءات غير الملتقَطة وقت التشغيل ويجبر الـ notifiers في طبقة العرض على معالجة حالتَي الفشل والنجاح صراحةً عبر `.fold()`."
+  },
+  "204": {
+    "question": "في Dart، أي ميزة في اللغة تسمح باستدعاء كائن Use Case مباشرة كأنه دالة (`await transferMoney(params);`)؟",
+    "options": [
+      "إعادة تعريف عامل الاستدعاء '()' عبر الدالة الخاصة call() في Dart.",
+      "الـ annotation المسمّى @callable من حزمة meta.",
+      "الانعكاس في Dart عبر dart:mirrors.",
+      "التحويل الضمني للأنواع."
+    ],
+    "explanation": "في Dart، أي صنف يعرّف دالة اسمها `call()` يمكن استدعاؤه مباشرة كأنه دالة (callable class). وهذا يتيح صياغة نظيفة ومعبّرة عند تنسيق الـ Use Cases في الـ Domain."
+  },
+  "205": {
+    "question": "في تطبيق تقنية مالية يعمل دون اتصال أولاً (offline-first)، ما المسؤولية الأساسية لـ `WalletRepositoryImpl`؟",
+    "options": [
+      "يرسم UI widgets على الشاشة مباشرة.",
+      "ينسّق بين مصادر البيانات البعيدة والمحلية، ويدير سياسات التخزين المؤقت، ويحوّل استثناءات البنية التحتية المنخفضة المستوى إلى Domain Failures.",
+      "يتولى شهادات مصافحة HTTP TLS.",
+      "يصرِّف برامج تشغيل SQLite الأصلية."
+    ],
+    "explanation": "تطبيق الـ Repository في طبقة Data يخفي تفاصيل جلب البيانات عن طبقة Domain. فهو يفحص الاتصال بالشبكة، ويرجع إلى الذاكرة المؤقتة المحلية (Hive/SQLite) عند الحاجة، ويحفظ بيانات الخادم الحديثة، ويحوّل الاستثناءات الخام إلى كائنات `Failure` محددة الأنواع."
+  },
+  "206": {
+    "question": "عند إعداد حقن الاعتماديات (Dependency Injection) بـ `GetIt`، متى يُستخدم `registerLazySingleton` ومتى يُستخدم `registerFactory`؟",
+    "options": [
+      "registerLazySingleton ينشئ نسخة جديدة مع كل استدعاء، وregisterFactory ينشئ نسخة مشتركة واحدة.",
+      "registerLazySingleton ينشئ نسخة مشتركة واحدة عند أول طلب ويعيد استخدامها، وregisterFactory ينشئ نسخة جديدة مستقلة في كل مرة يُستدعى فيها sl<T>().",
+      "registerFactory خاص بالـ mocks في اختبارات الوحدة، وregisterLazySingleton خاص بنسخ الإصدار.",
+      "registerLazySingleton يحجب تشغيل التطبيق أثناء void main()."
+    ],
+    "explanation": "`registerLazySingleton` مثالي للخدمات العديمة الحالة أو المشتركة (مثل `Dio` والـ Repositories وSecureStorage) التي ينبغي ألا تُنشأ إلا عند الحاجة ثم تُحفظ. أما `registerFactory` فيُستخدم للـ ViewModels والـ Controllers ذات الحالة التي يجب أن تُنشأ من جديد عند دخول المستخدم الشاشة وتُتلف عند خروجه."
+  },
+  "207": {
+    "question": "لماذا يُعدّ استدعاء `context.watch<WalletProvider>()` داخل رد نداء `onPressed` لزر نمطاً خاطئاً (anti-pattern)؟",
+    "options": [
+      "context.watch() مدعوم في Riverpod فقط، لا في Provider.",
+      "context.watch() يسجّل الـ widget المستدعي ليُعاد بناؤه مع كل تغيّر في الحالة؛ واستدعاؤه داخل رد نداء حدث يرمي assertion وقت التشغيل أو ينشئ اشتراكات إعادة بناء غير مرغوبة. يجب استخدام context.read() بدلاً منه.",
+      "context.watch() يعمل في isolate في الخلفية.",
+      "onPressed يقبل الدوال الساكنة فقط."
+    ],
+    "explanation": "`context.watch<T>()` يشترك في إعادة بناء الـ widget كلما استُدعي `notifyListeners()`، ويجب أن يُستخدم داخل `build()` فقط. أما داخل ردود النداء (مثل `onPressed` و`onTap`) أو دوال دورة الحياة (`initState` و`dispose`) فاستخدم `context.read<T>()` الذي يقرأ القيمة مرة واحدة دون إنشاء اشتراك إعادة بناء."
+  },
+  "208": {
+    "question": "كيف يحسّن `Selector<WalletProvider, int>` أداء إعادة البناء مقارنةً بـ `Consumer<WalletProvider>`؟",
+    "options": [
+      "يحوّل Text widget إلى OpenGL shader.",
+      "يعيد بناء الـ builder فقط عندما يتغيّر الجزء المحدد من الحالة (balanceInBaisa)، ويتجاهل تحديثات الحقول الأخرى في WalletProvider.",
+      "يمنع الـ widgets الأبناء من تشغيل الحركات.",
+      "يصرِّف الـ builder إلى WebAssembly."
+    ],
+    "explanation": "`Consumer<T>` يُعاد بناؤه كلما استُدعي `notifyListeners()`. أما `Selector<T, S>` فيقارن القيمة المحددة `S` باستخدام `==`. وإذا تغيّرت خصائص أخرى في `WalletProvider` (مثل ملف المستخدم أو قائمة المعاملات أو شارات الإشعارات) يتجاهلها الـ `Selector` ويمنع إعادة البناء غير الضرورية."
+  },
+  "209": {
+    "question": "متى يلزم استخدام `ChangeNotifierProxyProvider` في تطبيق Flutter؟",
+    "options": [
+      "عند تمرير حركة الشبكة عبر خادم proxy.",
+      "عندما يعتمد ChangeNotifier على حالة provider آخر (مثل حاجة WalletProvider إلى AuthTokens متغيّرة من AuthProvider) ويجب أن يتزامن معه عند تحديث الـ provider الأب.",
+      "لتحويل طلبات REST API إلى استعلامات GraphQL.",
+      "عند اختبار الـ widgets دون جهاز حقيقي."
+    ],
+    "explanation": "`ChangeNotifierProxyProvider<A, B>` يسمح للـ provider `B` بمراقبة حالة الـ provider `A` واستخدامها. عندما يسجّل `AuthProvider` الدخول ويحصل على رمز مصادقة جديد، يمرّر رد النداء `update` أحدث رمز إلى `WalletProvider` دون إعادة إنشاء حالة الـ provider كلها."
+  },
+  "210": {
+    "question": "ما سبب الخطأ 'FlutterError: A TransferNotifier was used after being disposed' وكيف يُمنع؟",
+    "options": [
+      "تغليف التطبيق بكتلة try-catch عامة في main().",
+      "التحقق من أن الـ notifier ما زال مركَّباً أو له مستمعون قبل استدعاء notifyListeners()، أو الحماية براية مخصصة _isDisposed.",
+      "عدم استخدام async/await داخل ChangeNotifier أبداً.",
+      "تعطيل زر الرجوع في الجهاز نهائياً."
+    ],
+    "explanation": "عند إغلاق الشاشة يستدعي Provider تلقائياً `dispose()` على الـ `ChangeNotifier`. وإذا انتهت مهمة غير متزامنة بعد الإتلاف واستدعت `notifyListeners()` يرمي Flutter خطأ assertion. والتحقق بـ `if (!hasListeners) return;` أو تتبّع `_isDisposed` يحمي من هذا الانهيار."
+  },
+  "211": {
+    "question": "في اختبار وحدة لـ Use Case في الـ Domain باستخدام `mocktail`، ما الذي يتحقق منه `verify()`؟",
+    "options": [
+      "أن جدول قاعدة البيانات فيه صف واحد بالضبط.",
+      "أن الدالة executeTransfer في الـ mock repository استُدعيت مرة واحدة بالضبط بالمعاملات المحددة، وأنه لم تُستدعَ أي دوال أخرى غير متوقعة في الـ repository.",
+      "أن تأخير الشبكة كان أقل من 100ms.",
+      "أن الاختبار نُفّذ على محاكي Android."
+    ],
+    "explanation": "`verify(...).called(1)` يتحقق من أن الاعتمادية المقلَّدة استُدعيت بالمعاملات المتوقعة تماماً. و`verifyNoMoreInteractions(mockRepository)` يضمن أن الـ Use Case لم يسبّب أي آثار جانبية غير متوقعة في الـ repository."
+  },
+  "212": {
+    "question": "لماذا يُعدّ اختبار انتقالات حالة `ChangeNotifier` بالمستمعين دون `WidgetTester` أفضل ممارسة لمنطق الحالة؟",
+    "options": [
+      "لأن WidgetTester لا يستطيع اختبار الكود غير المتزامن.",
+      "لأن اختبارات الوحدة الخالصة تعمل في أجزاء من الثانية دون كلفة الرسم في محرّك Flutter، فتضمن اختباراً سريعاً وثابت النتائج ومعزولاً لمنطق العمل.",
+      "لأن ChangeNotifier لا يمكن تركيبه في شجرة الـ widgets أثناء الاختبارات.",
+      "لأن الـ mocking ممنوع في اختبارات الـ widgets."
+    ],
+    "explanation": "الـ state notifiers والـ ViewModels تحتوي على منطق عرض خالص. واختبارها مباشرة بالمستمعين أسرع بمراتب من اختبارات الـ widgets، ويتجنّب تذبذب تخطيط الواجهة، ويتحقق من تغيّرات الحالة بنتائج ثابتة."
+  },
+  "213": {
+    "question": "ماذا يفعل `await tester.pumpAndSettle()` في اختبار widget في Flutter؟",
+    "options": [
+      "يعيد تشغيل منفّذ الاختبارات والمحاكي.",
+      "يستدعي pump() تكراراً حتى تستقر كل الإطارات المجدولة والحركات (التلاشي والتكبير وانتقالات الصفحات) والـ microtasks.",
+      "يرسل طلب HTTP حقيقياً إلى الخادم.",
+      "يحفظ لقطة شاشة للـ widget على القرص."
+    ],
+    "explanation": "`tester.pump()` يقدّم الساعة بإطار واحد أو مدة محددة. أما `tester.pumpAndSettle()` فيكرر ضخّ الإطارات حتى تكتمل كل الحركات والمؤقتات والـ microtasks المجدولة، فيضمن انتهاء انتقالات الواجهة قبل تنفيذ التحققات."
+  },
+  "214": {
+    "question": "ما الدور الأساسي لـ Golden Tests (اختبارات تراجع لقطات الشاشة) في تطوير تطبيقات الجوال المالية؟",
+    "options": [
+      "قياس سرعة تصريف GPU shaders.",
+      "رسم الـ widgets دون واجهة ومقارنة البكسلات الناتجة بصور مرجعية معتمدة، لاكتشاف تراجعات الواجهة غير المقصودة عبر أحجام الشاشات واللغات ذات الاتجاهين RTL/LTR.",
+      "التحقق من تجزئات SHA-256 لكلمات مرور قاعدة البيانات.",
+      "التحقق من شهادات التاجر في Apple Pay."
+    ],
+    "explanation": "الـ Golden Tests ترسم الـ widgets وتقارنها بكسلاً ببكسل بملفات صور مرجعية. وهذا يضمن أن بطاقات الواجهة المالية المعقدة والإيصالات وشارات المعاملات وتخطيطات العربية RTL تحافظ على اتساقها البصري دون أن تتعطل مع التحديثات."
+  },
+  "215": {
+    "question": "بماذا تختلف حزمة `integration_test` الرسمية في Flutter عن اختبارات `testWidgets` العادية؟",
+    "options": [
+      "integration_test تعمل في متصفحات سطح المكتب فقط.",
+      "integration_test تعمل على أجهزة حقيقية أو محاكيات مع ملف التطبيق الكامل، فتختبر إضافات المنصة الأصلية الحقيقية (Biometrics وCamera وNFC وSecureStorage) والمسارات من البداية إلى النهاية.",
+      "integration_test تغني عن التصريف في Xcode وAndroid Studio.",
+      "integration_test تُنفَّذ دون تصريف كود Dart."
+    ],
+    "explanation": "اختبارات الـ widgets العادية تعمل في بيئة اختبار محاكاة بلا واجهة تُقلَّد فيها قنوات المنصة الأصلية. أما `integration_test` فتصرِّف تطبيق APK أو iOS Runner مجهَّزاً للقياس يعمل على عتاد حقيقي، فتتحقق من الإضافات الأصلية الحقيقية والحساسات والتكامل الكامل مع الخادم."
+  }
+}

@@ -145,6 +145,8 @@ export interface AppState {
 
   // Preferences
   locale: import('./utils/i18n').Locale;
+  /** True once the Arabic question text has been downloaded. */
+  translationsReady: boolean;
   theme: Theme;
   studyMode: boolean;
   customConfig: CustomQuizConfig;

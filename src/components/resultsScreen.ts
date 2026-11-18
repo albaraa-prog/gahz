@@ -1,12 +1,14 @@
 /** Results: score ring, verdict, per-topic bars and the filterable review list. */
 
 import type { ReviewFilter, VerdictLevel } from '../types';
-import { returnToHome } from '../services/quizEngine';
+import { categoryLabel, questionDirection, questionText } from '../services/questionText';
+import { mistakeQuestions } from '../services/mistakes';
+import { returnToHome, startMistakesQuiz } from '../services/quizEngine';
 import { byId, closestFrom, svgById } from '../utils/dom';
-import { escapeHtml, formatRichText } from '../utils/helpers';
+import { escapeHtml, formatLine, formatRichText } from '../utils/helpers';
 import { t, type TranslationKey } from '../utils/i18n';
 import { state, store } from '../utils/state';
-import { questionDirection } from './questionCard';
+import { startSafely } from './homeScreen';
 
 const RING_CIRCUMFERENCE = 440;
 
@@ -30,6 +32,11 @@ function renderSummary(animate: boolean): void {
   byId('scoreCircleText').textContent = `${report.percent}%`;
   byId('scoreCountsText').textContent = t('results.counts', { correct: report.correct, total: report.total });
 
+  const mistakes = mistakeQuestions(state.history, state.allQuestions).length;
+  const practice = byId('practiceMistakesBtn');
+  practice.hidden = mistakes === 0;
+  practice.textContent = t('mistakes.again', { n: mistakes });
+
   const verdict = VERDICTS[report.verdict];
   const badge = byId('scoreVerdictBadge');
   badge.textContent = t(verdict.key);
@@ -41,7 +48,7 @@ function renderSummary(animate: boolean): void {
       const percent = Math.round((stat.correct / stat.total) * 100);
       return `
         <div class="perf-bar-item">
-          <div class="perf-label" dir="auto">${escapeHtml(stat.category)}</div>
+          <div class="perf-label" dir="auto">${escapeHtml(categoryLabel(stat.category))}</div>
           <div class="perf-track"><div class="perf-fill" data-percent="${percent}"></div></div>
           <div class="perf-percent" dir="ltr">${percent}%</div>
         </div>`;
@@ -84,8 +91,9 @@ function renderReview(): void {
           ? `<span class="status-skipped">${t('review.skipped')}</span>`
           : `<span class="status-incorrect">${t('review.incorrect')}</span>`;
       const direction = questionDirection(question);
+      const text = questionText(question);
 
-      const options = question.options
+      const options = text.options
         .map((option, optionIndex) => {
           let optionClass = '';
           let suffix = '';
@@ -96,7 +104,7 @@ function renderReview(): void {
             optionClass = ' user-wrong-choice';
             suffix = t('review.yourAnswer');
           }
-          return `<div class="review-option${optionClass}"><span>${formatRichText(option)}</span><strong>${suffix}</strong></div>`;
+          return `<div class="review-option${optionClass}"><span>${formatLine(option, direction === 'rtl')}</span><strong>${suffix}</strong></div>`;
         })
         .join('');
 
@@ -104,18 +112,18 @@ function renderReview(): void {
         <article class="review-item ${cardClass}" data-correct="${String(correct)}" data-flagged="${String(flagged)}">
           <div class="review-status-header">
             <div>
-              <span class="category-tag" dir="auto">${escapeHtml(question.category)}</span>
+              <span class="category-tag" dir="auto">${escapeHtml(categoryLabel(question.category))}</span>
               <strong>${t('review.question', { n: index + 1 })}</strong>
             </div>
             <div>${status}${flagged ? `<span class="status-flag">${t('review.flagged')}</span>` : ''}</div>
           </div>
           <div dir="${direction}" lang="${direction === 'rtl' ? 'ar' : 'en'}">
-            <div class="question-text">${formatRichText(question.question)}</div>
+            <div class="question-text">${formatRichText(text.question)}</div>
             ${question.codeSnippet ? `<pre class="code-block" dir="ltr">${escapeHtml(question.codeSnippet)}</pre>` : ''}
             <div class="review-options-list">${options}</div>
             <div class="explanation-box">
               <span class="explanation-label"><strong>${t('quiz.explanation')}</strong></span>
-              ${formatRichText(question.explanation)}
+              ${formatRichText(text.explanation)}
             </div>
           </div>
         </article>`;
@@ -152,6 +160,7 @@ const FILTERS: readonly ReviewFilter[] = ['all', 'correct', 'incorrect', 'flagge
 
 export function initResultsScreen(): void {
   byId('returnHomeBtn').addEventListener('click', returnToHome);
+  byId('practiceMistakesBtn').addEventListener('click', () => startSafely(startMistakesQuiz));
 
   byId('reviewFilters').addEventListener('click', (event) => {
     const button = closestFrom(event, '[data-filter]');
@@ -162,9 +171,9 @@ export function initResultsScreen(): void {
   store.subscribe((_state, changed) => {
     if (state.screen !== 'results') return;
     // A language switch re-renders in place without replaying the score animation.
-    renderSummary(!changed.has('locale') || changed.has('lastReport'));
+    renderSummary(!(changed.has('locale') || changed.has('translationsReady')) || changed.has('lastReport'));
     renderReview();
     applyFilter();
-  }, ['lastReport', 'screen', 'locale']);
+  }, ['lastReport', 'screen', 'locale', 'translationsReady']);
   store.subscribe(applyFilter, ['reviewFilter']);
 }

@@ -23,6 +23,11 @@ const initialState: AppState = {
 
   roadmapPath: 'foundations',
 
+  lessonId: null,
+  lessonStep: 0,
+  lessonReturn: 'home',
+  lessonProgress: {},
+
   lastReport: null,
   reviewFilter: 'all',
 

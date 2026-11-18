@@ -3,6 +3,8 @@
  * which shows one path as an ordered list of steps with the user's progress.
  */
 
+import { openLesson } from '../services/lessonPlayer';
+import { lessonStatus, lessonsForStep, localized } from '../services/lessons';
 import { openRoadmap, returnToHome, startRoadmapStep } from '../services/quizEngine';
 import {
   ROADMAP_PATHS,
@@ -13,6 +15,7 @@ import {
   pathProgress,
   type PathProgress,
   type RoadmapPath,
+  type StepId,
 } from '../services/roadmap';
 import { byId, closestFrom } from '../utils/dom';
 import { escapeHtml, formatRichText } from '../utils/helpers';
@@ -68,6 +71,18 @@ function renderHomeCards(): void {
   fillBars(byId('roadmapCards'));
 }
 
+/** Interactive lessons that teach this step, offered before its quiz. */
+function lessonLinks(stepId: StepId): string {
+  const links = lessonsForStep(stepId).map((lesson) => {
+    const done = lessonStatus(lesson, state.lessonProgress).completed;
+    const title = localized(lesson.title, state.locale);
+    return `<button class="link-btn lesson-link${done ? ' lesson-link--done' : ''}" type="button" data-lesson="${escapeHtml(lesson.id)}">${escapeHtml(
+      t('lesson.roadmapLink', { title }),
+    )}${done ? ' ✓' : ''}</button>`;
+  });
+  return links.length > 0 ? `<div class="lesson-links">${links.join('')}</div>` : '';
+}
+
 function renderRoadmap(): void {
   const paths = visiblePaths();
   const current = paths.find(({ path }) => path.id === state.roadmapPath) ?? paths[0];
@@ -103,6 +118,7 @@ function renderRoadmap(): void {
             </p>
             <h4 class="roadmap-step-title">${escapeHtml(t(`step.${step.id}.title`))}</h4>
             <p class="mode-description">${formatRichText(t(`step.${step.id}.desc`))}</p>
+            ${lessonLinks(step.id)}
             <div class="roadmap-step-progress">
               ${bar(step.percent)}
               <span>${escapeHtml(t('roadmap.mastered', { n: step.mastered, total: step.total }))}</span>
@@ -155,6 +171,11 @@ export function initRoadmapScreen(): void {
       state.roadmapPath = tab.id;
       return;
     }
+    const lessonId = closestFrom(event, '[data-lesson]')?.dataset.lesson;
+    if (lessonId) {
+      openLesson(lessonId, 'roadmap');
+      return;
+    }
     const stepId = closestFrom(event, '[data-roadmap-step]')?.dataset.roadmapStep;
     if (isStepId(stepId)) startSafely(() => startRoadmapStep(stepId));
   });
@@ -164,5 +185,5 @@ export function initRoadmapScreen(): void {
   store.subscribe(renderHomeCards, ['bankStatus', 'allQuestions', 'locale', 'history']);
   store.subscribe(() => {
     if (state.screen === 'roadmap') renderRoadmap();
-  }, ['screen', 'roadmapPath', 'bankStatus', 'allQuestions', 'locale', 'history']);
+  }, ['screen', 'roadmapPath', 'bankStatus', 'allQuestions', 'locale', 'history', 'lessonProgress']);
 }

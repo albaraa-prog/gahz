@@ -1,0 +1,220 @@
+[
+  {
+    "id": 446,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "easy",
+    "question": "This Laravel code runs one query for the posts and one more query per post. How is it fixed?",
+    "codeSnippet": "$posts = Post::all();\nforeach ($posts as $post) {\n    echo $post->author->name;\n}",
+    "options": [
+      "Replace `foreach` with a `for` loop.",
+      "Add `sleep(1)` between iterations.",
+      "Eager load the relationship: `Post::with('author')->get()`.",
+      "Call `Post::all()` twice."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Relationships are lazy by default, so each `$post->author` triggers a query: the N+1 problem. `with('author')` loads all authors in one extra query (2 queries in total). Calling `Model::preventLazyLoading()` in development makes such mistakes throw an exception."
+  },
+  {
+    "id": 447,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "easy",
+    "question": "What does the `$fillable` property protect against in a Laravel Eloquent model?",
+    "codeSnippet": "class User extends Model\n{\n    protected $fillable = ['name', 'email'];\n}\n\nUser::create($request->all());",
+    "options": [
+      "Mass assignment: only the listed attributes can be set from an array, so a request cannot set fields such as `is_admin`.",
+      "SQL injection in raw queries.",
+      "Reading the model without being logged in.",
+      "Deleting the model by accident."
+    ],
+    "correctAnswer": 0,
+    "explanation": "`create()` and `update()` accept an array, often straight from user input. Without a whitelist an attacker could add `is_admin=1` to the form. `$fillable` lists what may be mass assigned and everything else is ignored. Passing `$request->validated()` instead of `$request->all()` adds a second layer."
+  },
+  {
+    "id": 448,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "medium",
+    "question": "How does this Laravel controller receive its `PaymentGateway` object?",
+    "codeSnippet": "class CheckoutController extends Controller\n{\n    public function __construct(private PaymentGateway $gateway) {}\n}",
+    "options": [
+      "The developer must call `new CheckoutController(new PaymentGateway())` in the routes file.",
+      "The service container reads the type hint and builds or resolves the dependency automatically.",
+      "PHP creates it, because all constructor parameters are optional in PHP 8.",
+      "It is read from the `.env` file."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Laravel resolves controllers through its service container, which uses reflection to see the type hints and inject instances (auto-wiring). If `PaymentGateway` is an interface, a service provider tells the container which class to use: `$this->app->bind(PaymentGateway::class, StripeGateway::class)`."
+  },
+  {
+    "id": 449,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "medium",
+    "question": "What is the role of middleware in Laravel?",
+    "options": [
+      "It compiles Blade templates into JavaScript.",
+      "It stores uploaded files in cloud storage.",
+      "It defines the columns of database tables.",
+      "It filters HTTP requests before they reach a route or controller, for example to check that the user is authenticated."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Middleware wraps the request: it can reject or redirect it, change it, or act on the response afterwards. `auth`, `throttle` and CSRF verification are built-in examples. It is attached to routes or groups: `Route::middleware('auth')->group(...)`."
+  },
+  {
+    "id": 450,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "easy",
+    "question": "In a Laravel Blade template, what is the difference between `{{ $comment }}` and `{!! $comment !!}`?",
+    "options": [
+      "There is no difference; both are aliases.",
+      "`{{ }}` escapes HTML special characters, which prevents XSS; `{!! !!}` prints the raw value.",
+      "`{{ }}` prints raw HTML and `{!! !!}` escapes it.",
+      "`{!! !!}` is a comment and prints nothing."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`{{ }}` passes the value through `htmlspecialchars()`, so a `<script>` tag typed by a user is shown as text and not executed. `{!! !!}` outputs the value as it is and should only be used for HTML you trust or have sanitized."
+  },
+  {
+    "id": 451,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "medium",
+    "question": "Why do Laravel projects change the database schema through migrations instead of editing tables by hand?",
+    "options": [
+      "Migrations are versioned code, so every developer and server applies the same schema changes in order and can roll them back.",
+      "Migrations make queries run faster than manually created tables.",
+      "Tables created by hand cannot be read by Eloquent.",
+      "Migrations encrypt the data in every column."
+    ],
+    "correctAnswer": 0,
+    "explanation": "A migration is a class with `up()` and `down()` methods kept in source control. `php artisan migrate` runs the ones not yet applied (tracked in the `migrations` table), and `migrate:rollback` reverses the last batch. The schema is therefore reproducible on any machine and in CI."
+  },
+  {
+    "id": 452,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "medium",
+    "question": "With this Laravel route, what happens for `GET /posts/999` when no post with id 999 exists?",
+    "codeSnippet": "Route::get('/posts/{post}', function (Post $post) {\n    return $post->title;\n});",
+    "options": [
+      "`$post` is `null` and the code fails with a 500 error.",
+      "Laravel creates an empty post with id 999.",
+      "Laravel returns a 404 response automatically, without running the closure.",
+      "The route is skipped and the home page is shown."
+    ],
+    "correctAnswer": 2,
+    "explanation": "This is route model binding. Because the parameter name `{post}` matches the type-hinted `Post $post`, Laravel loads the model by its primary key and throws `ModelNotFoundException` when it is missing, which becomes a 404. A different column can be used with `{post:slug}`."
+  },
+  {
+    "id": 453,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "medium",
+    "question": "A Laravel signup request takes 4 seconds because it sends a welcome email before responding. What is the standard solution?",
+    "options": [
+      "Increase `max_execution_time` in `php.ini`.",
+      "Send the email from JavaScript in the browser.",
+      "Remove the welcome email.",
+      "Dispatch a queued job, so the response returns immediately and a queue worker sends the email in the background."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Slow work that the user does not need to wait for (emails, PDF generation, calls to slow APIs) goes onto a queue. The job is stored in Redis, the database or another driver, and processes started with `php artisan queue:work` run it. Failed jobs can be retried."
+  },
+  {
+    "id": 454,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "medium",
+    "question": "A Laravel controller method type-hints a Form Request class whose rules fail for the submitted data. What does Laravel do for a JSON API request?",
+    "codeSnippet": "public function store(StorePostRequest $request)\n{\n    Post::create($request->validated());\n}",
+    "options": [
+      "It runs `store()` and `validated()` returns an empty array.",
+      "It does not run `store()` and returns `422 Unprocessable Entity` with the validation errors.",
+      "It returns `200 OK` with a warning header.",
+      "It logs the user out."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A Form Request is validated before the controller method is called. On failure a JSON request gets a 422 response containing the errors, and a normal web form is redirected back with the errors and old input in the session. `validated()` returns only the fields that have rules."
+  },
+  {
+    "id": 455,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "easy",
+    "question": "A Laravel Blade form is submitted with POST and the server answers `419 Page Expired`. What is the most likely cause?",
+    "options": [
+      "The form is missing the `@csrf` directive, so the CSRF token check failed.",
+      "The database is offline.",
+      "The route uses the wrong controller name.",
+      "The `.env` file has no `APP_NAME`."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Laravel rejects POST, PUT, PATCH and DELETE requests on web routes that do not carry a valid CSRF token, which stops other sites from submitting forms on behalf of a logged-in user. `@csrf` adds the hidden `_token` field. An expired session gives the same 419."
+  },
+  {
+    "id": 456,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "medium",
+    "question": "What is the difference between `from()` and `tryFrom()` on this PHP 8.1 backed enum when called with `'archived'`?",
+    "codeSnippet": "enum Status: string\n{\n    case Draft = 'draft';\n    case Published = 'published';\n}",
+    "options": [
+      "Both return `null`.",
+      "Both throw a `ValueError`.",
+      "`Status::from('archived')` throws a `ValueError`; `Status::tryFrom('archived')` returns `null`.",
+      "`from()` returns `Status::Draft` as a default; `tryFrom()` returns `false`."
+    ],
+    "correctAnswer": 2,
+    "explanation": "A backed enum maps each case to a scalar value. `from()` is for values that must be valid and throws when there is no matching case. `tryFrom()` is for untrusted input and returns `null`, which combines well with `??` to supply a default."
+  },
+  {
+    "id": 457,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "medium",
+    "question": "What happens on the last line of this PHP 8.1 code?",
+    "codeSnippet": "final class Money\n{\n    public function __construct(public readonly int $amount) {}\n}\n\n$price = new Money(100);\n$price->amount = 200;",
+    "options": [
+      "`amount` becomes 200.",
+      "The assignment is silently ignored and `amount` stays 100.",
+      "A new `Money` object is created with 200.",
+      "PHP throws an `Error`, because a readonly property cannot be modified after it is initialized."
+    ],
+    "correctAnswer": 3,
+    "explanation": "A `readonly` property can be written once, from inside the class scope, normally in the constructor. Any later write throws `Error: Cannot modify readonly property Money::$amount`. This gives immutable value objects without writing getters. PHP 8.2 allows marking the whole class `readonly`."
+  },
+  {
+    "id": 458,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "easy",
+    "question": "What does this PHP 8 expression evaluate to when `$user` is `null`?",
+    "codeSnippet": "$city = $user?->address?->city;",
+    "options": [
+      "It throws `Error: Attempt to read property on null`.",
+      "`null`, because the nullsafe operator `?->` stops the chain as soon as it meets `null`.",
+      "An empty string.",
+      "`false`."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The nullsafe operator, added in PHP 8.0, short-circuits: if the value on its left is `null`, the rest of the chain is skipped and the whole expression is `null`. It replaces nested `if ($user !== null && $user->address !== null)` checks."
+  },
+  {
+    "id": 459,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "medium",
+    "question": "In a PHP project that uses Composer, what is the purpose of `composer.lock`, and should it be committed?",
+    "options": [
+      "It records the exact version of every installed package so that `composer install` reproduces the same set everywhere; it should be committed for applications.",
+      "It is a temporary cache file and should be listed in `.gitignore`.",
+      "It stores database passwords and must never be committed.",
+      "It locks the project so only one developer can edit it at a time."
+    ],
+    "correctAnswer": 0,
+    "explanation": "`composer.json` states version ranges (for example `^11.0`). `composer.lock` pins the exact versions that were resolved. `composer install` reads the lock file, so production and teammates get identical code. `composer update` resolves the ranges again and rewrites the lock file."
+  },
+  {
+    "id": 460,
+    "category": "Laravel & Modern PHP",
+    "difficulty": "hard",
+    "question": "A Laravel command must process 2 million rows. `Order::all()` runs out of memory. Which approach is designed for this?",
+    "options": [
+      "`Order::all()->take(1000)`, because it limits the query.",
+      "Raising `memory_limit` to `-1` and keeping `Order::all()`.",
+      "`Order::chunkById(1000, fn ($orders) => ...)` or `Order::lazy()`, which load the rows in batches.",
+      "`Order::first()` inside a `while (true)` loop."
+    ],
+    "correctAnswer": 2,
+    "explanation": "`all()` hydrates every row into a model at once. `chunkById()` runs one query per batch using `where id > last_id`, which stays fast and is safe when rows are updated during the loop; `lazy()` gives the same batching behind a single `foreach`. `all()->take()` still loads everything first, because `take()` is applied to the collection in memory."
+  }
+]

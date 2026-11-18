@@ -12,6 +12,7 @@ import { addAttempt } from './history';
 import { MISTAKES_MAX_QUESTIONS, MISTAKES_MODE, mistakeQuestions } from './mistakes';
 import { customModeLabel, findPreset } from './presets';
 import { parseQuestion } from './questionLoader';
+import { type PathId, type StepId, masteredQuestionIds, pickStepQuestions, roadmapMode } from './roadmap';
 import { buildAttemptAnswers, gradeQuiz } from './scoring';
 import { STORAGE_KEYS, readJson, remove, writeJson } from './storage';
 
@@ -185,6 +186,13 @@ export function startMistakesQuiz(): void {
   begin(randomSample(questions, questions.length), Math.max(5, questions.length), MISTAKES_MODE);
 }
 
+/** A short quiz on one roadmap step. Questions not answered correctly yet are picked first. */
+export function startRoadmapStep(stepId: StepId): void {
+  const picked = pickStepQuestions(stepId, requireBank(), masteredQuestionIds(state.history));
+  if (picked.length === 0) throw new QuizStartError(t('start.presetEmpty'));
+  begin(randomSample(picked, picked.length), Math.max(5, picked.length), roadmapMode(stepId));
+}
+
 export function resumeQuiz(session: SavedSession): void {
   store.set({
     questions: session.questions,
@@ -273,4 +281,9 @@ export function submitQuiz(): void {
 export function returnToHome(): void {
   stopTimer();
   state.screen = 'home';
+}
+
+export function openRoadmap(path: PathId = state.roadmapPath): void {
+  stopTimer();
+  store.set({ roadmapPath: path, screen: 'roadmap' });
 }

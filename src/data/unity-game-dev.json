@@ -1,0 +1,218 @@
+[
+  {
+    "id": 401,
+    "category": "Unity & C# Game Development",
+    "difficulty": "easy",
+    "question": "In Unity, which method should contain code that applies forces to a `Rigidbody`?",
+    "options": [
+      "`Update()`, because it runs once per rendered frame.",
+      "`FixedUpdate()`, because it runs on the fixed physics timestep.",
+      "`LateUpdate()`, because it runs after all other updates.",
+      "`OnGUI()`, because it runs several times per frame."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The physics engine advances in fixed steps (0.02 s by default). `FixedUpdate()` is called in step with it, so forces applied there behave the same at any frame rate. `Update()` runs once per frame and its timing varies."
+  },
+  {
+    "id": 402,
+    "category": "Unity & C# Game Development",
+    "difficulty": "easy",
+    "question": "Why is movement in `Update()` usually multiplied by `Time.deltaTime`?",
+    "codeSnippet": "void Update()\n{\n    transform.Translate(Vector3.forward * speed * Time.deltaTime);\n}",
+    "options": [
+      "To make the object move faster on powerful devices.",
+      "To convert the speed from meters to pixels.",
+      "To make the speed independent of the frame rate.",
+      "To run the movement on a background thread."
+    ],
+    "correctAnswer": 2,
+    "explanation": "`Time.deltaTime` is the time in seconds since the last frame. Multiplying by it turns `speed` into units per second, so the object covers the same distance at 30 FPS and at 144 FPS."
+  },
+  {
+    "id": 403,
+    "category": "Unity & C# Game Development",
+    "difficulty": "easy",
+    "question": "What is the order of `Awake()` and `Start()` on a `MonoBehaviour` in Unity?",
+    "options": [
+      "`Awake()` runs first when the object is loaded; `Start()` runs later, just before the first frame update of an enabled script.",
+      "`Start()` runs first; `Awake()` runs when the object becomes visible to a camera.",
+      "They run at the same time on different threads.",
+      "`Awake()` runs every time the object is enabled; `Start()` runs only in the editor."
+    ],
+    "correctAnswer": 0,
+    "explanation": "`Awake()` is called once when the script instance is loaded, even if the component is disabled. `Start()` is called once before the first `Update()` and only if the component is enabled. Set up your own references in `Awake()` and talk to other objects in `Start()`."
+  },
+  {
+    "id": 404,
+    "category": "Unity & C# Game Development",
+    "difficulty": "medium",
+    "question": "What is the problem with this Unity script, and what is the usual fix?",
+    "codeSnippet": "void Update()\n{\n    GetComponent<Rigidbody>().AddForce(Vector3.up);\n}",
+    "options": [
+      "`GetComponent` cannot be used with `Rigidbody`; use `FindObjectOfType` instead.",
+      "`AddForce` only works inside `Start()`.",
+      "Nothing is wrong; Unity caches `GetComponent` results automatically.",
+      "The component is looked up every frame; get it once in `Awake()` and keep it in a field."
+    ],
+    "correctAnswer": 3,
+    "explanation": "`GetComponent` searches the GameObject each time it is called. Doing that every frame is wasted work, so the reference is cached once in `Awake()` or `Start()`. The force itself also belongs in `FixedUpdate()`."
+  },
+  {
+    "id": 405,
+    "category": "Unity & C# Game Development",
+    "difficulty": "medium",
+    "question": "What does this Unity coroutine do when it reaches the `yield` line?",
+    "codeSnippet": "IEnumerator Respawn()\n{\n    player.SetActive(false);\n    yield return new WaitForSeconds(2f);\n    player.SetActive(true);\n}",
+    "options": [
+      "It blocks the whole game for 2 seconds.",
+      "It pauses only this coroutine and resumes it on the main thread about 2 seconds later.",
+      "It moves the rest of the method to a background thread.",
+      "It restarts the method from the first line after 2 seconds."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A coroutine is not a thread. At `yield return` it hands control back to Unity, the game keeps running, and Unity resumes the method on the main thread once the wait has passed. It must be started with `StartCoroutine(Respawn())`."
+  },
+  {
+    "id": 406,
+    "category": "Unity & C# Game Development",
+    "difficulty": "easy",
+    "question": "What is a Prefab in Unity?",
+    "options": [
+      "A compiled C# library that the game loads at startup.",
+      "A scene that is loaded on top of the current scene.",
+      "A reusable GameObject template stored as an asset, from which instances can be created.",
+      "A texture format optimized for mobile devices."
+    ],
+    "correctAnswer": 2,
+    "explanation": "A Prefab stores a GameObject with its components, values and children as an asset. You place or `Instantiate()` copies of it, and a change to the Prefab flows to all of its instances, which is how enemies, bullets and pickups are usually built."
+  },
+  {
+    "id": 407,
+    "category": "Unity & C# Game Development",
+    "difficulty": "medium",
+    "question": "Two 3D objects overlap in Unity but `OnTriggerEnter` is never called. Which setup is required for it to fire?",
+    "options": [
+      "Both need a Collider, at least one Collider must have Is Trigger enabled, and at least one object must have a Rigidbody.",
+      "Both objects must have the same tag and be on the same layer.",
+      "Both objects must have a Rigidbody with Is Kinematic disabled, and no Collider is needed.",
+      "The script must inherit from `ScriptableObject` instead of `MonoBehaviour`."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Trigger messages need two colliders, one of them marked Is Trigger, and a Rigidbody on at least one of the objects (it can be kinematic). Without a Rigidbody the physics engine treats both as static and reports nothing."
+  },
+  {
+    "id": 408,
+    "category": "Unity & C# Game Development",
+    "difficulty": "medium",
+    "question": "A shooter game spawns and destroys hundreds of bullets per minute and stutters on mobile. Which technique addresses this directly?",
+    "options": [
+      "Marking every bullet as `static`.",
+      "Moving the bullets with `LateUpdate()` instead of `Update()`.",
+      "Loading each bullet from the `Resources` folder when it is fired.",
+      "Object pooling: deactivate bullets and reuse them instead of calling `Instantiate()` and `Destroy()` each time."
+    ],
+    "correctAnswer": 3,
+    "explanation": "`Instantiate()` and `Destroy()` cost CPU time and leave garbage for the collector, which causes frame spikes. A pool creates the objects once, hands out inactive ones and takes them back with `SetActive(false)`. Unity also ships a ready-made `ObjectPool<T>` class."
+  },
+  {
+    "id": 409,
+    "category": "Unity & C# Game Development",
+    "difficulty": "medium",
+    "question": "What is a `ScriptableObject` mainly used for in Unity?",
+    "options": [
+      "Running game logic on a GameObject every frame.",
+      "Storing shared data as an asset, independent of any scene or GameObject.",
+      "Saving the player's progress to disk automatically.",
+      "Replacing the physics engine with custom code."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A `ScriptableObject` is a data container saved as an asset. Many objects can reference the same one (for example weapon stats or enemy settings) instead of each holding its own copy, which saves memory and lets designers tune values without touching scenes. It is not attached to a GameObject and has no `Update()`."
+  },
+  {
+    "id": 410,
+    "category": "Unity & C# Game Development",
+    "difficulty": "hard",
+    "question": "Why does this line fail to compile in a Unity C# script?",
+    "codeSnippet": "transform.position.x = 5f;",
+    "options": [
+      "`position` is read-only and can only be changed with `Translate()`.",
+      "`x` is an integer and cannot hold `5f`.",
+      "`Vector3` is a struct, so `transform.position` returns a copy and changing the copy would have no effect.",
+      "`transform` is null until `Start()` has finished."
+    ],
+    "correctAnswer": 2,
+    "explanation": "`position` is a property that returns a `Vector3` by value. Assigning to a field of that temporary copy is meaningless, so the compiler rejects it (error CS1612). Copy it to a variable, change `x`, and assign the whole vector back: `var p = transform.position; p.x = 5f; transform.position = p;`."
+  },
+  {
+    "id": 411,
+    "category": "Unity & C# Game Development",
+    "difficulty": "medium",
+    "question": "A player object has a non-kinematic `Rigidbody` and is moved with `transform.Translate()`. It sometimes passes through walls. What is the recommended fix?",
+    "options": [
+      "Move it through the Rigidbody, for example `rb.MovePosition()` or `rb.AddForce()` in `FixedUpdate()`.",
+      "Increase the scale of the walls in the Inspector.",
+      "Call `transform.Translate()` twice per frame.",
+      "Remove the Collider from the player."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Setting the transform directly teleports the object and bypasses the physics solver, so collisions can be missed. Moving through the Rigidbody lets the physics engine sweep and resolve collisions. For very fast objects, also set Collision Detection to Continuous."
+  },
+  {
+    "id": 412,
+    "category": "Unity & C# Game Development",
+    "difficulty": "easy",
+    "question": "What does the `[SerializeField]` attribute do on a private field in a Unity script?",
+    "codeSnippet": "[SerializeField] private float jumpForce = 5f;",
+    "options": [
+      "It makes the field public to all other scripts.",
+      "It encrypts the value in the built game.",
+      "It makes the field constant at runtime.",
+      "It shows the field in the Inspector and saves its value, while keeping it private in code."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Unity serializes public fields by default. `[SerializeField]` gives a private field the same treatment, so it can be tuned in the Inspector without exposing it to other classes, which keeps encapsulation intact."
+  },
+  {
+    "id": 413,
+    "category": "Unity & C# Game Development",
+    "difficulty": "medium",
+    "question": "Why is `other.CompareTag(\"Enemy\")` preferred over `other.tag == \"Enemy\"` in Unity?",
+    "options": [
+      "`CompareTag` ignores upper and lower case.",
+      "`other.tag` creates a new string on every call, which produces garbage; `CompareTag` does not allocate.",
+      "`other.tag` only works in the editor, not in builds.",
+      "`CompareTag` also compares the object's layer."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Reading the `tag` property copies the tag name from the engine into a new managed string each time. In code that runs often, such as collision callbacks, that adds garbage collector pressure. `CompareTag` does the comparison on the engine side without allocating."
+  },
+  {
+    "id": 414,
+    "category": "Unity & C# Game Development",
+    "difficulty": "hard",
+    "question": "In Unity, `target` refers to a GameObject that was destroyed with `Destroy()` in an earlier frame. What does this code do?",
+    "codeSnippet": "if (target != null) target.SetActive(false);\ntarget?.SetActive(false);",
+    "options": [
+      "Both lines safely do nothing.",
+      "Both lines throw an exception.",
+      "The first line safely does nothing; the second can throw, because `?.` skips Unity's overloaded null check.",
+      "The first line throws; the second safely does nothing."
+    ],
+    "correctAnswer": 2,
+    "explanation": "`UnityEngine.Object` overloads `==` and `!=` so that a destroyed object compares equal to `null`, even though the C# wrapper still exists. The `?.` and `??` operators check the real C# reference, see a non-null wrapper and call the method on a destroyed object, which throws `MissingReferenceException`."
+  },
+  {
+    "id": 415,
+    "category": "Unity & C# Game Development",
+    "difficulty": "medium",
+    "question": "A Unity game has an `AudioManager` object that must keep playing music when a new scene is loaded. Which call achieves this?",
+    "options": [
+      "`DontDestroyOnLoad(gameObject);`",
+      "`Destroy(gameObject);`",
+      "`gameObject.SetActive(true);`",
+      "`Application.Quit();`"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Loading a scene normally destroys every object of the previous one. `DontDestroyOnLoad` moves the object to a special scene that survives loads. It is usually combined with a singleton check in `Awake()` so that returning to the first scene does not create a second manager."
+  }
+]

@@ -13,6 +13,7 @@ import { initNavbar } from './components/navbar';
 import { initQuestionCard } from './components/questionCard';
 import { initQuestionMap } from './components/questionMap';
 import { initResultsScreen } from './components/resultsScreen';
+import { initRoadmapScreen } from './components/roadmapScreen';
 import { initTimer } from './components/timer';
 import { initToasts, toast } from './components/toast';
 import { initAuth } from './services/auth';
@@ -30,7 +31,7 @@ import { applyStaticTranslations, t } from './utils/i18n';
 import { state, store } from './utils/state';
 import { initTheme } from './utils/theme';
 
-const SCREENS: readonly Screen[] = ['home', 'quiz', 'results'];
+const SCREENS: readonly Screen[] = ['home', 'roadmap', 'quiz', 'results'];
 
 /** Router: exactly one <section class="screen"> is active at a time. */
 function initRouter(): void {
@@ -113,6 +114,7 @@ function main(): void {
   initQuestionMap();
   initTimer();
   initResultsScreen();
+  initRoadmapScreen();
   initRouter();
   initConstellation();
   initConnectivity();

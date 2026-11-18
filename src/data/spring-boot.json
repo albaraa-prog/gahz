@@ -1,0 +1,218 @@
+[
+  {
+    "id": 416,
+    "category": "Spring Boot",
+    "difficulty": "easy",
+    "question": "Which three annotations does `@SpringBootApplication` combine?",
+    "options": [
+      "`@Controller`, `@Service` and `@Repository`",
+      "`@Bean`, `@Autowired` and `@Qualifier`",
+      "`@SpringBootConfiguration`, `@EnableAutoConfiguration` and `@ComponentScan`",
+      "`@Entity`, `@Table` and `@Id`"
+    ],
+    "correctAnswer": 2,
+    "explanation": "`@SpringBootApplication` marks the class as a configuration class, turns on auto-configuration based on the libraries on the classpath, and scans the class's package and its sub-packages for components. That is why the main class normally sits in the root package."
+  },
+  {
+    "id": 417,
+    "category": "Spring Boot",
+    "difficulty": "easy",
+    "question": "Which style of dependency injection does the Spring team recommend for required dependencies?",
+    "codeSnippet": "@Service\npublic class OrderService {\n    private final PaymentClient payments;\n\n    public OrderService(PaymentClient payments) {\n        this.payments = payments;\n    }\n}",
+    "options": [
+      "Constructor injection, as shown, because dependencies can be `final` and the class is easy to test.",
+      "Field injection with `@Autowired`, because it needs less code.",
+      "Creating the dependency with `new` inside the class.",
+      "Looking the bean up from a static `ApplicationContext` holder."
+    ],
+    "correctAnswer": 0,
+    "explanation": "With constructor injection the object cannot exist without its dependencies, the fields can be `final`, and a test can pass a mock straight to the constructor. A class with a single constructor does not even need `@Autowired`."
+  },
+  {
+    "id": 418,
+    "category": "Spring Boot",
+    "difficulty": "easy",
+    "question": "What is the difference between `@Controller` and `@RestController` in Spring?",
+    "options": [
+      "`@RestController` can only handle GET requests.",
+      "`@Controller` is for Spring Boot and `@RestController` is for Spring MVC.",
+      "`@RestController` creates a new instance for every request.",
+      "`@RestController` adds `@ResponseBody`, so return values are written to the response body (usually as JSON) instead of being treated as view names."
+    ],
+    "correctAnswer": 3,
+    "explanation": "`@RestController` is `@Controller` plus `@ResponseBody`. A method in a plain `@Controller` that returns `\"home\"` renders the view called home; in a `@RestController` the same return value is sent as the response body, and objects are converted to JSON by Jackson."
+  },
+  {
+    "id": 419,
+    "category": "Spring Boot",
+    "difficulty": "medium",
+    "question": "What is the default scope of a Spring bean, and what does it imply?",
+    "options": [
+      "`prototype`: a new instance is created every time the bean is injected.",
+      "`singleton`: one shared instance per application context, so it should not keep per-request state in fields.",
+      "`request`: one instance per HTTP request.",
+      "`session`: one instance per logged-in user."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Beans are singletons unless declared otherwise. The same service or controller object handles all requests on many threads at once, so mutable fields holding data of one request are a concurrency bug."
+  },
+  {
+    "id": 420,
+    "category": "Spring Boot",
+    "difficulty": "hard",
+    "question": "In this Spring service, `importAll()` is called from a controller. Why does `saveOne()` not run in its own new transaction?",
+    "codeSnippet": "@Service\npublic class ImportService {\n    public void importAll(List<Row> rows) {\n        for (Row row : rows) saveOne(row);\n    }\n\n    @Transactional(propagation = Propagation.REQUIRES_NEW)\n    public void saveOne(Row row) { /* ... */ }\n}",
+    "options": [
+      "`REQUIRES_NEW` is only allowed on private methods.",
+      "`@Transactional` works only on repository interfaces.",
+      "The call is made on `this`, so it bypasses the Spring proxy that applies `@Transactional`.",
+      "Transactions cannot be started inside a loop."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Spring applies `@Transactional` through a proxy that wraps the bean. Only calls that come in through the proxy are intercepted. A call from one method to another in the same object goes straight to `this`, so the annotation on `saveOne()` is ignored. The usual fix is to move `saveOne()` to another bean."
+  },
+  {
+    "id": 421,
+    "category": "Spring Boot",
+    "difficulty": "medium",
+    "question": "By default, for which exceptions does a Spring `@Transactional` method roll back the transaction?",
+    "options": [
+      "Unchecked exceptions (`RuntimeException` and `Error`), but not checked exceptions.",
+      "Every exception, checked or unchecked.",
+      "Only `SQLException`.",
+      "None; rollback must always be called manually."
+    ],
+    "correctAnswer": 0,
+    "explanation": "The default rule rolls back on `RuntimeException` and `Error` and commits when a checked exception is thrown. To roll back on a checked exception as well, declare it: `@Transactional(rollbackFor = Exception.class)`."
+  },
+  {
+    "id": 422,
+    "category": "Spring Boot",
+    "difficulty": "medium",
+    "question": "A Spring Boot project has `application.properties` and `application-prod.properties`. The app starts with `spring.profiles.active=prod`. Which values are used?",
+    "options": [
+      "Only `application-prod.properties`; the base file is ignored.",
+      "Only `application.properties`; profile files are for tests.",
+      "The app fails to start because two files define properties.",
+      "Both are loaded, and values in `application-prod.properties` override the same keys in `application.properties`."
+    ],
+    "correctAnswer": 3,
+    "explanation": "The base file holds the common settings and each profile file holds only what differs. When a profile is active its file is loaded on top, so its keys win. This is how one build runs with different database URLs in development and production."
+  },
+  {
+    "id": 423,
+    "category": "Spring Boot",
+    "difficulty": "medium",
+    "question": "What does Spring Data JPA do with this repository method that has no implementation?",
+    "codeSnippet": "public interface UserRepository extends JpaRepository<User, Long> {\n    List<User> findByEmailAndActiveTrue(String email);\n}",
+    "options": [
+      "It fails to compile because interface methods need a body.",
+      "It derives the query from the method name: users whose `email` matches and whose `active` is true.",
+      "It returns every user and filters the list in memory.",
+      "It calls a stored procedure named `findByEmailAndActiveTrue`."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Spring Data parses the method name into a query (`findBy` + property + keyword) and generates the implementation at startup. If a property in the name does not exist on the entity, the application fails to start, which catches typos early. Complex queries use `@Query` instead."
+  },
+  {
+    "id": 424,
+    "category": "Spring Boot",
+    "difficulty": "hard",
+    "question": "An endpoint loads 100 `Order` entities and then reads `order.getCustomer().getName()` for each one. The log shows 101 SQL queries. What is this problem and a standard fix?",
+    "options": [
+      "A deadlock; fix it by adding `synchronized` to the method.",
+      "A connection leak; fix it by increasing the connection pool size.",
+      "The N+1 select problem; load the association in the same query with `JOIN FETCH` or `@EntityGraph`.",
+      "A missing index; fix it by adding `@Index` on the `id` column."
+    ],
+    "correctAnswer": 2,
+    "explanation": "One query loads the orders, then each lazy `customer` triggers its own query: 1 + N. A fetch join (`select o from Order o join fetch o.customer`) or an `@EntityGraph` loads both in one round trip. Switching the mapping to `EAGER` everywhere is not a real fix, because it loads the data even when it is not needed."
+  },
+  {
+    "id": 425,
+    "category": "Spring Boot",
+    "difficulty": "easy",
+    "question": "For the request `GET /products/42?currency=OMR`, how does this Spring method receive `42` and `OMR`?",
+    "codeSnippet": "@GetMapping(\"/products/{id}\")\npublic Product get(@PathVariable Long id, @RequestParam String currency) { /* ... */ }",
+    "options": [
+      "`@PathVariable` reads `42` from the URL path and `@RequestParam` reads `OMR` from the query string.",
+      "`@PathVariable` reads `OMR` from the query string and `@RequestParam` reads `42` from the path.",
+      "Both values are read from the request body.",
+      "Both values are read from HTTP headers."
+    ],
+    "correctAnswer": 0,
+    "explanation": "`@PathVariable` binds a `{placeholder}` segment of the path, which identifies the resource. `@RequestParam` binds a query string parameter (after the `?`), which is normally used for options such as filters, sorting and paging."
+  },
+  {
+    "id": 426,
+    "category": "Spring Boot",
+    "difficulty": "medium",
+    "question": "What do you get by adding the single dependency `spring-boot-starter-web` to a project?",
+    "options": [
+      "Only the Spring annotations; a web server must be installed separately.",
+      "A React front end generated from your controllers.",
+      "A database and an ORM configured for production.",
+      "Spring MVC, JSON support through Jackson and an embedded Tomcat server, with compatible versions chosen for you."
+    ],
+    "correctAnswer": 3,
+    "explanation": "A starter is a dependency that pulls in a tested set of libraries for one purpose. With the web starter the application runs as a plain JAR with `java -jar`, because Tomcat is embedded, and auto-configuration wires MVC and JSON conversion without XML."
+  },
+  {
+    "id": 427,
+    "category": "Spring Boot",
+    "difficulty": "medium",
+    "question": "How do you return the same JSON error format from every controller in a Spring Boot API when a `NotFoundException` is thrown?",
+    "options": [
+      "Wrap the body of every controller method in `try/catch`.",
+      "Write one class annotated with `@RestControllerAdvice` that has an `@ExceptionHandler(NotFoundException.class)` method.",
+      "Set `server.error.format=json` in `application.properties`.",
+      "Throw the exception from a `static` block."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`@RestControllerAdvice` applies to all controllers. Its `@ExceptionHandler` methods turn an exception into a response (status code and body) in one place, so controllers stay free of repeated error handling."
+  },
+  {
+    "id": 428,
+    "category": "Spring Boot",
+    "difficulty": "easy",
+    "question": "What does Spring Boot Actuator add to an application?",
+    "options": [
+      "A visual drag-and-drop editor for controllers.",
+      "Automatic translation of the API into other languages.",
+      "Production endpoints such as `/actuator/health` and metrics for monitoring the running application.",
+      "A replacement for the Java garbage collector."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Actuator exposes operational information over HTTP or JMX: health, metrics, environment, loggers and more. Load balancers and Kubernetes probes commonly call `/actuator/health`. Only a few endpoints are exposed over HTTP by default, and sensitive ones should be secured."
+  },
+  {
+    "id": 429,
+    "category": "Spring Boot",
+    "difficulty": "medium",
+    "question": "A client posts `{\"email\": \"\"}` to this Spring Boot endpoint. What happens?",
+    "codeSnippet": "public record SignupRequest(@NotBlank @Email String email) {}\n\n@PostMapping(\"/signup\")\npublic void signup(@Valid @RequestBody SignupRequest request) { /* ... */ }",
+    "options": [
+      "Validation fails before the method body runs and the client gets `400 Bad Request`.",
+      "The method runs with `email` set to `null`.",
+      "The application shuts down with a validation error.",
+      "The client gets `200 OK` and the error is only logged."
+    ],
+    "correctAnswer": 0,
+    "explanation": "`@Valid` makes Spring run Bean Validation on the deserialized body. A violation throws `MethodArgumentNotValidException`, which Spring maps to a 400 response, so the method never sees invalid input. This needs `spring-boot-starter-validation` on the classpath."
+  },
+  {
+    "id": 430,
+    "category": "Spring Boot",
+    "difficulty": "hard",
+    "question": "Two classes annotated with `@Component` implement the interface `Notifier`. What happens when Spring builds this service, and how is it fixed?",
+    "codeSnippet": "@Service\npublic class AlertService {\n    public AlertService(Notifier notifier) { /* ... */ }\n}",
+    "options": [
+      "Spring injects the implementation whose class name comes first alphabetically.",
+      "Spring injects both, one after the other.",
+      "Spring injects `null` and the service fails on first use.",
+      "Startup fails with `NoUniqueBeanDefinitionException`; mark one bean `@Primary` or choose one with `@Qualifier`."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Injection by type needs exactly one candidate. With two, Spring refuses to guess and the context fails to start. `@Primary` sets a default, `@Qualifier(\"name\")` picks one at the injection point, and injecting `List<Notifier>` receives all of them."
+  }
+]

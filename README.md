@@ -5,7 +5,7 @@
 [![Deploy](https://github.com/albaraa-prog/gahz/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/albaraa-prog/gahz/actions/workflows/firebase-hosting-merge.yml)
 
 Gahz (جاهز, Arabic for "ready") is an open-source practice platform for learning programming and getting
-ready for technical interviews. 320 multiple-choice questions across 28 topics, timed exams, a study mode with
+ready for technical interviews. 515 multiple-choice questions across 38 topics, timed exams, a study mode with
 instant explanations, an **English and Arabic interface**, and a dedicated **Oman & GCC enterprise interview
 track**. It was previously called DevQuiz Studio.
 
@@ -15,7 +15,7 @@ track**. It was previously called DevQuiz Studio.
 - **Timed exams** with a countdown, a question map, flag-for-review and an auto-submit when time runs out.
 - **Study mode**: see whether you were right, plus the explanation, as soon as you answer.
 - **Presets**: mixed exam, Oman Enterprise & Banking Tech, Senior Flutter & Fintech, APIs & Networking,
-  CS Fundamentals, Logic & IQ, and Arabic (right-to-left).
+  CS Fundamentals, Data Structures & Algorithms, SQL & Databases, Logic & IQ, and Arabic (right-to-left).
 - **Custom quiz builder**: pick the categories, question count and time limit.
 - **Results**: score, verdict, per-topic breakdown and a filterable review of every question.
 - **Practice my mistakes**: a quiz built from the questions you last answered wrong. A question leaves the

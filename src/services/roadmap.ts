@@ -45,6 +45,10 @@ export const ROADMAP_STEPS = {
   ai_fundamentals: ['AI Fundamentals'],
   llms: ['LLMs & Generative AI'],
   prompt_engineering: ['Prompt Engineering'],
+  csharp: ['C#'],
+  unity: ['Unity & C# Game Development'],
+  backend_frameworks: ['Spring Boot', '.NET & ASP.NET Core', 'Laravel & Modern PHP'],
+  networking_fundamentals: ['Networking Fundamentals'],
 } as const satisfies Record<string, readonly string[]>;
 
 export type StepId = keyof typeof ROADMAP_STEPS;
@@ -52,12 +56,17 @@ export type StepId = keyof typeof ROADMAP_STEPS;
 export const ROADMAP_PATHS = [
   { id: 'foundations', steps: ['basics', 'fundamentals', 'dsa', 'logic', 'systems'] },
   { id: 'web', steps: ['basics', 'javascript', 'fullstack', 'rest', 'apis', 'sql', 'databases'] },
-  { id: 'backend', steps: ['fundamentals', 'backend_language', 'sql', 'databases', 'plsql', 'rest', 'apis', 'networking'] },
+  {
+    id: 'backend',
+    steps: ['fundamentals', 'backend_language', 'backend_frameworks', 'sql', 'databases', 'plsql', 'rest', 'apis', 'networking'],
+  },
   {
     id: 'mobile',
     steps: ['flutter_basics', 'flutter_core', 'flutter_architecture', 'flutter_performance', 'fintech_security', 'apis'],
   },
   { id: 'ai', steps: ['ai_fundamentals', 'llms', 'prompt_engineering'] },
+  { id: 'game', steps: ['basics', 'csharp', 'unity', 'dsa', 'logic'] },
+  { id: 'networks', steps: ['networking_fundamentals', 'networking', 'rest', 'apis'] },
   {
     id: 'interview',
     steps: ['logic', 'dsa', 'systems', 'networking', 'enterprise_backend', 'enterprise_operations', 'enterprise_communication'],

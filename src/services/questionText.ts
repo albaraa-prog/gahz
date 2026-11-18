@@ -118,6 +118,7 @@ export function questionDirection(question: Question): 'rtl' | 'ltr' {
  * in the custom quiz settings) and translated only for display.
  */
 const ARABIC_CATEGORIES: Readonly<Record<string, string>> = {
+  '.NET & ASP.NET Core': '.NET و ASP.NET Core',
   'AI Fundamentals': 'أساسيات الذكاء الاصطناعي',
   'APIs & Data Integration (REST, GraphQL, WebSockets)': 'واجهات API وتكامل البيانات (REST وGraphQL وWebSockets)',
   'Arabic (الأساسيات والبرمجة)': 'الأساسيات والبرمجة',
@@ -134,8 +135,10 @@ const ARABIC_CATEGORIES: Readonly<Record<string, string>> = {
   'Fullstack Web Dev': 'تطوير الويب المتكامل',
   Fullstack: 'التطوير المتكامل (Fullstack)',
   'General Computer Science & Advanced Systems': 'علوم الحاسوب العامة والأنظمة المتقدمة',
+  'Laravel & Modern PHP': 'Laravel و PHP الحديثة',
   'LLMs & Generative AI': 'النماذج اللغوية الكبيرة والذكاء الاصطناعي التوليدي',
   'Logic & IQ': 'المنطق والذكاء',
+  'Networking Fundamentals': 'أساسيات الشبكات',
   'Oman Enterprise: Backend & ERP Integration': 'مؤسسات عُمان: الخوادم وتكامل ERP',
   'Oman Enterprise: Oracle & PostgreSQL': 'مؤسسات عُمان: Oracle وPostgreSQL',
   'Oman Enterprise: Incidents & Security Judgment': 'مؤسسات عُمان: الحوادث والحكم الأمني',
@@ -144,6 +147,7 @@ const ARABIC_CATEGORIES: Readonly<Record<string, string>> = {
   'Programming Basics': 'أساسيات البرمجة',
   'Prompt Engineering': 'هندسة الأوامر (Prompt Engineering)',
   'REST & SOAP': 'REST وSOAP',
+  'Unity & C# Game Development': 'تطوير الألعاب بـUnity و C#',
 };
 
 export function categoryLabel(category: string): string {

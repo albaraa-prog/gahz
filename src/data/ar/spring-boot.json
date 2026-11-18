@@ -1,0 +1,152 @@
+{
+  "416": {
+    "question": "ما السمات (annotations) الثلاث التي تجمعها `@SpringBootApplication`؟",
+    "options": [
+      "`@Controller` و`@Service` و`@Repository`",
+      "`@Bean` و`@Autowired` و`@Qualifier`",
+      "`@SpringBootConfiguration` و`@EnableAutoConfiguration` و`@ComponentScan`",
+      "`@Entity` و`@Table` و`@Id`"
+    ],
+    "explanation": "`@SpringBootApplication` تجعل الصنف صنف إعدادات، وتفعّل الإعداد التلقائي بحسب المكتبات الموجودة في الـclasspath، وتفحص حزمة الصنف وحزمها الفرعية بحثاً عن المكوّنات. ولهذا يوضع الصنف الرئيسي عادةً في الحزمة الجذرية."
+  },
+  "417": {
+    "question": "أي أسلوب لحقن الاعتماديات (dependency injection) يوصي به فريق Spring للاعتماديات الإلزامية؟",
+    "options": [
+      "الحقن عبر الـconstructor كما في المثال، لأن الاعتماديات تصبح `final` ويسهل اختبار الصنف.",
+      "الحقن في الحقول بـ`@Autowired` لأنه يحتاج إلى كود أقل.",
+      "إنشاء الاعتمادية بـ`new` داخل الصنف.",
+      "جلب الـbean من حامل `ApplicationContext` ثابت (static)."
+    ],
+    "explanation": "مع الحقن عبر الـconstructor لا يمكن أن يوجد الكائن من دون اعتمادياته، ويمكن جعل الحقول `final`، ويستطيع الاختبار تمرير mock مباشرة إلى الـconstructor. والصنف الذي يملك constructor واحداً لا يحتاج حتى إلى `@Autowired`."
+  },
+  "418": {
+    "question": "ما الفرق بين `@Controller` و`@RestController` في Spring؟",
+    "options": [
+      "`@RestController` تعالج طلبات GET فقط.",
+      "`@Controller` خاصة بـSpring Boot و`@RestController` خاصة بـSpring MVC.",
+      "`@RestController` تنشئ نسخة جديدة لكل طلب.",
+      "`@RestController` تضيف `@ResponseBody`، فتُكتب القيم المُعادة في جسم الاستجابة (غالباً JSON) بدلاً من اعتبارها أسماء صفحات عرض."
+    ],
+    "explanation": "`@RestController` هي `@Controller` مع `@ResponseBody`. الدالة في `@Controller` عادي التي تعيد `\"home\"` تعرض صفحة العرض المسماة home، أما في `@RestController` فتُرسل القيمة نفسها كجسم للاستجابة، وتحوّل Jackson الكائنات إلى JSON."
+  },
+  "419": {
+    "question": "ما النطاق (scope) الافتراضي للـbean في Spring، وماذا يترتب عليه؟",
+    "options": [
+      "`prototype`: تُنشأ نسخة جديدة في كل مرة يُحقن فيها الـbean.",
+      "`singleton`: نسخة واحدة مشتركة لكل application context، فلا ينبغي أن يحفظ في حقوله حالة خاصة بطلب معيّن.",
+      "`request`: نسخة واحدة لكل طلب HTTP.",
+      "`session`: نسخة واحدة لكل مستخدم مسجّل الدخول."
+    ],
+    "explanation": "الـbeans من نوع singleton ما لم يُصرَّح بغير ذلك. الكائن نفسه من الخدمة أو الـcontroller يعالج كل الطلبات على خيوط كثيرة في الوقت نفسه، لذلك فإن الحقول القابلة للتغيير التي تحمل بيانات طلب واحد خطأ تزامن."
+  },
+  "420": {
+    "question": "في خدمة Spring التالية تُستدعى `importAll()` من controller. لماذا لا تعمل `saveOne()` في معاملة (transaction) جديدة خاصة بها؟",
+    "options": [
+      "`REQUIRES_NEW` مسموحة على الدوال الخاصة (private) فقط.",
+      "`@Transactional` تعمل على واجهات الـrepository فقط.",
+      "الاستدعاء يتم على `this` فيتجاوز الـproxy الذي يطبّق به Spring `@Transactional`.",
+      "لا يمكن بدء المعاملات داخل حلقة."
+    ],
+    "explanation": "Spring يطبّق `@Transactional` عبر proxy يغلّف الـbean. تُعترض فقط الاستدعاءات القادمة عبر الـproxy. أما استدعاء دالة لأخرى داخل الكائن نفسه فيذهب مباشرة إلى `this`، فتُهمل السمة الموضوعة على `saveOne()`. والحل المعتاد نقل `saveOne()` إلى bean آخر."
+  },
+  "421": {
+    "question": "افتراضياً، عند أي استثناءات تتراجع (rollback) الدالة المعلَّمة بـ`@Transactional` في Spring عن المعاملة؟",
+    "options": [
+      "الاستثناءات غير المفحوصة (`RuntimeException` و`Error`) دون الاستثناءات المفحوصة (checked).",
+      "كل استثناء، مفحوصاً كان أو غير مفحوص.",
+      "`SQLException` فقط.",
+      "لا شيء، ويجب استدعاء التراجع يدوياً دائماً."
+    ],
+    "explanation": "القاعدة الافتراضية تتراجع عند `RuntimeException` و`Error` وتثبّت المعاملة (commit) إذا رُمي استثناء مفحوص. وللتراجع عند الاستثناء المفحوص أيضاً صرّح بذلك: `@Transactional(rollbackFor = Exception.class)`."
+  },
+  "422": {
+    "question": "مشروع Spring Boot يحتوي على `application.properties` و`application-prod.properties`، ويبدأ التطبيق مع `spring.profiles.active=prod`. أي القيم تُستخدم؟",
+    "options": [
+      "`application-prod.properties` فقط، ويُهمل الملف الأساسي.",
+      "`application.properties` فقط، فملفات الـprofile مخصصة للاختبارات.",
+      "يفشل التطبيق في البدء لأن ملفين يعرّفان خصائص.",
+      "يُحمَّل الملفان، وقيم `application-prod.properties` تتغلب على المفاتيح نفسها في `application.properties`."
+    ],
+    "explanation": "الملف الأساسي يحمل الإعدادات المشتركة وكل ملف profile يحمل ما يختلف فقط. عند تفعيل profile يُحمَّل ملفه فوق الأساسي فتتغلب مفاتيحه. وبهذا تعمل النسخة نفسها بعناوين قواعد بيانات مختلفة في التطوير والإنتاج."
+  },
+  "423": {
+    "question": "ماذا يفعل Spring Data JPA بدالة الـrepository التالية التي لا تملك تنفيذاً؟",
+    "options": [
+      "يفشل التصريف لأن دوال الواجهة تحتاج إلى جسم.",
+      "يشتق الاستعلام من اسم الدالة: المستخدمون الذين يطابق `email` لديهم القيمة المعطاة وقيمة `active` لديهم true.",
+      "يعيد جميع المستخدمين ثم يصفّي القائمة في الذاكرة.",
+      "يستدعي إجراءً مخزّناً اسمه `findByEmailAndActiveTrue`."
+    ],
+    "explanation": "Spring Data يحلّل اسم الدالة إلى استعلام (`findBy` ثم الخاصية ثم الكلمة المفتاحية) ويولّد التنفيذ عند بدء التشغيل. وإذا لم توجد خاصية مذكورة في الاسم داخل الـentity يفشل التطبيق في البدء، فتُكتشف الأخطاء الإملائية مبكراً. أما الاستعلامات المعقدة فتُكتب بـ`@Query`."
+  },
+  "424": {
+    "question": "نقطة نهاية تحمّل 100 كيان `Order` ثم تقرأ `order.getCustomer().getName()` لكل واحد، ويُظهر السجل 101 استعلام SQL. ما هذه المشكلة وما حلّها المعتاد؟",
+    "options": [
+      "هذا deadlock، وحلّه إضافة `synchronized` إلى الدالة.",
+      "هذا تسريب اتصالات، وحلّه زيادة حجم الـconnection pool.",
+      "هذه مشكلة N+1، وحلّها تحميل العلاقة في الاستعلام نفسه بـ`JOIN FETCH` أو `@EntityGraph`.",
+      "هذا فهرس مفقود، وحلّه إضافة `@Index` على العمود `id`."
+    ],
+    "explanation": "استعلام واحد يحمّل الطلبات، ثم كل `customer` محمَّل بتأخير (lazy) يطلق استعلامه الخاص: 1 + N. الـfetch join (`select o from Order o join fetch o.customer`) أو `@EntityGraph` يحمّلان الاثنين في رحلة واحدة. أما تحويل العلاقة إلى `EAGER` في كل مكان فليس حلاً حقيقياً لأنه يحمّل البيانات حتى عند عدم الحاجة إليها."
+  },
+  "425": {
+    "question": "في الطلب `GET /products/42?currency=OMR`، كيف تستقبل دالة Spring التالية القيمتين `42` و`OMR`؟",
+    "options": [
+      "`@PathVariable` تقرأ `42` من مسار الرابط و`@RequestParam` تقرأ `OMR` من سلسلة الاستعلام (query string).",
+      "`@PathVariable` تقرأ `OMR` من سلسلة الاستعلام و`@RequestParam` تقرأ `42` من المسار.",
+      "تُقرأ القيمتان من جسم الطلب.",
+      "تُقرأ القيمتان من ترويسات HTTP."
+    ],
+    "explanation": "`@PathVariable` تربط جزءاً من المسار على شكل `{placeholder}` وهو ما يحدد المورد. و`@RequestParam` تربط معاملاً من سلسلة الاستعلام (بعد `?`)، ويُستخدم عادةً لخيارات مثل التصفية والترتيب والتقسيم إلى صفحات."
+  },
+  "426": {
+    "question": "ما الذي تحصل عليه عند إضافة الاعتمادية الواحدة `spring-boot-starter-web` إلى المشروع؟",
+    "options": [
+      "سمات Spring فقط، ويجب تثبيت خادم ويب بشكل منفصل.",
+      "واجهة React تُولَّد من الـcontrollers.",
+      "قاعدة بيانات و ORM مهيآن للإنتاج.",
+      "Spring MVC ودعم JSON عبر Jackson وخادم Tomcat مضمَّن، مع اختيار إصدارات متوافقة تلقائياً."
+    ],
+    "explanation": "الـstarter اعتمادية تجلب مجموعة مكتبات مجرَّبة لغرض واحد. مع starter الويب يعمل التطبيق كملف JAR عادي بالأمر `java -jar` لأن Tomcat مضمَّن، ويتولى الإعداد التلقائي تجهيز MVC وتحويل JSON من دون XML."
+  },
+  "427": {
+    "question": "كيف تعيد صيغة خطأ JSON موحّدة من كل controller في واجهة Spring Boot عند رمي `NotFoundException`؟",
+    "options": [
+      "تغليف جسم كل دالة في كل controller بـ`try/catch`.",
+      "كتابة صنف واحد معلَّم بـ`@RestControllerAdvice` فيه دالة عليها `@ExceptionHandler(NotFoundException.class)`.",
+      "ضبط `server.error.format=json` في `application.properties`.",
+      "رمي الاستثناء من داخل كتلة `static`."
+    ],
+    "explanation": "`@RestControllerAdvice` تُطبَّق على جميع الـcontrollers. ودوال `@ExceptionHandler` فيها تحوّل الاستثناء إلى استجابة (رمز الحالة والجسم) في مكان واحد، فتبقى الـcontrollers خالية من معالجة الأخطاء المكررة."
+  },
+  "428": {
+    "question": "ماذا يضيف Spring Boot Actuator إلى التطبيق؟",
+    "options": [
+      "محرراً مرئياً بالسحب والإفلات للـcontrollers.",
+      "ترجمة تلقائية للواجهة البرمجية إلى لغات أخرى.",
+      "نقاط نهاية تشغيلية مثل `/actuator/health` ومقاييس لمراقبة التطبيق أثناء عمله.",
+      "بديلاً عن جامع القمامة في Java."
+    ],
+    "explanation": "Actuator يعرض معلومات تشغيلية عبر HTTP أو JMX: الحالة الصحية والمقاييس والبيئة والـloggers وغيرها. وتستدعي موازنات الحمل وفحوص Kubernetes عادةً `/actuator/health`. ولا يُعرض عبر HTTP افتراضياً إلا عدد قليل من النقاط، ويجب تأمين الحساس منها."
+  },
+  "429": {
+    "question": "عميل يرسل `{\"email\": \"\"}` إلى نقطة النهاية التالية في Spring Boot. ماذا يحدث؟",
+    "options": [
+      "يفشل التحقق قبل تنفيذ جسم الدالة ويحصل العميل على `400 Bad Request`.",
+      "تعمل الدالة وقيمة `email` تساوي `null`.",
+      "يتوقف التطبيق بخطأ تحقق.",
+      "يحصل العميل على `200 OK` ويُكتفى بتسجيل الخطأ."
+    ],
+    "explanation": "`@Valid` تجعل Spring يشغّل Bean Validation على الجسم بعد تحويله إلى كائن. أي مخالفة ترمي `MethodArgumentNotValidException` التي يحوّلها Spring إلى استجابة 400، فلا تصل المدخلات غير الصالحة إلى الدالة. ويتطلب ذلك وجود `spring-boot-starter-validation` في الـclasspath."
+  },
+  "430": {
+    "question": "صنفان معلَّمان بـ`@Component` ينفّذان الواجهة `Notifier`. ماذا يحدث عندما يبني Spring الخدمة التالية، وكيف يُحل ذلك؟",
+    "options": [
+      "يحقن Spring التنفيذ الذي يأتي اسم صنفه أولاً أبجدياً.",
+      "يحقن Spring الاثنين واحداً بعد الآخر.",
+      "يحقن Spring القيمة `null` وتفشل الخدمة عند أول استخدام.",
+      "يفشل بدء التشغيل بـ`NoUniqueBeanDefinitionException`، والحل تعليم أحد الـbeans بـ`@Primary` أو اختيار أحدهما بـ`@Qualifier`."
+    ],
+    "explanation": "الحقن بحسب النوع يحتاج إلى مرشح واحد بالضبط. عند وجود اثنين يرفض Spring التخمين ويفشل بدء الـcontext. `@Primary` تحدد الافتراضي، و`@Qualifier(\"name\")` تختار واحداً عند موضع الحقن، وحقن `List<Notifier>` يستقبلها جميعاً."
+  }
+}

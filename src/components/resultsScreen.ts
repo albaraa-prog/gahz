@@ -3,7 +3,8 @@
 import type { ReviewFilter, VerdictLevel } from '../types';
 import { categoryLabel, questionDirection, questionText } from '../services/questionText';
 import { mistakeQuestions } from '../services/mistakes';
-import { returnToHome, startMistakesQuiz } from '../services/quizEngine';
+import { openRoadmap, returnToHome, startMistakesQuiz } from '../services/quizEngine';
+import { findPath, parseRoadmapMode, pathForStep } from '../services/roadmap';
 import { byId, closestFrom, svgById } from '../utils/dom';
 import { escapeHtml, formatLine, formatRichText } from '../utils/helpers';
 import { t, type TranslationKey } from '../utils/i18n';
@@ -36,6 +37,8 @@ function renderSummary(animate: boolean): void {
   const practice = byId('practiceMistakesBtn');
   practice.hidden = mistakes === 0;
   practice.textContent = t('mistakes.again', { n: mistakes });
+
+  byId('continueRoadmapBtn').hidden = parseRoadmapMode(state.activeMode) === null;
 
   const verdict = VERDICTS[report.verdict];
   const badge = byId('scoreVerdictBadge');
@@ -160,6 +163,13 @@ const FILTERS: readonly ReviewFilter[] = ['all', 'correct', 'incorrect', 'flagge
 
 export function initResultsScreen(): void {
   byId('returnHomeBtn').addEventListener('click', returnToHome);
+  byId('continueRoadmapBtn').addEventListener('click', () => {
+    // Stay on the path the step was started from; after a resumed quiz, fall back to a path that has the step.
+    const step = parseRoadmapMode(state.activeMode);
+    const current = findPath(state.roadmapPath);
+    const onCurrent = step !== null && current !== undefined && (current.steps as readonly string[]).includes(step);
+    openRoadmap(onCurrent || step === null ? state.roadmapPath : pathForStep(step)?.id);
+  });
   byId('practiceMistakesBtn').addEventListener('click', () => startSafely(startMistakesQuiz));
 
   byId('reviewFilters').addEventListener('click', (event) => {

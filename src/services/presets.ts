@@ -91,6 +91,22 @@ export const PRESETS: readonly Preset[] = [
     card: {},
   },
   {
+    id: 'dsa',
+    modeLabel: 'Data Structures & Algorithms',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['Data Structures & Algorithms']),
+    card: {},
+  },
+  {
+    id: 'sql',
+    modeLabel: 'SQL & Databases',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['SQL', 'Databases']),
+    card: {},
+  },
+  {
     id: 'iq',
     modeLabel: 'Logic & IQ Drill',
     count: 15,

@@ -82,6 +82,13 @@ const en = {
   'preset.cs_basics.title': 'CS Fundamentals & Systems',
   'preset.cs_basics.desc':
     'Core foundations: algorithms, data structures (trees, graphs, hash tables), memory allocation, concurrency and OOP principles.',
+  'preset.dsa.title': 'Data Structures & Algorithms',
+  'preset.dsa.desc':
+    'The coding-interview core: Big-O analysis, arrays and hashing, stacks, heaps, trees, graphs, sorting, sliding window and dynamic programming.',
+  'preset.dsa.chip': 'Coding interviews',
+  'preset.sql.title': 'SQL & Databases',
+  'preset.sql.desc':
+    'Joins, grouping, NULL pitfalls, window functions, subqueries, indexes, normalization, transactions and isolation levels.',
   'preset.iq.title': 'Logic & IQ Drill',
   'preset.iq.desc': 'Test your problem-solving speed with 15 logical reasoning and puzzle questions.',
   'preset.arabic.title': 'الأسئلة باللغة العربية',
@@ -299,6 +306,13 @@ const ar: Record<TranslationKey, string> = {
   'preset.cs_basics.title': 'أساسيات علوم الحاسوب والأنظمة',
   'preset.cs_basics.desc':
     'الأسس الجوهرية: الخوارزميات، هياكل البيانات (الأشجار والرسوم البيانية وجداول التجزئة)، إدارة الذاكرة، التزامن ومبادئ البرمجة الكائنية.',
+  'preset.dsa.title': 'هياكل البيانات والخوارزميات',
+  'preset.dsa.desc':
+    'أساس مقابلات البرمجة: تحليل التعقيد Big-O، المصفوفات والتجزئة، المكدّسات، الكومات، الأشجار، الرسوم البيانية، الترتيب، النافذة المنزلقة والبرمجة الديناميكية.',
+  'preset.dsa.chip': 'مقابلات البرمجة',
+  'preset.sql.title': 'SQL وقواعد البيانات',
+  'preset.sql.desc':
+    'الربط بين الجداول، التجميع، مزالق NULL، دوال النوافذ، الاستعلامات الفرعية، الفهارس، التطبيع، المعاملات ومستويات العزل.',
   'preset.iq.title': 'تمرين المنطق والذكاء',
   'preset.iq.desc': 'اختبر سرعتك في حل المشكلات عبر 15 سؤالاً في الاستدلال المنطقي والألغاز.',
   'preset.arabic.title': 'الأسئلة باللغة العربية',

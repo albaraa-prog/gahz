@@ -1,6 +1,7 @@
 /** Custom quiz builder: question count, time limit and category checkboxes. */
 
 import type { CustomQuizConfig } from '../types';
+import { categoryLabel } from '../services/questionText';
 import { startCustomQuiz } from '../services/quizEngine';
 import { byId } from '../utils/dom';
 import { clamp, escapeHtml } from '../utils/helpers';
@@ -33,7 +34,7 @@ function render(): void {
       return `
         <label class="checkbox-container">
           <input type="checkbox" name="customCategory" value="${escapeHtml(category)}"${checked ? ' checked' : ''}>
-          <span>${escapeHtml(category)} (${counts.get(category) ?? 0})</span>
+          <span dir="auto">${escapeHtml(categoryLabel(category))} (${counts.get(category) ?? 0})</span>
         </label>`;
     })
     .join('');
@@ -83,7 +84,5 @@ export function initCustomConfig(): void {
   });
 
   render();
-  store.subscribe(render, ['categories', 'allQuestions', 'customConfig']);
-  // Category names are data and stay as written; they read left to right.
-  byId('categoryTogglesContainer').lang = 'en';
+  store.subscribe(render, ['categories', 'allQuestions', 'customConfig', 'locale']);
 }

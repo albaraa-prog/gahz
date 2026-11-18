@@ -25,6 +25,7 @@ const initialState: AppState = {
   reviewFilter: 'all',
 
   locale: 'en',
+  translationsReady: false,
   theme: 'dark',
   studyMode: true,
   customConfig: DEFAULT_CUSTOM_CONFIG,

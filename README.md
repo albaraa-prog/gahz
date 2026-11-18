@@ -18,11 +18,14 @@ track**. It was previously called DevQuiz Studio.
   CS Fundamentals, Logic & IQ, and Arabic (right-to-left).
 - **Custom quiz builder**: pick the categories, question count and time limit.
 - **Results**: score, verdict, per-topic breakdown and a filterable review of every question.
+- **Practice my mistakes**: a quiz built from the questions you last answered wrong. A question leaves the
+  list once you get it right.
 - **History and streaks**, saved in the browser. An unfinished quiz can be resumed after closing the tab.
 - **Optional cloud sync**: sign in with Email/Password or Google to back up history, settings and stats to
   Firestore and use them on other devices. Without sign-in the app is a fully working guest mode.
 - **English and Arabic interface** with full right-to-left layout. The language follows the browser on the
-  first visit and can be switched from the header.
+  first visit and can be switched from the header. Questions, options and explanations are shown in Arabic
+  too when the interface is in Arabic.
 - **Dark and light themes**.
 
 ## Tech stack
@@ -179,8 +182,27 @@ TypeScript refuses to build if a key is missing from the Arabic dictionary. Stat
 opts in with `data-i18n="key"`; components call `t('key')`. Layout uses CSS logical properties, so it mirrors
 automatically when `<html dir>` is `rtl`.
 
-Question content is not translated by the interface language: each question is shown in the language it was
-written in, with its own text direction. To add Arabic questions, add them to a bank like any other question.
+Question content is written in English in `src/data/<bank>.json` and translated in `src/data/ar/<bank>.json`,
+an object keyed by question id:
+
+```json
+{
+  "74": {
+    "question": "…",
+    "options": ["…", "…", "…", "…"],
+    "explanation": "…"
+  }
+}
+```
+
+- `options` are in the same order as the English bank. Keep code, identifiers and option values that are
+  pure code (`O(n log n)`, `true`) exactly as they are.
+- Code snippets, ids, categories and the correct answer are never repeated in the translation.
+- A question with no translation is shown in English, so a new English question never blocks a build.
+  `npm run validate:data` reports how many are still missing.
+- The Arabic files are downloaded only when the interface is switched to Arabic.
+
+Questions in the `arabic` bank are written in Arabic to begin with and are shown in Arabic in both languages.
 
 Browser storage keys still start with `devquiz-` (the original name) so existing users keep their history.
 

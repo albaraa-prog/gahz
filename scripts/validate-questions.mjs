@@ -1,7 +1,7 @@
 // Validates every question bank in src/data against the JSON schema and a few
 // cross-file rules the schema cannot express. Runs before every build and in CI.
 //   npm run validate:data
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import Ajv from 'ajv';
@@ -59,6 +59,63 @@ for (const file of files) {
   }
 }
 
+// Arabic translations: src/data/ar/<bank>.json maps a question id to its
+// translated question, options (same order as the English bank) and explanation.
+const arDir = join(dataDir, 'ar');
+const arFiles = existsSync(arDir) ? readdirSync(arDir).filter((f) => f.endsWith('.json')).sort() : [];
+const ARABIC = /[؀-ۿ]/;
+let translated = 0;
+
+for (const file of arFiles) {
+  const where = `ar/${file}`;
+  if (!files.includes(file)) {
+    errors.push(`${where}: no English bank with this name in src/data`);
+    continue;
+  }
+  let entries;
+  let bank;
+  try {
+    entries = JSON.parse(readFileSync(join(arDir, file), 'utf8'));
+    bank = JSON.parse(readFileSync(join(dataDir, file), 'utf8'));
+  } catch (err) {
+    errors.push(`${where}: invalid JSON (${err.message})`);
+    continue;
+  }
+  if (typeof entries !== 'object' || entries === null || Array.isArray(entries)) {
+    errors.push(`${where}: must be an object keyed by question id`);
+    continue;
+  }
+  const byId = new Map(Array.isArray(bank) ? bank.map((q) => [String(q.id), q]) : []);
+
+  for (const [id, entry] of Object.entries(entries)) {
+    const at = `${where} id ${id}`;
+    const original = byId.get(id);
+    if (!original) {
+      errors.push(`${at}: no question with this id in ${file}`);
+      continue;
+    }
+    const keys = Object.keys(entry ?? {}).sort().join(',');
+    if (keys !== 'explanation,options,question') {
+      errors.push(`${at}: must have exactly "question", "options" and "explanation"`);
+      continue;
+    }
+    if (typeof entry.question !== 'string' || !ARABIC.test(entry.question)) errors.push(`${at}: "question" must be Arabic text`);
+    if (typeof entry.explanation !== 'string' || !ARABIC.test(entry.explanation)) errors.push(`${at}: "explanation" must be Arabic text`);
+    const options = entry.options;
+    if (!Array.isArray(options) || options.length !== 4 || !options.every((o) => typeof o === 'string' && o.trim().length > 0)) {
+      errors.push(`${at}: "options" must be four non-empty strings, in the same order as the English bank`);
+    } else if (new Set(options.map((o) => o.trim())).size !== 4) {
+      errors.push(`${at}: options must be distinct`);
+    }
+    for (const field of ['question', 'explanation']) {
+      if (typeof entry[field] !== 'string') continue;
+      if (entry[field] !== entry[field].trim()) errors.push(`${at}: "${field}" has leading or trailing whitespace`);
+      if ((entry[field].split('`').length - 1) % 2 !== 0) errors.push(`${at}: "${field}" has an unclosed \` code mark`);
+    }
+    translated += 1;
+  }
+}
+
 if (errors.length > 0) {
   console.error(`\nQuestion bank validation failed with ${errors.length} problem(s):\n`);
   for (const e of errors) console.error(`  - ${e}`);
@@ -67,6 +124,13 @@ if (errors.length > 0) {
 }
 
 console.log(`Validated ${total} questions in ${files.length} banks across ${perCategory.size} categories.`);
+if (arFiles.length > 0) {
+  // Questions written in Arabic already (the "Arabic" bank) need no translation.
+  const needed = [...perCategory].filter(([category]) => !category.includes('Arabic')).reduce((sum, [, count]) => sum + count, 0);
+  const missing = needed - translated;
+  console.log(`Validated ${translated} Arabic translations in ${arFiles.length} files.`);
+  if (missing > 0) console.log(`Note: ${missing} question(s) have no Arabic translation yet and will be shown in English.`);
+}
 if (process.argv.includes('--verbose')) {
   for (const [category, count] of [...perCategory].sort()) console.log(`  ${String(count).padStart(3)}  ${category}`);
 }

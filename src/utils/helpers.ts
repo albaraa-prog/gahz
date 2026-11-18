@@ -49,6 +49,16 @@ export function containsArabic(text: string): boolean {
   return ARABIC.test(text);
 }
 
+/**
+ * Rich text for one line (an answer option) shown inside right-to-left
+ * content. A line with no Arabic in it, such as `O(n log n)` or `[1, 2]`,
+ * keeps its left-to-right order instead of being mirrored.
+ */
+export function formatLine(text: string, insideRtl: boolean): string {
+  const html = formatRichText(text);
+  return insideRtl ? `<span dir="${containsArabic(text) ? 'rtl' : 'ltr'}">${html}</span>` : html;
+}
+
 export function formatAttemptDate(timestamp: number): string {
   const d = new Date(timestamp);
   return `${d.toLocaleDateString()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;

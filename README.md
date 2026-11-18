@@ -5,7 +5,7 @@
 [![Deploy](https://github.com/albaraa-prog/gahz/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/albaraa-prog/gahz/actions/workflows/firebase-hosting-merge.yml)
 
 Gahz (جاهز, Arabic for "ready") is an open-source practice platform for learning programming and getting
-ready for technical interviews. 320 multiple-choice questions across 28 topics, timed exams, a study mode with
+ready for technical interviews. 370 multiple-choice questions across 31 topics, timed exams, a study mode with
 instant explanations, an **English and Arabic interface**, and a dedicated **Oman & GCC enterprise interview
 track**. It was previously called DevQuiz Studio.
 

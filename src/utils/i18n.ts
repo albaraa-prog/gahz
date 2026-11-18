@@ -54,7 +54,7 @@ const en = {
   'home.headline': 'Be ready before you walk in.',
   'home.loading': 'Loading the question bank…',
   'home.lead':
-    '{count} questions across {topics} topics: Flutter and fintech, APIs and networking, databases, CS fundamentals, logic, Arabic, and an Oman and GCC enterprise track. Timed, randomized every session, with an explanation for every answer.',
+    '{count} questions across {topics} topics: Flutter and fintech, APIs and networking, databases, CS fundamentals, AI and prompt engineering, logic, Arabic, and an Oman and GCC enterprise track. Timed, randomized every session, with an explanation for every answer.',
   'home.studyLabel': 'Study mode.',
   'home.studyText': 'Show whether you were right, and why, as soon as you answer.',
   'home.start': 'Start mixed exam · 25 min',
@@ -82,6 +82,14 @@ const en = {
   'preset.cs_basics.title': 'CS Fundamentals & Systems',
   'preset.cs_basics.desc':
     'Core foundations: algorithms, data structures (trees, graphs, hash tables), memory allocation, concurrency and OOP principles.',
+  'preset.ai.title': 'AI & LLM Fundamentals',
+  'preset.ai.desc':
+    'Machine learning basics (training, overfitting, precision and recall) and how large language models work: tokens, context windows, hallucinations, RAG, tool use, cost and security.',
+  'preset.ai.chip': 'New track',
+  'preset.prompt_engineering.title': 'Prompt Engineering',
+  'preset.prompt_engineering.desc':
+    'Write prompts that work: clear instructions, examples, roles, delimiters, structured output, grounding answers in sources, testing prompts and defending against prompt injection.',
+  'preset.prompt_engineering.chip': 'New track',
   'preset.iq.title': 'Logic & IQ Drill',
   'preset.iq.desc': 'Test your problem-solving speed with 15 logical reasoning and puzzle questions.',
   'preset.arabic.title': 'الأسئلة باللغة العربية',
@@ -272,7 +280,7 @@ const ar: Record<TranslationKey, string> = {
   'home.headline': 'كن جاهزاً قبل أن تدخل المقابلة.',
   'home.loading': 'جارٍ تحميل بنك الأسئلة…',
   'home.lead':
-    '{count} سؤالاً في {topics} موضوعاً: Flutter والتقنية المالية، واجهات البرمجة والشبكات، قواعد البيانات، أساسيات علوم الحاسوب، المنطق، أسئلة بالعربية، ومسار خاص بمؤسسات عُمان والخليج. اختبارات مؤقتة وعشوائية في كل مرة، مع شرح لكل إجابة.',
+    '{count} سؤالاً في {topics} موضوعاً: Flutter والتقنية المالية، واجهات البرمجة والشبكات، قواعد البيانات، أساسيات علوم الحاسوب، الذكاء الاصطناعي وهندسة الأوامر، المنطق، أسئلة بالعربية، ومسار خاص بمؤسسات عُمان والخليج. اختبارات مؤقتة وعشوائية في كل مرة، مع شرح لكل إجابة.',
   'home.studyLabel': 'وضع الدراسة.',
   'home.studyText': 'اعرف إن كانت إجابتك صحيحة، ولماذا، فور اختيارها.',
   'home.start': 'ابدأ اختباراً منوّعاً · 25 دقيقة',
@@ -299,6 +307,14 @@ const ar: Record<TranslationKey, string> = {
   'preset.cs_basics.title': 'أساسيات علوم الحاسوب والأنظمة',
   'preset.cs_basics.desc':
     'الأسس الجوهرية: الخوارزميات، هياكل البيانات (الأشجار والرسوم البيانية وجداول التجزئة)، إدارة الذاكرة، التزامن ومبادئ البرمجة الكائنية.',
+  'preset.ai.title': 'أساسيات الذكاء الاصطناعي والنماذج اللغوية',
+  'preset.ai.desc':
+    'أساسيات تعلّم الآلة (التدريب، فرط التخصيص، الـ precision والـ recall) وكيف تعمل النماذج اللغوية الكبيرة: الـ tokens، نافذة السياق، الهلوسة، RAG، استخدام الأدوات، التكلفة والأمان.',
+  'preset.ai.chip': 'مسار جديد',
+  'preset.prompt_engineering.title': 'هندسة الأوامر (Prompt Engineering)',
+  'preset.prompt_engineering.desc':
+    'اكتب prompts تؤدي الغرض: تعليمات واضحة، أمثلة، أدوار، محدِّدات، مخرجات منظَّمة، إسناد الإجابات إلى المصادر، اختبار الـ prompts والحماية من حقن الأوامر.',
+  'preset.prompt_engineering.chip': 'مسار جديد',
   'preset.iq.title': 'تمرين المنطق والذكاء',
   'preset.iq.desc': 'اختبر سرعتك في حل المشكلات عبر 15 سؤالاً في الاستدلال المنطقي والألغاز.',
   'preset.arabic.title': 'الأسئلة باللغة العربية',

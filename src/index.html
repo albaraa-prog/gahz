@@ -89,6 +89,11 @@
                 </div>
             </div>
 
+            <!-- Interactive lessons: one card per lesson, see components/lessonScreen.ts -->
+            <h3 class="section-title" data-i18n="lesson.title">Learn by doing</h3>
+            <p class="section-intro" data-i18n="lesson.intro">Short lessons where you do the work.</p>
+            <div class="quiz-modes" id="lessonCards"></div>
+
             <!-- Learning roadmap: one card per path, see components/roadmapScreen.ts -->
             <h3 class="section-title" data-i18n="roadmap.title">Learning roadmap</h3>
             <p class="section-intro" data-i18n="roadmap.intro">Pick a path and follow it step by step.</p>
@@ -123,6 +128,12 @@
                     </table>
                 </div>
             </div>
+        </section>
+
+        <!-- ================= LESSON SCREEN ================= -->
+        <section id="lessonScreen" class="screen">
+            <button class="link-btn roadmap-back" type="button" id="lessonBackBtn" data-i18n="roadmap.back">Back to home</button>
+            <div class="lesson" id="lessonBody"></div>
         </section>
 
         <!-- ================= ROADMAP SCREEN ================= -->

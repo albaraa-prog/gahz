@@ -44,6 +44,24 @@ Options are shuffled every time a quiz starts, so the position of the correct an
 all four options about the same length and level of detail: when the right answer is the only long, specific
 one, it can be picked without knowing the topic. An option such as "None of these" stays where you put it.
 
+## Adding an interactive lesson
+
+Lessons are short, hands-on walkthroughs ("Learn by doing" on the home screen). Each one is a TypeScript file in
+`src/lessons/` that exports a `Lesson`; the shapes are documented in `src/lessons/types.ts`.
+
+1. Copy an existing lesson, give it a new kebab-case `id`, and add it to the list in `src/lessons/index.ts`.
+2. Write every piece of prose in both languages (`{ en: '…', ar: '…' }`). Code and program output are written once.
+3. Start with an `explain` step, then mix the exercise kinds:
+   - `choice`: pick one option, for example "what does this print?"
+   - `blank`: fill the `___` gaps in a code template from a bank of tokens
+   - `order`: put shuffled lines back in order (make sure only one order is correct)
+   - `code`: write JavaScript that runs in the browser and must pass `tests`
+4. Give every exercise a `hint` that nudges without giving the answer away and an `explain` that says why.
+5. List the roadmap steps the lesson belongs to in `roadmapSteps`; it is then offered on those steps.
+6. Run `npm test`. It checks both languages and runs each code exercise's `solution` against its `tests`.
+
+Code exercises are JavaScript only for now. For other languages use `choice`, `blank` and `order`.
+
 ## Adding a preset
 
 Presets are defined in `src/services/presets.ts`. Add an entry with an `id`, a `modeLabel`, the number of

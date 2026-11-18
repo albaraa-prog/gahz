@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gahz code runner</title>
+</head>
+<body>
+<!--
+  Runs the code a learner types in a lesson. See src/services/codeRunner.ts.
+
+  The app loads this page in a hidden, sandboxed iframe (sandbox="allow-scripts"),
+  so the code gets its own throwaway origin: it cannot read the app's storage,
+  the signed-in session or the page around it, and this page's own
+  Content-Security-Policy (firebase.json) blocks all network access. The code
+  itself runs in a worker, so an endless loop cannot freeze the app; the worker
+  is stopped after a few seconds.
+
+  The policy in firebase.json allows this exact inline script by its hash.
+  After editing the script, run `npm test`: the lessons test prints the new hash.
+-->
+<script>(function () {
+  'use strict';
+
+  var TIMEOUT_MS = 3000;
+
+  function workerMain() {
+    var MAX_LOGS = 200;
+    var MAX_TEXT = 2000;
+
+    function format(value, depth) {
+      depth = depth || 0;
+      if (typeof value === 'string') return depth === 0 ? value : JSON.stringify(value);
+      if (typeof value === 'function') return '[Function ' + (value.name || 'anonymous') + ']';
+      if (typeof value === 'bigint') return String(value) + 'n';
+      if (value === null || typeof value !== 'object') return String(value);
+      if (value instanceof Error) return String(value);
+      if (depth > 3) return Array.isArray(value) ? '[…]' : '{…}';
+      if (Array.isArray(value)) {
+        return '[' + value.map(function (item) { return format(item, depth + 1); }).join(', ') + ']';
+      }
+      if (value instanceof Set) return 'Set ' + format(Array.from(value), depth).replace(/^\[/, '{').replace(/\]$/, '}');
+      if (value instanceof Map) return 'Map ' + format(Object.fromEntries(value), depth);
+      var keys = Object.keys(value);
+      if (keys.length === 0) return '{}';
+      return '{ ' + keys.map(function (key) { return key + ': ' + format(value[key], depth + 1); }).join(', ') + ' }';
+    }
+
+    function toJson(value) {
+      try {
+        var json = JSON.stringify(value);
+        return json === undefined ? 'undefined' : json;
+      } catch (error) {
+        return 'unserializable';
+      }
+    }
+
+    function clip(text) {
+      return text.length > MAX_TEXT ? text.slice(0, MAX_TEXT) + '…' : text;
+    }
+
+    self.onmessage = function (event) {
+      var logs = [];
+      var checking = false;
+      var write = function (level) {
+        return function () {
+          // Only the learner's own run is shown, not what the checks print when they call the code again.
+          if (checking || logs.length >= MAX_LOGS) return;
+          var parts = Array.prototype.map.call(arguments, function (item) { return format(item); });
+          logs.push({ level: level, text: clip(parts.join(' ')) });
+        };
+      };
+      var fakeConsole = { log: write('log'), info: write('log'), debug: write('log'), warn: write('warn'), error: write('error') };
+      var results = [];
+      var failure = null;
+      try {
+        var thunks = event.data.calls.map(function (call) { return 'function () { return (' + call + '\n); }'; });
+        var body = '"use strict";\n' + event.data.code + '\n;return [' + thunks.join(',') + '];';
+        var run = new Function('console', body)(fakeConsole);
+        checking = true;
+        run.forEach(function (thunk) {
+          try {
+            var value = thunk();
+            results.push({ ok: true, json: toJson(value), text: clip(format(value, 1)) });
+          } catch (error) {
+            results.push({ ok: false, error: String(error) });
+          }
+        });
+      } catch (error) {
+        failure = String(error);
+      }
+      self.postMessage({ logs: logs, results: results, error: failure });
+    };
+  }
+
+  var workerUrl = URL.createObjectURL(new Blob(['(' + workerMain.toString() + ')()'], { type: 'text/javascript' }));
+
+  window.addEventListener('message', function (event) {
+    if (event.source !== window.parent) return;
+    var request = event.data;
+    if (!request || request.type !== 'gahz-run' || typeof request.code !== 'string' || !Array.isArray(request.calls)) return;
+
+    var reply = function (payload) {
+      payload.type = 'gahz-result';
+      payload.id = request.id;
+      // The sandbox gives this page an opaque origin, so there is no origin to name. The reply holds only run output.
+      window.parent.postMessage(payload, '*');
+    };
+
+    var worker;
+    try {
+      worker = new Worker(workerUrl);
+    } catch (error) {
+      reply({ logs: [], results: [], error: String(error), timedOut: false });
+      return;
+    }
+    var timer = setTimeout(function () {
+      worker.terminate();
+      reply({ logs: [], results: [], error: null, timedOut: true });
+    }, TIMEOUT_MS);
+    worker.onmessage = function (message) {
+      clearTimeout(timer);
+      worker.terminate();
+      reply({ logs: message.data.logs, results: message.data.results, error: message.data.error, timedOut: false });
+    };
+    worker.onerror = function (error) {
+      clearTimeout(timer);
+      worker.terminate();
+      reply({ logs: [], results: [], error: String(error.message || 'Error'), timedOut: false });
+    };
+    worker.postMessage({ code: request.code, calls: request.calls });
+  });
+
+  window.parent.postMessage({ type: 'gahz-runner-ready' }, '*');
+})();</script>
+</body>
+</html>

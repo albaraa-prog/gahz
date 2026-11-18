@@ -1,0 +1,213 @@
+[
+  {
+    "id": 1001,
+    "category": "AI Fundamentals",
+    "difficulty": "easy",
+    "question": "How do artificial intelligence (AI), machine learning (ML) and deep learning (DL) relate to each other?",
+    "options": [
+      "They are three unrelated fields that only share a name",
+      "Deep learning is a part of machine learning, and machine learning is a part of AI",
+      "AI is a part of deep learning, which is a part of machine learning",
+      "Machine learning and deep learning are two names for the same thing"
+    ],
+    "correctAnswer": 1,
+    "explanation": "AI is the broad goal of making machines do tasks that need intelligence. Machine learning is one way to reach it: learning patterns from data instead of following hand-written rules. Deep learning is the part of machine learning that uses neural networks with many layers."
+  },
+  {
+    "id": 1002,
+    "category": "AI Fundamentals",
+    "difficulty": "easy",
+    "question": "What makes a machine learning task \"supervised\"?",
+    "options": [
+      "A human watches the model while it trains",
+      "The model is trained on a GPU",
+      "The training data includes the correct answer (label) for each example",
+      "The model is checked by a second model after training"
+    ],
+    "correctAnswer": 2,
+    "explanation": "In supervised learning every training example comes with its label, such as an email marked \"spam\" or \"not spam\", and the model learns to predict the label. In unsupervised learning there are no labels, and the model looks for structure such as groups of similar items."
+  },
+  {
+    "id": 1003,
+    "category": "AI Fundamentals",
+    "difficulty": "easy",
+    "question": "A model predicts the selling price of a house from its size and location. What kind of problem is this?",
+    "options": [
+      "Regression",
+      "Classification",
+      "Clustering",
+      "Reinforcement learning"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Regression predicts a number on a continuous scale, such as a price or a temperature. Classification predicts one of a fixed set of categories, such as \"spam\" or \"not spam\". Clustering groups unlabeled data, and reinforcement learning learns from rewards."
+  },
+  {
+    "id": 1004,
+    "category": "AI Fundamentals",
+    "difficulty": "easy",
+    "question": "A model scores 99% on its training data but only 70% on new data it has never seen. What is the most likely problem?",
+    "options": [
+      "Underfitting: the model is too simple to learn the pattern",
+      "The new data was labeled incorrectly",
+      "The learning rate was too low",
+      "Overfitting: the model memorized the training data instead of learning the general pattern"
+    ],
+    "correctAnswer": 3,
+    "explanation": "A large gap between training and test performance is the classic sign of overfitting. The model has learned details and noise that are specific to the training examples, so it does not generalize. More data, a simpler model or regularization usually help."
+  },
+  {
+    "id": 1005,
+    "category": "AI Fundamentals",
+    "difficulty": "easy",
+    "question": "In a spam filter trained on past emails, what is the \"label\"?",
+    "options": [
+      "The words that appear in the email",
+      "Whether each email is spam or not spam",
+      "The name of the algorithm used for training",
+      "The number of emails in the dataset"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The label is the answer the model learns to predict, here \"spam\" or \"not spam\". The inputs used to make the prediction, such as the words in the email or the sender, are called features."
+  },
+  {
+    "id": 1006,
+    "category": "AI Fundamentals",
+    "difficulty": "medium",
+    "question": "Why is a test set kept separate and used only once training and tuning are finished?",
+    "options": [
+      "To make training faster by using less data",
+      "Because test data is always of lower quality",
+      "To get an honest estimate of how the model performs on data it has never seen",
+      "Because models cannot be trained on more than 80% of a dataset"
+    ],
+    "correctAnswer": 2,
+    "explanation": "If you make decisions based on the test set, such as picking the best settings, the model indirectly \"sees\" it and the score becomes too optimistic. That is why tuning is done on a separate validation set, and the test set is touched only at the end."
+  },
+  {
+    "id": 1007,
+    "category": "AI Fundamentals",
+    "difficulty": "medium",
+    "question": "A bank builds a model to flag fraudulent transactions. Missing a real fraud is far more costly than checking a legitimate transaction by mistake. Which metric matters most?",
+    "options": [
+      "Recall",
+      "Precision",
+      "Training accuracy",
+      "Model size"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Recall is the share of real fraud cases the model catches. When a missed case (a false negative) is the expensive mistake, you optimize recall. Precision is the share of flagged transactions that really are fraud, and matters most when false alarms are the expensive mistake."
+  },
+  {
+    "id": 1008,
+    "category": "AI Fundamentals",
+    "difficulty": "medium",
+    "question": "Only 1% of transactions in a dataset are fraud. A model that always answers \"not fraud\" reaches 99% accuracy. What does this show?",
+    "options": [
+      "The model is excellent and ready for production",
+      "Accuracy is always the best metric for classification",
+      "The dataset is too small to train on",
+      "Accuracy can be misleading when classes are imbalanced"
+    ],
+    "correctAnswer": 3,
+    "explanation": "The model catches zero fraud cases, yet its accuracy looks great because almost every example belongs to the majority class. With imbalanced data, look at precision, recall and the confusion matrix instead of accuracy alone."
+  },
+  {
+    "id": 1009,
+    "category": "AI Fundamentals",
+    "difficulty": "medium",
+    "question": "During training with gradient descent, the loss jumps up and down and never settles. Which cause is the most likely?",
+    "options": [
+      "The learning rate is too low",
+      "The learning rate is too high",
+      "The dataset has too many examples",
+      "The model has too few parameters"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Gradient descent moves the weights a step in the direction that reduces the loss, and the learning rate sets the step size. Steps that are too large overshoot the minimum, so the loss bounces or even grows. A rate that is too low gives the opposite symptom: stable but very slow progress."
+  },
+  {
+    "id": 1010,
+    "category": "AI Fundamentals",
+    "difficulty": "medium",
+    "question": "A model performs poorly on the training data and just as poorly on the test data. What is this called, and what usually helps?",
+    "options": [
+      "Underfitting: use a more capable model or better features",
+      "Overfitting: collect less data",
+      "Data leakage: remove the test set",
+      "Overfitting: add more regularization"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Poor results on both sets mean the model has not captured the pattern at all, which is underfitting (high bias). A more expressive model, more informative features or longer training help. Adding regularization would make underfitting worse."
+  },
+  {
+    "id": 1011,
+    "category": "AI Fundamentals",
+    "difficulty": "hard",
+    "question": "A model that predicts whether a patient has a disease scores almost perfectly in testing, then fails in the hospital. One training column was \"treatment prescribed\", filled in after diagnosis. What went wrong?",
+    "options": [
+      "The model was underfitting",
+      "The learning rate was too high",
+      "Data leakage: the model used information that is not available at prediction time",
+      "The test set was too large"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A treatment is prescribed only after the diagnosis is known, so that column gives away the answer. In real use the column is empty when the prediction is needed. Leakage produces test scores that look too good to be true; every feature should be checked for whether it exists at the moment of prediction."
+  },
+  {
+    "id": 1012,
+    "category": "AI Fundamentals",
+    "difficulty": "medium",
+    "question": "Why do neural networks apply a non-linear activation function (such as ReLU) between layers?",
+    "options": [
+      "To make the network use less memory",
+      "To convert the outputs into probabilities that add up to 1",
+      "To make sure all weights stay positive",
+      "Without it, any number of layers would behave like a single linear layer"
+    ],
+    "correctAnswer": 3,
+    "explanation": "A stack of linear layers is still one linear transformation, so it can only learn straight-line relationships. The non-linearity between layers is what lets a deep network learn complex patterns. Turning outputs into probabilities is the job of softmax at the output, not of ReLU."
+  },
+  {
+    "id": 1013,
+    "category": "AI Fundamentals",
+    "difficulty": "medium",
+    "question": "What is an \"embedding\" in machine learning?",
+    "options": [
+      "A compressed backup copy of the training data",
+      "A list of numbers (a vector) that represents an item so that similar items end up close together",
+      "A model placed inside a mobile application",
+      "A rule written by hand to classify text"
+    ],
+    "correctAnswer": 1,
+    "explanation": "An embedding turns text, an image or another item into a vector. Items with similar meaning get vectors that are close to each other, which is what makes semantic search and recommendations work: you compare vectors instead of exact words."
+  },
+  {
+    "id": 1014,
+    "category": "AI Fundamentals",
+    "difficulty": "easy",
+    "question": "A program learns to play a game by trying moves and receiving points for good outcomes and penalties for bad ones. Which type of learning is this?",
+    "options": [
+      "Reinforcement learning",
+      "Supervised learning",
+      "Unsupervised learning",
+      "Transfer learning"
+    ],
+    "correctAnswer": 0,
+    "explanation": "In reinforcement learning an agent acts in an environment and learns from rewards and penalties which actions lead to the best long-term result. There are no labeled examples telling it the right move in advance."
+  },
+  {
+    "id": 1015,
+    "category": "AI Fundamentals",
+    "difficulty": "hard",
+    "question": "Using the counts below for a disease classifier, what is its precision?",
+    "codeSnippet": "True positives  (TP) = 40\nFalse positives (FP) = 10\nFalse negatives (FN) = 20\nTrue negatives  (TN) = 930",
+    "options": [
+      "0.67",
+      "0.57",
+      "0.80",
+      "0.90"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Precision = TP / (TP + FP) = 40 / (40 + 10) = 0.80: of everything the model flagged as positive, 80% really was. Recall would be TP / (TP + FN) = 40 / 60 = 0.67, which is the trap answer."
+  }
+]

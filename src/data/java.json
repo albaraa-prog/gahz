@@ -143,5 +143,78 @@
     ],
     "correctAnswer": 1,
     "explanation": "First, static initializers run when the class is loaded. Then, instance initializers run when the object is instantiated, and finally, the constructor body executes."
+  },
+  {
+    "id": 371,
+    "category": "Java",
+    "difficulty": "hard",
+    "question": "What does this Java code print, given how `Integer` values are autoboxed?",
+    "codeSnippet": "Integer a = 127, b = 127;\nInteger c = 128, d = 128;\nSystem.out.println((a == b) + \" \" + (c == d));",
+    "options": [
+      "true true",
+      "true false",
+      "false false",
+      "false true"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`==` on `Integer` objects compares references. Autoboxing reuses cached objects for values from -128 to 127, so `a` and `b` are the same object. 128 is outside the cache, so `c` and `d` are different objects. Compare wrapper values with `equals()`."
+  },
+  {
+    "id": 372,
+    "category": "Java",
+    "difficulty": "easy",
+    "question": "Which operation is faster on an `ArrayList` than on a `LinkedList` in Java?",
+    "options": [
+      "Reading the element at a given index with `get(i)`",
+      "Removing the first element",
+      "Inserting at the head of the list",
+      "Removing an element through an iterator that is already positioned on it"
+    ],
+    "correctAnswer": 0,
+    "explanation": "An `ArrayList` is backed by an array, so `get(i)` is O(1). A `LinkedList` has to walk node by node to reach index i, which is O(n). Linked lists are better only for inserting and removing at the ends or at an iterator's position."
+  },
+  {
+    "id": 373,
+    "category": "Java",
+    "difficulty": "easy",
+    "question": "What does this Java code print?",
+    "codeSnippet": "String s = \"a\";\ns.concat(\"b\");\nSystem.out.println(s);",
+    "options": [
+      "a",
+      "ab",
+      "b",
+      "It does not compile"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Strings are immutable in Java. `concat` returns a new string and leaves the original unchanged, and here the result is thrown away. Writing `s = s.concat(\"b\");` would print `ab`."
+  },
+  {
+    "id": 374,
+    "category": "Java",
+    "difficulty": "medium",
+    "question": "What does calling `f()` return?",
+    "codeSnippet": "static int f() {\n    try {\n        return 1;\n    } finally {\n        return 2;\n    }\n}",
+    "options": [
+      "1",
+      "2",
+      "It throws an exception at run time",
+      "It does not compile"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The `finally` block always runs before the method actually returns. A `return` inside `finally` replaces the value that the `try` block was about to return, and would also swallow any exception. That is why returning from `finally` is considered bad practice."
+  },
+  {
+    "id": 375,
+    "category": "Java",
+    "difficulty": "easy",
+    "question": "Which statement about classes and interfaces in Java is correct?",
+    "options": [
+      "A class can extend several classes but implement only one interface",
+      "A class can extend only one class but can implement several interfaces",
+      "A class cannot extend a class and implement an interface at the same time",
+      "An interface can be instantiated directly with `new`"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Java allows single inheritance of classes, which avoids the diamond problem for state, and multiple inheritance of interfaces. For example: `class Car extends Vehicle implements Serializable, Comparable<Car>`."
   }
 ]

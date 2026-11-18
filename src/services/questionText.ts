@@ -123,6 +123,7 @@ const ARABIC_CATEGORIES: Readonly<Record<string, string>> = {
   'Computer Networking & Protocols': 'شبكات الحاسوب والبروتوكولات',
   'CS & Networks': 'علوم الحاسوب والشبكات',
   'CS & Programming Fundamentals': 'أساسيات علوم الحاسوب والبرمجة',
+  'Data Structures & Algorithms': 'هياكل البيانات والخوارزميات',
   Databases: 'قواعد البيانات',
   'Fintech Mobile Security, QR & Payments': 'أمان تطبيقات التقنية المالية ورموز QR والمدفوعات',
   'Flutter Clean Architecture & Provider': 'Flutter: المعمارية النظيفة وProvider',

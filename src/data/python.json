@@ -145,5 +145,78 @@
     ],
     "correctAnswer": 1,
     "explanation": "While reference counting handles the vast majority of cleanups, cyclic references (where objects reference each other but are otherwise root-unreachable) cannot be reclaimed by reference count checks alone. CPython uses an auxiliary generational cyclic garbage collector to scan and clean up these cycles."
+  },
+  {
+    "id": 366,
+    "category": "Python",
+    "difficulty": "easy",
+    "question": "What does the following Python 3 statement print?",
+    "codeSnippet": "print(type(5 / 2), 5 // 2)",
+    "options": [
+      "<class 'int'> 2",
+      "<class 'float'> 2",
+      "<class 'float'> 2.5",
+      "<class 'int'> 2.5"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Python 3 the `/` operator always does true division and returns a float, even for two integers. The `//` operator does floor division, so `5 // 2` is the integer 2."
+  },
+  {
+    "id": 367,
+    "category": "Python",
+    "difficulty": "medium",
+    "question": "What does this code print, given how the nested list is created?",
+    "codeSnippet": "grid = [[0] * 2] * 2\ngrid[0][0] = 1\nprint(grid)",
+    "options": [
+      "[[1, 0], [0, 0]]",
+      "[[1, 0], [1, 0]]",
+      "[[1, 1], [1, 1]]",
+      "[[1, 1], [0, 0]]"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`[[0] * 2] * 2` puts the same inner list in the outer list twice; it does not copy it. Changing it through `grid[0]` is visible through `grid[1]` too. Use `[[0] * 2 for _ in range(2)]` to get independent rows."
+  },
+  {
+    "id": 368,
+    "category": "Python",
+    "difficulty": "easy",
+    "question": "Inside a function defined as `def f(*args, **kwargs)`, what are `args` and `kwargs`?",
+    "options": [
+      "`args` is a list and `kwargs` is a list of pairs",
+      "`args` is a tuple of the extra positional arguments and `kwargs` is a dict of the extra keyword arguments",
+      "`args` is a dict and `kwargs` is a tuple",
+      "Both are generators that can be read only once"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`*args` collects any extra positional arguments into a tuple, and `**kwargs` collects any extra keyword arguments into a dictionary keyed by parameter name."
+  },
+  {
+    "id": 369,
+    "category": "Python",
+    "difficulty": "hard",
+    "question": "What does this code print, given how closures capture the loop variable?",
+    "codeSnippet": "funcs = [lambda: i for i in range(3)]\nprint([f() for f in funcs])",
+    "options": [
+      "[0, 1, 2]",
+      "[2, 2, 2]",
+      "[0, 0, 0]",
+      "It raises a NameError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Each lambda captures the variable `i` itself, not its value at the time the lambda was created. By the time the lambdas are called the loop has finished and `i` is 2. Writing `lambda i=i: i` freezes the value for each one."
+  },
+  {
+    "id": 370,
+    "category": "Python",
+    "difficulty": "easy",
+    "question": "Why can a tuple be used as a dictionary key in Python while a list cannot?",
+    "options": [
+      "Tuples are stored on the stack and lists on the heap",
+      "Tuples are immutable and therefore hashable (when their elements are), while lists are mutable and unhashable",
+      "Lists can hold only numbers",
+      "Tuples are always sorted"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Dictionary keys must be hashable, and the hash must never change while the key is in the dictionary. A list can be modified in place, so Python does not let it be hashed. A tuple cannot be modified, so it is hashable as long as everything inside it is."
   }
 ]

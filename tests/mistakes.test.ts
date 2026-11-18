@@ -118,7 +118,7 @@ describe('Arabic question text', () => {
     const { questions } = await loadQuestionBanks();
     state.locale = 'ar';
     const untranslated = [...new Set(questions.map((q) => q.category))].filter((c) => categoryLabel(c) === c);
-    expect(untranslated.sort()).toEqual(['C#', 'Java', 'JavaScript', 'PHP', 'PL/SQL', 'Python']);
+    expect(untranslated.sort()).toEqual(['C#', 'Java', 'JavaScript', 'PHP', 'PL/SQL', 'Python', 'SQL']);
   });
 
   it('keeps code-only options left to right inside Arabic content', () => {

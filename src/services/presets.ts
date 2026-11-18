@@ -91,6 +91,22 @@ export const PRESETS: readonly Preset[] = [
     card: {},
   },
   {
+    id: 'ai',
+    modeLabel: 'AI & LLM Fundamentals',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['AI Fundamentals', 'LLMs & Generative AI']),
+    card: {},
+  },
+  {
+    id: 'prompt_engineering',
+    modeLabel: 'Prompt Engineering',
+    count: 15,
+    minutes: 15,
+    pick: inCategories(['Prompt Engineering']),
+    card: {},
+  },
+  {
     id: 'iq',
     modeLabel: 'Logic & IQ Drill',
     count: 15,

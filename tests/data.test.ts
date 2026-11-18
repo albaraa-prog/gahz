@@ -10,8 +10,8 @@ describe('question banks', () => {
     const { questions, failedBanks, skipped } = await loadQuestionBanks();
     expect(failedBanks).toEqual([]);
     expect(skipped).toBe(0);
-    expect(questions.length).toBeGreaterThanOrEqual(320);
-    expect(listCategories(questions).length).toBeGreaterThanOrEqual(28);
+    expect(questions.length).toBeGreaterThanOrEqual(370);
+    expect(listCategories(questions).length).toBeGreaterThanOrEqual(31);
   });
 
   it('gives every preset enough questions', async () => {

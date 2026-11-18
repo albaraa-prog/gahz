@@ -118,6 +118,7 @@ export function questionDirection(question: Question): 'rtl' | 'ltr' {
  * in the custom quiz settings) and translated only for display.
  */
 const ARABIC_CATEGORIES: Readonly<Record<string, string>> = {
+  'AI Fundamentals': 'أساسيات الذكاء الاصطناعي',
   'APIs & Data Integration (REST, GraphQL, WebSockets)': 'واجهات API وتكامل البيانات (REST وGraphQL وWebSockets)',
   'Arabic (الأساسيات والبرمجة)': 'الأساسيات والبرمجة',
   'Computer Networking & Protocols': 'شبكات الحاسوب والبروتوكولات',
@@ -132,6 +133,7 @@ const ARABIC_CATEGORIES: Readonly<Record<string, string>> = {
   'Fullstack Web Dev': 'تطوير الويب المتكامل',
   Fullstack: 'التطوير المتكامل (Fullstack)',
   'General Computer Science & Advanced Systems': 'علوم الحاسوب العامة والأنظمة المتقدمة',
+  'LLMs & Generative AI': 'النماذج اللغوية الكبيرة والذكاء الاصطناعي التوليدي',
   'Logic & IQ': 'المنطق والذكاء',
   'Oman Enterprise: Backend & ERP Integration': 'مؤسسات عُمان: الخوادم وتكامل ERP',
   'Oman Enterprise: Oracle & PostgreSQL': 'مؤسسات عُمان: Oracle وPostgreSQL',
@@ -139,6 +141,7 @@ const ARABIC_CATEGORIES: Readonly<Record<string, string>> = {
   'Oman Enterprise: Resilience & Scalability': 'مؤسسات عُمان: المتانة وقابلية التوسعة',
   'Oman Enterprise: Stakeholder Communication': 'مؤسسات عُمان: التواصل مع أصحاب المصلحة',
   'Programming Basics': 'أساسيات البرمجة',
+  'Prompt Engineering': 'هندسة الأوامر (Prompt Engineering)',
   'REST & SOAP': 'REST وSOAP',
 };
 

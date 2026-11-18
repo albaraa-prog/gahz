@@ -139,6 +139,8 @@ const ARABIC_CATEGORIES: Readonly<Record<string, string>> = {
   'LLMs & Generative AI': 'النماذج اللغوية الكبيرة والذكاء الاصطناعي التوليدي',
   'Logic & IQ': 'المنطق والذكاء',
   'Networking Fundamentals': 'أساسيات الشبكات',
+  'Job Test: Aptitude & Reasoning': 'اختبارات التوظيف: القدرات والاستدلال',
+  'Job Test: IT & Information Systems': 'اختبارات التوظيف: تقنية المعلومات ونظم المعلومات',
   'Oman Enterprise: Backend & ERP Integration': 'مؤسسات عُمان: الخوادم وتكامل ERP',
   'Oman Enterprise: Oracle & PostgreSQL': 'مؤسسات عُمان: Oracle وPostgreSQL',
   'Oman Enterprise: Incidents & Security Judgment': 'مؤسسات عُمان: الحوادث والحكم الأمني',

@@ -1,0 +1,422 @@
+[
+  {
+    "id": 1077,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "Which type of memory loses its contents when the computer is switched off?",
+    "options": [
+      "SSD storage",
+      "ROM",
+      "A USB flash drive",
+      "RAM"
+    ],
+    "correctAnswer": 3,
+    "explanation": "RAM is volatile: it holds running programs and their data only while it has power. ROM, SSDs and flash drives are non-volatile and keep their data without power."
+  },
+  {
+    "id": 1078,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "Which of these is an output device?",
+    "options": [
+      "Barcode reader",
+      "Printer",
+      "Scanner",
+      "Microphone"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A printer takes data from the computer and produces something for the user. Scanners, barcode readers and microphones all send data into the computer, so they are input devices."
+  },
+  {
+    "id": 1079,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "Which component fetches, decodes and executes the instructions of a program?",
+    "options": [
+      "The CPU",
+      "RAM",
+      "The power supply",
+      "The hard disk"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The central processing unit (CPU) runs the fetch-decode-execute cycle. RAM holds the instructions and data while they are used, and the disk stores them long term."
+  },
+  {
+    "id": 1080,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What is the main job of an operating system?",
+    "options": [
+      "To manage the hardware and give programs shared services such as memory, files and processes",
+      "To translate source code into machine code",
+      "To protect the computer from viruses only",
+      "To display web pages"
+    ],
+    "correctAnswer": 0,
+    "explanation": "An operating system (Windows, Linux, Android) manages the CPU, memory, storage and devices and lets programs use them safely. Compilers translate code, antivirus software detects malware, and browsers display web pages."
+  },
+  {
+    "id": 1081,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "medium",
+    "question": "A program uses binary search to look for a value in a list that was never sorted. What is the most likely result?",
+    "options": [
+      "It always finds the value, only more slowly",
+      "It can report that the value is missing even though it is in the list",
+      "It sorts the list automatically first",
+      "It throws a compile error"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Binary search assumes the list is sorted and discards half of it at each step. On unsorted data it may discard the half that holds the value, so it can return a wrong \"not found\". It does not sort anything and the code still compiles."
+  },
+  {
+    "id": 1082,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What does Big O notation describe?",
+    "options": [
+      "How an algorithm's running time or memory grows as the input gets larger",
+      "How many lines of code a program has",
+      "The exact running time of a program in seconds",
+      "How fast the computer's processor is"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Big O describes the growth rate of time or memory with input size n, such as O(n) or O(log n). It ignores constant factors and the hardware, so it is not a time in seconds."
+  },
+  {
+    "id": 1083,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "In software, what is an API?",
+    "options": [
+      "A tool for drawing user interfaces",
+      "A programming language for web pages",
+      "A type of database",
+      "A defined interface that lets one program request data or services from another"
+    ],
+    "correctAnswer": 3,
+    "explanation": "API stands for Application Programming Interface. It defines the requests a program can make and the responses it gets, for example a payment API or a weather API."
+  },
+  {
+    "id": 1084,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "medium",
+    "question": "A company uses an email and office suite in the browser. The vendor runs the servers and installs every update. Which cloud service model is this?",
+    "options": [
+      "IaaS (Infrastructure as a Service)",
+      "PaaS (Platform as a Service)",
+      "SaaS (Software as a Service)",
+      "On-premises hosting"
+    ],
+    "correctAnswer": 2,
+    "explanation": "With SaaS the customer just uses finished software and the vendor manages everything underneath. PaaS gives a platform to deploy your own code, IaaS gives virtual machines and networks you manage yourself, and on-premises means your own servers."
+  },
+  {
+    "id": 1085,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "In information security, what do the letters of the CIA triad stand for?",
+    "options": [
+      "Cryptography, Identity, Access",
+      "Control, Inspection, Authorization",
+      "Confidentiality, Integrity, Availability",
+      "Compliance, Investigation, Audit"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Confidentiality: only authorized people can read the data. Integrity: the data is not changed without authorization. Availability: the system and data are there when needed."
+  },
+  {
+    "id": 1086,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What does a network firewall do?",
+    "options": [
+      "It stores backups of the company's files",
+      "It allows or blocks network traffic according to security rules",
+      "It speeds up the internet connection",
+      "It assigns IP addresses to devices"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A firewall sits between networks (for example the office and the internet) and filters traffic by rules such as addresses, ports and connection state. Assigning IP addresses is the job of DHCP."
+  },
+  {
+    "id": 1087,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "An email that looks like it comes from your bank asks you to \"verify your account\" by entering your password on a linked page. What kind of attack is this?",
+    "options": [
+      "Phishing",
+      "Brute-force attack",
+      "SQL injection",
+      "Denial of service (DoS)"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Phishing tricks people into giving away credentials or personal data by pretending to be a trusted sender. Check the real sender and address, and never enter a password from an email link."
+  },
+  {
+    "id": 1088,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "Which type of malware encrypts a victim's files and demands payment to unlock them?",
+    "options": [
+      "Adware",
+      "Ransomware",
+      "A keylogger",
+      "Spyware"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Ransomware locks data by encrypting it and asks for a ransom. Spyware and keyloggers secretly collect information, and adware shows unwanted ads."
+  },
+  {
+    "id": 1089,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "medium",
+    "question": "Which security goal does encrypting a laptop's disk protect most directly if the laptop is stolen?",
+    "options": [
+      "Performance",
+      "Availability",
+      "Integrity of backups",
+      "Confidentiality"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Without the key, the thief cannot read the data, which protects confidentiality. Encryption does not keep the data available to you; only a backup does that."
+  },
+  {
+    "id": 1090,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "medium",
+    "question": "Why should at least one backup copy be kept offline or in a different location?",
+    "options": [
+      "Because offline backups restore faster",
+      "To save storage space",
+      "Because online backups are not allowed by law",
+      "So that ransomware, fire or theft at the main site cannot destroy every copy"
+    ],
+    "correctAnswer": 3,
+    "explanation": "This is the idea behind the 3-2-1 rule: 3 copies, on 2 types of media, 1 of them offsite. Ransomware often encrypts every connected drive, so a copy that is disconnected or elsewhere survives."
+  },
+  {
+    "id": 1091,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "Logging in needs a password and then a code from an app on your phone. What is this called?",
+    "options": [
+      "Role-based access control",
+      "Encryption at rest",
+      "Multi-factor authentication",
+      "Single sign-on"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Multi-factor (two-factor) authentication combines something you know (the password) with something you have (the phone). A stolen password alone is then not enough."
+  },
+  {
+    "id": 1092,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What are the main components of an information system?",
+    "options": [
+      "People, processes, data, hardware and software",
+      "Only hardware and software",
+      "Only the computer network",
+      "Only the database"
+    ],
+    "correctAnswer": 0,
+    "explanation": "An information system is not just technology: people use it, follow procedures (processes), and work with data on hardware and software."
+  },
+  {
+    "id": 1093,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "When does data become information?",
+    "options": [
+      "When it is encrypted",
+      "When it is typed by a person instead of a machine",
+      "When it is processed and organized so it has meaning for a decision",
+      "When it is saved to a hard disk"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Data is raw facts, for example a list of sales records. Information is data processed into something meaningful, such as \"sales fell 10% this month\"."
+  },
+  {
+    "id": 1094,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What is an ERP system used for in an organization?",
+    "options": [
+      "Designing the company's website",
+      "Integrating core functions such as finance, HR, procurement and inventory in one system",
+      "Sending marketing emails only",
+      "Monitoring network traffic"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Enterprise Resource Planning systems (such as SAP or Oracle E-Business Suite) share one database across departments, so finance, HR and supply chain work from the same data."
+  },
+  {
+    "id": 1095,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What does a Management Information System (MIS) mainly help managers do?",
+    "options": [
+      "Repair computer hardware",
+      "Make decisions using regular reports and summaries",
+      "Design logos and graphics",
+      "Write program code"
+    ],
+    "correctAnswer": 1,
+    "explanation": "An MIS turns transaction data into reports, dashboards and summaries that managers use to plan, control and decide."
+  },
+  {
+    "id": 1096,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "Which of these is a service that a database management system (DBMS) provides?",
+    "options": [
+      "Routing packets between networks",
+      "Compressing video files",
+      "Storing, retrieving and securing data, and letting many users work on it at once",
+      "Editing images"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A DBMS such as Oracle, PostgreSQL or MySQL manages data storage, queries, access control, transactions and concurrent access."
+  },
+  {
+    "id": 1097,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "medium",
+    "question": "What does a feasibility study decide before a new system is built?",
+    "options": [
+      "The colors and fonts of the user interface",
+      "The test cases for each function",
+      "Whether the project is technically, economically and operationally worth doing",
+      "Which programming language the developers prefer"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A feasibility study checks if the system can be built with the available technology, if the benefits justify the cost, and if the organization can actually use it, before money is committed."
+  },
+  {
+    "id": 1098,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What does a UML use case diagram show?",
+    "options": [
+      "The tables and columns of the database",
+      "The actors (users or other systems) and what they can do with the system",
+      "The order of messages between objects over time",
+      "The network devices and their connections"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A use case diagram shows actors and use cases such as \"Apply for leave\" or \"Approve request\". Message order over time is a sequence diagram, and tables belong in an ER diagram."
+  },
+  {
+    "id": 1099,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What does a Software Requirements Specification (SRS) document contain?",
+    "options": [
+      "The marketing plan for the product",
+      "What the system must do and the quality constraints it must meet",
+      "The source code of the system",
+      "The salaries of the project team"
+    ],
+    "correctAnswer": 1,
+    "explanation": "An SRS lists functional requirements (features and behavior) and non-functional requirements (performance, security, availability). Developers and testers build and check the system against it."
+  },
+  {
+    "id": 1100,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "Which development approach delivers working software in short iterations and gathers customer feedback after each one?",
+    "options": [
+      "Big-bang development",
+      "The V-model",
+      "Waterfall",
+      "Agile (for example Scrum)"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Agile works in short cycles (sprints of a few weeks), shows working software at the end of each, and adjusts the plan from the feedback."
+  },
+  {
+    "id": 1101,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "Which statement best describes the Waterfall model?",
+    "options": [
+      "Users test every feature on the day it is written",
+      "Development and testing happen at the same time with no plan",
+      "Requirements change in every two-week sprint",
+      "Phases run in sequence, and each phase is finished before the next one starts"
+    ],
+    "correctAnswer": 3,
+    "explanation": "In Waterfall the phases (requirements, design, implementation, testing, deployment) follow one after another. It suits projects with stable, well-known requirements."
+  },
+  {
+    "id": 1102,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What is a version control system such as Git mainly used for?",
+    "options": [
+      "Hosting the website for visitors",
+      "Running the code faster",
+      "Finding bugs automatically",
+      "Tracking every change to the code, so a team can work together and go back to earlier versions"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Git records each change as a commit with its author and message. Teams work on branches, merge their work, and can restore any earlier version."
+  },
+  {
+    "id": 1103,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What is unit testing?",
+    "options": [
+      "Testing the smallest pieces of code, such as single functions, in isolation",
+      "Testing the whole system with real users",
+      "Checking the spelling in the user interface",
+      "Testing how many users the server can handle"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Unit tests check one function or class at a time, usually automatically on every change. Testing with real users is acceptance testing, and testing load is performance testing."
+  },
+  {
+    "id": 1104,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What kind of network connects the computers inside one office building?",
+    "options": [
+      "The internet backbone",
+      "A LAN (Local Area Network)",
+      "A WAN (Wide Area Network)",
+      "A MAN (Metropolitan Area Network)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A LAN covers a small area such as an office or a home. A WAN links sites across cities or countries, and a MAN covers a city."
+  },
+  {
+    "id": 1105,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "hard",
+    "question": "What is the range of usable host addresses in the subnet that contains 10.10.10.77 with the mask 255.255.255.192?",
+    "options": [
+      "10.10.10.64 to 10.10.10.126",
+      "10.10.10.65 to 10.10.10.126",
+      "10.10.10.64 to 10.10.10.127",
+      "10.10.10.65 to 10.10.10.127"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The mask .192 (/26) makes blocks of 64: 0, 64, 128, 192. 77 is in the block 64 to 127. Address .64 is the network address and .127 is the broadcast address, so the usable hosts are .65 to .126."
+  },
+  {
+    "id": 1106,
+    "category": "Job Test: IT & Information Systems",
+    "difficulty": "easy",
+    "question": "What does HTTPS add to HTTP?",
+    "options": [
+      "Automatic backups of the website",
+      "Encryption and server identity checks using TLS",
+      "A different port for email",
+      "Faster page loading by compressing images"
+    ],
+    "correctAnswer": 1,
+    "explanation": "HTTPS is HTTP over TLS. The connection is encrypted, and the server's certificate proves you are talking to the real site. It normally uses port 443 instead of 80."
+  }
+]

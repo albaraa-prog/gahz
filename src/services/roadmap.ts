@@ -49,6 +49,8 @@ export const ROADMAP_STEPS = {
   unity: ['Unity & C# Game Development'],
   backend_frameworks: ['Spring Boot', '.NET & ASP.NET Core', 'Laravel & Modern PHP'],
   networking_fundamentals: ['Networking Fundamentals'],
+  job_aptitude: ['Job Test: Aptitude & Reasoning'],
+  job_it: ['Job Test: IT & Information Systems'],
 } as const satisfies Record<string, readonly string[]>;
 
 export type StepId = keyof typeof ROADMAP_STEPS;
@@ -67,6 +69,7 @@ export const ROADMAP_PATHS = [
   { id: 'ai', steps: ['ai_fundamentals', 'llms', 'prompt_engineering'] },
   { id: 'game', steps: ['basics', 'csharp', 'unity', 'dsa', 'logic'] },
   { id: 'networks', steps: ['networking_fundamentals', 'networking', 'rest', 'apis'] },
+  { id: 'job_test', steps: ['job_aptitude', 'logic', 'job_it', 'networking_fundamentals'] },
   {
     id: 'interview',
     steps: ['logic', 'dsa', 'systems', 'networking', 'enterprise_backend', 'enterprise_operations', 'enterprise_communication'],

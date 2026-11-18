@@ -19,6 +19,7 @@ import { initAuth } from './services/auth';
 import { initHistory } from './services/history';
 import { initPreferences } from './services/preferences';
 import { listCategories, loadQuestionBanks } from './services/questionLoader';
+import { ensureQuestionTranslations } from './services/questionText';
 import { discardSavedSession, loadSavedSession, onTimeUp, resumeQuiz } from './services/quizEngine';
 import { isPersistent } from './services/storage';
 import { initSync } from './services/sync';
@@ -97,6 +98,9 @@ function main(): void {
   initPreferences();
   applyStaticTranslations();
   store.subscribe(() => applyStaticTranslations(), ['locale']);
+  // Arabic question text is a separate download, fetched only when the interface is in Arabic.
+  void ensureQuestionTranslations();
+  store.subscribe(() => void ensureQuestionTranslations(), ['locale']);
   initTheme();
   initHistory();
 

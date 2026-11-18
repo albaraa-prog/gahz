@@ -1,0 +1,77 @@
+{
+  "11": {
+    "question": "ما ناتج برنامج Java التالي الذي يقارن بين النصوص الحرفية (literals) والنصوص المُنشأة بـ new؟",
+    "options": ["true true", "true false", "false true", "false false"],
+    "explanation": "s1 وs2 نصّان حرفيان مخزّنان في String Constant Pool، فهما يشيران إلى الكائن نفسه (`s1 == s2` تساوي true). أما s3 فيُنشأ في الـ heap باستخدام `new String(...)` ككائن جديد، لذلك `s1 == s3` تساوي false."
+  },
+  "12": {
+    "question": "أيٌّ مما يلي استثناء مُتحقَّق منه (checked exception) في Java؟",
+    "options": ["NullPointerException", "IllegalArgumentException", "IOException", "ArithmeticException"],
+    "explanation": "الاستثناءات المتحقَّق منها هي الأصناف الفرعية من `java.lang.Exception` (ما عدا `RuntimeException`). يجب التصريح عنها في توقيع الدالة عبر `throws` أو التقاطها بـ try-catch. `IOException` متحقَّق منه، أما البقية فترث من `RuntimeException` (غير متحقَّق منها)."
+  },
+  "13": {
+    "question": "ما ناتج تنفيذ كود الوراثة التالي في Java؟",
+    "options": ["Parent", "Child", "يفشل التصريف (compilation)", "يُرمى ClassCastException"],
+    "explanation": "تستخدم Java الربط الديناميكي (تعدد الأشكال وقت التشغيل) لدوال النُّسخ. نوع الكائن الفعلي (Child) هو الذي يحدد أي نسخة من الدالة تُنفَّذ، وليس نوع المتغيّر المرجعي (Parent)."
+  },
+  "14": {
+    "question": "ماذا يحدث عند استخدام الكلمة `final` في تعريف صنف (class) في Java؟",
+    "options": [
+      "تصبح كل دوال الصنف ساكنة (static) تلقائياً.",
+      "لا يمكن إنشاء كائن من الصنف باستخدام new.",
+      "لا يمكن وراثة الصنف أو اشتقاق صنف فرعي منه.",
+      "يحمّل الـ ClassLoader الصنف بشكل متأخر (lazy)."
+    ],
+    "explanation": "تعريف الصنف بـ `final` يمنع الوراثة منه. يُستخدم ذلك غالباً لأسباب تتعلق بالأمان أو عدم القابلية للتغيير أو تحسين الأداء (مثل `java.lang.String`)."
+  },
+  "15": {
+    "question": "أي عملية على الـ stream في Java تُعدّ عملية وسيطة (intermediate) تُقيَّم بشكل متأخر (lazily)؟",
+    "options": ["count()", "forEach()", "filter()", "collect()"],
+    "explanation": "العمليات الوسيطة (مثل `filter` و`map` و`sorted`) تعيد stream جديداً وتُنفَّذ بشكل متأخر. أما العمليات النهائية (مثل `count` و`collect` و`forEach`) فتشغّل معالجة الـ stream وتستهلكه."
+  },
+  "16": {
+    "question": "ما منطقة الـ heap الأساسية التي توضع فيها كائنات Java الجديدة عند إنشائها؟",
+    "options": ["Old Generation", "Survivor Space (S0/S1)", "Eden Space", "Metaspace"],
+    "explanation": "في نماذج جمع النفايات بالأجيال تُحجز الكائنات الجديدة في Eden Space ضمن Young Generation. الكائنات التي تنجو تُنسخ لاحقاً إلى مناطق Survivor ثم تُرقّى في النهاية إلى Old Generation."
+  },
+  "17": {
+    "question": "إذا أعدت تعريف الدالة `equals()` في صنف Java، فما العقد المتعلق بـ `hashCode()`؟",
+    "options": [
+      "يجب إعادة تعريف hashCode() أيضاً بحيث إذا كانت a.equals(b) صحيحة تكون a.hashCode() == b.hashCode() صحيحة كذلك.",
+      "يجب إعادة تعريف hashCode() بحيث إذا لم يتساوَ كائنان وجب أن يعيدا قيمتَي hashCode مختلفتين.",
+      "لا يوجد أي شرط؛ الـ JVM تحسب الـ hash بشكل مستقل.",
+      "ينبغي عدم إعادة تعريف hashCode() للحفاظ على تمثيل عنوان الذاكرة."
+    ],
+    "explanation": "ينص العقد على أنه إذا تساوى كائنان بحسب `equals(Object)` فيجب أن يعيدا قيمة hash code الصحيحة نفسها. الإخلال بذلك يعطّل المجموعات المعتمدة على الـ hash مثل `HashMap` و`HashSet`."
+  },
+  "18": {
+    "question": "أي عبارة تصف سلوك محو الأنواع (Type Erasure) في Generics بلغة Java؟",
+    "options": [
+      "تحجز الـ JVM أصنافاً متخصصة لكل نوع generic وقت التشغيل.",
+      "تُستبدل معاملات النوع بحدودها أو بـ Object أثناء التصريف، فتضيع تفاصيل النوع وقت التشغيل.",
+      "يحوّل المصرِّف الأصناف العامة إلى ملفات واجهات ويفرض قواعد تحويل صارمة عبر التسلسل (serialization).",
+      "تُحسم الـ Generics بالانعكاس (reflection) الديناميكي عند كل استدعاء دالة."
+    ],
+    "explanation": "الـ Generics في Java مطبّقة عبر Type Erasure. المصرِّف يفرض أمان الأنواع وقت التصريف ثم يزيل معاملات النوع ويستبدلها بأنواع خام أو بـ Object. لذلك لا تتوفر معلومات النوع العام وقت التشغيل."
+  },
+  "19": {
+    "question": "أي ميزة أُضيفت إلى الواجهات (Interfaces) في Java 8؟",
+    "options": [
+      "الدوال المجردة (abstract)",
+      "الدوال الخاصة (private)",
+      "الدوال الافتراضية (default) والساكنة (static) مع تنفيذها",
+      "تعريف حقول حالة للنُّسخ"
+    ],
+    "explanation": "أضافت Java 8 الدوال الافتراضية (بالكلمة `default`) والدوال الساكنة داخل الواجهات. وهذا يسمح بإضافة دوال جديدة إلى الواجهات دون كسر التطبيقات الموجودة لها."
+  },
+  "20": {
+    "question": "ما ناتج تنفيذ كتل التهيئة والدالة البانية التالية في Java؟",
+    "options": [
+      "Instance Constructor Static",
+      "Static Instance Constructor",
+      "Constructor Instance Static",
+      "Static Constructor Instance"
+    ],
+    "explanation": "أولاً تُنفَّذ كتل التهيئة الساكنة عند تحميل الصنف. ثم تُنفَّذ كتل تهيئة النسخة عند إنشاء الكائن، وأخيراً يُنفَّذ جسم الدالة البانية."
+  }
+}

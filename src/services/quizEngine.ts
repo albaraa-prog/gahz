@@ -9,6 +9,7 @@ import { t } from '../utils/i18n';
 import { state, store } from '../utils/state';
 import { track } from './analytics';
 import { addAttempt } from './history';
+import { MISTAKES_MAX_QUESTIONS, MISTAKES_MODE, mistakeQuestions } from './mistakes';
 import { customModeLabel, findPreset } from './presets';
 import { parseQuestion } from './questionLoader';
 import { buildAttemptAnswers, gradeQuiz } from './scoring';
@@ -173,6 +174,15 @@ export function startCustomQuiz(config: CustomQuizConfig): void {
   if (pool.length === 0) throw new QuizStartError(t('start.noQuestions'));
   const count = Math.min(clamp(config.count, 1, 100), pool.length);
   begin(randomSample(pool, count), clamp(config.minutes, 1, 120), customModeLabel(count));
+}
+
+/** A quiz made only of questions the user most recently answered wrong, newest mistakes first. */
+export function startMistakesQuiz(): void {
+  const pool = mistakeQuestions(state.history, requireBank());
+  if (pool.length === 0) throw new QuizStartError(t('start.noMistakes'));
+  const questions = pool.slice(0, MISTAKES_MAX_QUESTIONS);
+  // One minute per question, never less than five so a short list is not rushed.
+  begin(randomSample(questions, questions.length), Math.max(5, questions.length), MISTAKES_MODE);
 }
 
 export function resumeQuiz(session: SavedSession): void {

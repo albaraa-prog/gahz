@@ -9,7 +9,8 @@
  *
  * This module has no imports on purpose, so services can use it for error
  * messages without creating import cycles. Question content is not translated
- * here; it lives in the JSON banks.
+ * here; it lives in the JSON banks (Arabic text in /src/data/ar, see
+ * services/questionText.ts).
  */
 
 export type Locale = 'en' | 'ar';
@@ -86,6 +87,14 @@ const en = {
   'preset.arabic.title': 'الأسئلة باللغة العربية',
   'preset.arabic.desc': 'أسئلة تدريبية باللغة العربية تختبر أساسيات البرمجة وعلم الحاسوب.',
   'mode.custom': 'Custom ({n} questions)',
+
+  // Practice my mistakes
+  'mistakes.title': 'Practice my mistakes',
+  'mistakes.desc': 'A quiz made only of the questions you last answered wrong. Get one right in any quiz and it leaves the list.',
+  'mistakes.empty': 'Nothing to review yet. Questions you answer wrong will be collected here.',
+  'mistakes.chip': 'From your history',
+  'mistakes.count': '{n} to review',
+  'mistakes.again': 'Practice my mistakes ({n})',
 
   // Custom quiz
   'custom.title': 'Build a custom quiz',
@@ -217,6 +226,7 @@ const en = {
   'start.presetEmpty': 'The questions for this exam could not be loaded.',
   'start.noCategory': 'Please select at least one category.',
   'start.noQuestions': 'No questions found in the selected categories.',
+  'start.noMistakes': 'You have no mistakes to practice right now.',
 
   // Footer
   'footer.license': '© 2026 Gahz جاهز. Open source under the MIT License.',
@@ -294,6 +304,13 @@ const ar: Record<TranslationKey, string> = {
   'preset.arabic.title': 'الأسئلة باللغة العربية',
   'preset.arabic.desc': 'أسئلة تدريبية باللغة العربية تختبر أساسيات البرمجة وعلم الحاسوب.',
   'mode.custom': 'مخصص ({n} سؤالاً)',
+
+  'mistakes.title': 'تدرّب على أخطائي',
+  'mistakes.desc': 'اختبار من الأسئلة التي أخطأت فيها في آخر إجابة لك فقط. أجب عن السؤال إجابة صحيحة في أي اختبار فيخرج من القائمة.',
+  'mistakes.empty': 'لا شيء للمراجعة بعد. الأسئلة التي تخطئ فيها ستُجمع هنا.',
+  'mistakes.chip': 'من سجلّك',
+  'mistakes.count': '{n} للمراجعة',
+  'mistakes.again': 'تدرّب على أخطائي ({n})',
 
   'custom.title': 'أنشئ اختباراً مخصصاً',
   'custom.count': 'عدد الأسئلة',
@@ -419,6 +436,7 @@ const ar: Record<TranslationKey, string> = {
   'start.presetEmpty': 'تعذّر تحميل أسئلة هذا الاختبار.',
   'start.noCategory': 'يرجى اختيار فئة واحدة على الأقل.',
   'start.noQuestions': 'لا توجد أسئلة في الفئات المحددة.',
+  'start.noMistakes': 'لا توجد أخطاء للتدرّب عليها الآن.',
 
   'footer.license': '© 2026 جاهز Gahz. مفتوح المصدر برخصة MIT.',
   'footer.count': '{count} سؤالاً في {topics} فئة',

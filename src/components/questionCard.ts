@@ -1,17 +1,12 @@
 /** The active question: text, code snippet, options, explanation and navigation. */
 
 import { navigate, selectOption, setStudyMode, submitQuiz, toggleFlag, unansweredCount } from '../services/quizEngine';
-import type { Question } from '../types';
+import { categoryLabel, questionDirection, questionText } from '../services/questionText';
 import { byId, closestFrom } from '../utils/dom';
-import { containsArabic, formatRichText } from '../utils/helpers';
+import { formatLine, formatRichText } from '../utils/helpers';
 import { t } from '../utils/i18n';
 import { state, store } from '../utils/state';
 import { showDialog } from './modal';
-
-/** Questions are written in English or Arabic, independent of the interface language. */
-export function questionDirection(question: Question): 'rtl' | 'ltr' {
-  return question.category.includes('Arabic') || containsArabic(question.question) ? 'rtl' : 'ltr';
-}
 
 /** Shared by the Next button on the last question and the sidebar's Finish button. */
 export async function confirmSubmit(): Promise<void> {
@@ -35,18 +30,19 @@ function render(): void {
   const answered = answer !== undefined;
   const reveal = state.studyMode && answered;
   const direction = questionDirection(question);
+  const text = questionText(question);
 
   const content = byId('questionContent');
   content.dir = direction;
   content.lang = direction === 'rtl' ? 'ar' : 'en';
 
-  byId('currentCategoryTag').textContent = question.category;
+  byId('currentCategoryTag').textContent = categoryLabel(question.category);
   const difficulty = byId('currentDifficultyTag');
   difficulty.textContent = t(`difficulty.${question.difficulty}`);
   difficulty.dataset.level = question.difficulty;
 
   byId('quizProgressBar').style.width = `${(index / total) * 100}%`;
-  byId('questionText').innerHTML = `<strong>${String(index + 1).padStart(2, '0')}</strong>&ensp;${formatRichText(question.question)}`;
+  byId('questionText').innerHTML = `<strong>${String(index + 1).padStart(2, '0')}</strong>&ensp;${formatRichText(text.question)}`;
 
   const code = byId('questionCodeBlock');
   code.hidden = !question.codeSnippet;
@@ -56,7 +52,7 @@ function render(): void {
   const hadFocus = options.contains(document.activeElement);
   options.classList.toggle('locked', reveal);
   options.setAttribute('role', 'radiogroup');
-  options.innerHTML = question.options
+  options.innerHTML = text.options
     .map((option, optionIndex) => {
       const selected = answer === optionIndex;
       let stateClass = '';
@@ -70,7 +66,7 @@ function render(): void {
         <button type="button" class="option-item${stateClass}" role="radio" aria-checked="${String(selected)}"
                 data-option="${optionIndex}"${reveal ? ' disabled' : ''}>
           <span class="option-radio"></span>
-          <span class="option-text">${formatRichText(option)}</span>
+          <span class="option-text">${formatLine(option, direction === 'rtl')}</span>
         </button>`;
     })
     .join('');
@@ -80,7 +76,7 @@ function render(): void {
   const explanation = byId('quizExplanationBox');
   explanation.hidden = !reveal;
   explanation.innerHTML = reveal
-    ? `<span class="explanation-label"><strong>${t('quiz.explanation')}</strong></span> ${formatRichText(question.explanation)}`
+    ? `<span class="explanation-label"><strong>${t('quiz.explanation')}</strong></span> ${formatRichText(text.explanation)}`
     : '';
 
   byId<HTMLButtonElement>('prevBtn').disabled = index === 0;
@@ -112,5 +108,5 @@ export function initQuestionCard(): void {
     setStudyMode((event.target as HTMLInputElement).checked);
   });
 
-  store.subscribe(render, ['screen', 'questions', 'currentIdx', 'answers', 'flags', 'studyMode', 'locale']);
+  store.subscribe(render, ['screen', 'questions', 'currentIdx', 'answers', 'flags', 'studyMode', 'locale', 'translationsReady']);
 }

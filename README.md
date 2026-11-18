@@ -54,10 +54,8 @@ Vite, TypeScript (strict), vanilla DOM components, a small Proxy-based reactive 
 │   └── utils/                store (reactive state), state (the app store), i18n (English and Arabic text),
 │                             theme, errors, helpers, dom
 ├── scripts/
-│   ├── validate-questions.mjs        Schema and cross-file validation (runs before every build)
-│   └── extract-legacy-questions.mjs  One-off migration from the original single-file app
+│   └── validate-questions.mjs        Schema and cross-file validation (runs before every build)
 ├── tests/                    Vitest unit tests
-├── legacy/index.html         The original single-file app, kept for reference
 ├── firebase.json             Hosting config: caching and security headers (CSP, X-Frame-Options, ...)
 ├── firestore.rules           Security rules
 └── .github/workflows/        CI: build and deploy to Firebase Hosting on merge to main

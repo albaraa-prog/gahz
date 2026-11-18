@@ -142,5 +142,76 @@
     ],
     "correctAnswer": 0,
     "explanation": "C# extension methods must be declared as static methods within a non-generic static class. The first parameter must represent the type being extended and must be prefixed with the `this` modifier."
+  },
+  {
+    "id": 381,
+    "category": "C#",
+    "difficulty": "easy",
+    "question": "Why is `StringBuilder` preferred over `string` when concatenating inside a large loop in C#?",
+    "options": [
+      "`string` cannot hold more than 255 characters",
+      "Strings are immutable, so each `+=` allocates a new string and copies the old content; `StringBuilder` appends to a resizable buffer",
+      "`StringBuilder` checks spelling while it appends",
+      "`string` concatenation is not thread-safe but `StringBuilder` is"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Each `+=` on a string creates a whole new string, so n appends copy O(n²) characters in total and leave garbage for the collector. `StringBuilder` keeps a growing buffer and builds the final string once with `ToString()`."
+  },
+  {
+    "id": 382,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "What is the difference between `ref` and `out` parameters in C#?",
+    "options": [
+      "`ref` requires the variable to be initialized before the call; `out` does not, but the method must assign it before returning",
+      "`out` requires the variable to be initialized before the call; `ref` does not",
+      "`ref` works only with value types and `out` only with reference types",
+      "There is no difference; they are aliases"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Both pass the variable by reference. With `ref` the caller supplies a value that the method may read and change. With `out` the incoming value is ignored and the method is required to assign one, as in `int.TryParse(text, out int number)`."
+  },
+  {
+    "id": 383,
+    "category": "C#",
+    "difficulty": "hard",
+    "question": "With Entity Framework, what is the practical difference between filtering an `IQueryable<T>` and filtering an `IEnumerable<T>`?",
+    "options": [
+      "A `Where` on `IQueryable<T>` is translated to SQL and runs in the database; on `IEnumerable<T>` it runs in memory after the rows are loaded",
+      "A `Where` on `IEnumerable<T>` is translated to SQL; on `IQueryable<T>` it runs in memory",
+      "`IQueryable<T>` executes immediately, while `IEnumerable<T>` is always deferred",
+      "`IEnumerable<T>` cannot be used with LINQ"
+    ],
+    "correctAnswer": 0,
+    "explanation": "`IQueryable<T>` holds an expression tree that the provider turns into SQL, so the database does the filtering. Once the sequence is treated as `IEnumerable<T>`, for example after `AsEnumerable()` or `ToList()`, later operators run in memory on rows that have already been fetched."
+  },
+  {
+    "id": 384,
+    "category": "C#",
+    "difficulty": "easy",
+    "question": "What does the `using` statement guarantee in this C# code?",
+    "codeSnippet": "using (var stream = File.OpenRead(path))\n{\n    // read from the stream\n}",
+    "options": [
+      "That the file exists before it is opened",
+      "That `stream.Dispose()` is called when the block ends, even if an exception is thrown",
+      "That the stream is collected by the garbage collector immediately",
+      "That the code inside the block runs on a background thread"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`using` works with any `IDisposable`. The compiler turns it into a `try`/`finally` that calls `Dispose()`, so the file handle is released as soon as the block is left, without waiting for the garbage collector."
+  },
+  {
+    "id": 385,
+    "category": "C#",
+    "difficulty": "medium",
+    "question": "Why should `async void` methods be avoided in C#, except for event handlers?",
+    "options": [
+      "They always run synchronously",
+      "The caller cannot await them, and an exception they throw cannot be caught by the caller and may crash the process",
+      "They cannot contain the `await` keyword",
+      "They are slower than `async Task` methods by design"
+    ],
+    "correctAnswer": 1,
+    "explanation": "An `async Task` method hands back a task that the caller can await and that carries any exception. An `async void` method returns nothing, so the caller cannot know when it finishes, and its exceptions are raised on the synchronization context instead of reaching the caller's `try`/`catch`."
   }
 ]

@@ -1,0 +1,212 @@
+[
+  {
+    "id": 461,
+    "category": "Networking Fundamentals",
+    "difficulty": "easy",
+    "question": "How many usable host addresses does the IPv4 network `192.168.10.0/24` provide?",
+    "options": [
+      "256",
+      "254",
+      "255",
+      "24"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A `/24` leaves 8 bits for hosts: 2^8 = 256 addresses. The first (`.0`) is the network address and the last (`.255`) is the broadcast address, so 254 can be assigned to devices. The general formula is 2^(32 - prefix) - 2."
+  },
+  {
+    "id": 462,
+    "category": "Networking Fundamentals",
+    "difficulty": "medium",
+    "question": "A company splits `10.0.0.0/24` into subnets with the mask `/26`. How many subnets does it get, and how many usable hosts are in each?",
+    "options": [
+      "2 subnets with 126 hosts each",
+      "8 subnets with 30 hosts each",
+      "4 subnets with 62 hosts each",
+      "4 subnets with 64 hosts each"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Going from `/24` to `/26` borrows 2 bits, which gives 2^2 = 4 subnets. Each has 6 host bits: 2^6 = 64 addresses, minus the network and broadcast addresses, so 62 usable. The subnets start at `.0`, `.64`, `.128` and `.192`."
+  },
+  {
+    "id": 463,
+    "category": "Networking Fundamentals",
+    "difficulty": "easy",
+    "question": "What does a DHCP server do on a network?",
+    "options": [
+      "It automatically gives devices an IP address, subnet mask, default gateway and DNS servers.",
+      "It translates domain names into IP addresses.",
+      "It encrypts traffic between two offices.",
+      "It blocks websites that contain malware."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Without DHCP every device would need manual configuration. A joining device broadcasts a request and the exchange follows four steps known as DORA: Discover, Offer, Request, Acknowledge. The address is leased for a limited time and renewed while the device stays connected."
+  },
+  {
+    "id": 464,
+    "category": "Networking Fundamentals",
+    "difficulty": "easy",
+    "question": "What is the main difference between a switch and a router?",
+    "options": [
+      "A switch works only with Wi-Fi and a router works only with cables.",
+      "A switch assigns IP addresses and a router assigns MAC addresses.",
+      "There is no difference; the two names mean the same device.",
+      "A switch forwards frames inside one network using MAC addresses; a router forwards packets between networks using IP addresses."
+    ],
+    "correctAnswer": 3,
+    "explanation": "A switch works at layer 2: it learns which MAC address is behind each port and delivers frames within the local network. A router works at layer 3: it reads the destination IP address and chooses the next hop toward another network. A home \"router\" combines both, plus an access point."
+  },
+  {
+    "id": 465,
+    "category": "Networking Fundamentals",
+    "difficulty": "medium",
+    "question": "Why would a network administrator put the finance department and the guest Wi-Fi in different VLANs on the same switches?",
+    "options": [
+      "To double the internet speed of both groups.",
+      "To separate them into different broadcast domains, so guests cannot reach finance devices directly and traffic between them must pass a router or firewall.",
+      "To let both groups share the same IP addresses.",
+      "To remove the need for cables."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A VLAN divides one physical switch network into isolated logical networks. Devices in different VLANs do not see each other's broadcasts and cannot talk at layer 2. Any communication goes through a layer 3 device, where access rules can be enforced. Links that carry several VLANs between switches are trunks and tag frames with 802.1Q."
+  },
+  {
+    "id": 466,
+    "category": "Networking Fundamentals",
+    "difficulty": "easy",
+    "question": "A laptop with the address `192.168.1.20/24` wants to send a packet to `8.8.8.8`. Where does it send the packet first?",
+    "options": [
+      "Directly to `8.8.8.8` over the local cable.",
+      "To the DHCP server.",
+      "To its default gateway, the router on its own network.",
+      "To every device on the network as a broadcast."
+    ],
+    "correctAnswer": 2,
+    "explanation": "A device compares the destination with its own subnet. `8.8.8.8` is outside `192.168.1.0/24`, so the packet is handed to the default gateway, which routes it onward. A wrong or missing default gateway is a classic cause of \"local network works, internet does not\"."
+  },
+  {
+    "id": 467,
+    "category": "Networking Fundamentals",
+    "difficulty": "hard",
+    "question": "A host has the address `192.168.1.130` with the mask `255.255.255.128` (`/25`). Which of these addresses is in the same subnet?",
+    "options": [
+      "`192.168.1.200`",
+      "`192.168.1.100`",
+      "`192.168.1.127`",
+      "`192.168.2.130`"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A `/25` splits the last octet in two halves: `192.168.1.0` to `.127` and `192.168.1.128` to `.255`. The host `.130` is in the second half, whose usable range is `.129` to `.254`. Only `.200` falls inside it. `.100` and `.127` belong to the first half."
+  },
+  {
+    "id": 468,
+    "category": "Networking Fundamentals",
+    "difficulty": "easy",
+    "question": "Which protocol does the `ping` command use to test whether a host is reachable?",
+    "options": [
+      "TCP on port 80",
+      "UDP on port 53",
+      "ARP",
+      "ICMP (echo request and echo reply)"
+    ],
+    "correctAnswer": 3,
+    "explanation": "`ping` sends ICMP echo request messages and measures the time until the echo reply returns. ICMP has no port numbers. A host can be up and still not answer, because many firewalls drop ICMP, so a failed ping is not proof that a server is down."
+  },
+  {
+    "id": 469,
+    "category": "Networking Fundamentals",
+    "difficulty": "medium",
+    "question": "You want `www.example.com` to point to `myapp.hosting.net`, whatever IP address that host currently has. Which DNS record type do you create?",
+    "options": [
+      "An A record",
+      "A CNAME record",
+      "An MX record",
+      "A TXT record"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A CNAME maps one name to another name, and the resolver then looks up the target. An A record maps a name to an IPv4 address and AAAA maps to an IPv6 address. MX names the mail servers of a domain, and TXT holds free text such as SPF and domain verification values."
+  },
+  {
+    "id": 470,
+    "category": "Networking Fundamentals",
+    "difficulty": "medium",
+    "question": "How long is an IPv6 address, and what was the main reason for introducing IPv6?",
+    "options": [
+      "64 bits; to make websites load faster.",
+      "48 bits; to replace MAC addresses.",
+      "128 bits; IPv4's 32-bit address space (about 4.3 billion addresses) was running out.",
+      "256 bits; to encrypt all traffic by default."
+    ],
+    "correctAnswer": 2,
+    "explanation": "IPv4 has 2^32 addresses, far fewer than the number of connected devices, which is why NAT became so common. IPv6 uses 128 bits written as eight groups of hexadecimal digits, for example `2001:db8::1`, where `::` stands for a run of zero groups."
+  },
+  {
+    "id": 471,
+    "category": "Networking Fundamentals",
+    "difficulty": "medium",
+    "question": "A packet travels from your laptop through three routers to a web server. What happens to its addresses along the way (ignoring NAT)?",
+    "options": [
+      "The source and destination IP addresses stay the same; the source and destination MAC addresses are rewritten at every hop.",
+      "The IP addresses are rewritten at every hop; the MAC addresses stay the same.",
+      "Both the IP and the MAC addresses stay the same from end to end.",
+      "Both the IP and the MAC addresses are rewritten at every hop."
+    ],
+    "correctAnswer": 0,
+    "explanation": "IP addresses identify the two end points and are used for routing across networks. MAC addresses only have meaning on one local link, so each router strips the incoming frame and builds a new one with its own MAC as source and the next hop's MAC as destination."
+  },
+  {
+    "id": 472,
+    "category": "Networking Fundamentals",
+    "difficulty": "medium",
+    "question": "A browser opens two tabs to the same website, and both use the server's port 443. How does the server tell the two TCP connections apart?",
+    "options": [
+      "By the MAC address of the browser.",
+      "By the order in which the packets arrive.",
+      "It cannot; the second tab reuses the first connection's data.",
+      "Each connection is identified by source IP, source port, destination IP and destination port, and the browser uses a different source port for each."
+    ],
+    "correctAnswer": 3,
+    "explanation": "The operating system gives each outgoing connection its own ephemeral source port (for example 51000 and 51001). The combination of the two IP addresses and the two ports is unique for each connection, so thousands of clients can share one server port."
+  },
+  {
+    "id": 473,
+    "category": "Networking Fundamentals",
+    "difficulty": "hard",
+    "question": "A developer starts an API with `--host 127.0.0.1 --port 8000`. It works in the browser on the same machine, but a phone on the same Wi-Fi cannot open it. Why?",
+    "options": [
+      "Port 8000 is reserved for local use by the operating system.",
+      "`127.0.0.1` is the loopback address, so the server accepts connections only from the same machine; binding to `0.0.0.0` listens on all interfaces.",
+      "Phones cannot use HTTP on port numbers above 1024.",
+      "The Wi-Fi router blocks all traffic between devices by design."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The loopback interface never leaves the machine. A server bound to `127.0.0.1` is unreachable from the network, which is a safe default during development. Binding to `0.0.0.0` (or to the machine's LAN address) accepts connections on the network, after which the phone can use `http://<laptop-ip>:8000` if the firewall allows it."
+  },
+  {
+    "id": 474,
+    "category": "Networking Fundamentals",
+    "difficulty": "medium",
+    "question": "What is the advantage of a stateful firewall over a stateless packet filter?",
+    "options": [
+      "It needs no rules at all.",
+      "It works without looking at IP addresses or ports.",
+      "It tracks active connections, so replies to connections started from inside are allowed automatically while unsolicited incoming packets are dropped.",
+      "It makes every connection use UDP."
+    ],
+    "correctAnswer": 2,
+    "explanation": "A stateless filter judges each packet alone, so return traffic needs its own broad rules. A stateful firewall keeps a connection table: once an outgoing connection is permitted, only packets that belong to it are let back in. Cloud security groups, for example in AWS, behave this way."
+  },
+  {
+    "id": 475,
+    "category": "Networking Fundamentals",
+    "difficulty": "hard",
+    "question": "A Windows PC that is set to obtain its address automatically shows the IP address `169.254.37.12` and has no internet. What does this address indicate?",
+    "options": [
+      "The PC could not reach a DHCP server and assigned itself a link-local (APIPA) address.",
+      "The PC received a public address from the internet provider.",
+      "The PC is infected with malware that changed its address.",
+      "The DNS server is down, but DHCP is working."
+    ],
+    "correctAnswer": 0,
+    "explanation": "`169.254.0.0/16` is the link-local range. A device picks an address from it when DHCP gets no answer. Such a device can only talk to others on the same link that did the same, and it has no gateway. The checks to make are the cable or Wi-Fi association, the VLAN of the port, and whether the DHCP server is up and has free addresses."
+  }
+]

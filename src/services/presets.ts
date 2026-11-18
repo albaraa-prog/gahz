@@ -10,6 +10,7 @@
 import type { Question } from '../types';
 import { hasKey, t } from '../utils/i18n';
 import { MISTAKES_MODE } from './mistakes';
+import { parseRoadmapMode } from './roadmap';
 
 export interface Preset {
   id: string;
@@ -91,6 +92,78 @@ export const PRESETS: readonly Preset[] = [
     card: {},
   },
   {
+    id: 'dsa',
+    modeLabel: 'Data Structures & Algorithms',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['Data Structures & Algorithms']),
+    card: {},
+  },
+  {
+    id: 'sql',
+    modeLabel: 'SQL & Databases',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['SQL', 'Databases']),
+    card: {},
+  },
+  {
+    id: 'ai',
+    modeLabel: 'AI & LLM Fundamentals',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['AI Fundamentals', 'LLMs & Generative AI']),
+    card: {},
+  },
+  {
+    id: 'prompt_engineering',
+    modeLabel: 'Prompt Engineering',
+    count: 15,
+    minutes: 15,
+    pick: inCategories(['Prompt Engineering']),
+    card: {},
+  },
+  {
+    id: 'game_dev',
+    modeLabel: 'Unity & C# Game Development',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['Unity & C# Game Development', 'C#']),
+    card: {},
+  },
+  {
+    id: 'spring_boot',
+    modeLabel: 'Java & Spring Boot',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['Spring Boot', 'Java']),
+    card: {},
+  },
+  {
+    id: 'dotnet',
+    modeLabel: 'C# & .NET',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['.NET & ASP.NET Core', 'C#']),
+    card: {},
+  },
+  {
+    id: 'php_laravel',
+    modeLabel: 'PHP & Laravel',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['Laravel & Modern PHP', 'PHP']),
+    card: {},
+  },
+  {
+    id: 'networks',
+    modeLabel: 'Computer Networks',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['Networking Fundamentals', 'CS & Networks', 'Computer Networking & Protocols']),
+    card: {},
+  },
+  {
     id: 'iq',
     modeLabel: 'Logic & IQ Drill',
     count: 15,
@@ -137,6 +210,8 @@ export function displayMode(mode: string): string {
   const custom = CUSTOM_MODE.exec(mode);
   if (custom) return t('mode.custom', { n: custom[1] ?? '' });
   if (mode === MISTAKES_MODE) return t('mistakes.title');
+  const step = parseRoadmapMode(mode);
+  if (step) return t('roadmap.mode', { step: t(`step.${step}.title`) });
 
   // "standard" is what the original single-file app stored for the mixed exam.
   const preset = PRESETS.find((p) => p.modeLabel === mode) ?? (mode === 'standard' ? findPreset('standard') : undefined);

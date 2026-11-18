@@ -143,5 +143,79 @@
     ],
     "correctAnswer": 1,
     "explanation": "The spread operator (`...`) creates a shallow copy. While the root property `a` is cloned, the nested object `b` is copied by reference. Therefore, modifying `copy.b.c` also alters the shared reference, affecting `original.b.c`."
+  },
+  {
+    "id": 376,
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "question": "What does `typeof null` evaluate to in JavaScript?",
+    "options": [
+      "'null'",
+      "'undefined'",
+      "'object'",
+      "'number'"
+    ],
+    "correctAnswer": 2,
+    "explanation": "`typeof null` is `'object'`. It is a bug from the first version of JavaScript that was kept for backward compatibility. To test for null, compare directly: `value === null`."
+  },
+  {
+    "id": 377,
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "What does this JavaScript statement log?",
+    "codeSnippet": "console.log(0.1 + 0.2 === 0.3);",
+    "options": [
+      "true",
+      "false",
+      "undefined",
+      "It throws a TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "JavaScript numbers are IEEE 754 double-precision floats, and 0.1 and 0.2 cannot be represented exactly in binary. Their sum is 0.30000000000000004. Compare with a small tolerance, or work in integers such as cents."
+  },
+  {
+    "id": 378,
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "question": "What does this code log, given how `var` declarations are hoisted?",
+    "codeSnippet": "console.log(a);\nvar a = 5;",
+    "options": [
+      "5",
+      "undefined",
+      "null",
+      "It throws a ReferenceError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A `var` declaration is hoisted to the top of its scope and initialized with `undefined`, but the assignment stays where it was written. With `let` or `const` the same code would throw a ReferenceError."
+  },
+  {
+    "id": 379,
+    "category": "JavaScript",
+    "difficulty": "hard",
+    "question": "What does this expression evaluate to?",
+    "codeSnippet": "['1', '2', '3'].map(parseInt)",
+    "options": [
+      "[1, 2, 3]",
+      "[1, NaN, NaN]",
+      "[NaN, NaN, NaN]",
+      "['1', '2', '3']"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`map` calls its callback with (element, index, array), and `parseInt` takes the second argument as the radix. So the calls are `parseInt('1', 0)` which is 1, `parseInt('2', 1)` which is NaN because 1 is not a valid radix, and `parseInt('3', 2)` which is NaN because 3 is not a binary digit. Use `.map(Number)` instead."
+  },
+  {
+    "id": 380,
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "question": "What happens when this code runs?",
+    "codeSnippet": "const list = [1, 2];\nlist.push(3);\nconsole.log(list.length);",
+    "options": [
+      "It throws a TypeError because `list` is a constant",
+      "It logs 3",
+      "It logs 2",
+      "It logs undefined"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`const` only prevents the variable from being reassigned. The array it points to is still mutable, so `push` works. `list = [1, 2, 3]` would throw. Use `Object.freeze` to make the array itself read-only."
   }
 ]

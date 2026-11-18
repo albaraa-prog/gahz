@@ -1,0 +1,286 @@
+[
+  {
+    "id": 346,
+    "category": "SQL",
+    "difficulty": "easy",
+    "question": "What does a `LEFT JOIN` return that an `INNER JOIN` does not?",
+    "options": [
+      "Rows from the right table that have no match in the left table",
+      "Rows from the left table that have no match in the right table, with NULLs in the right table's columns",
+      "Every possible combination of rows from both tables",
+      "Only the rows where the join columns are NULL in both tables"
+    ],
+    "correctAnswer": 1,
+    "explanation": "An `INNER JOIN` keeps only the rows that match in both tables. A `LEFT JOIN` keeps every row of the left table as well, filling the right table's columns with NULL where there is no match."
+  },
+  {
+    "id": 347,
+    "category": "SQL",
+    "difficulty": "easy",
+    "question": "What is the difference between `WHERE` and `HAVING`?",
+    "options": [
+      "`WHERE` filters rows before grouping; `HAVING` filters groups after aggregation",
+      "`HAVING` filters rows before grouping; `WHERE` filters groups after aggregation",
+      "They are interchangeable in every query",
+      "`WHERE` works only on numbers and `HAVING` only on text"
+    ],
+    "correctAnswer": 0,
+    "explanation": "`WHERE` is applied to individual rows before `GROUP BY`, so it cannot use aggregates such as `COUNT(*)`. `HAVING` is applied after the groups are formed, so it can filter on aggregate results."
+  },
+  {
+    "id": 348,
+    "category": "SQL",
+    "difficulty": "medium",
+    "question": "The `manager_id` column is NULL for three employees. How many rows does this query return?",
+    "codeSnippet": "SELECT *\nFROM employees\nWHERE manager_id = NULL;",
+    "options": [
+      "Three rows",
+      "All rows in the table",
+      "No rows",
+      "It raises a syntax error"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Comparing anything to NULL with `=` gives UNKNOWN, never TRUE, so no row passes the filter. Use `WHERE manager_id IS NULL` to find missing values."
+  },
+  {
+    "id": 349,
+    "category": "SQL",
+    "difficulty": "medium",
+    "question": "A table has 10 rows and the `phone` column is NULL in 3 of them. What do `COUNT(*)` and `COUNT(phone)` return?",
+    "options": [
+      "10 and 10",
+      "10 and 7",
+      "7 and 7",
+      "10 and 3"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`COUNT(*)` counts rows. `COUNT(column)` counts only the rows where that column is not NULL, so the three missing phone numbers are left out."
+  },
+  {
+    "id": 350,
+    "category": "SQL",
+    "difficulty": "easy",
+    "question": "What is the difference between `UNION` and `UNION ALL`?",
+    "options": [
+      "`UNION` removes duplicate rows; `UNION ALL` keeps them and is usually faster",
+      "`UNION ALL` removes duplicate rows; `UNION` keeps them",
+      "`UNION` joins tables side by side; `UNION ALL` stacks them",
+      "`UNION ALL` works only when both tables have the same name"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Both stack the results of two queries with the same number of columns. `UNION` then removes duplicates, which needs a sort or hash step; `UNION ALL` skips that step and returns every row."
+  },
+  {
+    "id": 351,
+    "category": "SQL",
+    "difficulty": "medium",
+    "question": "What does this query return?",
+    "codeSnippet": "SELECT MAX(salary)\nFROM employees\nWHERE salary < (SELECT MAX(salary) FROM employees);",
+    "options": [
+      "The highest salary",
+      "The second-highest distinct salary",
+      "The lowest salary",
+      "The average of the two highest salaries"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The subquery finds the highest salary. The outer query then takes the maximum of everything strictly below it, which is the second-highest distinct value. It returns NULL when all salaries are equal."
+  },
+  {
+    "id": 352,
+    "category": "SQL",
+    "difficulty": "medium",
+    "question": "Three rows have scores 100, 100 and 90. Ordered by score descending, what do `RANK()` and `DENSE_RANK()` assign?",
+    "options": [
+      "`RANK()`: 1, 1, 3 and `DENSE_RANK()`: 1, 1, 2",
+      "`RANK()`: 1, 1, 2 and `DENSE_RANK()`: 1, 1, 3",
+      "`RANK()`: 1, 2, 3 and `DENSE_RANK()`: 1, 1, 2",
+      "Both assign 1, 2, 3"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Both give tied rows the same rank. `RANK()` then skips as many positions as there were ties, so the next row is 3. `DENSE_RANK()` leaves no gaps, so the next row is 2."
+  },
+  {
+    "id": 353,
+    "category": "SQL",
+    "difficulty": "easy",
+    "question": "Which statement removes every row from a table but keeps the table itself, and does not accept a `WHERE` clause?",
+    "options": [
+      "`DELETE`",
+      "`TRUNCATE`",
+      "`DROP`",
+      "`ALTER`"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`TRUNCATE` empties the whole table quickly and keeps its structure. `DELETE` removes rows one by one and can be filtered with `WHERE`. `DROP` removes the table itself along with its data."
+  },
+  {
+    "id": 354,
+    "category": "SQL",
+    "difficulty": "hard",
+    "question": "The subquery below returns the values 1, 2 and NULL. What does the outer query return?",
+    "codeSnippet": "SELECT *\nFROM customers\nWHERE id NOT IN (SELECT customer_id FROM orders);",
+    "options": [
+      "Every customer except those with id 1 or 2",
+      "Every customer",
+      "No rows at all",
+      "Only the customers whose id is NULL"
+    ],
+    "correctAnswer": 2,
+    "explanation": "`id NOT IN (1, 2, NULL)` means `id <> 1 AND id <> 2 AND id <> NULL`. The last comparison is UNKNOWN for every row, so the whole condition is never TRUE. Use `NOT EXISTS`, or filter the NULLs out of the subquery."
+  },
+  {
+    "id": 355,
+    "category": "SQL",
+    "difficulty": "easy",
+    "question": "How does a `PRIMARY KEY` constraint differ from a `UNIQUE` constraint?",
+    "options": [
+      "A table can have only one primary key and its columns cannot be NULL; it can have several unique constraints",
+      "A unique constraint cannot be used on text columns",
+      "A primary key allows duplicate values but a unique constraint does not",
+      "There is no difference; they are two names for the same thing"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Both forbid duplicate values. The primary key is the table's single main identifier and is always NOT NULL. A table can have many `UNIQUE` constraints, and they generally allow NULL."
+  },
+  {
+    "id": 356,
+    "category": "SQL",
+    "difficulty": "medium",
+    "question": "Which query lists the customers who have never placed an order?",
+    "options": [
+      "`SELECT c.* FROM customers c INNER JOIN orders o ON o.customer_id = c.id WHERE o.id IS NULL`",
+      "`SELECT c.* FROM customers c LEFT JOIN orders o ON o.customer_id = c.id WHERE o.id IS NULL`",
+      "`SELECT c.* FROM customers c LEFT JOIN orders o ON o.customer_id = c.id WHERE o.id IS NOT NULL`",
+      "`SELECT c.* FROM customers c CROSS JOIN orders o WHERE o.customer_id = c.id`"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The `LEFT JOIN` keeps every customer and fills the order columns with NULL when there is no matching order. Filtering on `o.id IS NULL` keeps exactly those customers. An `INNER JOIN` would have dropped them already."
+  },
+  {
+    "id": 357,
+    "category": "SQL",
+    "difficulty": "medium",
+    "question": "Which query finds the email addresses that appear more than once in a `users` table?",
+    "options": [
+      "`SELECT email FROM users WHERE COUNT(*) > 1`",
+      "`SELECT email FROM users GROUP BY email HAVING COUNT(*) > 1`",
+      "`SELECT DISTINCT email FROM users`",
+      "`SELECT email FROM users ORDER BY email HAVING COUNT(*) > 1`"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Group the rows by email and keep only the groups with more than one row. The filter must be in `HAVING` because aggregates such as `COUNT(*)` are not allowed in `WHERE`."
+  },
+  {
+    "id": 358,
+    "category": "SQL",
+    "difficulty": "medium",
+    "question": "A table has a composite index on `(last_name, first_name)`. Which filter can NOT use that index efficiently?",
+    "options": [
+      "`WHERE last_name = 'Ali'`",
+      "`WHERE last_name = 'Ali' AND first_name = 'Sara'`",
+      "`WHERE first_name = 'Sara'`",
+      "`WHERE last_name LIKE 'Al%'`"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A composite index is sorted by its first column, then by the second within each first value. It helps only when the filter includes the leading column (the leftmost-prefix rule). Filtering on `first_name` alone has no sorted range to seek into."
+  },
+  {
+    "id": 359,
+    "category": "SQL",
+    "difficulty": "medium",
+    "question": "A table is already in second normal form. What must be removed to bring it to third normal form (3NF)?",
+    "options": [
+      "Repeating groups of columns",
+      "Transitive dependencies, where a non-key column depends on another non-key column",
+      "All foreign keys",
+      "Every column that allows NULL"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In 3NF every non-key column depends on the key and nothing else. If `orders` stores both `customer_id` and `customer_city`, the city depends on the customer rather than on the order, so it belongs in the `customers` table."
+  },
+  {
+    "id": 360,
+    "category": "SQL",
+    "difficulty": "easy",
+    "question": "Which names does the filter `WHERE name LIKE '_a%'` match?",
+    "options": [
+      "Names that start with 'a'",
+      "Names whose second character is 'a'",
+      "Names that end with 'a'",
+      "Names that contain 'a' anywhere"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In a `LIKE` pattern `_` matches exactly one character and `%` matches any number of characters, including none. So `'_a%'` means any one character, then 'a', then anything."
+  },
+  {
+    "id": 361,
+    "category": "SQL",
+    "difficulty": "medium",
+    "question": "An `employees` table has `id`, `name` and `manager_id`, where `manager_id` points to another row of the same table. How do you list each employee next to their manager's name?",
+    "options": [
+      "With a self join: join `employees` to itself under two aliases",
+      "With `UNION ALL` of the table and itself",
+      "With `GROUP BY manager_id`",
+      "It is not possible without a second table"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A self join treats one table as two: `FROM employees e LEFT JOIN employees m ON m.id = e.manager_id`. The aliases tell the two roles apart, and the `LEFT JOIN` keeps employees who have no manager."
+  },
+  {
+    "id": 362,
+    "category": "SQL",
+    "difficulty": "medium",
+    "question": "What makes a subquery a correlated subquery?",
+    "options": [
+      "It returns more than one column",
+      "It refers to a column of the outer query, so it is logically evaluated once per outer row",
+      "It is written in the `FROM` clause",
+      "It uses an aggregate function"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A correlated subquery depends on the current row of the outer query, for example `WHERE salary > (SELECT AVG(salary) FROM employees e2 WHERE e2.dept_id = e1.dept_id)`. An ordinary subquery can be run once on its own."
+  },
+  {
+    "id": 363,
+    "category": "SQL",
+    "difficulty": "easy",
+    "question": "What does `COALESCE(nickname, first_name, 'Guest')` return?",
+    "options": [
+      "The first argument that is not NULL",
+      "The longest of the three values",
+      "All three values joined together",
+      "NULL if any argument is NULL"
+    ],
+    "correctAnswer": 0,
+    "explanation": "`COALESCE` checks its arguments from left to right and returns the first one that is not NULL. Here that is the nickname if there is one, otherwise the first name, otherwise the text 'Guest'."
+  },
+  {
+    "id": 364,
+    "category": "SQL",
+    "difficulty": "hard",
+    "question": "What does the `running` column contain in this query?",
+    "codeSnippet": "SELECT customer_id, order_date, amount,\n       SUM(amount) OVER (\n         PARTITION BY customer_id\n         ORDER BY order_date\n       ) AS running\nFROM orders;",
+    "options": [
+      "The total of all orders in the table, repeated on every row",
+      "Each customer's grand total, repeated on every row of that customer",
+      "A running total of each customer's orders up to and including the current order date",
+      "The amount of the previous order of the same customer"
+    ],
+    "correctAnswer": 2,
+    "explanation": "`PARTITION BY` restarts the calculation for each customer. Adding `ORDER BY` inside `OVER` changes the default frame to run from the first row of the partition to the current row, which turns `SUM` into a running total."
+  },
+  {
+    "id": 365,
+    "category": "SQL",
+    "difficulty": "medium",
+    "question": "`created_at` is indexed, yet the filter `WHERE YEAR(created_at) = 2024` is slow on a large table. Why?",
+    "options": [
+      "Indexes cannot be used on date columns",
+      "Wrapping the column in a function stops the database from seeking in the index, so it checks every row",
+      "`YEAR()` locks the whole table",
+      "The `=` operator never uses an index"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The index is sorted by `created_at`, not by `YEAR(created_at)`, so the database has to compute the function for every row. Write a range on the bare column instead: `created_at >= '2024-01-01' AND created_at < '2025-01-01'`."
+  }
+]

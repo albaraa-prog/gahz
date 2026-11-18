@@ -141,5 +141,78 @@
     ],
     "correctAnswer": 2,
     "explanation": "Constructor Property Promotion allows developers to combine property declaration, type-hinting, parameter matching, and assignment into a single constructor signature line (e.g. `public function __construct(private string $name) {}`)."
+  },
+  {
+    "id": 386,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "What does this statement output in PHP 8?",
+    "codeSnippet": "var_dump(0 == \"a\");",
+    "options": [
+      "bool(true)",
+      "bool(false)",
+      "int(0)",
+      "It throws a TypeError"
+    ],
+    "correctAnswer": 1,
+    "explanation": "PHP 8 changed how a number is compared with a non-numeric string: the number is converted to a string, so this compares \"0\" with \"a\" and gives false. In PHP 7 the string was converted to the number 0 and the result was true, which caused many bugs."
+  },
+  {
+    "id": 387,
+    "category": "PHP",
+    "difficulty": "easy",
+    "question": "What is the difference between `include` and `require` in PHP when the file cannot be found?",
+    "options": [
+      "`include` emits a warning and the script continues; `require` stops the script with a fatal error",
+      "`require` emits a warning and the script continues; `include` stops the script with a fatal error",
+      "Both stop the script with a fatal error",
+      "Both silently ignore the missing file"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Use `require` for files the script cannot work without, such as configuration or class definitions, and `include` for optional parts. The `_once` variants additionally make sure the same file is not loaded twice."
+  },
+  {
+    "id": 388,
+    "category": "PHP",
+    "difficulty": "easy",
+    "question": "What does this line do when the URL has no `name` parameter?",
+    "codeSnippet": "$name = $_GET['name'] ?? 'guest';",
+    "options": [
+      "It raises an 'undefined array key' warning and sets `$name` to null",
+      "It sets `$name` to 'guest' without raising a warning",
+      "It sets `$name` to an empty string",
+      "It throws an exception"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The null coalescing operator `??` returns its left side if it is set and not null, otherwise its right side, and it does not raise a warning for a missing key. The short ternary `?:` is different: it tests truthiness and does warn about an undefined key."
+  },
+  {
+    "id": 389,
+    "category": "PHP",
+    "difficulty": "hard",
+    "question": "What does this code print, given the difference between `self::` and `static::`?",
+    "codeSnippet": "class A {\n    public static function create() { return new static(); }\n    public static function make()   { return new self(); }\n}\nclass B extends A {}\n\necho get_class(B::create()), ' ', get_class(B::make());",
+    "options": [
+      "A A",
+      "B A",
+      "B B",
+      "A B"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`self` always refers to the class where the code is written, so `make()` builds an `A`. `static` uses late static binding and refers to the class the method was called on, so `B::create()` builds a `B`."
+  },
+  {
+    "id": 390,
+    "category": "PHP",
+    "difficulty": "medium",
+    "question": "How does the PHP 8 `match` expression differ from `switch`?",
+    "options": [
+      "`match` compares loosely with `==` and falls through to the next case by default",
+      "`match` compares strictly with `===`, returns a value, has no fall-through and throws `UnhandledMatchError` when nothing matches",
+      "`match` can be used only with integers",
+      "`match` is only a shorter spelling of `switch` with identical behavior"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`match` is an expression, so its result can be assigned directly. It uses strict comparison, each arm is a single expression with no `break` needed, and an unmatched value with no `default` arm throws instead of being silently skipped."
   }
 ]

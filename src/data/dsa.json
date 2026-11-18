@@ -1,0 +1,354 @@
+[
+  {
+    "id": 321,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "easy",
+    "question": "What is the time complexity of binary search on a sorted array of n elements?",
+    "options": [
+      "O(1)",
+      "O(log n)",
+      "O(n)",
+      "O(n log n)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Binary search halves the remaining range on every comparison, so it needs at most about log₂(n) steps. It only works when the data is sorted and supports random access."
+  },
+  {
+    "id": 322,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "easy",
+    "question": "Which data structure is the natural choice for checking that brackets like `({[]})` are balanced?",
+    "options": [
+      "Queue",
+      "Stack",
+      "Binary search tree",
+      "Min-heap"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Push every opening bracket onto a stack; on a closing bracket, pop and check that the types match. The most recently opened bracket must be closed first, which is exactly LIFO order."
+  },
+  {
+    "id": 323,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "What are the average and worst-case time complexities of looking up a key in a hash table?",
+    "options": [
+      "O(1) average, O(n) worst case",
+      "O(log n) average, O(n) worst case",
+      "O(1) average, O(log n) worst case",
+      "O(n) average, O(n²) worst case"
+    ],
+    "correctAnswer": 0,
+    "explanation": "With a good hash function keys spread evenly over the buckets, so a lookup touches a constant number of entries on average. If many keys collide into one bucket, the lookup degrades to scanning up to n entries."
+  },
+  {
+    "id": 324,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "What is the time complexity of the following function in terms of n?",
+    "codeSnippet": "def work(n):\n    count = 0\n    for i in range(n):\n        j = 1\n        while j < n:\n            count += 1\n            j *= 2\n    return count",
+    "options": [
+      "O(n)",
+      "O(n log n)",
+      "O(n²)",
+      "O(log n)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The outer loop runs n times. The inner loop doubles `j` each time, so it runs about log₂(n) times. Multiplying the two gives O(n log n)."
+  },
+  {
+    "id": 325,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "Which sorting algorithm is stable and guarantees O(n log n) time even in the worst case?",
+    "options": [
+      "Quick sort",
+      "Heap sort",
+      "Merge sort",
+      "Selection sort"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Merge sort always splits the input in half and merges in linear time, so it is O(n log n) in every case, and merging keeps equal elements in their original order. Quick sort can degrade to O(n²); heap sort is O(n log n) but not stable."
+  },
+  {
+    "id": 326,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "In a binary min-heap with n elements, what does it cost to read the minimum and to remove it?",
+    "options": [
+      "O(1) to read, O(log n) to remove",
+      "O(log n) to read, O(log n) to remove",
+      "O(1) to read, O(1) to remove",
+      "O(1) to read, O(n) to remove"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The minimum is always at the root, so reading it is O(1). Removing it moves the last element to the root and sifts it down along one path of the tree, which has height log n."
+  },
+  {
+    "id": 327,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "Dijkstra's shortest-path algorithm can return wrong answers when the graph contains which of the following?",
+    "options": [
+      "Cycles",
+      "Edges with negative weights",
+      "More than one path between two nodes",
+      "Directed edges"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Dijkstra finalizes a node the first time it is taken from the priority queue, assuming no later path can be shorter. A negative edge can break that assumption. Bellman-Ford handles negative weights."
+  },
+  {
+    "id": 328,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "How can you detect a cycle in a singly linked list using only O(1) extra memory?",
+    "options": [
+      "Store every visited node in a hash set",
+      "Move a slow pointer one step and a fast pointer two steps and check whether they meet",
+      "Sort the list and compare neighbours",
+      "Reverse the list twice and compare the lengths"
+    ],
+    "correctAnswer": 1,
+    "explanation": "This is Floyd's tortoise and hare algorithm. If there is a cycle, the fast pointer eventually laps the slow one and they meet; if there is none, the fast pointer reaches the end. A hash set also works but needs O(n) memory."
+  },
+  {
+    "id": 329,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "easy",
+    "question": "Which traversal of a binary search tree visits the keys in ascending sorted order?",
+    "options": [
+      "Pre-order (node, left, right)",
+      "In-order (left, node, right)",
+      "Post-order (left, right, node)",
+      "Level-order (breadth-first)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In a BST every key in the left subtree is smaller than the node and every key in the right subtree is larger. Visiting left, then the node, then right therefore yields the keys in sorted order."
+  },
+  {
+    "id": 330,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "Given an unsorted array, what is the standard way to find two numbers that add up to a target in O(n) time?",
+    "options": [
+      "Check every pair with two nested loops",
+      "Sort the array, then binary search for each element's complement",
+      "Walk the array once, storing seen values in a hash map and looking up `target - x`",
+      "Build a min-heap and pop the two smallest values"
+    ],
+    "correctAnswer": 2,
+    "explanation": "For each value `x`, a hash map lookup tells you in O(1) whether `target - x` was already seen, so one pass is enough. Nested loops are O(n²) and sorting first is O(n log n)."
+  },
+  {
+    "id": 331,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "Which two properties must a problem have for dynamic programming to apply?",
+    "options": [
+      "Sorted input and random access",
+      "Overlapping subproblems and optimal substructure",
+      "A greedy choice and no recursion",
+      "A directed graph and no cycles"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Optimal substructure means the best answer is built from the best answers to smaller subproblems. Overlapping subproblems means the same subproblems come up again and again, so storing their results saves work."
+  },
+  {
+    "id": 332,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "hard",
+    "question": "What is the time complexity of building a binary heap from an unsorted array of n elements with the bottom-up heapify method?",
+    "options": [
+      "O(log n)",
+      "O(n)",
+      "O(n log n)",
+      "O(n²)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Bottom-up heapify sifts down each non-leaf node. Most nodes are near the bottom and move only a few levels, and the total work sums to O(n). Inserting the elements one at a time would cost O(n log n)."
+  },
+  {
+    "id": 333,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "What is the extra space used by a recursive depth-first traversal of a binary tree with n nodes and height h?",
+    "options": [
+      "O(1)",
+      "O(h)",
+      "O(n log n)",
+      "O(n²)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The call stack holds one frame per node on the current root-to-node path, so it grows to the height of the tree. That is O(log n) for a balanced tree and O(n) for a completely skewed one."
+  },
+  {
+    "id": 334,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "What is the time complexity of this function, and what does adding memoization reduce it to?",
+    "codeSnippet": "def fib(n):\n    if n < 2:\n        return n\n    return fib(n - 1) + fib(n - 2)",
+    "options": [
+      "O(n) as written, O(log n) with memoization",
+      "Exponential, about O(2^n), as written; O(n) with memoization",
+      "O(n²) as written, O(n) with memoization",
+      "Exponential as written; memoization does not change it"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Each call makes two more calls, and the same values are recomputed many times, giving exponential growth. Caching each result means every value from 0 to n is computed once, so the time drops to O(n)."
+  },
+  {
+    "id": 335,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "Which combination of data structures gives an LRU cache O(1) `get` and `put`?",
+    "options": [
+      "A sorted array and binary search",
+      "A hash map and a doubly linked list",
+      "A binary search tree and a queue",
+      "Two stacks"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The hash map finds a node by key in O(1). The doubly linked list keeps the usage order, so a node can be moved to the front or the least recently used node removed from the back in O(1)."
+  },
+  {
+    "id": 336,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "A topological ordering exists only for which kind of graph?",
+    "options": [
+      "Any connected undirected graph",
+      "A directed acyclic graph (DAG)",
+      "A complete graph",
+      "A graph with weighted edges only"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A topological order lists the nodes so that every edge points from an earlier node to a later one. A cycle makes that impossible, so the graph must be directed and acyclic. Typical uses are build systems and course prerequisites."
+  },
+  {
+    "id": 337,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "A queue is implemented with two stacks, moving elements from the 'in' stack to the 'out' stack only when 'out' is empty. What is the amortized cost of a dequeue?",
+    "options": [
+      "O(1)",
+      "O(log n)",
+      "O(n)",
+      "O(n log n)"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A single dequeue can take O(n) when the 'out' stack is empty and everything must be moved. But each element is pushed and popped at most twice in total, so the cost averaged over a sequence of operations is O(1)."
+  },
+  {
+    "id": 338,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "Which technique finds the maximum sum of any contiguous block of exactly k elements in an array in O(n) time?",
+    "options": [
+      "Sliding window",
+      "Binary search",
+      "Backtracking",
+      "Divide and conquer with sorting"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Compute the sum of the first k elements, then slide the window one position at a time: add the element that enters and subtract the one that leaves. Each step is O(1), so the whole scan is O(n)."
+  },
+  {
+    "id": 339,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "What problem does Kadane's algorithm solve, and in what time?",
+    "options": [
+      "Shortest path in a weighted graph, in O(E log V)",
+      "Maximum sum of a contiguous subarray, in O(n)",
+      "Longest common subsequence of two strings, in O(n·m)",
+      "Finding the median of an array, in O(n log n)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kadane's algorithm scans the array once, keeping the best sum of a subarray ending at the current position: either extend the previous subarray or start fresh at the current element. The answer is the largest value seen."
+  },
+  {
+    "id": 340,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "hard",
+    "question": "What is the lower bound on the number of comparisons any comparison-based sorting algorithm needs in the worst case?",
+    "options": [
+      "Ω(n)",
+      "Ω(n log n)",
+      "Ω(n²)",
+      "Ω(log n)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A comparison sort must distinguish between n! possible orderings, and each comparison has two outcomes, so it needs at least log₂(n!) comparisons, which is Ω(n log n). Counting sort and radix sort beat this only because they do not compare elements."
+  },
+  {
+    "id": 341,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "Which data structure is designed for prefix queries such as autocomplete, with lookups that take time proportional to the length of the word?",
+    "options": [
+      "Trie (prefix tree)",
+      "Min-heap",
+      "Hash set",
+      "Adjacency matrix"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A trie stores one character per edge, so words with a common prefix share a path. Finding a word or every word with a given prefix walks one node per character, regardless of how many words are stored."
+  },
+  {
+    "id": 342,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "hard",
+    "question": "With both path compression and union by rank, what is the amortized cost of an operation on a Union-Find (disjoint set) structure?",
+    "options": [
+      "O(n)",
+      "O(log n)",
+      "Nearly constant: the inverse Ackermann function α(n)",
+      "O(n log n)"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Union by rank keeps the trees shallow and path compression flattens them on every `find`. Together they give an amortized cost of α(n), the inverse Ackermann function, which is below 5 for any input size you will ever meet."
+  },
+  {
+    "id": 343,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "easy",
+    "question": "What is the cost of appending an element to the end of a dynamic array such as Python's `list` or Java's `ArrayList`?",
+    "options": [
+      "O(1) amortized, O(n) when the array has to grow",
+      "O(n) every time",
+      "O(log n) every time",
+      "O(1) every time, with no exceptions"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Most appends write into spare capacity in O(1). When the capacity runs out, the array allocates a larger block (usually about double) and copies all n elements. Because that happens rarely, the average cost per append stays O(1)."
+  },
+  {
+    "id": 344,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "medium",
+    "question": "What is the time complexity of a breadth-first or depth-first traversal of a graph with V vertices and E edges stored as adjacency lists?",
+    "options": [
+      "O(V)",
+      "O(V + E)",
+      "O(V · E)",
+      "O(V²) in every case"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Each vertex is visited once and each adjacency list is scanned once, so every edge is examined a constant number of times. With an adjacency matrix the same traversal costs O(V²), because finding a vertex's neighbours means scanning a whole row."
+  },
+  {
+    "id": 345,
+    "category": "Data Structures & Algorithms",
+    "difficulty": "hard",
+    "question": "What is the average time complexity of Quickselect for finding the k-th smallest element of an unsorted array?",
+    "options": [
+      "O(log n)",
+      "O(n)",
+      "O(n log n)",
+      "O(n²)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Quickselect partitions like quick sort but recurses into only the side that contains the k-th element. On average the work shrinks geometrically (n + n/2 + n/4 + ...), which sums to O(n). The worst case with bad pivots is O(n²)."
+  }
+]

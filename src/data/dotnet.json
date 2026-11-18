@@ -1,0 +1,219 @@
+[
+  {
+    "id": 431,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "easy",
+    "question": "In ASP.NET Core dependency injection, what does registering a service with `AddScoped` mean?",
+    "codeSnippet": "builder.Services.AddScoped<IOrderService, OrderService>();",
+    "options": [
+      "One instance is shared by the whole application.",
+      "One instance is created per HTTP request and shared within that request.",
+      "A new instance is created every time the service is requested.",
+      "The instance is created only when the application shuts down."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The three lifetimes are `AddSingleton` (one for the application), `AddScoped` (one per request) and `AddTransient` (a new one on every resolution). `DbContext` is registered as scoped, so all code handling one request shares the same context."
+  },
+  {
+    "id": 432,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "hard",
+    "question": "A service registered with `AddSingleton` takes a `DbContext` (registered as scoped) in its constructor. What is wrong with this?",
+    "options": [
+      "Nothing; the container converts the `DbContext` to a singleton safely.",
+      "It will not compile, because the compiler checks service lifetimes.",
+      "The singleton keeps one `DbContext` alive for the life of the app (a captive dependency), which is not thread-safe; scope validation throws in Development.",
+      "The `DbContext` is recreated on every method call, which is slow."
+    ],
+    "correctAnswer": 2,
+    "explanation": "A longer-lived service must not hold a shorter-lived one. The single `DbContext` would be used by many requests at once and never disposed. In the Development environment the container validates scopes and throws `InvalidOperationException`. The fix is to make the consumer scoped, or to inject `IServiceScopeFactory` (or `IDbContextFactory`) and create a context when needed."
+  },
+  {
+    "id": 433,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "easy",
+    "question": "What is middleware in ASP.NET Core?",
+    "options": [
+      "Components arranged in a pipeline; each one handles the request, can pass it to the next, and can act on the response on the way back.",
+      "A database layer that sits between EF Core and SQL Server.",
+      "A tool that compiles Razor pages to JavaScript.",
+      "A background service that restarts the app when it crashes."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Every request passes through the middleware in the order they are added in `Program.cs` (`app.Use...`), and the response travels back in reverse. Each middleware can end the request early (for example, returning 401) or call the next one. Routing, authentication, CORS and static files are all middleware."
+  },
+  {
+    "id": 434,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "medium",
+    "question": "In this ASP.NET Core pipeline, endpoints marked `[Authorize]` reject requests that carry a valid token. What is the bug?",
+    "codeSnippet": "app.UseRouting();\napp.UseAuthorization();\napp.UseAuthentication();\napp.MapControllers();",
+    "options": [
+      "`UseRouting()` must be the last call.",
+      "`MapControllers()` must come before `UseRouting()`.",
+      "`UseAuthorization()` and `UseAuthentication()` cannot be used together.",
+      "`UseAuthentication()` must come before `UseAuthorization()`, because the user has to be identified before permissions are checked."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Middleware runs in registration order. Authentication reads the token or cookie and sets `HttpContext.User`. Authorization then decides whether that user may access the endpoint. With the order reversed, authorization sees an anonymous user and refuses the request."
+  },
+  {
+    "id": 435,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "easy",
+    "question": "What happens to C# source code on its way to running on a machine with .NET?",
+    "options": [
+      "It is interpreted line by line from the `.cs` files at runtime.",
+      "It is compiled directly to machine code for one specific CPU, with no runtime involved.",
+      "It is compiled to Intermediate Language (IL), and the runtime's JIT compiler turns IL into native code as it runs.",
+      "It is translated to Java bytecode and run on the JVM."
+    ],
+    "correctAnswer": 2,
+    "explanation": "The C# compiler produces assemblies containing IL and metadata. The Common Language Runtime (CLR) loads them and its Just-In-Time compiler generates native code for the current CPU, which is why the same assembly runs on Windows, Linux and macOS. Native AOT is an optional mode that compiles ahead of time instead."
+  },
+  {
+    "id": 436,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "medium",
+    "question": "When should you add `AsNoTracking()` to an EF Core query?",
+    "codeSnippet": "var products = await db.Products.AsNoTracking().ToListAsync();",
+    "options": [
+      "When the entities will be modified and saved with `SaveChangesAsync()`.",
+      "When the results are only read, because EF Core then skips change tracking and uses less memory and CPU.",
+      "When the query must bypass the database and read from a file.",
+      "When the table has no primary key."
+    ],
+    "correctAnswer": 1,
+    "explanation": "By default EF Core keeps a snapshot of every loaded entity so that `SaveChanges()` can detect edits. For read-only work, such as returning a list from a GET endpoint, that bookkeeping is wasted. With `AsNoTracking()` changes made to those objects are not saved."
+  },
+  {
+    "id": 437,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "medium",
+    "question": "You added a property to an EF Core entity. Which commands bring the database schema in line with the model?",
+    "options": [
+      "`dotnet ef migrations add AddPhone` and then `dotnet ef database update`",
+      "`dotnet build --schema` and then `dotnet run --migrate`",
+      "`dotnet new database` and then `dotnet restore`",
+      "`dotnet test` and then `dotnet publish`"
+    ],
+    "correctAnswer": 0,
+    "explanation": "`migrations add` compares the model with the last snapshot and generates a migration class with `Up()` and `Down()` methods. `database update` applies pending migrations and records them in the `__EFMigrationsHistory` table. Migration files are committed to source control so every environment gets the same changes."
+  },
+  {
+    "id": 438,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "medium",
+    "question": "An ASP.NET Core app defines the same setting in `appsettings.json`, in `appsettings.Production.json` and as an environment variable. With the default configuration and the Production environment, which value wins?",
+    "options": [
+      "`appsettings.json`, because it is loaded first.",
+      "`appsettings.Production.json`, because files always beat environment variables.",
+      "The app throws an exception about a duplicate key.",
+      "The environment variable, because later configuration sources override earlier ones."
+    ],
+    "correctAnswer": 3,
+    "explanation": "The default builder adds sources in this order: `appsettings.json`, `appsettings.{Environment}.json`, user secrets (Development only), environment variables, then command-line arguments. The last source that contains a key wins, which lets a server or container override a file without rebuilding. Nested keys use a double underscore, for example `ConnectionStrings__Default`."
+  },
+  {
+    "id": 439,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "hard",
+    "question": "Under heavy load, an ASP.NET Core API that contains code like this becomes very slow even though CPU usage is low. Why?",
+    "codeSnippet": "public IActionResult Get()\n{\n    var data = _client.GetStringAsync(url).Result;\n    return Ok(data);\n}",
+    "options": [
+      "`.Result` runs the call twice.",
+      "`IActionResult` cannot return strings.",
+      "`.Result` blocks a thread pool thread while waiting for I/O, so the pool runs out of threads (thread pool starvation).",
+      "`GetStringAsync` only works inside a `static` method."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Blocking on a task holds a thread that is doing nothing but waiting. With many concurrent requests all threads end up blocked, new requests queue, and throughput collapses. Making the action `async Task<IActionResult>` and using `await` releases the thread during the I/O."
+  },
+  {
+    "id": 440,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "easy",
+    "question": "What does the `[ApiController]` attribute do when a request body fails model validation?",
+    "options": [
+      "It ignores the validation errors and runs the action.",
+      "It automatically returns `400 Bad Request` with the validation errors, before the action runs.",
+      "It redirects the client to an HTML error page.",
+      "It retries the request three times."
+    ],
+    "correctAnswer": 1,
+    "explanation": "With `[ApiController]` there is no need to write `if (!ModelState.IsValid) return BadRequest(ModelState);` in every action. The framework checks the model state and answers with a 400 and a `ValidationProblemDetails` body. The attribute also infers binding sources, such as `[FromBody]` for complex types."
+  },
+  {
+    "id": 441,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "medium",
+    "question": "With this minimal API endpoint, what does the server return for `GET /users/abc`?",
+    "codeSnippet": "app.MapGet(\"/users/{id:int}\", (int id) => Results.Ok(id));",
+    "options": [
+      "`404 Not Found`, because the `:int` route constraint does not match and no endpoint is selected.",
+      "`200 OK` with the value `0`.",
+      "`500 Internal Server Error`, because the conversion throws.",
+      "`200 OK` with the text `abc`."
+    ],
+    "correctAnswer": 0,
+    "explanation": "A route constraint is part of route matching. `abc` is not an integer, so this route is not a match at all and the result is a 404. Without the constraint the route would match and parameter binding would fail with a 400."
+  },
+  {
+    "id": 442,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "hard",
+    "question": "Why is creating `new HttpClient()` inside a `using` block for every outgoing call a known problem in .NET services, and what is the recommended approach?",
+    "options": [
+      "`HttpClient` is not thread-safe, so a new one must be created per thread.",
+      "`HttpClient` cannot be disposed; it has no `Dispose()` method.",
+      "It disables HTTPS certificate checks; use `WebClient` instead.",
+      "Each disposed client leaves its socket in a wait state, which can exhaust ports under load; use `IHttpClientFactory` or a shared long-lived client."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Disposing an `HttpClient` closes its connection, but the operating system keeps the socket in `TIME_WAIT` for a while. Under load the machine runs out of ports (socket exhaustion). `IHttpClientFactory` pools and recycles the underlying handlers, which also picks up DNS changes. A single static client with `PooledConnectionLifetime` set is the other accepted option."
+  },
+  {
+    "id": 443,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "medium",
+    "question": "What does this C# code print?",
+    "codeSnippet": "public record Point(int X, int Y);\n\nvar a = new Point(1, 2);\nvar b = new Point(1, 2);\nConsole.WriteLine(a == b);",
+    "options": [
+      "`False`, because `a` and `b` are different objects.",
+      "It does not compile, because records cannot be compared with `==`.",
+      "`True`, because records compare by value.",
+      "It throws `InvalidOperationException` at runtime."
+    ],
+    "correctAnswer": 2,
+    "explanation": "A `record` generates value-based equality: two records of the same type are equal when all their properties are equal. A normal `class` compares references, so the same code with `class` would print `False`. Records also provide `with` expressions for copying with changes, which suits DTOs."
+  },
+  {
+    "id": 444,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "easy",
+    "question": "What is Kestrel in ASP.NET Core?",
+    "options": [
+      "The cross-platform web server built into ASP.NET Core that listens for HTTP requests.",
+      "The ORM used to talk to SQL databases.",
+      "The package manager that downloads NuGet packages.",
+      "A testing framework for controllers."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Kestrel is the default web server in every ASP.NET Core app and runs on Windows, Linux and macOS. It can face the internet directly or sit behind a reverse proxy such as Nginx or IIS, which then handles things like TLS termination and load balancing."
+  },
+  {
+    "id": 445,
+    "category": ".NET & ASP.NET Core",
+    "difficulty": "medium",
+    "question": "What is the purpose of the `CancellationToken` parameter in this ASP.NET Core action?",
+    "codeSnippet": "[HttpGet]\npublic async Task<IActionResult> Report(CancellationToken ct)\n{\n    var rows = await db.Sales.ToListAsync(ct);\n    return Ok(rows);\n}",
+    "options": [
+      "It limits the action to one call per user.",
+      "It is signaled when the client disconnects, so the database query can stop instead of finishing work nobody will receive.",
+      "It encrypts the response.",
+      "It makes the query run on a separate CPU core."
+    ],
+    "correctAnswer": 1,
+    "explanation": "ASP.NET Core binds the parameter to `HttpContext.RequestAborted`. If the user closes the tab or the request times out, the token is cancelled and operations that received it (EF Core queries, `HttpClient` calls) stop early, which frees the database and the server for other work."
+  }
+]

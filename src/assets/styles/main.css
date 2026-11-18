@@ -650,6 +650,9 @@ code {
 
 /* Code always reads left to right, whatever the question or interface language. */
 .code-block { direction: ltr; text-align: left; }
+/* Inline code inside Arabic text keeps its own left-to-right order. */
+[dir="rtl"] code { direction: ltr; unicode-bidi: isolate; }
+.mode-card--mistakes[aria-disabled="true"] { cursor: default; }
 
 /* Sidebar */
 .quiz-sidebar { position: sticky; top: var(--s-36); }

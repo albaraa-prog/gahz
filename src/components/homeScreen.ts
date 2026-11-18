@@ -1,7 +1,8 @@
 /** Home screen: hero, study-mode switch, preset cards and load notices. */
 
 import { PRESETS, presetText } from '../services/presets';
-import { QuizStartError, setStudyMode, startPreset } from '../services/quizEngine';
+import { MISTAKES_MAX_QUESTIONS, mistakeQuestions } from '../services/mistakes';
+import { QuizStartError, setStudyMode, startMistakesQuiz, startPreset } from '../services/quizEngine';
 import { byId, closestFrom } from '../utils/dom';
 import { reportError } from '../utils/errors';
 import { escapeHtml } from '../utils/helpers';
@@ -22,11 +23,31 @@ export function startSafely(start: () => void): void {
   }
 }
 
+/** The first card of the grid. It is built from the user's own history, not from a preset. */
+function mistakesCard(): string {
+  const ready = state.bankStatus === 'ready';
+  const total = ready ? mistakeQuestions(state.history, state.allQuestions).length : 0;
+  const count = Math.min(total, MISTAKES_MAX_QUESTIONS);
+  const chips =
+    total > 0
+      ? [t('chip.questions', { n: count }), t('chip.minutes', { n: Math.max(5, count) }), t('mistakes.count', { n: total })]
+      : [t('mistakes.chip')];
+  return `
+    <div class="mode-card mode-card--mistakes" role="button" tabindex="0" data-mistakes
+         aria-disabled="${String(total === 0)}">
+      <div>
+        <div class="mode-title">${escapeHtml(t('mistakes.title'))}</div>
+        <p class="mode-description">${escapeHtml(total > 0 ? t('mistakes.desc') : t('mistakes.empty'))}</p>
+      </div>
+      <div class="mode-meta">${chips.map((chip) => `<span>${escapeHtml(chip)}</span>`).join('<span aria-hidden="true">·</span>')}</div>
+    </div>`;
+}
+
 function renderPresetCards(): void {
   const all = state.allQuestions;
   const ready = state.bankStatus === 'ready';
 
-  byId('presetCards').innerHTML = PRESETS.filter((preset) => preset.card)
+  const presetCards = PRESETS.filter((preset) => preset.card)
     .map((preset) => {
       const text = presetText(preset);
       const available = ready ? Math.min(preset.count, preset.pick(all).length) : preset.count;
@@ -45,6 +66,7 @@ function renderPresetCards(): void {
         </div>`;
     })
     .join('');
+  byId('presetCards').innerHTML = mistakesCard() + presetCards;
 }
 
 function renderBankState(): void {
@@ -82,10 +104,11 @@ export function initHomeScreen(onRetryBank: () => void): void {
   const home = byId('homeScreen');
 
   const activate = (event: Event): void => {
-    const trigger = closestFrom(event, '[data-preset]');
-    const presetId = trigger?.dataset.preset;
-    if (!trigger || !presetId || trigger.getAttribute('aria-disabled') === 'true') return;
-    startSafely(() => startPreset(presetId));
+    const trigger = closestFrom(event, '[data-preset], [data-mistakes]');
+    if (!trigger || trigger.getAttribute('aria-disabled') === 'true') return;
+    const presetId = trigger.dataset.preset;
+    if (presetId) startSafely(() => startPreset(presetId));
+    else if ('mistakes' in trigger.dataset) startSafely(startMistakesQuiz);
   };
   home.addEventListener('click', (event) => {
     if (closestFrom(event, '#retryBankBtn')) onRetryBank();
@@ -109,6 +132,6 @@ export function initHomeScreen(onRetryBank: () => void): void {
   store.subscribe(() => {
     renderPresetCards();
     renderBankState();
-  }, ['bankStatus', 'failedBanks', 'allQuestions', 'locale']);
+  }, ['bankStatus', 'failedBanks', 'allQuestions', 'locale', 'history']);
   store.subscribe(renderStudyMode, ['studyMode']);
 }

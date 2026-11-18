@@ -1,0 +1,102 @@
+{
+  "251": {
+    "question": "ما التسلسل الدقيق لتنفيذ دوال دورة الحياة في StatefulWidget في Flutter عند إدراجه في شجرة الـ widgets لأول مرة ثم إعادة بنائه؟",
+    "options": [
+      "createState() -> didChangeDependencies() -> initState() -> build()",
+      "createState() -> initState() -> didChangeDependencies() -> build()",
+      "initState() -> createState() -> build() -> didUpdateWidget()",
+      "createState() -> build() -> initState() -> didChangeDependencies()"
+    ],
+    "explanation": "عند تركيب `StatefulWidget` يستدعي Flutter أولاً `createState()`. ثم تُنفَّذ `initState()` مرة واحدة فقط للتهيئة الأولية. بعدها تعمل `didChangeDependencies()` عندما تُحسم اعتماديات كائن الـ State لأول مرة (مثل `InheritedWidget` و`Theme` و`MediaQuery`). وأخيراً تُستدعى `build()` لتوليد شجرة الـ widgets الفرعية."
+  },
+  "252": {
+    "question": "لماذا يُعدّ إنشاء Future مباشرة داخل دالة `build()` لـ `FutureBuilder` خطأ خطيراً في الأداء؟",
+    "options": [
+      "FutureBuilder لا يقبل الدوال غير المتزامنة في Dart.",
+      "في كل مرة يُعاد بناء الـ widget الأب (أو عند حركة أو تغيّر السمة أو ظهور لوحة المفاتيح) تعمل build() مجدداً، فتُرسل طلب HTTP جديداً ويبدأ الـ Future من الصفر، فتظهر مؤشرات تحميل بلا نهاية ويُرهَق الخادم.",
+      "FutureBuilder يعمل مع Streams متزامنة فقط.",
+      "يسبّب خطأ أنواع وقت التصريف في وضع release."
+    ],
+    "explanation": "قد تُستدعى `build()` في كل إطار أثناء الحركات أو عند إعادة بناء الـ widgets الأب. إذا استُدعي `future: apiService.fetchBalance()` داخل `build()` يُنشأ Future جديد مع كل إعادة بناء، فيُعاد ضبط الـ snapshot ويُغرق الـ API بالطلبات. يجب دائماً حفظ الـ Future في متغيّر داخل `initState()` في `StatefulWidget` أو إدارته عبر state provider."
+  },
+  "253": {
+    "question": "لماذا يُفضَّل `ListView.builder` على وضع `Column` داخل `SingleChildScrollView` لعرض القوائم الطويلة (مثل 1,000 صف معاملات)؟",
+    "options": [
+      "Column لا يدعم التمرير باللمس.",
+      "الـ Column داخل SingleChildScrollView ينشئ كل الـ widgets الألف مع RenderBoxes الخاصة بها ويحسب تخطيطها في الذاكرة دفعة واحدة، فيسبّب سقوط إطارات شديداً وانهيارات نفاد الذاكرة (OOM)؛ أما ListView.builder فيبني العناصر الظاهرة على الشاشة فقط عند الحاجة.",
+      "ListView.builder يعطّل الرسم بالـ GPU.",
+      "SingleChildScrollView يعرض Text widgets فقط."
+    ],
+    "explanation": "`SingleChildScrollView + Column` يحسب التخطيط ويُبقي كل الـ widgets في الذاكرة حتى لو كانت بعيدة عن الشاشة. أما `ListView.builder` فيستخدم viewport مع بروتوكول slivers يبني ويرسم ويعيد تدوير الـ widgets الظاهرة حالياً فقط ضمن نافذة التمرير (مع هامش تخزين مؤقت صغير)، فيبقى استهلاك الذاكرة O(1)."
+  },
+  "254": {
+    "question": "ما الفرق البنيوي بين `Expanded` و`Flexible` داخل `Row` أو `Column`؟",
+    "options": [
+      "Expanded يعمل في Column فقط، وFlexible يعمل في Row فقط.",
+      "Expanded يجبر ابنه على ملء كل المساحة المتبقية (FlexFit.tight)، أما Flexible فيسمح افتراضياً لابنه بأن يكون أصغر من المساحة المتاحة (FlexFit.loose).",
+      "Flexible يحوّل الابن إلى viewport قابل للتمرير.",
+      "Expanded يتجاهل معاملات flex."
+    ],
+    "explanation": "`Expanded` هو حرفياً صنف فرعي من `Flexible` مع `fit: FlexFit.tight`. `Flexible(fit: FlexFit.loose)` يسمح للـ widget الابن بأخذ المساحة المتبقية على الأكثر (مع احترام حجمه الطبيعي)، أما `Expanded` (tight) فيجبر الابن على التمدد وشغل كل المساحة المرنة المتبقية."
+  },
+  "255": {
+    "question": "ما سلوك عامل التتالي (`..`) وعامل التتالي الآمن مع null (`?..`) في Dart؟",
+    "options": [
+      "ينشئ نسخة عميقة من الكائن في كل سطر.",
+      "ينفّذ سلسلة عمليات على الكائن نفسه ويعيد الكائن الهدف نفسه بدلاً من القيمة المعادة من الدوال المستدعاة.",
+      "ينفّذ الدوال بالتزامن في خيوط عمل في الخلفية.",
+      "يغلّف استدعاءات الدوال بكتل try-catch تلقائياً."
+    ],
+    "explanation": "عامل التتالي (`..`) يسمح بتنفيذ سلسلة عمليات على أعضاء الكائن نفسه. القيمة المعادة من الدوال المتسلسلة (وهي `void` غالباً) تُهمل، ويُعاد الكائن الهدف نفسه، فتصبح تهيئة الكائنات بأسلوب builder نظيفة."
+  },
+  "256": {
+    "question": "ماذا يحدث إذا قُرئ متغيّر `late` غير قابل لـ null قبل تهيئته في Dart؟",
+    "options": [
+      "يطبع 'null' دون رمي خطأ.",
+      "يُصرَّف بلا مشاكل لكنه يرمي `LateInitializationError: Field 'transactionId' has not been initialized` وقت التشغيل.",
+      "يسبّب خطأ صياغة وقت التصريف.",
+      "يهيّئ المتغيّر بنص فارغ ''."
+    ],
+    "explanation": "المحدِّد `late` يقول لمصرِّف Dart ذي الـ null-safety: «ثق بي، سأهيّئ هذا المتغيّر غير القابل لـ null قبل قراءته». وإذا قُرئ المتغيّر قبل إسناد قيمة إليه ترمي Dart خطأ `LateInitializationError` وقت التشغيل."
+  },
+  "257": {
+    "question": "ما الفرق بين المولّد المتزامن (`sync*`) والمولّد غير المتزامن (`async*`) في Dart؟",
+    "options": [
+      "sync* يعيد Future<List<int>>، وasync* يعيد Isolate.",
+      "sync* يعيد Iterable<T> كسولاً يُنتج القيم عند الطلب بشكل متزامن، وasync* يعيد Stream<T> يبثّ القيم بشكل غير متزامن عند جاهزيتها.",
+      "async* لا يُستدعى إلا من داخل Web Worker.",
+      "لا فرق؛ sync* مجرد اسم آخر لـ async*."
+    ],
+    "explanation": "دوال `sync*` تعيد `Iterable<T>` كسولاً تُسحب قيمه بشكل متزامن باستخدام `yield`. ودوال `async*` تعيد `Stream<T>` تُدفع أحداثه بشكل غير متزامن مع الوقت باستخدام `yield` و`yield*`."
+  },
+  "258": {
+    "question": "لماذا يلتقط `TextEditingController.addListener()` تغييرات النص البرمجية (مثل `controller.text = '100'`) بينما لا يلتقطها `TextField(onChanged: ...)`؟",
+    "options": [
+      "TextField.onChanged مهمَل (deprecated) في Flutter 3.",
+      "TextField(onChanged:) يُستدعى فقط عند إدخال المستخدم المباشر من لوحة المفاتيح، أما TextEditingController.addListener() فيستمع إلى كل التغييرات على نموذج ValueNotifier الذي تحته، ومنها التحديثات البرمجية.",
+      "addListener يعمل في خيط خلفي أصلي في Android.",
+      "TextField يحجب إشعارات مستمعي الـ controller."
+    ],
+    "explanation": "`TextField.onChanged` مصمَّم تحديداً لإدخال المستخدم التفاعلي المباشر من لوحة المفاتيح الافتراضية أو اللصق. وإسناد `controller.text = 'newValue'` برمجياً لا يستدعي `onChanged`. لكن `TextEditingController` يرث من `ValueNotifier<TextEditingValue>`، ولذلك يُشعر `addListener()` بكل تغيّر في القيمة."
+  },
+  "259": {
+    "question": "لماذا لا يظهر تأثير التموّج (ripple) عند الضغط على `InkWell` إذا وُضع داخل `Container(color: Colors.white)` معتم دون `Material` widget؟",
+    "options": [
+      "InkWell لا يدعم أحداث الضغط.",
+      "InkWell يرسم تموّج Material على أقرب Material widget من أسلافه؛ ولون الـ Container المعتم يُرسم فوق طبقة Material فيحجب التموّج تحته.",
+      "Container يعطّل كل أدوات التعرّف على الإيماءات.",
+      "InkWell يتطلب اتصال Bluetooth نشطاً."
+    ],
+    "explanation": "`InkWell` يرسم حركة تموّج الحبر مباشرة على لوحة أقرب `Material` من أسلافه. وإذا كان بينهما `Container` بلون خلفية معتم فإنه يُرسم فوق لوحة `Material` ويخفي التموّج. للإصلاح استخدم `Ink(color: Colors.white, child: InkWell(...))` أو غلّفه بـ `Material(color: Colors.white, child: InkWell(...))`."
+  },
+  "260": {
+    "question": "عند بناء widget متجاوب للجوال، لماذا يتفوّق `LayoutBuilder` على الاستعلام بـ `MediaQuery.of(context).size`؟",
+    "options": [
+      "MediaQuery لا يمكن الوصول إليه داخل StatelessWidget.",
+      "MediaQuery يعيد أبعاد شاشة الجهاز كلها، أما LayoutBuilder فيعطي BoxConstraints الخاصة بالـ widget الأب المباشر، فتصبح الـ widgets قابلة لإعادة الاستخدام فعلاً في العروض المقسومة والنوافذ الحوارية والبطاقات المضمَّنة.",
+      "LayoutBuilder يعمل في خيط الرسم الخاص بالـ GPU.",
+      "MediaQuery يسبّب تسرّب ذاكرة عند تدوير الجهاز."
+    ],
+    "explanation": "`MediaQuery.of(context).size` يعطي الحجم الكلي لشاشة الجهاز (مثل 1080x1920). وإذا وُضعت بطاقتك داخل نافذة سفلية صغيرة أو عرض مقسوم على جهاز لوحي أو درج جانبي، يبقى `MediaQuery` يعيد عرض الشاشة الكامل. أما `LayoutBuilder` فيعطي `constraints.maxWidth` الفعلي الذي خصّصه الأب لذلك الـ widget تحديداً."
+  }
+}

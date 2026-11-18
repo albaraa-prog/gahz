@@ -1,0 +1,36 @@
+# Checks every pull request: validates the question banks, type-checks, runs the tests and builds.
+# It uses no secrets, so it is safe to run on pull requests from forks.
+
+name: CI
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate question banks, type-check and test
+        run: npm run check
+
+      - name: Build
+        run: npx vite build

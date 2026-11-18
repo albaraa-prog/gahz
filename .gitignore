@@ -8,8 +8,18 @@ ui-debug.log*
 
 # Environment files (never commit real keys)
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+
+# Credentials (never commit these)
+*service-account*.json
+*serviceAccount*.json
+*-firebase-adminsdk-*.json
+*.pem
+*.key
+*.p12
+*.keystore
+*.jks
 
 # Editor / OS
 .vscode/*

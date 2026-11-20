@@ -15,7 +15,7 @@
  */
 
 import type { Localized } from '../lessons/types';
-import type { StepId } from './roadmap';
+import { ROADMAP_STEPS, type StepId } from './roadmap';
 
 export type ResourceKind = 'certificate' | 'course';
 
@@ -129,6 +129,28 @@ const DOTNET_BACKEND = course(
   'فيديوهات ودروس رسمية لبناء واجهات API بـ ASP.NET Core.',
 );
 
+const SAYLOR_LOGIC = certificate(
+  'PHIL102: Introduction to Critical Thinking and Logic',
+  'Saylor Academy',
+  'https://learn.saylor.org/course/phil102',
+  'Arguments, fallacies and formal logic, with a free certificate after the final exam.',
+  'الحُجج والمغالطات والمنطق الصوري، مع شهادة مجانية بعد الاختبار النهائي.',
+);
+const HACKERRANK_PROBLEM_SOLVING = certificate(
+  'Problem Solving (Basic) certification',
+  'HackerRank',
+  'https://www.hackerrank.com/skills-verification/problem_solving_basic',
+  'A free 90-minute test on algorithms and data structures that awards a certificate. It is a test, not a course.',
+  'اختبار مجاني مدته 90 دقيقة في الخوارزميات وهياكل البيانات يمنح شهادة. وهو اختبار لا دورة.',
+);
+const SIMPLILEARN_FLUTTER = certificate(
+  'Flutter for Beginners',
+  'Simplilearn SkillUp',
+  'https://www.simplilearn.com/free-flutter-foundation-course-skillup',
+  'A free video course on Flutter basics with a completion certificate. Needs a free account.',
+  'دورة فيديو مجانية في أساسيات Flutter مع شهادة إتمام. تتطلب حساباً مجانياً.',
+);
+
 export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
   basics: [
     CS50X,
@@ -151,7 +173,7 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
       'أساسيات Python وهياكل البيانات والبرمجة الكائنية عبر مشاريع.',
     ),
   ],
-  logic: [LOGIC],
+  logic: [SAYLOR_LOGIC, HACKERRANK_PROBLEM_SOLVING, LOGIC],
   systems: [
     CS50X,
     course(
@@ -275,6 +297,7 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
     ),
   ],
   flutter_basics: [
+    SIMPLILEARN_FLUTTER,
     course(
       'Learn Flutter',
       'Flutter documentation',
@@ -291,6 +314,7 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
     ),
   ],
   flutter_core: [
+    SIMPLILEARN_FLUTTER,
     course(
       'Learn Dart',
       'Dart documentation',
@@ -307,6 +331,7 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
     ),
   ],
   flutter_architecture: [
+    SIMPLILEARN_FLUTTER,
     course(
       'Flutter learning resources',
       'Flutter documentation',
@@ -316,6 +341,7 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
     ),
   ],
   flutter_performance: [
+    SIMPLILEARN_FLUTTER,
     course(
       'Flutter learning resources',
       'Flutter documentation',
@@ -345,6 +371,14 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
     ),
   ],
   enterprise_operations: [
+    NETACAD_SECURITY,
+    certificate(
+      'DevOps Basics',
+      'Simplilearn SkillUp',
+      'https://www.simplilearn.com/learn-devops-basics-free-skillup',
+      'A free introduction to DevOps practices with a completion certificate. Needs a free account.',
+      'مقدّمة مجانية في ممارسات DevOps مع شهادة إتمام. تتطلب حساباً مجانياً.',
+    ),
     course(
       'Google SRE books',
       'Google',
@@ -361,6 +395,13 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
     ),
   ],
   enterprise_communication: [
+    certificate(
+      'BUS210: Business Communication',
+      'Saylor Academy',
+      'https://learn.saylor.org/course/bus210',
+      'Writing, presenting and communicating at work, with a free certificate after the final exam.',
+      'الكتابة والعرض والتواصل في العمل، مع شهادة مجانية بعد الاختبار النهائي.',
+    ),
     course(
       'Technical Writing',
       'Google for Developers',
@@ -369,7 +410,7 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
       'دورات قصيرة في كتابة مستندات تقنية واضحة لأي جمهور.',
     ),
   ],
-  dsa: [FCC_JS, KHAN_ALGORITHMS, CS50X],
+  dsa: [FCC_JS, HACKERRANK_PROBLEM_SOLVING, KHAN_ALGORITHMS, CS50X],
   sql: [
     FCC_SQL,
     certificate(
@@ -481,12 +522,12 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
     ),
   ],
   unity: [
-    course(
+    certificate(
       'Unity Essentials',
       'Unity Learn',
       'https://learn.unity.com/pathway/unity-essentials',
-      'The official first pathway: the editor, scenes, objects and publishing.',
-      'المسار الرسمي الأول: المحرّر والمشاهد والكائنات والنشر.',
+      'The official first pathway: the editor, scenes, objects and publishing. Finishing it earns a Unity badge.',
+      'المسار الرسمي الأول: المحرّر والمشاهد والكائنات والنشر. وإتمامه يمنح شارة من Unity.',
     ),
     course(
       'Junior Programmer',
@@ -497,6 +538,7 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
     ),
   ],
   backend_frameworks: [
+    FCC_CSHARP,
     course(
       'Spring Academy',
       'Spring',
@@ -515,6 +557,14 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
   ],
   networking_fundamentals: [NETACAD_NETWORKING, NETACAD_SECURITY],
   job_aptitude: [
+    certificate(
+      'MA006: Foundations of Real World Math',
+      'Saylor Academy',
+      'https://learn.saylor.org/course/ma006',
+      'Fractions, ratios, percentages and word problems, with a free certificate after the final exam.',
+      'الكسور والنسب والنسب المئوية والمسائل الكلامية، مع شهادة مجانية بعد الاختبار النهائي.',
+    ),
+    SAYLOR_LOGIC,
     course(
       'Pre-algebra',
       'Khan Academy',
@@ -522,7 +572,6 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
       'Ratios, percentages, equations and word problems, with practice exercises.',
       'النسب والنسب المئوية والمعادلات والمسائل الكلامية، مع تمارين.',
     ),
-    LOGIC,
   ],
   job_it: [
     NETACAD_SECURITY,
@@ -536,6 +585,20 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
     ),
   ],
   git_github: [
+    certificate(
+      'Git Training',
+      'Simplilearn SkillUp',
+      'https://www.simplilearn.com/learn-git-basics-skillup',
+      'A free video course on Git commands and workflows with a completion certificate. Needs a free account.',
+      'دورة فيديو مجانية في أوامر Git ومسارات العمل مع شهادة إتمام. تتطلب حساباً مجانياً.',
+    ),
+    certificate(
+      'GitHub Basics',
+      'Simplilearn SkillUp',
+      'https://www.simplilearn.com/free-github-course-skillup',
+      'A free beginner course on repositories, branches and pull requests with a completion certificate.',
+      'دورة مجانية للمبتدئين في المستودعات والفروع وطلبات السحب مع شهادة إتمام.',
+    ),
     course(
       'Introduction to GitHub',
       'GitHub Skills',
@@ -580,6 +643,13 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
     ),
   ],
   cicd: [
+    certificate(
+      'CI/CD Pipeline',
+      'Simplilearn SkillUp',
+      'https://www.simplilearn.com/free-ci-cd-online-training-course-skillup',
+      'A free course on continuous integration and delivery pipelines with a completion certificate.',
+      'دورة مجانية في خطوط التكامل والتسليم المستمرَّين مع شهادة إتمام.',
+    ),
     course(
       'Hello GitHub Actions',
       'GitHub Skills',
@@ -685,4 +755,20 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
 
 export function resourcesForStep(stepId: StepId): readonly Resource[] {
   return STEP_RESOURCES[stepId];
+}
+
+/**
+ * The resources of every step that covers one of these question categories,
+ * without repeats and with the ones that give a certificate first. Used by the
+ * quiz cards on the home screen.
+ */
+export function resourcesForCategories(categories: Iterable<string>): Resource[] {
+  const wanted = new Set(categories);
+  const byUrl = new Map<string, Resource>();
+  for (const [stepId, stepCategories] of Object.entries(ROADMAP_STEPS) as [StepId, readonly string[]][]) {
+    if (!stepCategories.some((category) => wanted.has(category))) continue;
+    for (const resource of STEP_RESOURCES[stepId]) if (!byUrl.has(resource.url)) byUrl.set(resource.url, resource);
+  }
+  const all = [...byUrl.values()];
+  return [...all.filter((resource) => resource.kind === 'certificate'), ...all.filter((resource) => resource.kind === 'course')];
 }

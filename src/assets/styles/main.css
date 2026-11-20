@@ -1214,6 +1214,9 @@ footer .link-btn { font-size: 13px; }
 .resource-kind--certificate { color: var(--verdant-text); }
 .resource-about { color: var(--muted); font-size: 14px; }
 .resources-note { color: var(--muted); font-size: 13px; margin: var(--s-12) 0 0; }
+.card-resources { color: var(--iris); margin-top: var(--s-12); text-align: start; }
+.resources-dialog { max-height: 55vh; overflow-y: auto; padding-inline-end: var(--s-6); font-weight: 400; text-align: start; }
+.resources-dialog .resource-list { margin-top: 0; }
 
 /* -------------------------------------------------------------- responsive */
 

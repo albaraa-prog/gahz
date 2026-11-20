@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { STEP_RESOURCES, resourcesForStep } from '../src/services/resources';
+import { STEP_RESOURCES, resourcesForCategories, resourcesForStep } from '../src/services/resources';
 import { ROADMAP_STEPS, isStepId } from '../src/services/roadmap';
 import { LOCALES } from '../src/utils/i18n';
 
@@ -31,5 +31,15 @@ describe('free courses and certificates', () => {
         expect(ARABIC.test(resource.about.ar), `${where}: Arabic description`).toBe(true);
       }
     }
+  });
+
+  it('collects the resources for a quiz card, certificates first and without repeats', () => {
+    const resources = resourcesForCategories(['SQL', 'Databases']);
+    const urls = resources.map((resource) => resource.url);
+    expect(new Set(urls).size).toBe(urls.length);
+    expect(urls).toContain('https://www.freecodecamp.org/learn/relational-database/');
+    const firstCourse = resources.findIndex((resource) => resource.kind === 'course');
+    expect(resources.slice(firstCourse).every((resource) => resource.kind === 'course')).toBe(true);
+    expect(resourcesForCategories(['No such category'])).toEqual([]);
   });
 });

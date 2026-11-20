@@ -18,8 +18,9 @@ track**. It was previously called DevQuiz Studio.
   CS Fundamentals, Data Structures & Algorithms, SQL & Databases, Logic & IQ, and Arabic (right-to-left).
 - **Custom quiz builder**: pick the categories, question count and time limit.
 - **Results**: score, verdict, per-topic breakdown and a filterable review of every question.
-- **Free courses and certificates**: every roadmap step lists free courses on other sites (freeCodeCamp, CS50,
-  Cisco Networking Academy, GitHub Skills, Microsoft Learn and more), marked when they also give a free certificate.
+- **Free courses and certificates**: every roadmap step and quiz card lists free courses on other sites
+  (freeCodeCamp, CS50, Cisco Networking Academy, GitHub Skills, Saylor Academy and more), marked when they also
+  give a free certificate.
 - **Practice my mistakes**: a quiz built from the questions you last answered wrong. A question leaves the
   list once you get it right.
 - **Learn by doing**: short interactive lessons in English and Arabic. Predict what code prints, fill the

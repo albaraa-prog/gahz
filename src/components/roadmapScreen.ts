@@ -23,6 +23,7 @@ import { escapeHtml, formatRichText } from '../utils/helpers';
 import { t } from '../utils/i18n';
 import { state, store } from '../utils/state';
 import { startSafely } from './homeScreen';
+import { resourceListHtml } from './resourceList';
 
 interface PathView {
   path: RoadmapPath;
@@ -88,23 +89,10 @@ function lessonLinks(stepId: StepId): string {
 function resourceLinks(stepId: StepId): string {
   const resources = resourcesForStep(stepId);
   if (resources.length === 0) return '';
-  const items = resources.map((resource) => {
-    const kind = t(resource.kind === 'certificate' ? 'resources.certificate' : 'resources.course');
-    return `
-      <li class="resource">
-        <a class="resource-link" href="${escapeHtml(resource.url)}" target="_blank" rel="noopener noreferrer" dir="ltr">${escapeHtml(resource.title)}</a>
-        <span class="resource-meta">
-          <span class="resource-kind resource-kind--${resource.kind}">${escapeHtml(kind)}</span>
-          <span dir="ltr">${escapeHtml(resource.provider)}</span>
-        </span>
-        <span class="resource-about">${escapeHtml(localized(resource.about, state.locale))}</span>
-      </li>`;
-  });
   return `
     <details class="resources">
       <summary>${escapeHtml(t('resources.title'))} <span class="resources-count" dir="ltr">${resources.length}</span></summary>
-      <ul class="resource-list">${items.join('')}</ul>
-      <p class="resources-note">${escapeHtml(t('resources.note'))}</p>
+      ${resourceListHtml(resources)}
     </details>`;
 }
 

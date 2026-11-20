@@ -180,6 +180,20 @@ export const PRESETS: readonly Preset[] = [
     card: {},
   },
   {
+    id: 'interview_essentials',
+    modeLabel: 'Interview Essentials',
+    count: 20,
+    minutes: 25,
+    pick: inCategories([
+      'OOP & Design Patterns',
+      'System Design Basics',
+      'Frontend: HTML, CSS & React',
+      'Testing, Code Review & Agile',
+      'Behavioral & HR Interview',
+    ]),
+    card: {},
+  },
+  {
     id: 'arabic',
     modeLabel: 'Arabic Questions',
     count: 10,

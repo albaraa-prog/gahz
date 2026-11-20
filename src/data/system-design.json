@@ -1,0 +1,170 @@
+[
+  {
+    "id": 1238,
+    "category": "System Design Basics",
+    "difficulty": "easy",
+    "question": "A service on one server is running out of CPU. What is the difference between scaling it vertically and scaling it horizontally?",
+    "options": [
+      "Vertical moves the service to another region; horizontal moves it to another cloud provider",
+      "Vertical adds more servers behind a load balancer; horizontal gives the one server more CPU and RAM",
+      "Vertical gives the one server more CPU and RAM; horizontal adds more servers behind a load balancer",
+      "Vertical adds a cache in front of the service; horizontal adds a queue in front of the service"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Scaling up (vertical) is simple but hits a hardware ceiling and keeps a single point of failure. Scaling out (horizontal) has no fixed ceiling and survives a server failure, but the service must be able to run as several copies."
+  },
+  {
+    "id": 1239,
+    "category": "System Design Basics",
+    "difficulty": "medium",
+    "question": "You are designing a URL shortener that runs on several servers. Which way of producing the short code guarantees that two long URLs never get the same code?",
+    "options": [
+      "Take the first six characters of an MD5 hash of the long URL",
+      "Give each URL a unique numeric id and encode that id in base 62",
+      "Pick six random characters and store them without any lookup",
+      "Use the current time in seconds converted to hexadecimal text"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A unique id (from a database sequence or an id generator) maps to exactly one base-62 string, so collisions are impossible. Truncated hashes and random strings can collide and need a check-and-retry step; a timestamp collides whenever two requests arrive in the same second."
+  },
+  {
+    "id": 1240,
+    "category": "System Design Basics",
+    "difficulty": "medium",
+    "question": "An API should allow each client an average of 10 requests per second but accept a short burst of up to 50. Which rate-limiting algorithm matches this directly?",
+    "options": [
+      "Token bucket with capacity 50 that refills at 10 tokens per second",
+      "Fixed window that counts at most 10 requests in each clock second",
+      "Leaky bucket that releases exactly one request every 100 milliseconds",
+      "Round robin that sends every client's request to the next server"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A token bucket stores unused allowance up to its capacity, so an idle client can burst, while the refill rate caps the long-term average. A fixed window of 10 rejects the burst, a leaky bucket smooths output to a constant rate, and round robin is load balancing, not rate limiting."
+  },
+  {
+    "id": 1241,
+    "category": "System Design Basics",
+    "difficulty": "medium",
+    "question": "A product page reads through a cache-aside layer: on a miss it loads from the database and stores the result. After an admin edits a price, users keep seeing the old one. What is the standard fix?",
+    "options": [
+      "Store every product twice in the cache under two different key names",
+      "Increase the cache memory so that old entries are evicted less frequently",
+      "Read the price from a database replica instead of from the primary server",
+      "Delete the cached entry when the price is written, and keep a TTL as a safety net"
+    ],
+    "correctAnswer": 3,
+    "explanation": "With cache-aside the application owns invalidation: after writing the database it removes (or updates) the key, so the next read reloads fresh data. A TTL bounds how long any missed invalidation can stay stale. More memory would make stale entries live longer."
+  },
+  {
+    "id": 1242,
+    "category": "System Design Basics",
+    "difficulty": "medium",
+    "question": "After a second web server is added behind a load balancer, users are randomly logged out. Sessions are kept in each server's memory. Which change fixes the cause and keeps the servers interchangeable?",
+    "options": [
+      "Double the session timeout so that sessions expire later on both servers",
+      "Send each new request to whichever server currently has the fewest sessions",
+      "Store sessions in a shared store such as Redis, or use signed stateless tokens",
+      "Restart both servers together so that their memory starts out identical"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A request that lands on the other server finds no session there. Moving session state out of the web servers makes them stateless, so any server can handle any request and one can fail without logging users out. Sticky sessions would hide the problem but tie users to one machine."
+  },
+  {
+    "id": 1243,
+    "category": "System Design Basics",
+    "difficulty": "medium",
+    "question": "To handle heavy read traffic you add read replicas with asynchronous replication. A user saves their profile and the next page still shows the old name. What is happening?",
+    "options": [
+      "A deadlock: the write and the read are each waiting for the other's lock",
+      "Replication lag: the read hit a replica that had not yet received the write",
+      "A cache stampede: many requests rebuilt the same cache entry at once",
+      "A split brain: two primaries accepted the write and then disagreed on it"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Asynchronous replicas are slightly behind the primary. A common fix is read-your-own-writes: route a user's reads to the primary for a short time after they write, or for data they just changed."
+  },
+  {
+    "id": 1244,
+    "category": "System Design Basics",
+    "difficulty": "hard",
+    "question": "An orders table is sharded by `country`. One shard holds 70% of the rows and is overloaded while the others sit idle. Which shard key would spread the load better?",
+    "options": [
+      "A hash of `customer_id`, which has many values and spreads them evenly",
+      "The `order_status` column, which has only five possible values in total",
+      "The `created_date` column, so every new order lands in the newest shard",
+      "The `currency` column, since it closely follows the customer's country"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A good shard key has high cardinality and an even distribution, and keeps the rows that are queried together (one customer's orders) on one shard. Low-cardinality keys and keys that follow time or geography create hot shards."
+  },
+  {
+    "id": 1245,
+    "category": "System Design Basics",
+    "difficulty": "medium",
+    "question": "Sign-up takes six seconds because the request waits while a welcome email is sent and a PDF is generated. How should this be redesigned?",
+    "options": [
+      "Raise the HTTP timeout to thirty seconds so that the request never fails",
+      "Open a second database connection so the email and PDF run in one transaction",
+      "Move the sign-up endpoint to a CDN so that its response is cached worldwide",
+      "Put the slow jobs on a message queue and let background workers process them"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Work the user does not need to wait for should be asynchronous: the request records the sign-up, enqueues the jobs and returns at once. The queue also absorbs spikes and lets failed jobs be retried. A longer timeout keeps the user waiting."
+  },
+  {
+    "id": 1246,
+    "category": "System Design Basics",
+    "difficulty": "easy",
+    "question": "Your servers are in Europe, and users in Asia complain that product images load slowly. Which component addresses this most directly?",
+    "options": [
+      "A read replica that holds a second copy of the image table",
+      "A message queue that delivers the images in the background",
+      "A CDN that serves cached copies from locations near the users",
+      "A reverse proxy placed beside the servers inside Europe"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A content delivery network caches static files at edge locations around the world, so the bytes travel a short distance. It also takes that traffic off the origin servers."
+  },
+  {
+    "id": 1247,
+    "category": "System Design Basics",
+    "difficulty": "hard",
+    "question": "A cache cluster picks a node with `hash(key) % N`. When a fifth node is added to four, almost every key maps to a different node and the database is flooded with misses. Which technique avoids this?",
+    "options": [
+      "Round-robin placement, where each new key goes to the next node in turn",
+      "Consistent hashing, where adding a node moves only about 1/N of the keys",
+      "Write-through caching, where each write updates the cache and the database",
+      "Two-phase commit, where all nodes agree before a key is finally stored"
+    ],
+    "correctAnswer": 1,
+    "explanation": "With modulo hashing, changing N changes the result for most keys. Consistent hashing places nodes and keys on a ring, so a new node only takes over the keys in its own segment. Round robin could not find a key again on reads."
+  },
+  {
+    "id": 1248,
+    "category": "System Design Basics",
+    "difficulty": "easy",
+    "question": "You are choosing a database for orders and payments, where an order, its items and the stock update must succeed or fail together. Which choice fits best?",
+    "options": [
+      "A relational database with ACID transactions",
+      "A key-value cache that keeps data in memory",
+      "A document store with eventual consistency",
+      "A search engine index built over the orders"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Multi-row, multi-table changes that must be all-or-nothing are exactly what relational transactions provide. NoSQL stores are a good fit for flexible schemas, huge scale or simple key lookups, but many trade strict consistency for availability."
+  },
+  {
+    "id": 1249,
+    "category": "System Design Basics",
+    "difficulty": "medium",
+    "question": "In a design interview you estimate load first. A service receives 10 million requests per day, spread fairly evenly. About how many requests per second is that?",
+    "options": [
+      "About 4,200 per second",
+      "About 12 per second",
+      "About 1,150 per second",
+      "About 115 per second"
+    ],
+    "correctAnswer": 3,
+    "explanation": "A day has 86,400 seconds, so 10,000,000 / 86,400 is roughly 115. Rounding a day to 100,000 seconds gives a quick 100 per second. Interviewers then expect you to allow for a peak several times higher than the average."
+  }
+]

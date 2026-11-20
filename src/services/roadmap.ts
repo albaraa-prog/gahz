@@ -51,13 +51,18 @@ export const ROADMAP_STEPS = {
   networking_fundamentals: ['Networking Fundamentals'],
   job_aptitude: ['Job Test: Aptitude & Reasoning'],
   job_it: ['Job Test: IT & Information Systems'],
+  oop_patterns: ['OOP & Design Patterns'],
+  system_design: ['System Design Basics'],
+  frontend: ['Frontend: HTML, CSS & React'],
+  engineering_practices: ['Testing, Code Review & Agile'],
+  behavioral: ['Behavioral & HR Interview'],
 } as const satisfies Record<string, readonly string[]>;
 
 export type StepId = keyof typeof ROADMAP_STEPS;
 
 export const ROADMAP_PATHS = [
   { id: 'foundations', steps: ['basics', 'fundamentals', 'dsa', 'logic', 'systems'] },
-  { id: 'web', steps: ['basics', 'javascript', 'fullstack', 'rest', 'apis', 'sql', 'databases'] },
+  { id: 'web', steps: ['basics', 'javascript', 'frontend', 'fullstack', 'rest', 'apis', 'sql', 'databases'] },
   {
     id: 'backend',
     steps: ['fundamentals', 'backend_language', 'backend_frameworks', 'sql', 'databases', 'plsql', 'rest', 'apis', 'networking'],
@@ -69,6 +74,10 @@ export const ROADMAP_PATHS = [
   { id: 'ai', steps: ['ai_fundamentals', 'llms', 'prompt_engineering'] },
   { id: 'game', steps: ['basics', 'csharp', 'unity', 'dsa', 'logic'] },
   { id: 'networks', steps: ['networking_fundamentals', 'networking', 'rest', 'apis'] },
+  {
+    id: 'tech_interview',
+    steps: ['dsa', 'oop_patterns', 'system_design', 'engineering_practices', 'behavioral'],
+  },
   { id: 'job_test', steps: ['job_aptitude', 'logic', 'job_it', 'networking_fundamentals'] },
   {
     id: 'interview',

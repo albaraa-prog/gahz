@@ -118,9 +118,9 @@ export const PRESETS: readonly Preset[] = [
   {
     id: 'prompt_engineering',
     modeLabel: 'Prompt Engineering',
-    count: 15,
-    minutes: 15,
-    pick: inCategories(['Prompt Engineering']),
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['Prompt Engineering', 'AI Skills, Tools & Plugins']),
     card: {},
   },
   {

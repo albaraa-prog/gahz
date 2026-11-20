@@ -7,6 +7,7 @@
  * against its tests.
  */
 
+import { aiSkillsTools } from './ai-skills-tools';
 import { bigOBinarySearch } from './big-o-binary-search';
 import { conditionsLoops } from './conditions-loops';
 import { jsFunctionsArrays } from './js-functions-arrays';
@@ -22,4 +23,5 @@ export const LESSONS: readonly Lesson[] = [
   bigOBinarySearch,
   pythonListsDicts,
   sqlFirstQueries,
+  aiSkillsTools,
 ];

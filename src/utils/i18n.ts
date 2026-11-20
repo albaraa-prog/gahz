@@ -93,9 +93,9 @@ const en = {
   'preset.ai.desc':
     'Machine learning basics (training, overfitting, precision and recall) and how large language models work: tokens, context windows, hallucinations, RAG, tool use, cost and security.',
   'preset.ai.chip': 'New track',
-  'preset.prompt_engineering.title': 'Prompt Engineering',
+  'preset.prompt_engineering.title': 'Prompt Engineering, Skills & Plugins',
   'preset.prompt_engineering.desc':
-    'Write prompts that work: clear instructions, examples, roles, delimiters, structured output, grounding answers in sources, testing prompts and defending against prompt injection.',
+    'Write prompts that work: clear instructions, examples, roles, delimiters, structured output, grounding answers in sources, testing prompts and defending against prompt injection. Then go beyond the prompt: tool use, MCP servers, agent skills (SKILL.md) and plugins.',
   'preset.prompt_engineering.chip': 'New track',
   'preset.game_dev.title': 'Unity & C# Game Development',
   'preset.game_dev.desc':
@@ -213,7 +213,7 @@ const en = {
   'path.mobile.title': 'Flutter and fintech mobile',
   'path.mobile.desc': 'Dart and Flutter from the basics to clean architecture, performance and payment-grade security.',
   'path.ai.title': 'AI and prompt engineering',
-  'path.ai.desc': 'How modern AI models work, then how to write prompts that get reliable results from them.',
+  'path.ai.desc': 'How modern AI models work, how to write prompts that get reliable results from them, and how to extend them with tools, skills and plugins.',
   'path.game.title': 'Game developer',
   'path.game.desc': 'Programming basics and C#, then building games with Unity and the algorithms games rely on.',
   'path.networks.title': 'Networks',
@@ -280,6 +280,8 @@ const en = {
   'step.llms.desc': 'Tokens, context windows, hallucinations and what large language models can and cannot do.',
   'step.prompt_engineering.title': 'Prompt engineering',
   'step.prompt_engineering.desc': 'Clear instructions, examples, structure and checking the output.',
+  'step.ai_skills_plugins.title': 'Skills, tools and plugins',
+  'step.ai_skills_plugins.desc': 'Tool use, MCP servers, agent skills (SKILL.md), plugins and using them safely.',
   'step.enterprise_backend.title': 'Enterprise backends and databases',
   'step.enterprise_backend.desc': 'ERP integration, Oracle and PostgreSQL in banking-scale systems.',
   'step.enterprise_operations.title': 'Incidents, security and resilience',
@@ -501,9 +503,9 @@ const ar: Record<TranslationKey, string> = {
   'preset.ai.desc':
     'أساسيات تعلّم الآلة (التدريب، فرط التخصيص، الـ precision والـ recall) وكيف تعمل النماذج اللغوية الكبيرة: الـ tokens، نافذة السياق، الهلوسة، RAG، استخدام الأدوات، التكلفة والأمان.',
   'preset.ai.chip': 'مسار جديد',
-  'preset.prompt_engineering.title': 'هندسة الأوامر (Prompt Engineering)',
+  'preset.prompt_engineering.title': 'هندسة الأوامر والمهارات والإضافات (Prompts, Skills & Plugins)',
   'preset.prompt_engineering.desc':
-    'اكتب prompts تؤدي الغرض: تعليمات واضحة، أمثلة، أدوار، محدِّدات، مخرجات منظَّمة، إسناد الإجابات إلى المصادر، اختبار الـ prompts والحماية من حقن الأوامر.',
+    'اكتب prompts تؤدي الغرض: تعليمات واضحة، أمثلة، أدوار، محدِّدات، مخرجات منظَّمة، إسناد الإجابات إلى المصادر، اختبار الـ prompts والحماية من حقن الأوامر. ثم ما بعد الـ prompt: استخدام الأدوات، خوادم MCP، مهارات الـ agent (SKILL.md) والـ plugins.',
   'preset.prompt_engineering.chip': 'مسار جديد',
   'preset.game_dev.title': 'تطوير الألعاب بـUnity و C#',
   'preset.game_dev.desc':
@@ -619,7 +621,7 @@ const ar: Record<TranslationKey, string> = {
   'path.mobile.title': 'تطبيقات Flutter والتقنية المالية',
   'path.mobile.desc': 'Dart و Flutter من الأساسيات إلى المعمارية النظيفة والأداء والأمان بمستوى أنظمة الدفع.',
   'path.ai.title': 'الذكاء الاصطناعي وهندسة الأوامر',
-  'path.ai.desc': 'كيف تعمل نماذج الذكاء الاصطناعي الحديثة، ثم كيف تكتب أوامر تحصل بها على نتائج موثوقة.',
+  'path.ai.desc': 'كيف تعمل نماذج الذكاء الاصطناعي الحديثة، وكيف تكتب أوامر تحصل بها على نتائج موثوقة، ثم كيف توسّعها بالأدوات والمهارات والإضافات.',
   'path.game.title': 'مطوّر ألعاب',
   'path.game.desc': 'أساسيات البرمجة و C#، ثم بناء الألعاب بـUnity والخوارزميات التي تعتمد عليها الألعاب.',
   'path.networks.title': 'الشبكات',
@@ -686,6 +688,8 @@ const ar: Record<TranslationKey, string> = {
   'step.llms.desc': 'الرموز (tokens) ونافذة السياق والهلوسة، وما تستطيعه النماذج اللغوية الكبيرة وما لا تستطيعه.',
   'step.prompt_engineering.title': 'هندسة الأوامر',
   'step.prompt_engineering.desc': 'تعليمات واضحة وأمثلة وبنية منظّمة، ثم التحقق من الناتج.',
+  'step.ai_skills_plugins.title': 'المهارات والأدوات والإضافات',
+  'step.ai_skills_plugins.desc': 'استخدام الأدوات، وخوادم MCP، ومهارات الـ agent (SKILL.md)، والـ plugins، واستخدامها بأمان.',
   'step.enterprise_backend.title': 'أنظمة المؤسسات الخلفية وقواعد بياناتها',
   'step.enterprise_backend.desc': 'تكامل ERP، و Oracle و PostgreSQL في أنظمة بحجم البنوك.',
   'step.enterprise_operations.title': 'الحوادث والأمان والمتانة',

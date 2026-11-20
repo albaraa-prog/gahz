@@ -1,0 +1,214 @@
+[
+  {
+    "id": 1135,
+    "category": "Docker",
+    "difficulty": "easy",
+    "question": "What is the difference between a Docker image and a container?",
+    "options": [
+      "An image is a read-only template; a container is a running instance of it.",
+      "An image runs on Linux only; a container runs on any operating system.",
+      "An image stores the data; a container stores the application code.",
+      "An image is a small virtual machine; a container is a large one."
+    ],
+    "correctAnswer": 0,
+    "explanation": "An image packages the application with its dependencies and never changes. `docker run` creates a container from it: an isolated process with its own thin writable layer. Many containers can run from one image, like many objects from one class."
+  },
+  {
+    "id": 1136,
+    "category": "Docker",
+    "difficulty": "easy",
+    "question": "How does a container differ from a virtual machine?",
+    "options": [
+      "A container includes a full guest operating system with its own kernel.",
+      "A container needs a hypervisor, while a virtual machine does not need one.",
+      "A container cannot be limited in CPU or memory, unlike a virtual machine.",
+      "A container shares the host kernel, so it starts in seconds and uses less memory."
+    ],
+    "correctAnswer": 3,
+    "explanation": "A virtual machine virtualizes hardware and boots its own operating system. A container is a normal process isolated by kernel features (namespaces and cgroups), so it is lighter. The price is weaker isolation, because the kernel is shared."
+  },
+  {
+    "id": 1137,
+    "category": "Docker",
+    "difficulty": "easy",
+    "question": "What does `-p 8080:80` mean in this command?",
+    "codeSnippet": "docker run -d -p 8080:80 nginx",
+    "options": [
+      "Port 80 on the host is forwarded to port 8080 inside the container.",
+      "The container may use any port in the range from 80 to 8080.",
+      "Port 8080 on the host is forwarded to port 80 inside the container.",
+      "The container is limited to 8080 MB of memory and 80% of the CPU."
+    ],
+    "correctAnswer": 2,
+    "explanation": "The format is `host:container`. nginx listens on 80 inside the container, and you open `http://localhost:8080` on your machine. Without `-p` the port is reachable only from other containers on the same Docker network."
+  },
+  {
+    "id": 1138,
+    "category": "Docker",
+    "difficulty": "medium",
+    "question": "Why does this Dockerfile copy `package*.json` and run `npm ci` before copying the rest of the code?",
+    "codeSnippet": "FROM node:22-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci\nCOPY . .\nCMD [\"node\", \"server.js\"]",
+    "options": [
+      "So the dependencies are installed twice, once per `COPY` instruction.",
+      "So the dependency layer is cached and reused when only source files change.",
+      "So the final image leaves out `package.json` and becomes smaller.",
+      "So `npm ci` can run before the base image has been downloaded."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Each instruction creates a layer, and Docker reuses a cached layer until one of its inputs changes; every layer after that is rebuilt. Source code changes far more often than dependencies, so installing first keeps the slow step cached."
+  },
+  {
+    "id": 1139,
+    "category": "Docker",
+    "difficulty": "medium",
+    "question": "A PostgreSQL container is removed and recreated. How do you keep its data?",
+    "options": [
+      "Mount a volume on the database data directory.",
+      "Add an `EXPOSE 5432` line to the Dockerfile.",
+      "Run the container with the `--restart always` flag.",
+      "Tag the image with `latest` before each restart."
+    ],
+    "correctAnswer": 0,
+    "explanation": "A container's writable layer is deleted with the container. A volume lives outside it, for example `-v pgdata:/var/lib/postgresql/data`, and can be attached to the next container. `--restart` restarts a stopped container; it does not protect data from `docker rm`."
+  },
+  {
+    "id": 1140,
+    "category": "Docker",
+    "difficulty": "medium",
+    "question": "What is Docker Compose used for?",
+    "options": [
+      "Compressing an image so that it downloads faster from a registry.",
+      "Scanning an image for known vulnerabilities before it is pushed.",
+      "Converting a virtual machine disk into a container image.",
+      "Describing and starting several related containers from one YAML file."
+    ],
+    "correctAnswer": 3,
+    "explanation": "`compose.yaml` lists services (for example `web`, `db`, `cache`) with their images, ports, volumes and environment. `docker compose up` creates them on a shared network where each service reaches the others by service name."
+  },
+  {
+    "id": 1141,
+    "category": "Docker",
+    "difficulty": "medium",
+    "question": "In a Compose file, the `web` service must connect to the `db` service. Which host name does it use?",
+    "options": [
+      "`localhost`, because all the services run on the same physical machine.",
+      "`127.0.0.1`, because containers share one loopback network interface.",
+      "`db`, because Compose gives each service a DNS name on the shared network.",
+      "`host.docker.internal`, because that name always points to the database."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Inside a container, `localhost` is the container itself, not the host and not another container. Compose creates a network with built-in DNS, so the connection string uses the service name, for example `postgres://db:5432/app`."
+  },
+  {
+    "id": 1142,
+    "category": "Docker",
+    "difficulty": "medium",
+    "question": "What is the main benefit of a multi-stage build?",
+    "options": [
+      "The image is built on several machines at once, so the build finishes sooner.",
+      "The final image holds only the built output, without compilers and build tools.",
+      "The image can run on Windows, Linux and macOS without being rebuilt.",
+      "The image is rebuilt automatically each time the base image is updated."
+    ],
+    "correctAnswer": 1,
+    "explanation": "One `FROM` stage installs the tools and builds; a later stage starts from a small base and uses `COPY --from=build` to take only the result. The image is smaller, downloads faster and has fewer packages that could contain vulnerabilities."
+  },
+  {
+    "id": 1143,
+    "category": "Docker",
+    "difficulty": "medium",
+    "question": "What is the difference between `CMD` and `RUN` in a Dockerfile?",
+    "options": [
+      "`RUN` executes while the image is built; `CMD` is the default command when a container starts.",
+      "`RUN` executes when a container starts; `CMD` executes while the image is built.",
+      "`RUN` is for shell scripts only; `CMD` is for compiled binaries only.",
+      "`RUN` can appear once per file; `CMD` can appear many times and all of them run."
+    ],
+    "correctAnswer": 0,
+    "explanation": "`RUN npm ci` changes the image and is stored as a layer. `CMD [\"node\", \"server.js\"]` only records what to start later; if several `CMD` lines exist, the last one wins, and arguments to `docker run` replace it."
+  },
+  {
+    "id": 1144,
+    "category": "Docker",
+    "difficulty": "easy",
+    "question": "What is the purpose of a `.dockerignore` file?",
+    "options": [
+      "It lists the containers that Docker must not restart after a crash.",
+      "It hides chosen images from the output of the `docker images` command.",
+      "It blocks network access for the containers that are named in it.",
+      "It keeps listed files, such as `node_modules` and `.env`, out of the build context."
+    ],
+    "correctAnswer": 3,
+    "explanation": "`docker build` sends the whole folder (the build context) to the builder. Ignoring large or sensitive paths makes builds faster and stops `COPY . .` from baking secrets or a local `node_modules` into the image."
+  },
+  {
+    "id": 1145,
+    "category": "Docker",
+    "difficulty": "medium",
+    "question": "An app needs a database password at run time. What is the right way to provide it to the container?",
+    "options": [
+      "Write it in the Dockerfile with `ENV DB_PASSWORD=...` so it is always there.",
+      "Copy the `.env` file into the image with `COPY .env .` during the build.",
+      "Pass it when the container starts, as an environment variable or a mounted secret.",
+      "Put it in the image tag so that each environment pulls its own image."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Anything written into an image can be read by everyone who can pull it: `docker history` and the layers show `ENV` values and copied files. Keep images free of secrets and inject them at run time with `-e`, `--env-file` or the platform's secret store."
+  },
+  {
+    "id": 1146,
+    "category": "Docker",
+    "difficulty": "medium",
+    "question": "A container exits right after it starts. Which command helps you find out why?",
+    "options": [
+      "`docker pull <image>` to download the image from the registry again.",
+      "`docker logs <container>` to read what the process printed before it stopped.",
+      "`docker rmi <image>` to remove the image so that Docker repairs it.",
+      "`docker port <container>` to list the ports that were published."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A container lives only as long as its main process. `docker ps -a` shows the exit code and `docker logs` shows the error output, typically a missing environment variable, a wrong command or a crash at startup."
+  },
+  {
+    "id": 1147,
+    "category": "Docker",
+    "difficulty": "hard",
+    "question": "Why is deploying the tag `myapp:latest` to production considered risky?",
+    "options": [
+      "The tag moves, so two servers can run different code and a rollback has no fixed target.",
+      "The tag is reserved for Docker's official images and is rejected by private registries.",
+      "The tag turns off layer caching, so each deployment downloads the whole image.",
+      "The tag expires after 30 days, and then the image is removed from the registry."
+    ],
+    "correctAnswer": 0,
+    "explanation": "`latest` is just a default tag name that points to whatever was pushed last. Tag images with a version or the commit hash (or pin the digest) so that every environment runs a known build and you can roll back to an exact one."
+  },
+  {
+    "id": 1148,
+    "category": "Docker",
+    "difficulty": "hard",
+    "question": "Why should the process in a container usually not run as `root`?",
+    "options": [
+      "Root processes cannot open network ports, so the application would be unreachable.",
+      "Root processes ignore memory limits, so the container would always be killed.",
+      "Root processes cannot read environment variables that are passed at start time.",
+      "If the app is compromised, the attacker gets root in the container and a path to the host."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Containers share the host kernel, so root inside is a bigger risk when combined with a kernel bug or a mounted host path. Add a `USER` instruction (many base images ship one, such as `node`) and grant only the permissions the app needs."
+  },
+  {
+    "id": 1149,
+    "category": "Docker",
+    "difficulty": "easy",
+    "question": "What is a container registry such as Docker Hub or GitHub Container Registry?",
+    "options": [
+      "A service that runs containers and scales them when traffic grows.",
+      "A file on the host that lists every container and its current state.",
+      "A service that stores images so they can be pushed once and pulled anywhere.",
+      "A network that links the containers of one Compose project."
+    ],
+    "correctAnswer": 2,
+    "explanation": "A typical pipeline builds the image in CI, pushes it to a registry (`docker push`) and servers pull it (`docker pull`). Running and scaling containers is the job of an orchestrator or platform, such as Kubernetes or Cloud Run."
+  }
+]

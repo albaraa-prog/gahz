@@ -1,0 +1,395 @@
+[
+  {
+    "id": 1107,
+    "category": "Git & GitHub",
+    "difficulty": "easy",
+    "question": "You edited `app.ts` and ran `git add app.ts`. Where is that change now?",
+    "options": [
+      "In the staging area, ready to be included in the next commit.",
+      "In the local repository, saved as a new commit already.",
+      "On GitHub, visible to everyone who can see the repo.",
+      "In the stash, hidden until you run `git stash pop`."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Git has three places: the working directory (your files), the staging area (what the next commit will contain) and the repository (commits). `git add` moves a change to staging, `git commit` records it locally, and only `git push` sends it to GitHub."
+  },
+  {
+    "id": 1108,
+    "category": "Git & GitHub",
+    "difficulty": "easy",
+    "question": "What is the difference between `git fetch` and `git pull`?",
+    "options": [
+      "`fetch` downloads one branch; `pull` downloads every branch and every tag.",
+      "`fetch` works on public repos only; `pull` is needed for private repos.",
+      "`fetch` updates your files directly; `pull` only updates the remote-tracking refs.",
+      "`fetch` only downloads new commits; `pull` downloads them and merges them into your branch."
+    ],
+    "correctAnswer": 3,
+    "explanation": "`git pull` is `git fetch` followed by a merge (or a rebase, if configured). Fetching is always safe because it only updates remote-tracking branches such as `origin/main`; your own branch and files change only when you merge or pull."
+  },
+  {
+    "id": 1109,
+    "category": "Git & GitHub",
+    "difficulty": "easy",
+    "question": "Which command creates a new branch called `fix-typo` and switches to it in one step?",
+    "options": [
+      "git branch fix-typo",
+      "git checkout fix-typo",
+      "git switch -c fix-typo",
+      "git commit -b fix-typo"
+    ],
+    "correctAnswer": 2,
+    "explanation": "`git switch -c <name>` (or the older `git checkout -b <name>`) creates the branch and moves you onto it. `git branch fix-typo` creates it but leaves you where you were, and `git checkout fix-typo` only works if the branch already exists."
+  },
+  {
+    "id": 1110,
+    "category": "Git & GitHub",
+    "difficulty": "medium",
+    "question": "You pushed a commit to a shared `main` branch and it broke the build. What is the safest way to undo it?",
+    "options": [
+      "`git reset --hard HEAD~1` followed by `git push --force` to main.",
+      "`git revert <commit>`, which adds a new commit that undoes the change.",
+      "`git commit --amend` to replace the bad commit with an empty one.",
+      "`git stash` so that the bad commit is hidden from teammates."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`git revert` keeps history intact, so teammates who already pulled are not affected. `reset` plus a force push rewrites shared history: others end up with commits that no longer exist on the server, and protected branches reject the push anyway."
+  },
+  {
+    "id": 1111,
+    "category": "Git & GitHub",
+    "difficulty": "medium",
+    "question": "During `git merge feature`, Git stops and reports a conflict in `config.json`. What do you do?",
+    "options": [
+      "Edit the file to keep the right lines, remove the markers, `git add` it, then commit.",
+      "Delete the file, run `git merge feature` again and let Git recreate it.",
+      "Run `git push --force` so the remote version replaces both sides.",
+      "Run `git fetch` again, because conflicts mean the download was incomplete."
+    ],
+    "correctAnswer": 0,
+    "explanation": "A conflict means both branches changed the same lines and Git cannot choose. It marks the two versions with `<<<<<<<`, `=======` and `>>>>>>>`. You decide the final content, stage the file and commit to finish the merge. `git merge --abort` cancels it."
+  },
+  {
+    "id": 1112,
+    "category": "Git & GitHub",
+    "difficulty": "medium",
+    "question": "What does `git rebase main` do when you run it on your feature branch?",
+    "options": [
+      "It copies the commits of `main` into your branch as one merge commit.",
+      "It deletes your branch commits and resets the branch to match `main`.",
+      "It uploads your branch to the remote and opens a pull request for it.",
+      "It replays your branch commits on top of the latest `main`, giving them new hashes."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Rebasing rewrites your commits so history is linear, as if you had started from the newest `main`. Because the hashes change, rebase only branches that are yours; rebasing a branch others have pulled forces everyone to repair their copies."
+  },
+  {
+    "id": 1113,
+    "category": "Git & GitHub",
+    "difficulty": "easy",
+    "question": "A file named `.env` holds your API keys. How do you keep it out of the repository?",
+    "options": [
+      "Rename the file to `.env.txt` so Git treats it as plain text.",
+      "Make the repository private, which stops Git from tracking it.",
+      "Add `.env` to `.gitignore` before the file is ever committed.",
+      "Commit it once, then delete it in the next commit you push."
+    ],
+    "correctAnswer": 2,
+    "explanation": "`.gitignore` tells Git which untracked files to leave alone. It does not affect files that are already tracked, and deleting a secret in a later commit does not remove it from history. A key that was pushed must be rotated (replaced)."
+  },
+  {
+    "id": 1114,
+    "category": "Git & GitHub",
+    "difficulty": "medium",
+    "question": "You want to contribute to an open-source repo that you cannot push to. What is the usual flow?",
+    "options": [
+      "Clone it, commit on `main` and push straight to the original repo.",
+      "Fork it, clone your fork, push a branch there and open a pull request.",
+      "Email the changed files to the maintainer and ask for a merge.",
+      "Open an issue, paste the full new code in it and close the issue."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A fork is your own copy of the repository on GitHub. You push branches to the fork and open a pull request from it to the original (the \"upstream\") repo, where maintainers review, run checks and merge."
+  },
+  {
+    "id": 1115,
+    "category": "Git & GitHub",
+    "difficulty": "medium",
+    "question": "A pull request has 14 small \"fix\" commits. The maintainer picks \"Squash and merge\". What lands on `main`?",
+    "options": [
+      "One new commit that contains the combined changes of all 14.",
+      "All 14 commits plus one extra merge commit that joins them.",
+      "All 14 commits replayed one by one, with no merge commit.",
+      "Only the last commit; the other 13 changes are thrown away."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Squash merging keeps `main` readable: one commit per pull request. \"Create a merge commit\" keeps every commit and adds a merge commit; \"Rebase and merge\" replays each commit without one. No option drops changes."
+  },
+  {
+    "id": 1116,
+    "category": "Git & GitHub",
+    "difficulty": "medium",
+    "question": "Which setting stops anyone from pushing directly to `main` and requires checks to pass first?",
+    "options": [
+      "A `CODEOWNERS` file that lists the people who own every folder.",
+      "A `.gitignore` entry for `main` so that pushes to it are skipped.",
+      "Making the repository private so only collaborators can see it.",
+      "A branch protection rule that requires a pull request and status checks."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Branch protection (Settings > Branches or Rulesets) can require a pull request, passing status checks and reviews, and can block force pushes and deletion. `CODEOWNERS` only chooses reviewers; it protects nothing unless a rule requires their review."
+  },
+  {
+    "id": 1117,
+    "category": "Git & GitHub",
+    "difficulty": "hard",
+    "question": "You ran `git reset --hard HEAD~2` by mistake and lost two commits that were never pushed. Can you get them back?",
+    "options": [
+      "Yes: run `git pull`, which restores commits that reset removed.",
+      "No: `--hard` deletes the commit objects from disk immediately.",
+      "Yes: find their hashes with `git reflog`, then reset or branch to them.",
+      "No: only commits that were pushed to a remote can be recovered."
+    ],
+    "correctAnswer": 2,
+    "explanation": "The reflog records every position `HEAD` has had, including commits no branch points to any more. They stay on disk until garbage collection (weeks by default), so `git reset --hard <hash>` or `git branch rescue <hash>` restores them. Uncommitted changes are not recoverable this way."
+  },
+  {
+    "id": 1118,
+    "category": "Git & GitHub",
+    "difficulty": "medium",
+    "question": "You are halfway through a change when an urgent bug arrives on another branch. How do you switch without committing unfinished work?",
+    "options": [
+      "`git clean -fd`, switch branches, and later `git pull` to bring the work back.",
+      "`git stash`, switch branches, and later `git stash pop` to bring the work back.",
+      "`git reset --hard`, switch branches, and later `git revert` to bring it back.",
+      "`git rm -r .`, switch branches, and later `git checkout .` to bring it back."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`git stash` saves your uncommitted changes on a stack and gives you a clean working directory. `git clean` and `git reset --hard` destroy uncommitted work instead of saving it."
+  },
+  {
+    "id": 1119,
+    "category": "Git & GitHub",
+    "difficulty": "easy",
+    "question": "You want to add a new question to the open-source Gahz project. Where do questions live?",
+    "options": [
+      "In JSON files under `src/data/`, one file per topic.",
+      "In a Firestore collection that you edit in the console.",
+      "In TypeScript arrays inside `src/app.ts`, one per mode.",
+      "In GitHub issues labelled `question`, one per question."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Each topic is a \"bank\": a JSON array in `src/data/<topic>.json`. A question has an `id`, `category`, `difficulty`, `question`, four `options`, the `correctAnswer` index and an `explanation`. The Arabic text goes in `src/data/ar/<topic>.json` under the same id."
+  },
+  {
+    "id": 1120,
+    "category": "Git & GitHub",
+    "difficulty": "easy",
+    "question": "Before opening a pull request to Gahz, which command should pass on your machine?",
+    "options": [
+      "`npm run deploy`, which builds the site and publishes it to Firebase Hosting.",
+      "`npm audit fix --force`, which upgrades every dependency to its latest major.",
+      "`npm publish`, which uploads the package to the public npm registry.",
+      "`npm run check`, which validates the question banks, type-checks and runs the tests."
+    ],
+    "correctAnswer": 3,
+    "explanation": "The same command runs in CI on every pull request, so running it locally first saves a failed check. It reports duplicate ids, a missing field, an Arabic entry with the wrong number of options, type errors and failing tests. Contributors never deploy: merging to `main` does that."
+  },
+  {
+    "id": 1121,
+    "category": "Git & GitHub",
+    "difficulty": "medium",
+    "question": "Your Gahz pull request fails with \"duplicate id (also in sql.json)\". What is the fix?",
+    "options": [
+      "Delete the question in `sql.json`, since newer questions take priority.",
+      "Move your question into `sql.json` so both share the same file.",
+      "Give your question the next free `id`: ids must be unique across every bank.",
+      "Re-run the failed check until the validator accepts the id."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Progress, mistakes and translations are all stored by question id, so an id can be used only once in the whole project, not once per file. Never change or reuse the id of an existing question either: people's history points to it."
+  },
+  {
+    "id": 1122,
+    "category": "Git & GitHub",
+    "difficulty": "medium",
+    "question": "Your fork of a project is 30 commits behind the original. How do you update your local `main`?",
+    "options": [
+      "Delete the `origin` remote, then run `git pull` with no arguments.",
+      "Add the original as the `upstream` remote, fetch it and merge `upstream/main`.",
+      "Run `git push --force origin main` to refresh the fork from GitHub.",
+      "Run `git rebase --abort`, which resets a fork to its parent repo."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`origin` is your fork; by convention `upstream` is the original. `git remote add upstream <url>`, `git fetch upstream`, `git merge upstream/main` (then `git push` to update the fork). GitHub's \"Sync fork\" button does the same on the website."
+  },
+  {
+    "id": 1123,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "easy",
+    "question": "In a team project, what does continuous integration (CI) mean?",
+    "options": [
+      "Every change is built and tested automatically as soon as it is pushed.",
+      "Every change is released to production by hand at the end of the sprint.",
+      "Every developer works on one long-lived branch until the release date.",
+      "Every server is restarted on a schedule to keep the app responsive."
+    ],
+    "correctAnswer": 0,
+    "explanation": "CI merges small changes often and lets a machine build and test each one, so a broken change is caught minutes after it is written. Continuous delivery/deployment (CD) goes one step further and releases changes that passed automatically."
+  },
+  {
+    "id": 1124,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "easy",
+    "question": "Where must a GitHub Actions workflow file be saved for GitHub to run it?",
+    "options": [
+      "In the repository root as `actions.json`.",
+      "In `.git/hooks/` as an executable script.",
+      "In `src/ci/` next to the code it tests.",
+      "In `.github/workflows/` as a `.yml` or `.yaml` file."
+    ],
+    "correctAnswer": 3,
+    "explanation": "GitHub looks only in `.github/workflows/`. Each YAML file there is one workflow with its own triggers and jobs. `.git/hooks/` holds local Git hooks, which are not shared with the repository at all."
+  },
+  {
+    "id": 1125,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "easy",
+    "question": "What does this part of a workflow do?",
+    "codeSnippet": "on:\n  push:\n    branches: [main]\n  pull_request:",
+    "options": [
+      "Runs the workflow once, when the file is first added to `main`.",
+      "Pushes the code to `main` and then opens a pull request for it.",
+      "Runs the workflow on every push to `main` and on every pull request.",
+      "Runs the workflow only when a pull request is merged into `main`."
+    ],
+    "correctAnswer": 2,
+    "explanation": "`on` lists the events that trigger a workflow. Here there are two: a `push` filtered to the `main` branch, and any `pull_request` event (opened, updated or reopened). Other common triggers are `schedule` and the manual `workflow_dispatch`."
+  },
+  {
+    "id": 1126,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "medium",
+    "question": "A workflow has two jobs, `test` and `deploy`. How do you make `deploy` wait for `test` and run only if it passed?",
+    "options": [
+      "Write `deploy` below `test` in the file.",
+      "Add `needs: test` to the `deploy` job.",
+      "Add `runs-on: test` to the `deploy` job.",
+      "Add `if: always()` to the `deploy` job."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Jobs run in parallel by default, whatever their order in the file. `needs` creates a dependency: the job starts after the listed jobs succeed and is skipped if one fails. `if: always()` would do the opposite and deploy even after failed tests."
+  },
+  {
+    "id": 1127,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "medium",
+    "question": "A deploy job needs a cloud service-account key. Where should the key be stored?",
+    "options": [
+      "In an encrypted repository secret, read as `${{ secrets.NAME }}`.",
+      "In the workflow file itself, encoded in base64.",
+      "In a `.env` file committed to a private branch.",
+      "In a repository variable, read as `${{ vars.NAME }}`."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Secrets are encrypted, masked in logs and not passed to workflows triggered from forks. Variables (`vars`) are for non-sensitive configuration and are stored and shown in plain text. Base64 is an encoding, not encryption, and anything committed stays in history."
+  },
+  {
+    "id": 1128,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "medium",
+    "question": "Gahz runs its CI on pull requests from forks. Why is that safe?",
+    "options": [
+      "Forks are scanned by GitHub and blocked when they contain new code.",
+      "The workflow runs on the contributor's own computer, not on GitHub.",
+      "Pull requests from forks are merged first and tested afterwards.",
+      "The `pull_request` workflow uses no secrets and only has read permission."
+    ],
+    "correctAnswer": 3,
+    "explanation": "A pull request can change any file, including test scripts, so its code must be treated as untrusted. For `pull_request` events from forks GitHub withholds secrets and gives a read-only token. The deploy workflow, which holds the Firebase key, runs only on pushes to `main`."
+  },
+  {
+    "id": 1129,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "medium",
+    "question": "In CI, why is `npm ci` preferred over `npm install`?",
+    "options": [
+      "It installs only the packages in `devDependencies` and skips all the others.",
+      "It installs the newest version of each package, ignoring the lock file.",
+      "It installs exactly what `package-lock.json` lists and fails if the lock file is out of sync.",
+      "It installs packages globally so that later jobs can reuse them."
+    ],
+    "correctAnswer": 2,
+    "explanation": "`npm ci` deletes `node_modules` and installs the locked versions, so every run uses the same dependency tree as your machine. `npm install` may update the lock file, which makes builds differ from one run to the next."
+  },
+  {
+    "id": 1130,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "medium",
+    "question": "A branch rule on `main` requires the status check `check`, and the check fails on your pull request. What happens?",
+    "options": [
+      "The pull request is closed and its branch is deleted automatically.",
+      "The merge button stays blocked until a new commit makes the check pass.",
+      "The pull request is merged, and the failure is reported afterwards.",
+      "The check is skipped after three failed runs so that work can continue."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A required status check turns CI from advice into a gate. Read the failed job's log, fix the cause and push again: the workflow re-runs on the new commit. Never disable or skip a failing test just to turn the check green."
+  },
+  {
+    "id": 1131,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "easy",
+    "question": "What is a \"runner\" in GitHub Actions?",
+    "options": [
+      "The machine (often a fresh virtual machine) that executes a job.",
+      "The person who is allowed to approve and start a workflow.",
+      "The YAML file that describes the steps of a workflow.",
+      "The branch that a workflow checks out before it starts."
+    ],
+    "correctAnswer": 0,
+    "explanation": "`runs-on: ubuntu-latest` asks for a GitHub-hosted Linux runner. Each job gets a clean machine, so nothing is left from earlier runs: that is why a job starts with `actions/checkout` and installs its dependencies again."
+  },
+  {
+    "id": 1132,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "hard",
+    "question": "Why do security guides tell you to set `permissions:` in a workflow, for example `contents: read`?",
+    "options": [
+      "It lets the job read private repositories that belong to other organizations.",
+      "It makes the workflow run faster, because fewer scopes are loaded.",
+      "It hides the workflow logs from people who are not collaborators.",
+      "It limits what the job's `GITHUB_TOKEN` can do if a step or dependency is compromised."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Every job receives an automatic token. With least privilege, a malicious package that runs during `npm ci` can read the code but cannot push commits, create releases or change issues. Grant write scopes only to the job that needs them."
+  },
+  {
+    "id": 1133,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "medium",
+    "question": "A site should go live automatically whenever a pull request is merged. Which trigger fits the deploy workflow?",
+    "options": [
+      "`pull_request` on any branch, because the code is reviewed there.",
+      "`schedule` once a day, because merges are collected overnight.",
+      "`push` on the `main` branch, because a merge adds commits to `main`.",
+      "`issues` when one is closed, because the work is then done."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Merging a pull request is a push to the target branch. Deploying from `push` on `main` means only reviewed, checked code is released, and the job may use secrets. Deploying from `pull_request` would publish unreviewed code."
+  },
+  {
+    "id": 1134,
+    "category": "CI/CD with GitHub Actions",
+    "difficulty": "medium",
+    "question": "What does the `cache: npm` option of `actions/setup-node` speed up?",
+    "options": [
+      "Running tests: results of passing tests are reused between runs.",
+      "Installing dependencies: downloaded packages are reused between runs.",
+      "Checking out code: unchanged files are reused between runs.",
+      "Starting the runner: the virtual machine is reused between runs."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The option saves npm's download cache, keyed by the lock file, so `npm ci` does not fetch every package from the registry again. Tests still run in full on a fresh machine every time."
+  }
+]

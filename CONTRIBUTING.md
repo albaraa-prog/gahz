@@ -62,6 +62,18 @@ Lessons are short, hands-on walkthroughs ("Learn by doing" on the home screen). 
 
 Code exercises are JavaScript only for now. For other languages use `choice`, `blank` and `order`.
 
+## Adding a free course or certificate
+
+Each roadmap step lists free courses in `src/services/resources.ts`. To add one:
+
+1. Open the link yourself and make sure the course can be studied for free, without a trial or a card.
+2. Use `certificate(...)` only when the provider also gives a certificate or badge at no cost; otherwise use
+   `course(...)`. If only the exam is paid, say so in the description.
+3. Link to the provider's own page over https, with no tracking parameters.
+4. Keep the provider's own course name as the title and describe it in one line in English and Arabic.
+
+`npm test` checks that every step has at least one entry and that each entry is complete.
+
 ## Adding a preset
 
 Presets are defined in `src/services/presets.ts`. Add an entry with an `id`, a `modeLabel`, the number of

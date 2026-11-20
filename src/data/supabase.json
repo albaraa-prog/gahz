@@ -1,0 +1,172 @@
+[
+  {
+    "id": 1162,
+    "category": "Supabase",
+    "difficulty": "easy",
+    "question": "Which database is every Supabase project built on?",
+    "options": [
+      "MongoDB, a document database.",
+      "PostgreSQL, a relational SQL database.",
+      "Redis, an in-memory key-value store.",
+      "SQLite, a single-file embedded database."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Supabase gives you a full Postgres database and adds authentication, auto-generated APIs, realtime, file storage and edge functions around it. Tables, joins, constraints, views and SQL functions all work as in any Postgres."
+  },
+  {
+    "id": 1163,
+    "category": "Supabase",
+    "difficulty": "medium",
+    "question": "What does Row Level Security (RLS) do on a Supabase table?",
+    "options": [
+      "It lets the database decide, row by row, what each user may read or change.",
+      "It encrypts every row with a key that only the table owner knows.",
+      "It locks a row while one user edits it so that nobody else can write.",
+      "It limits how many rows a single query is allowed to return."
+    ],
+    "correctAnswer": 0,
+    "explanation": "With RLS enabled, every query is checked against policies written in SQL. Because the browser talks to the database through the API directly, RLS is the main line of defence in a Supabase app, not an optional extra."
+  },
+  {
+    "id": 1164,
+    "category": "Supabase",
+    "difficulty": "medium",
+    "question": "What does this policy allow?",
+    "codeSnippet": "create policy \"own notes\"\non notes for select\nto authenticated\nusing (auth.uid() = user_id);",
+    "options": [
+      "Signed-in users can read every row and edit only their own rows.",
+      "Anonymous visitors can read the rows that have no `user_id` at all.",
+      "The table owner can read the rows, and nobody else can read any.",
+      "Signed-in users can read only the rows whose `user_id` is their own id."
+    ],
+    "correctAnswer": 3,
+    "explanation": "`auth.uid()` returns the id of the user who makes the request, taken from their JWT. The `using` expression is evaluated for each row and only rows where it is true are visible. Insert, update and delete need policies of their own."
+  },
+  {
+    "id": 1165,
+    "category": "Supabase",
+    "difficulty": "hard",
+    "question": "A table has RLS enabled but no policies. What does `select *` return for a normal signed-in user?",
+    "options": [
+      "All rows: without policies, RLS has nothing to enforce.",
+      "An error that says the table does not exist.",
+      "No rows, and no error: everything is denied by default.",
+      "Only the rows that the user inserted."
+    ],
+    "correctAnswer": 2,
+    "explanation": "RLS is \"deny by default\": a row is visible only if some policy allows it. An empty result with no error is the classic sign of a missing select policy. The opposite mistake is more dangerous: a table with RLS turned off is open to anyone who has the public key."
+  },
+  {
+    "id": 1166,
+    "category": "Supabase",
+    "difficulty": "medium",
+    "question": "Which Supabase key must never be used in browser or mobile code?",
+    "options": [
+      "The `anon` (publishable) key, because it identifies the project.",
+      "The `service_role` (secret) key, because it bypasses Row Level Security.",
+      "The project URL, because it reveals where the database is hosted.",
+      "The user's access token, because it is returned after sign-in."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The anon key is meant to be public and is safe as long as RLS is enabled with correct policies. The service-role key has full access to all data, so it belongs only in trusted server code or edge functions, read from an environment variable."
+  },
+  {
+    "id": 1167,
+    "category": "Supabase",
+    "difficulty": "easy",
+    "question": "What does this supabase-js call do?",
+    "codeSnippet": "const { data, error } = await supabase\n  .from('notes')\n  .select('title')\n  .eq('done', false);",
+    "options": [
+      "It reads the `title` of the rows in `notes` where `done` is false.",
+      "It deletes the rows in `notes` where `done` is false.",
+      "It sets `done` to false on the rows in `notes` that have a title.",
+      "It creates a `notes` table with the columns `title` and `done`."
+    ],
+    "correctAnswer": 0,
+    "explanation": "The client builds a request to the auto-generated REST API (PostgREST): `from` names the table, `select` the columns and `eq` adds a filter. It returns `{ data, error }` and does not throw, so always check `error`."
+  },
+  {
+    "id": 1168,
+    "category": "Supabase",
+    "difficulty": "medium",
+    "question": "How should changes to the database schema be managed in a team Supabase project?",
+    "options": [
+      "By editing tables in the production dashboard whenever a change is needed.",
+      "By exporting the whole database to a spreadsheet after each change.",
+      "By letting the app create the tables it needs the first time it starts.",
+      "As SQL migration files in the repository, applied with the Supabase CLI."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Migrations make the schema reviewable in pull requests and repeatable on every environment (local, staging, production). Changes made by hand in the dashboard cannot be reviewed or reproduced, and they drift away from what the code expects."
+  },
+  {
+    "id": 1169,
+    "category": "Supabase",
+    "difficulty": "medium",
+    "question": "Compared with Firestore, what is a main advantage of Supabase's data model?",
+    "options": [
+      "Schemaless documents: each row can have a different set of columns.",
+      "Offline-first sync: built-in local caching on every platform.",
+      "Relational features: joins, foreign keys, constraints and full SQL.",
+      "Per-read billing: you pay only for the documents that you fetch."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Postgres enforces relationships and lets you aggregate and join in one query, which Firestore cannot do. Firestore's strengths are different: flexible documents, automatic scaling and offline sync in its SDKs. Choose by the shape of your data."
+  },
+  {
+    "id": 1170,
+    "category": "Supabase",
+    "difficulty": "medium",
+    "question": "What are Supabase Edge Functions for?",
+    "options": [
+      "Running SQL queries in the browser without sending a network request.",
+      "Running server-side TypeScript, such as calling a payment API with a secret key.",
+      "Caching images on the user's device so that they load when offline.",
+      "Storing large files such as videos and serving them from a CDN."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Some logic cannot run on the client: anything that needs a secret, a webhook receiver, or a trusted check. Edge Functions run on Deno close to the user and read secrets from environment variables. Storing files is the job of Supabase Storage."
+  },
+  {
+    "id": 1171,
+    "category": "Supabase",
+    "difficulty": "medium",
+    "question": "Users upload profile photos to a Supabase Storage bucket. How is access to the files controlled?",
+    "options": [
+      "With RLS policies on the storage objects, written in SQL like table policies.",
+      "With a password on each file, sent to the user by email after the upload.",
+      "With a `.gitignore` file in the bucket that lists the private paths.",
+      "With CSS rules in the app that hide the images from other users."
+    ],
+    "correctAnswer": 0,
+    "explanation": "File metadata lives in the `storage.objects` table, so the same policy system applies, for example \"a user may upload only into a folder named after their uid\". A bucket can also be public (anyone with the URL can read) or private (signed URLs)."
+  },
+  {
+    "id": 1172,
+    "category": "Supabase",
+    "difficulty": "easy",
+    "question": "What does Supabase Realtime let an app do?",
+    "options": [
+      "Run long reports in the background and email the results to the user.",
+      "Translate the app's text into the visitor's language automatically.",
+      "Deploy the frontend again every time a table row changes.",
+      "Receive database changes and broadcast messages over a WebSocket as they happen."
+    ],
+    "correctAnswer": 3,
+    "explanation": "A client subscribes to a channel and is notified of inserts, updates and deletes (subject to RLS), or of messages and presence from other clients. It is what powers chat, live dashboards and collaborative cursors."
+  },
+  {
+    "id": 1173,
+    "category": "Supabase",
+    "difficulty": "hard",
+    "question": "A list screen loads 50 posts and then runs one extra query per post to fetch its author. What is the better approach in Supabase?",
+    "options": [
+      "Run the 50 author queries in parallel with `Promise.all` to save time.",
+      "Copy the author's name into `localStorage` the first time it is seen.",
+      "Fetch the related rows in the same request: `select('title, author:profiles(name)')`.",
+      "Raise the request timeout so that the 51 queries can all finish."
+    ],
+    "correctAnswer": 2,
+    "explanation": "This is the N+1 query problem. Because the tables are linked by a foreign key, the API can embed the related row in a single round trip, which the database answers with one join. Parallel requests are still 51 requests."
+  }
+]

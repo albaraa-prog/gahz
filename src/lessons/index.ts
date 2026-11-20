@@ -9,6 +9,9 @@
 
 import { bigOBinarySearch } from './big-o-binary-search';
 import { conditionsLoops } from './conditions-loops';
+import { dockerFirstContainer } from './docker-first-container';
+import { gitContributeToGahz } from './git-contribute-to-gahz';
+import { githubActionsCi } from './github-actions-ci';
 import { jsFunctionsArrays } from './js-functions-arrays';
 import { jsVariables } from './js-variables';
 import { pythonListsDicts } from './python-lists-dicts';
@@ -22,4 +25,7 @@ export const LESSONS: readonly Lesson[] = [
   bigOBinarySearch,
   pythonListsDicts,
   sqlFirstQueries,
+  gitContributeToGahz,
+  githubActionsCi,
+  dockerFirstContainer,
 ];

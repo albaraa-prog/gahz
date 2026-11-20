@@ -36,6 +36,8 @@ let pendingWrites = 0;
 let applyingRemote = false;
 /** Guards against a slow sign-in sync finishing after the user has signed out or switched account. */
 let syncGeneration = 0;
+/** True while an account is being deleted, so no queued write can recreate its documents. */
+let deleting = false;
 
 function refreshStatus(): void {
   if (!state.user) return;
@@ -90,7 +92,7 @@ function parseRemoteSettings(data: unknown): UserPreferences | null {
 
 async function pushProfile(): Promise<void> {
   const user = state.user;
-  if (!user) return;
+  if (!user || deleting) return;
   const [{ db }, sdk] = await Promise.all([getFirebase(), import('firebase/firestore')]);
   const preferences = currentPreferences();
   trackWrite(
@@ -118,7 +120,7 @@ const pushProfileSoon = debounce(() => {
 
 async function pushAttempt(attempt: Attempt): Promise<void> {
   const user = state.user;
-  if (!user) return;
+  if (!user || deleting) return;
   const [{ db }, sdk] = await Promise.all([getFirebase(), import('firebase/firestore')]);
   trackWrite(sdk.setDoc(sdk.doc(db, 'users', user.uid, 'attempts', attempt.id), attemptToDoc(attempt, sdk.serverTimestamp())));
 }
@@ -185,6 +187,7 @@ export async function handleSignedIn(uid: string): Promise<void> {
 /** Runs when there is no signed-in user (on load, or after signing out). */
 export function handleSignedOut(): void {
   syncGeneration += 1;
+  deleting = false;
   pendingWrites = 0;
   state.syncStatus = isFirebaseConfigured ? 'guest' : 'disabled';
   // The history on this device belonged to an account. It is backed up in the
@@ -215,6 +218,40 @@ export async function clearRemoteAttempts(): Promise<void> {
     trackWrite(batch.commit());
     if (snapshot.size < BATCH_LIMIT || !state.online) break;
   }
+}
+
+/**
+ * Deletes everything stored in the cloud for the signed-in user: every attempt
+ * and the profile document. Unlike the other writes here it waits for the
+ * server, so the caller can delete the sign-in afterwards knowing the data is gone.
+ */
+export async function deleteRemoteData(): Promise<void> {
+  const user = state.user;
+  if (!user) return;
+  deleting = true;
+  syncGeneration += 1; // abandon any sign-in sync still in flight
+  try {
+    const [{ db }, sdk] = await Promise.all([getFirebase(), import('firebase/firestore')]);
+    const attemptsRef = sdk.collection(db, 'users', user.uid, 'attempts');
+    // Let queued uploads reach the server first, so they are deleted too instead of arriving afterwards.
+    await sdk.waitForPendingWrites(db);
+    for (;;) {
+      const snapshot = await sdk.getDocsFromServer(sdk.query(attemptsRef, sdk.limit(BATCH_LIMIT)));
+      if (snapshot.empty) break;
+      const batch = sdk.writeBatch(db);
+      snapshot.docs.forEach((d) => batch.delete(d.ref));
+      await batch.commit();
+    }
+    await sdk.deleteDoc(sdk.doc(db, 'users', user.uid));
+  } catch (error) {
+    deleting = false;
+    throw error;
+  }
+}
+
+/** Called when deleting the sign-in failed after the data was removed, so normal syncing resumes. */
+export function cancelAccountDeletion(): void {
+  deleting = false;
 }
 
 /** Wires the store and history to Firestore. Call once at startup. */

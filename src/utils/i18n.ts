@@ -423,9 +423,31 @@ const en = {
   'footer.license': '© 2026 Gahz جاهز. Open source under the MIT License.',
   'footer.count': '{count:question} in {topics:category}',
   'footer.privacy': 'Privacy',
-  'privacy.title': 'Privacy',
-  'privacy.body':
-    'As a guest, your attempts and settings are saved only in this browser. If you sign in, your attempt history, settings and stats are also stored in your own private cloud record so you can use them on other devices. Nobody else can read them.',
+  'footer.terms': 'Terms',
+  'footer.analytics': 'Analytics choice',
+  'footer.deleteAccount': 'Delete my account',
+  'legal.privacyLink': 'privacy policy',
+  'legal.termsLink': 'terms of use',
+  'consent.label': 'Analytics consent',
+  'consent.text':
+    'May Gahz count visits with Google Analytics? It sends anonymous usage events to Google servers outside Oman, never your answers. Gahz works the same either way. See the {privacy}.',
+  'consent.accept': 'Accept',
+  'consent.decline': 'No thanks',
+  'consent.saved': 'Saved. You can change this at any time from the bottom of the page.',
+  'auth.consent':
+    'I am 18 or older, or my parent or guardian has approved. I agree to the {privacy} and the {terms}, including storing my account data on Google servers outside Oman.',
+  'auth.needConsent': 'Please tick the box to agree before creating an account.',
+  'auth.legalNote': 'By signing in you agree to the {privacy} and the {terms}. Your account data is stored on Google servers outside Oman.',
+  'deleteAccount.title': 'Delete your account?',
+  'deleteAccount.body':
+    'This permanently deletes your sign-in, profile, settings and quiz history from the cloud, and removes the history from this device. It cannot be undone.',
+  'deleteAccount.confirm': 'Delete everything',
+  'deleteAccount.cancel': 'Keep my account',
+  'deleteAccount.done': 'Your account and its data were deleted.',
+  'deleteAccount.offline': 'You are offline. Connect to the internet, then try again.',
+  'deleteAccount.reauth':
+    'For your security, deleting an account needs a fresh sign-in. Sign out, sign in again, then choose "Delete my account" straight away.',
+  'deleteAccount.failed': 'Could not delete the account. Please try again, or write to {email}.',
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -822,9 +844,31 @@ const ar: Record<TranslationKey, string> = {
   'footer.license': '© 2026 جاهز Gahz. مفتوح المصدر برخصة MIT.',
   'footer.count': '{count:question} في {topics:category}',
   'footer.privacy': 'الخصوصية',
-  'privacy.title': 'الخصوصية',
-  'privacy.body':
-    'في وضع الضيف تُحفظ محاولاتك وإعداداتك في هذا المتصفح فقط. عند تسجيل الدخول يُحفظ سجل محاولاتك وإعداداتك وإحصاءاتك أيضاً في سجل سحابي خاص بك لتستخدمها على أجهزة أخرى. لا أحد غيرك يستطيع قراءتها.',
+  'footer.terms': 'الشروط',
+  'footer.analytics': 'خيار التحليلات',
+  'footer.deleteAccount': 'حذف حسابي',
+  'legal.privacyLink': 'سياسة الخصوصية',
+  'legal.termsLink': 'شروط الاستخدام',
+  'consent.label': 'الموافقة على التحليلات',
+  'consent.text':
+    'هل تسمح لجاهز بإحصاء الزيارات عبر Google Analytics؟ تُرسل أحداث استخدام مجهولة إلى خوادم Google خارج عُمان، ولا تُرسل إجاباتك أبداً. يعمل جاهز بالطريقة نفسها في الحالتين. راجع {privacy}.',
+  'consent.accept': 'موافق',
+  'consent.decline': 'لا، شكراً',
+  'consent.saved': 'تم الحفظ. يمكنك تغيير اختيارك في أي وقت من أسفل الصفحة.',
+  'auth.consent':
+    'عمري 18 سنة أو أكثر، أو وافق وليّ أمري. أوافق على {privacy} و{terms}، ومن ذلك تخزين بيانات حسابي على خوادم Google خارج عُمان.',
+  'auth.needConsent': 'يرجى وضع علامة في المربع للموافقة قبل إنشاء الحساب.',
+  'auth.legalNote': 'بتسجيل الدخول فإنك توافق على {privacy} و{terms}. تُخزَّن بيانات حسابك على خوادم Google خارج عُمان.',
+  'deleteAccount.title': 'حذف حسابك؟',
+  'deleteAccount.body':
+    'سيُحذف نهائياً تسجيل دخولك وملفك وإعداداتك وسجلّ اختباراتك من السحابة، ويُزال السجلّ من هذا الجهاز. لا يمكن التراجع عن ذلك.',
+  'deleteAccount.confirm': 'حذف كل شيء',
+  'deleteAccount.cancel': 'الإبقاء على حسابي',
+  'deleteAccount.done': 'تم حذف حسابك وبياناته.',
+  'deleteAccount.offline': 'أنت غير متصل. اتصل بالإنترنت ثم حاول مرة أخرى.',
+  'deleteAccount.reauth':
+    'حفاظاً على أمانك، يتطلب حذف الحساب تسجيل دخول حديثاً. سجّل الخروج ثم سجّل الدخول من جديد، ثم اختر «حذف حسابي» مباشرة.',
+  'deleteAccount.failed': 'تعذّر حذف الحساب. حاول مرة أخرى أو راسلنا على {email}.',
 };
 
 const DICTIONARIES: Record<Locale, Record<TranslationKey, string>> = { en, ar };

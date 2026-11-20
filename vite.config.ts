@@ -14,6 +14,8 @@ export default defineConfig({
     // The lazily loaded Firebase SDK chunk (auth + firestore) is about 760 kB before gzip.
     chunkSizeWarningLimit: 800,
     rollupOptions: {
+      // The legal pages are standalone documents so they can be linked to directly.
+      input: ['src/index.html', 'src/privacy.html', 'src/terms.html'],
       output: {
         // Keep the Firebase SDK out of the entry chunk: guests never download it.
         manualChunks(id) {

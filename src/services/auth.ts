@@ -10,7 +10,7 @@ import { t, type TranslationKey } from '../utils/i18n';
 import { state } from '../utils/state';
 import { track } from './analytics';
 import { getFirebase, isFirebaseConfigured } from './firebase';
-import { handleSignedIn, handleSignedOut } from './sync';
+import { cancelAccountDeletion, deleteRemoteData, handleSignedIn, handleSignedOut } from './sync';
 
 function toAuthUser(user: User): AuthUser {
   return { uid: user.uid, displayName: user.displayName, email: user.email, photoURL: user.photoURL };
@@ -101,4 +101,40 @@ export async function sendPasswordReset(email: string): Promise<void> {
 export async function signOutUser(): Promise<void> {
   const [{ auth }, sdk] = await Promise.all([getFirebase(), import('firebase/auth')]);
   await sdk.signOut(auth);
+}
+
+/** Firebase refuses to delete an account unless the sign-in is recent (about five minutes). */
+const RECENT_LOGIN_MS = 4 * 60 * 1000;
+
+/** Thrown, before anything is deleted, when the user has to sign in again first. */
+export class RecentLoginRequiredError extends Error {
+  constructor() {
+    super('A recent sign-in is required to delete the account.');
+    this.name = 'RecentLoginRequiredError';
+  }
+}
+
+/**
+ * Permanently deletes the signed-in user's cloud data and then the sign-in itself.
+ * The recency check comes first so we never delete the data and then fail to delete the account.
+ */
+export async function deleteAccount(): Promise<void> {
+  const [{ auth }, sdk] = await Promise.all([getFirebase(), import('firebase/auth')]);
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const lastSignIn = Date.parse(user.metadata.lastSignInTime ?? '');
+  if (!Number.isFinite(lastSignIn) || Date.now() - lastSignIn > RECENT_LOGIN_MS) {
+    throw new RecentLoginRequiredError();
+  }
+
+  await deleteRemoteData();
+  try {
+    await sdk.deleteUser(user); // onAuthStateChanged then clears this device's copy
+  } catch (error) {
+    cancelAccountDeletion();
+    const code = typeof error === 'object' && error !== null && 'code' in error ? String(error.code) : '';
+    if (code === 'auth/requires-recent-login') throw new RecentLoginRequiredError();
+    throw error;
+  }
 }

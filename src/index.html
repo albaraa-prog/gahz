@@ -280,11 +280,16 @@
                     <label for="authPassword" data-i18n="auth.password">Password</label>
                     <input type="password" id="authPassword" autocomplete="current-password" minlength="6" dir="ltr" required>
                 </div>
+                <label class="checkbox-container auth-consent" id="authConsentField" hidden>
+                    <input type="checkbox" id="authConsent">
+                    <span id="authConsentText"></span>
+                </label>
                 <div class="form-message" id="authMessage" role="alert"></div>
                 <button class="btn btn-block" type="submit" id="authSubmitBtn">Sign in</button>
             </form>
             <div class="auth-divider" data-i18n="auth.or">or</div>
             <button class="btn btn-outline btn-block" type="button" id="googleSignInBtn" data-i18n="auth.google">Continue with Google</button>
+            <p class="auth-legal" id="authLegalNote"></p>
             <div class="auth-footer">
                 <button class="link-btn" type="button" id="authResetBtn" data-i18n="auth.forgot">Forgot password?</button>
                 <button class="link-btn" type="button" id="authCloseBtn" data-i18n="auth.guest">Continue as guest</button>
@@ -294,11 +299,23 @@
 
     <div class="toast-region" id="toastRegion" aria-live="polite"></div>
 
+    <!-- Analytics consent: shown until the visitor answers. Analytics is not loaded before "Accept". -->
+    <div class="consent-banner" id="consentBanner" role="region" data-i18n-aria-label="consent.label" hidden>
+        <p id="consentText"></p>
+        <div class="consent-actions">
+            <button class="btn btn-outline btn-sm" type="button" id="consentDeclineBtn" data-i18n="consent.decline">No thanks</button>
+            <button class="btn btn-sm" type="button" id="consentAcceptBtn" data-i18n="consent.accept">Accept</button>
+        </div>
+    </div>
+
     <footer>
         <p data-i18n="footer.license">© 2026 Gahz جاهز. Open source under the MIT License.</p>
         <div class="footer-links">
             <span id="questionCountLabel"></span>
-            <button class="link-btn" type="button" id="privacyBtn" data-i18n="footer.privacy">Privacy</button>
+            <a class="link-btn" href="./privacy.html" data-i18n="footer.privacy">Privacy</a>
+            <a class="link-btn" href="./terms.html" data-i18n="footer.terms">Terms</a>
+            <button class="link-btn" type="button" id="analyticsChoiceBtn" data-i18n="footer.analytics" hidden>Analytics choice</button>
+            <button class="link-btn" type="button" id="deleteAccountBtn" data-i18n="footer.deleteAccount" hidden>Delete my account</button>
         </div>
     </footer>
 

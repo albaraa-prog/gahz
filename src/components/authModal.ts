@@ -3,6 +3,7 @@
 import { describeAuthError, registerWithEmail, sendPasswordReset, signInWithEmail, signInWithGoogle } from '../services/auth';
 import { byId, closestFrom } from '../utils/dom';
 import { t } from '../utils/i18n';
+import { legalHtml } from '../utils/legalLinks';
 import { state, store } from '../utils/state';
 import { bindDismiss, closeModal, openModal } from './modal';
 import { toast } from './toast';
@@ -34,6 +35,11 @@ function renderTab(clearMessage = true): void {
   byId('authSubmitBtn').textContent = registering ? t('auth.tabRegister') : t('auth.tabSignIn');
   byId<HTMLInputElement>('authPassword').autocomplete = registering ? 'new-password' : 'current-password';
   byId('authResetBtn').hidden = registering;
+  // Creating an account needs an explicit tick; signing in to an existing one shows the notice.
+  byId('authConsentField').hidden = !registering;
+  byId('authLegalNote').hidden = registering;
+  byId('authConsentText').innerHTML = legalHtml('auth.consent');
+  byId('authLegalNote').innerHTML = legalHtml('auth.legalNote');
   if (clearMessage) setMessage('');
 }
 
@@ -67,6 +73,13 @@ function readCredentials(): { name: string; email: string; password: string } | 
   return { name, email, password };
 }
 
+/** On the "Create account" tab nothing proceeds, by email or Google, until the box is ticked. */
+function hasConsent(): boolean {
+  if (activeTab !== 'register' || byId<HTMLInputElement>('authConsent').checked) return true;
+  setMessage(t('auth.needConsent'));
+  return false;
+}
+
 export function openAuthModal(): void {
   activeTab = 'signin';
   renderTab();
@@ -76,6 +89,7 @@ export function openAuthModal(): void {
 function close(): void {
   closeModal(byId('authModal'));
   byId<HTMLInputElement>('authPassword').value = '';
+  byId<HTMLInputElement>('authConsent').checked = false;
   setMessage('');
 }
 
@@ -94,7 +108,7 @@ export function initAuthModal(): void {
   byId<HTMLFormElement>('authForm').addEventListener('submit', (event) => {
     event.preventDefault();
     const credentials = readCredentials();
-    if (!credentials) return;
+    if (!credentials || !hasConsent()) return;
     void run(() =>
       activeTab === 'register'
         ? registerWithEmail(credentials.name, credentials.email, credentials.password)
@@ -102,7 +116,9 @@ export function initAuthModal(): void {
     );
   });
 
-  byId('googleSignInBtn').addEventListener('click', () => void run(signInWithGoogle));
+  byId('googleSignInBtn').addEventListener('click', () => {
+    if (hasConsent()) void run(signInWithGoogle);
+  });
 
   byId('authResetBtn').addEventListener('click', () => {
     const email = byId<HTMLInputElement>('authEmail').value.trim();

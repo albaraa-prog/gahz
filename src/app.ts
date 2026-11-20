@@ -6,6 +6,7 @@
 import { initAuthModal } from './components/authModal';
 import { initConstellation } from './components/constellation';
 import { initCustomConfig } from './components/customConfig';
+import { initFooter } from './components/footer';
 import { initHistoryTable } from './components/historyTable';
 import { initHomeScreen } from './components/homeScreen';
 import { initLessonScreen } from './components/lessonScreen';
@@ -86,12 +87,6 @@ function initConnectivity(): void {
   });
 }
 
-function initPrivacyNote(): void {
-  byId('privacyBtn').addEventListener('click', () => {
-    void showDialog({ title: t('privacy.title'), body: t('privacy.body'), cancelLabel: null });
-  });
-}
-
 function main(): void {
   installGlobalErrorHandlers();
   initToasts();
@@ -122,7 +117,7 @@ function main(): void {
   initRouter();
   initConstellation();
   initConnectivity();
-  initPrivacyNote();
+  initFooter();
 
   onTimeUp(() => {
     void showDialog({ title: t('timeUp.title'), body: t('timeUp.body'), cancelLabel: null });

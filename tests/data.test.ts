@@ -90,6 +90,7 @@ describe('stored data recovery', () => {
     });
     expect(session).toMatchObject({
       answers: { 1: 2 },
+      checked: { 1: true },
       flags: { 1: true },
       currentIdx: 0,
       secondsRemaining: 30,

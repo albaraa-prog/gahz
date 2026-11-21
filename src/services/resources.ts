@@ -506,6 +506,16 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
       'دليل مفتوح من الـ prompts الأساسية إلى التقنيات المتقدمة وحقن الـ prompt.',
     ),
   ],
+  ai_skills_plugins: [
+    ANTHROPIC_COURSES,
+    course(
+      'Claude Code: A Highly Agentic Coding Assistant',
+      'DeepLearning.AI and Anthropic',
+      'https://www.deeplearning.ai/short-courses/claude-code-a-highly-agentic-coding-assistant/',
+      'A short video course that shows an AI agent using tools and MCP servers on a real codebase.',
+      'دورة فيديو قصيرة تعرض agent يستخدم الأدوات وخوادم MCP على مشروع حقيقي.',
+    ),
+  ],
   csharp: [
     FCC_CSHARP,
     course(

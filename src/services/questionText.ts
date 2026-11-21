@@ -119,6 +119,7 @@ export function questionDirection(question: Question): 'rtl' | 'ltr' {
  */
 const ARABIC_CATEGORIES: Readonly<Record<string, string>> = {
   '.NET & ASP.NET Core': '.NET و ASP.NET Core',
+  'AI Skills, Tools & Plugins': 'مهارات وأدوات وإضافات الذكاء الاصطناعي (Skills, Tools & Plugins)',
   'AI Fundamentals': 'أساسيات الذكاء الاصطناعي',
   'APIs & Data Integration (REST, GraphQL, WebSockets)': 'واجهات API وتكامل البيانات (REST وGraphQL وWebSockets)',
   'Arabic (الأساسيات والبرمجة)': 'الأساسيات والبرمجة',

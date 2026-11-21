@@ -7,6 +7,7 @@
  * against its tests.
  */
 
+import { aiSkillsTools } from './ai-skills-tools';
 import { bigOBinarySearch } from './big-o-binary-search';
 import { conditionsLoops } from './conditions-loops';
 import { dockerFirstContainer } from './docker-first-container';
@@ -27,6 +28,7 @@ export const LESSONS: readonly Lesson[] = [
   bigOBinarySearch,
   pythonListsDicts,
   sqlFirstQueries,
+  aiSkillsTools,
   gitContributeToGahz,
   githubActionsCi,
   dockerFirstContainer,

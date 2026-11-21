@@ -1,0 +1,171 @@
+[
+  {
+    "id": 1226,
+    "category": "OOP & Design Patterns",
+    "difficulty": "easy",
+    "question": "A `BankAccount` class keeps `balance` private and only lets other code change it through `deposit()` and `withdraw()`, which check the amount first. Which OOP principle is this?",
+    "options": [
+      "Polymorphism",
+      "Inheritance",
+      "Encapsulation",
+      "Abstraction"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Encapsulation keeps an object's state behind methods that protect its rules, so no outside code can set an invalid balance. Inheritance is reusing a parent class, polymorphism is one call behaving differently per type, and abstraction is exposing only the essential idea."
+  },
+  {
+    "id": 1227,
+    "category": "OOP & Design Patterns",
+    "difficulty": "medium",
+    "question": "`Car`, `Truck` and `Bus` share a `plateNumber` field and the same `register()` code, but each must supply its own `tollFee()`. In Java or C#, what fits best?",
+    "options": [
+      "An interface that declares `plateNumber`, `register()` and `tollFee()`",
+      "An abstract class with the shared field and method, and an abstract `tollFee()`",
+      "Three unrelated classes that each copy the field and `register()`",
+      "One concrete class with a `type` string and an `if` chain in `tollFee()`"
+    ],
+    "correctAnswer": 1,
+    "explanation": "An abstract class can hold state and shared implementation while forcing subclasses to implement the missing part. An interface describes what a type can do but is not the place for shared instance state; copying code or switching on a type string makes every new vehicle a change in several places."
+  },
+  {
+    "id": 1228,
+    "category": "OOP & Design Patterns",
+    "difficulty": "medium",
+    "question": "A developer writes `class Stack extends ArrayList` to reuse its storage. Callers can now call `add(0, x)` and insert at the bottom of the stack. What is the better design?",
+    "options": [
+      "Keep a private list inside `Stack` and expose only `push`, `pop` and `peek`",
+      "Keep the inheritance and document that `add(index, x)` must not be used",
+      "Override every `ArrayList` method that is unsafe so it throws an exception",
+      "Make `Stack` a static utility class that receives the list as a parameter"
+    ],
+    "correctAnswer": 0,
+    "explanation": "This is composition over inheritance: a stack *has* a list, it *is not* a general list. Wrapping the list exposes only valid stack operations. Documentation does not stop misuse, and overriding methods to throw breaks the promise the parent type makes to its callers."
+  },
+  {
+    "id": 1229,
+    "category": "OOP & Design Patterns",
+    "difficulty": "medium",
+    "question": "What is the key difference between method overloading and method overriding?",
+    "options": [
+      "Overloading changes only the return type of a method; overriding changes only its access modifier",
+      "Overloading is chosen at run time by the object's actual type; overriding is chosen at compile time by parameter types",
+      "Overloading needs a parent and a child class; overriding happens between methods inside one class",
+      "Overloading is chosen at compile time by parameter types; overriding is chosen at run time by the object's actual type"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Overloading means several methods with the same name but different parameter lists, resolved by the compiler. Overriding means a subclass replaces an inherited method with the same signature, and the version that runs depends on the real object (dynamic dispatch)."
+  },
+  {
+    "id": 1230,
+    "category": "OOP & Design Patterns",
+    "difficulty": "hard",
+    "question": "This lazy singleton sometimes produces two instances on a busy server. Why?",
+    "codeSnippet": "static Config instance;\n\nstatic Config get() {\n  if (instance == null) {\n    instance = new Config();\n  }\n  return instance;\n}",
+    "options": [
+      "The garbage collector may remove the instance between two calls",
+      "A static field is copied separately into every thread that reads it",
+      "Two threads can both see `null` before either one assigns the field",
+      "The constructor of `Config` runs again each time `get()` returns"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The check and the assignment are not atomic, so two threads can pass the `null` check together and each create an object. Fix it with eager initialization, a lock (or double-checked locking with a volatile field), or the language's lazy holder. Static fields are shared between threads, not copied."
+  },
+  {
+    "id": 1231,
+    "category": "OOP & Design Patterns",
+    "difficulty": "medium",
+    "question": "Code in twelve places does `if (type == \"sms\") new SmsSender() else if (type == \"email\") new EmailSender() ...`. Adding push notifications means editing all twelve. Which pattern removes this?",
+    "options": [
+      "Singleton: one shared sender object that every caller reuses for all types",
+      "Factory: one place decides which sender to create and returns it by its interface",
+      "Observer: senders subscribe to each other and react when a type is added",
+      "Decorator: each sender wraps the previous one and adds one more channel"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A factory centralizes object creation, so callers ask for a `Sender` and never name concrete classes. A new channel is then one new class and one change in the factory. Singleton controls how many instances exist, not which class is built."
+  },
+  {
+    "id": 1232,
+    "category": "OOP & Design Patterns",
+    "difficulty": "medium",
+    "question": "`OrderService` creates its own `new MySqlOrderRepository()` inside the constructor. What is the main benefit of receiving the repository as a constructor parameter instead?",
+    "options": [
+      "Tests can pass a fake repository, and the storage can change without editing the service",
+      "The service runs faster because the repository object is created only one time",
+      "The repository becomes private, so no other class in the project can use it",
+      "The compiler can inline the repository calls and remove the interface entirely"
+    ],
+    "correctAnswer": 0,
+    "explanation": "This is dependency injection: the service depends on an abstraction and someone else supplies the implementation. That makes the class testable in isolation and loosely coupled. It is a design benefit, not a speed optimization."
+  },
+  {
+    "id": 1233,
+    "category": "OOP & Design Patterns",
+    "difficulty": "hard",
+    "question": "`Square extends Rectangle` and overrides `setWidth` to also change the height. A function that sets width 5 and height 4 on any `Rectangle` and expects area 20 now fails for squares. Which principle is broken?",
+    "options": [
+      "Single responsibility: a class should have just one reason to change",
+      "Interface segregation: clients should not depend on methods they do not use",
+      "Dependency inversion: high-level code should depend on abstractions only",
+      "Liskov substitution: a subclass must work wherever its parent type is expected"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Code written against `Rectangle` assumes width and height change independently. `Square` silently breaks that assumption, so it cannot safely replace its parent. The usual fix is not to model square as a mutable rectangle subclass."
+  },
+  {
+    "id": 1234,
+    "category": "OOP & Design Patterns",
+    "difficulty": "medium",
+    "question": "When the shopping cart changes, the header badge, the totals panel and the analytics module must all update, and more listeners will be added later. The cart should not know about any of them. Which pattern fits?",
+    "options": [
+      "Builder: the cart is assembled step by step before the modules read it",
+      "Adapter: the cart converts its interface into the one each module expects",
+      "Observer: listeners subscribe to the cart and are notified on every change",
+      "Prototype: each module clones the cart and compares it with its old copy"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Observer (publish/subscribe) lets a subject broadcast changes to any number of subscribers without depending on them. Adapter only translates one interface into another, and Builder is about constructing complex objects."
+  },
+  {
+    "id": 1235,
+    "category": "OOP & Design Patterns",
+    "difficulty": "easy",
+    "question": "An `Invoice` class calculates totals, renders itself as a PDF and sends itself by email. A change to the email provider forces the class to be edited and retested. Which principle does this design ignore?",
+    "options": [
+      "Liskov substitution",
+      "Single responsibility",
+      "Open/closed",
+      "Dependency inversion"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The class has three reasons to change: pricing rules, PDF layout and email delivery. Splitting them into separate classes means a change in one area cannot break the others."
+  },
+  {
+    "id": 1236,
+    "category": "OOP & Design Patterns",
+    "difficulty": "medium",
+    "question": "`calculateShipping()` has a growing `switch` over carriers, each branch with its own pricing formula. You want to add a carrier without touching the existing branches. Which pattern is designed for this?",
+    "options": [
+      "Strategy: each formula is a class behind one interface, chosen at run time",
+      "Singleton: one calculator instance holds every formula in static fields",
+      "Facade: one simple method hides the `switch` from the calling code",
+      "Memento: each formula's previous result is saved and can be restored"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Strategy turns each interchangeable algorithm into its own object, so adding a carrier means adding a class (open for extension, closed for modification). A facade would only hide the switch; it would still have to be edited."
+  },
+  {
+    "id": 1237,
+    "category": "OOP & Design Patterns",
+    "difficulty": "hard",
+    "question": "A `Money` object is used as a key in a hash map. Later some code calls `money.setAmount(50)` on that same object, and `map.get(money)` no longer finds the entry. What design would have prevented this?",
+    "options": [
+      "Mark the map as `final` so that its entries can never be reassigned",
+      "Make `Money` a singleton so that the whole program shares one instance",
+      "Remove `hashCode()` from `Money` so the map compares keys by reference",
+      "Make `Money` immutable: no setters, and every change returns a new object"
+    ],
+    "correctAnswer": 3,
+    "explanation": "The entry was stored under the old hash; mutating the key changes its hash, so the lookup searches the wrong bucket. Immutable value objects are safe as keys and safe to share between threads. `final` on the map variable only stops reassigning the variable."
+  }
+]

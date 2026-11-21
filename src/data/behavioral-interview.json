@@ -1,0 +1,170 @@
+[
+  {
+    "id": 1274,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "easy",
+    "question": "Interviewers often recommend the STAR method for answering \"Tell me about a time when...\" questions. What do the four letters stand for?",
+    "options": [
+      "Skills, Timeline, Achievements, Role",
+      "Strategy, Team, Analysis, Review",
+      "Situation, Task, Action, Result",
+      "Summary, Target, Approach, Reflection"
+    ],
+    "correctAnswer": 2,
+    "explanation": "STAR keeps a story short and complete: the context, what you were responsible for, what *you* did, and what came of it. Most of the answer should be the Action, and the Result should be concrete, ideally with a number."
+  },
+  {
+    "id": 1275,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "medium",
+    "question": "An interview opens with \"Tell me about yourself.\" Which answer works best?",
+    "options": [
+      "A complete walk through your CV from school until today, with each job in date order",
+      "Two minutes on what you do now, the experience behind it, and why this role is your next step",
+      "Your personal story: where you grew up, your family, and what your hobbies are",
+      "One sentence with your name and degree, then waiting for the next question"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The question is an invitation to pitch your fit. Present, past, future is a reliable structure: current role and strengths, the highlights that built them, and why you want this job. Reciting the CV repeats what they have already read."
+  },
+  {
+    "id": 1276,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "medium",
+    "question": "You are asked \"What is your greatest weakness?\" Which answer is strongest?",
+    "options": [
+      "A real weakness that is not central to the job, with the steps you are taking to improve it",
+      "\"I am a perfectionist and I work too hard\", presented with a confident smile",
+      "\"I honestly cannot think of any weakness that affects my work\"",
+      "A weakness in the main skill the job needs, described in full detail"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The interviewer is testing self-awareness and growth. Naming a genuine weakness and showing what you do about it demonstrates both. Disguised strengths sound rehearsed, and \"none\" suggests you do not reflect on your work."
+  },
+  {
+    "id": 1277,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "medium",
+    "question": "\"Tell me about a time you disagreed with a teammate.\" Which story makes the best impression?",
+    "options": [
+      "You kept quiet to protect the relationship and built it your own way afterwards",
+      "You were right from the start, they refused to listen, and the manager finally sided with you",
+      "You avoid disagreements at work, so you have never really had one with a teammate",
+      "You listened to their reasoning, compared the options with data, agreed on one, and it worked out"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Interviewers want to see that you can disagree professionally: understand the other view, argue from evidence, commit to a decision and keep the relationship. Blaming a colleague or claiming you never disagree are both warning signs."
+  },
+  {
+    "id": 1278,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "medium",
+    "question": "\"Tell me about a time you failed.\" What should a good answer contain?",
+    "options": [
+      "A small problem that turned out to be a success, so that it is not really a failure",
+      "A failure that was caused by a teammate, to show that you can spot other people's mistakes",
+      "A real failure of your own, what you learned from it, and what you now do differently",
+      "A polite refusal, because talking about failure can only harm your chances"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The point of the question is ownership and learning. Pick a genuine mistake, take responsibility without drama, and spend most of the answer on the lesson and the change in how you work."
+  },
+  {
+    "id": 1279,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "medium",
+    "question": "In a technical interview you are asked about a technology you have never used. What is the best response?",
+    "options": [
+      "Answer confidently with your best guess, so the interviewer does not notice the gap",
+      "Say you have not used it, then reason from what you do know and how you would learn it",
+      "Say \"I don't know\" and stay silent until the interviewer moves to another question",
+      "Explain that the technology is outdated and that better alternatives exist today"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Honesty plus reasoning shows how you handle the unknown, which is most of a developer's job. Bluffing is usually spotted with one follow-up question and costs trust, while a bare \"I don't know\" wastes a chance to show how you think."
+  },
+  {
+    "id": 1280,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "medium",
+    "question": "A recruiter asks \"What are your salary expectations?\" early in the process. Which approach is the most effective?",
+    "options": [
+      "Give a range based on market research for the role and say you are open to discussing the full package",
+      "Name a very high figure, because the employer will always negotiate it down anyway",
+      "Say you will accept whatever the company usually pays for this position",
+      "Refuse to discuss money at all until a written offer has been made"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A researched range shows you know your value and leaves room to negotiate once you understand the role and benefits. An unrealistic number can end the process, and \"anything\" usually gets you the bottom of the band."
+  },
+  {
+    "id": 1281,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "easy",
+    "question": "At the end of the interview you hear \"Do you have any questions for us?\" Which reply helps you most?",
+    "options": [
+      "\"What exactly does your company do? I did not have time to check the website.\"",
+      "\"No, thank you. I think you have already covered everything I wanted to know.\"",
+      "\"How many days of leave do I get, and how soon can I start to take them?\"",
+      "\"What does success look like in this role after six months, and how does the team work day to day?\""
+    ],
+    "correctAnswer": 3,
+    "explanation": "Thoughtful questions show real interest and help you judge the job. Asking nothing looks like low interest, opening with leave puts benefits ahead of the work, and asking what the company does shows you did not prepare."
+  },
+  {
+    "id": 1282,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "medium",
+    "question": "\"Explain what an API is to someone who is not technical.\" What is the interviewer mainly checking?",
+    "options": [
+      "That you can speak for a long time and include as many details as you possibly can",
+      "That you can recite the formal definition accurately and name the related standards",
+      "That you can drop the jargon, use a familiar analogy and confirm the listener understood",
+      "That you can show a real code sample and walk through it one line at a time"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Developers constantly explain things to managers, clients and users. A good answer starts from something the listener already knows (a waiter taking orders to the kitchen, for example), stays short and checks understanding."
+  },
+  {
+    "id": 1283,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "medium",
+    "question": "In a live coding interview you are given a problem. What should you do first?",
+    "options": [
+      "Start typing code at once, so that the interviewer sees how fast you can work",
+      "Ask clarifying questions, walk through an example, and state your plan before coding",
+      "Think in complete silence for ten minutes, then write the final solution",
+      "Ask the interviewer which algorithm they would like you to use for it"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Interviewers grade how you approach a problem as much as the final code. Clarifying inputs, edge cases and constraints avoids solving the wrong problem, and thinking aloud lets them follow your reasoning and give hints."
+  },
+  {
+    "id": 1284,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "medium",
+    "question": "\"Why do you want to work here?\" Which answer is the most convincing?",
+    "options": [
+      "Something specific about the company's product or team, linked to the skills you bring",
+      "The company is large and well known, so it would look impressive on your CV",
+      "You need a job soon, and this position was the first one that invited you",
+      "The office is close to your home, and the working hours suit your routine"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A strong answer proves you researched the company and connects its work to what you can contribute. Generic praise or purely personal convenience tells the interviewer you would accept any job."
+  },
+  {
+    "id": 1285,
+    "category": "Behavioral & HR Interview",
+    "difficulty": "medium",
+    "question": "\"You have three tasks due on Friday and you can finish only two. What do you do?\" Which answer shows the best judgment?",
+    "options": [
+      "Do a quick, rough version of all three so that each one is technically delivered",
+      "Work late every night without telling anyone, and hope all three get finished",
+      "Finish the two easiest tasks first, and explain about the third on Friday",
+      "Rank them by impact and urgency, tell your manager early, and agree on what moves"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Employers look for prioritization and early communication. Raising the risk while there is still time lets the team re-plan. Silent heroics, late surprises and low-quality work all push the problem onto someone else."
+  }
+]

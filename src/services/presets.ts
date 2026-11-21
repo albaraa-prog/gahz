@@ -124,6 +124,22 @@ export const PRESETS: readonly Preset[] = [
     card: {},
   },
   {
+    id: 'ai_python',
+    modeLabel: 'Python with AI Assistants',
+    count: 15,
+    minutes: 15,
+    pick: inCategories(['AI-Assisted Python']),
+    card: {},
+  },
+  {
+    id: 'vibe_coding',
+    modeLabel: 'Claude & Vibe Coding',
+    count: 20,
+    minutes: 20,
+    pick: inCategories(['Claude & Claude Code', 'Vibe Coding & AI App Builders']),
+    card: {},
+  },
+  {
     id: 'game_dev',
     modeLabel: 'Unity & C# Game Development',
     count: 20,

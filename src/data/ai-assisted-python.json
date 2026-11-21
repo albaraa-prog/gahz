@@ -1,0 +1,317 @@
+[
+  {
+    "id": 1301,
+    "category": "AI-Assisted Python",
+    "difficulty": "easy",
+    "question": "What is an AI coding assistant inside an IDE, such as GitHub Copilot in VS Code or the AI Assistant in PyCharm?",
+    "options": [
+      "A language model that suggests and explains code using the context of your project.",
+      "A faster Python interpreter that replaces the one installed on your machine.",
+      "A linter that only reports style errors and never writes any code itself.",
+      "A search engine that copies the top answer from a questions website."
+    ],
+    "correctAnswer": 0,
+    "explanation": "The assistant is a large language model connected to your editor. It reads context such as the open file and predicts useful code or answers. It does not run your program and it can be wrong, so you still read and test what it writes."
+  },
+  {
+    "id": 1302,
+    "category": "AI-Assisted Python",
+    "difficulty": "easy",
+    "question": "While you type in VS Code, the assistant shows a grey suggestion after your cursor (\"ghost text\"). How do you accept it?",
+    "options": [
+      "Press `Esc`",
+      "Press `Tab`",
+      "Press `Ctrl+Z`",
+      "Press `F5`"
+    ],
+    "correctAnswer": 1,
+    "explanation": "`Tab` accepts an inline suggestion and `Esc` dismisses it. Nothing is added to your file until you accept, so read the suggestion first: accepting is your decision, not the assistant's."
+  },
+  {
+    "id": 1303,
+    "category": "AI-Assisted Python",
+    "difficulty": "easy",
+    "question": "What is the main difference between inline completion and the chat panel of an AI assistant?",
+    "options": [
+      "Completion works for Python only, while chat works for every other language.",
+      "Completion needs the internet, while chat runs fully offline on your laptop.",
+      "Completion continues what you are typing; chat answers questions you ask in words.",
+      "Completion is always correct, while chat is only a guess that needs review."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Inline completion predicts the next lines from where your cursor is. Chat is a conversation: you can ask it to explain an error, propose a design or write a test. Both come from a model and both need review."
+  },
+  {
+    "id": 1304,
+    "category": "AI-Assisted Python",
+    "difficulty": "easy",
+    "question": "You are learning Python and want the assistant to help you learn, not only to finish your homework. Which habit works best?",
+    "options": [
+      "Accept every suggestion quickly so that you see as much code as possible.",
+      "Ask for the whole program at once and read it only if it fails to run.",
+      "Turn the assistant off forever, because real programmers never use such tools.",
+      "Try first, then ask it to explain or give a hint, and retype the idea yourself."
+    ],
+    "correctAnswer": 3,
+    "explanation": "You learn when you struggle a little and then get feedback. Use the assistant as a tutor: ask for a hint, ask why a line works, ask it to quiz you. Code you only pasted is code you cannot write in an interview."
+  },
+  {
+    "id": 1305,
+    "category": "AI-Assisted Python",
+    "difficulty": "medium",
+    "question": "You want the assistant to write a function for you. Which comment is most likely to produce a correct suggestion?",
+    "options": [
+      "`# function`",
+      "`# do the thing with the list, make it good`",
+      "`# Return the average of a list of numbers; return 0.0 for an empty list`",
+      "`# average???`"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The model only knows what you tell it. A good prompt names the input, the output and the edge cases. Here the empty list is stated, so the suggestion is far less likely to divide by zero."
+  },
+  {
+    "id": 1306,
+    "category": "AI-Assisted Python",
+    "difficulty": "medium",
+    "question": "The assistant suggests this line, but you have never heard of the package. What should you do first?",
+    "codeSnippet": "pip install fastjson-python-utils",
+    "options": [
+      "Run it at once; the assistant only suggests packages that it has verified.",
+      "Check that the package really exists on PyPI and is the one you need.",
+      "Run it with `sudo`, so that the installation cannot fail for any reason.",
+      "Rename the package in the command until some version of it installs."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Models sometimes invent package names that sound right (a hallucination). Attackers register such names with malware inside, an attack known as slopsquatting. Look the package up on PyPI and read its page before you install it."
+  },
+  {
+    "id": 1307,
+    "category": "AI-Assisted Python",
+    "difficulty": "medium",
+    "question": "The assistant wrote this function. What is wrong with it?",
+    "codeSnippet": "def add_task(task, tasks=[]):\n    tasks.append(task)\n    return tasks",
+    "options": [
+      "`append` returns a new list, so the task is lost.",
+      "A parameter cannot have a default value in Python.",
+      "The function must be declared with `async def`.",
+      "The default list is shared between all calls."
+    ],
+    "correctAnswer": 3,
+    "explanation": "A default value is created once, when the function is defined. Every call without `tasks` appends to the same list. Use `tasks=None` and create the list inside. Assistants repeat this classic bug because it is common in the code they learned from."
+  },
+  {
+    "id": 1308,
+    "category": "AI-Assisted Python",
+    "difficulty": "medium",
+    "question": "The assistant generated a function and it looks right when you read it. What is the most reliable way to check it?",
+    "options": [
+      "Run tests that cover normal inputs and edge cases such as empty or invalid input.",
+      "Ask the same assistant whether the code is correct and trust a confident yes.",
+      "Check that the code has comments and that the variable names are long enough.",
+      "Generate the function a second time and keep whichever version is shorter."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Generated code is often plausible and subtly wrong. Tests are evidence: run it with `pytest` on typical values, boundaries, empty input and bad input. A model that says \"yes, it is correct\" is not a test."
+  },
+  {
+    "id": 1309,
+    "category": "AI-Assisted Python",
+    "difficulty": "easy",
+    "question": "Your script crashes with a traceback. Which message to the assistant will get the most useful help?",
+    "options": [
+      "\"My code is broken, please fix it.\"",
+      "\"Python does not work on my computer.\"",
+      "The full traceback, the code around the failing line and what you expected to happen.",
+      "Only the last word of the error, to keep the message short."
+    ],
+    "correctAnswer": 2,
+    "explanation": "The traceback names the file, the line and the error type, and the code shows why. With the expected behaviour the assistant can separate a crash from a wrong result. Ask it to explain the cause too, not only to patch it."
+  },
+  {
+    "id": 1310,
+    "category": "AI-Assisted Python",
+    "difficulty": "medium",
+    "question": "The assistant wrote this database query. Why must you not accept it?",
+    "codeSnippet": "cursor.execute(f\"SELECT * FROM users WHERE name = '{name}'\")",
+    "options": [
+      "f-strings are slower than `%` formatting.",
+      "`SELECT *` is not valid in an f-string.",
+      "`execute` accepts only byte strings.",
+      "It allows SQL injection through `name`."
+    ],
+    "correctAnswer": 3,
+    "explanation": "The user's text becomes part of the SQL, so a value such as `' OR '1'='1` changes the query. Pass values separately: `cursor.execute(\"SELECT * FROM users WHERE name = ?\", (name,))`. Insecure patterns are common in generated code."
+  },
+  {
+    "id": 1311,
+    "category": "AI-Assisted Python",
+    "difficulty": "medium",
+    "question": "The assistant completes a line with what looks like a real secret key. What is the right way to handle secrets?",
+    "codeSnippet": "API_KEY = \"sk-live-9f2c...\"",
+    "options": [
+      "Keep it in the file but add a comment that says the key is private.",
+      "Read it from an environment variable or a `.env` file that Git ignores.",
+      "Encode it with Base64 so that nobody can read it in the repository.",
+      "Move it to the bottom of the file, where reviewers rarely look."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A key committed to Git stays in the history and can be found by scanners within minutes. Load it with `os.environ[\"API_KEY\"]`, keep `.env` in `.gitignore`, and rotate any key that was ever committed. Base64 is encoding, not encryption."
+  },
+  {
+    "id": 1312,
+    "category": "AI-Assisted Python",
+    "difficulty": "easy",
+    "question": "What does an inline AI assistant mainly use to decide what to suggest next?",
+    "options": [
+      "The code and comments around your cursor and in related open files.",
+      "The output that your program printed the last time you ran it.",
+      "The private repositories of other companies that use the same tool.",
+      "The speed of your processor and the amount of free memory."
+    ],
+    "correctAnswer": 0,
+    "explanation": "The tool builds a prompt from nearby code: the current file, your cursor position and often other open or related files. That is why clear names, type hints and a short docstring above a function improve the suggestion."
+  },
+  {
+    "id": 1313,
+    "category": "AI-Assisted Python",
+    "difficulty": "medium",
+    "question": "Which function header gives an AI assistant the best chance of completing the body correctly?",
+    "options": [
+      "`def f(a, b):`",
+      "`def process(data):`",
+      "`def do_it(x, y, z):`",
+      "`def days_between(start: date, end: date) -> int:`"
+    ],
+    "correctAnswer": 3,
+    "explanation": "A descriptive name with type hints tells the model what goes in and what must come out. The same things help human readers. Vague names force the model to guess, and it guesses the most common meaning, not yours."
+  },
+  {
+    "id": 1314,
+    "category": "AI-Assisted Python",
+    "difficulty": "hard",
+    "question": "You ask the assistant to write tests for a function that it also wrote. What is the main risk?",
+    "options": [
+      "The tests will run much slower than tests written by hand.",
+      "The tests may simply confirm what the code does, including its bugs.",
+      "`pytest` refuses to collect tests that were generated by a model.",
+      "The tests cannot import the function from another module."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A model that reads the implementation tends to assert its current output, so a wrong result becomes an expected value. You decide the correct behaviour: state the expected results yourself, or write the tests from the requirements before the code."
+  },
+  {
+    "id": 1315,
+    "category": "AI-Assisted Python",
+    "difficulty": "hard",
+    "question": "For a small calculator the assistant suggests this code. What is the problem?",
+    "codeSnippet": "expression = input(\"Enter a calculation: \")\nprint(eval(expression))",
+    "options": [
+      "`eval` runs any Python code the user types.",
+      "`eval` works only with whole numbers.",
+      "`input` returns a number, not a string.",
+      "`print` cannot show the result of `eval`."
+    ],
+    "correctAnswer": 0,
+    "explanation": "`eval` executes its argument as code, so a user could type something that deletes files or reads secrets. Parse the numbers and the operator yourself, or use `ast.literal_eval` for plain literals. The shortest suggestion is often the unsafe one."
+  },
+  {
+    "id": 1316,
+    "category": "AI-Assisted Python",
+    "difficulty": "medium",
+    "question": "At work, you want to paste a file into a public AI chat to get help. What should you check first?",
+    "options": [
+      "That the file is short enough for the assistant to read and answer in one single reply.",
+      "That the file uses spaces for indentation and not tab characters.",
+      "That your company allows the tool and the file has no secrets or personal data.",
+      "That the chat is set to the same language as your code comments."
+    ],
+    "correctAnswer": 2,
+    "explanation": "What you paste leaves your machine. Many employers allow only approved tools and plans. Remove keys, passwords and customer data, and follow the policy. In an interview, this answer shows that you can be trusted with AI tools."
+  },
+  {
+    "id": 1317,
+    "category": "AI-Assisted Python",
+    "difficulty": "hard",
+    "question": "The assistant \"fixed\" a crash by wrapping the code like this. Why is it a poor fix?",
+    "codeSnippet": "try:\n    total = sum(prices) / len(prices)\nexcept:\n    pass",
+    "options": [
+      "`try` blocks make the code several times slower.",
+      "`pass` is not allowed inside an `except` block.",
+      "`sum` cannot be used on a list inside `try`.",
+      "It hides every error and leaves `total` undefined."
+    ],
+    "correctAnswer": 3,
+    "explanation": "A bare `except: pass` silences the symptom, including typos and `KeyboardInterrupt`, and the next line that uses `total` fails with a more confusing error. Handle the real case: check for an empty list, or catch `ZeroDivisionError` and decide what to return."
+  },
+  {
+    "id": 1318,
+    "category": "AI-Assisted Python",
+    "difficulty": "medium",
+    "question": "The assistant uses a library function that does not exist in the version you have installed. What is the most likely reason?",
+    "options": [
+      "Your Python installation is damaged and has to be removed and installed again from scratch.",
+      "The model learned from other versions of the library, or it invented the function.",
+      "The function exists but it is hidden until you buy a licence.",
+      "The editor removed the function to keep the suggestion short."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A model's knowledge stops at its training date and mixes many versions of each library, so it can suggest removed, renamed or imaginary functions. Check the official documentation for your installed version (`pip show <package>`), and tell the assistant which version you use."
+  },
+  {
+    "id": 1319,
+    "category": "AI-Assisted Python",
+    "difficulty": "hard",
+    "question": "You want the assistant to refactor a 600-line Python module. Which workflow is safest?",
+    "options": [
+      "Ask for the whole module to be rewritten in one go, then replace the old file with the result.",
+      "Delete the tests first, because they will fail during the refactoring.",
+      "Make sure tests pass, change one small part at a time, review each diff and commit.",
+      "Refactor directly on the main branch so that the team sees it sooner."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Small steps keep each change reviewable, tests tell you at once when behaviour changed, and a commit after each step gives a point to return to. A single huge rewrite hides dropped features and changed behaviour inside a diff nobody can read."
+  },
+  {
+    "id": 1320,
+    "category": "AI-Assisted Python",
+    "difficulty": "easy",
+    "question": "A bug in code that the AI assistant wrote reaches production. Who is responsible for it?",
+    "options": [
+      "The developer who accepted and committed the code.",
+      "The company that trained the language model.",
+      "Nobody, because a machine wrote the code.",
+      "The editor that displayed the suggestion."
+    ],
+    "correctAnswer": 0,
+    "explanation": "The assistant is a tool, like a compiler or a search engine. Code that you commit is your code: you must understand it, test it and be able to explain it in a review. This is the standard that teams and interviewers expect."
+  },
+  {
+    "id": 1321,
+    "category": "AI-Assisted Python",
+    "difficulty": "medium",
+    "question": "The assistant wrote this search function. For which call does it give the wrong answer?",
+    "codeSnippet": "def contains(items, target):\n    for item in items:\n        if item == target:\n            return True\n        else:\n            return False",
+    "options": [
+      "`contains([5, 7], 5)`",
+      "`contains([5], 9)`",
+      "`contains([5, 7], 7)`",
+      "`contains([7], 7)`"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The `else` returns `False` on the first item that does not match, so the loop never reaches the second item: `contains([5, 7], 7)` returns `False`. The `return False` belongs after the loop. A test with the target in the second position finds this at once."
+  },
+  {
+    "id": 1322,
+    "category": "AI-Assisted Python",
+    "difficulty": "medium",
+    "question": "The assistant tells you to run `pip install requests` for your project. Where should the package be installed?",
+    "options": [
+      "In the system Python, using administrator rights.",
+      "In the folder where the editor itself is installed.",
+      "In any folder, since Python finds packages anywhere.",
+      "In the project's virtual environment, after activating it."
+    ],
+    "correctAnswer": 3,
+    "explanation": "A virtual environment (`python -m venv .venv`) keeps each project's packages separate, so versions do not clash and the project can be rebuilt from `requirements.txt`. Select the same environment as the interpreter in your IDE, or the editor will report missing imports."
+  }
+]

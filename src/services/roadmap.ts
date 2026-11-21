@@ -56,6 +56,15 @@ export const ROADMAP_STEPS = {
   frontend: ['Frontend: HTML, CSS & React'],
   engineering_practices: ['Testing, Code Review & Agile'],
   behavioral: ['Behavioral & HR Interview'],
+  git_github: ['Git & GitHub'],
+  cicd: ['CI/CD with GitHub Actions'],
+  docker: ['Docker'],
+  firebase: ['Firebase'],
+  supabase: ['Supabase'],
+  netlify: ['Netlify'],
+  ai_python: ['AI-Assisted Python'],
+  claude_code: ['Claude & Claude Code'],
+  vibe_coding: ['Vibe Coding & AI App Builders'],
 } as const satisfies Record<string, readonly string[]>;
 
 export type StepId = keyof typeof ROADMAP_STEPS;
@@ -72,7 +81,9 @@ export const ROADMAP_PATHS = [
     steps: ['flutter_basics', 'flutter_core', 'flutter_architecture', 'flutter_performance', 'fintech_security', 'apis'],
   },
   { id: 'ai', steps: ['ai_fundamentals', 'llms', 'prompt_engineering'] },
+  { id: 'ai_coding', steps: ['basics', 'ai_python', 'prompt_engineering', 'claude_code', 'vibe_coding', 'git_github'] },
   { id: 'game', steps: ['basics', 'csharp', 'unity', 'dsa', 'logic'] },
+  { id: 'devops', steps: ['git_github', 'cicd', 'docker', 'firebase', 'supabase', 'netlify'] },
   { id: 'networks', steps: ['networking_fundamentals', 'networking', 'rest', 'apis'] },
   {
     id: 'tech_interview',

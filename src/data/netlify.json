@@ -1,0 +1,143 @@
+[
+  {
+    "id": 1174,
+    "category": "Netlify",
+    "difficulty": "easy",
+    "question": "You connect a GitHub repository to Netlify. What happens on every push to the production branch?",
+    "options": [
+      "Netlify emails you the changed files and waits for your approval.",
+      "Netlify runs the build command and publishes the output folder.",
+      "Netlify copies the repository as it is, without building anything.",
+      "Netlify restarts the virtual machine that serves your site."
+    ],
+    "correctAnswer": 1,
+    "explanation": "This is continuous deployment: Netlify clones the commit, installs dependencies, runs the build command (for example `npm run build`) and uploads the publish directory (for example `dist`) to its CDN."
+  },
+  {
+    "id": 1175,
+    "category": "Netlify",
+    "difficulty": "easy",
+    "question": "What is a Netlify Deploy Preview?",
+    "options": [
+      "A temporary copy of the site built from a pull request, on its own URL.",
+      "A screenshot of the home page that is taken after every deployment.",
+      "A local server that Netlify starts on your computer during the build.",
+      "A paid feature that shows the site to search engines before launch."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Each pull request gets its own build and link, posted as a comment and status check on the pull request. Reviewers can open the real result before merging, and the production site is not touched."
+  },
+  {
+    "id": 1176,
+    "category": "Netlify",
+    "difficulty": "medium",
+    "question": "What is the `netlify.toml` file used for?",
+    "codeSnippet": "[build]\n  command = \"npm run build\"\n  publish = \"dist\"",
+    "options": [
+      "Listing the npm packages that Netlify installs before each build.",
+      "Storing the API keys and passwords that the site needs in production.",
+      "Describing the database tables that Netlify creates for the site.",
+      "Keeping build settings, redirects and headers in the repository as code."
+    ],
+    "correctAnswer": 3,
+    "explanation": "It sits in the repository root and can set the build command, the publish directory, per-context settings, redirects, headers and functions. Settings in the file are versioned and reviewed with the code. Secrets do not belong there: the file is committed."
+  },
+  {
+    "id": 1177,
+    "category": "Netlify",
+    "difficulty": "medium",
+    "question": "A React single-page app on Netlify returns 404 when the user refreshes `/dashboard`. Which rule fixes it?",
+    "options": [
+      "`/*  /index.html  301` in a `_redirects` file.",
+      "`/dashboard  /404.html  404` in a `_redirects` file.",
+      "`/*  /index.html  200` in a `_redirects` file.",
+      "`/index.html  /*  200` in a `_redirects` file."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Status 200 makes the rule a rewrite: the server answers with `index.html` while the URL stays `/dashboard`, so the client-side router can show the right view. A 301 would redirect the browser to `/index.html` and lose the path."
+  },
+  {
+    "id": 1178,
+    "category": "Netlify",
+    "difficulty": "medium",
+    "question": "A Vite site reads `import.meta.env.VITE_API_URL`. You change the variable in the Netlify dashboard, but the live site still uses the old value. Why?",
+    "options": [
+      "The value is cached by visitors' browsers for exactly twenty-four hours.",
+      "The value is baked in at build time, so the site must be rebuilt and redeployed.",
+      "The value can be changed only by pushing a commit that edits `netlify.toml`.",
+      "The value is ignored because variable names must not start with `VITE_`."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A static site has no server that reads variables for each request: the bundler replaces them with literal text during the build. Trigger a new deploy after changing one. For the same reason, such variables are public, so never put a secret in them."
+  },
+  {
+    "id": 1179,
+    "category": "Netlify",
+    "difficulty": "medium",
+    "question": "A frontend on Netlify must call a paid API with a secret key. Where should the call be made?",
+    "options": [
+      "In a Netlify Function, which reads the key from an environment variable on the server.",
+      "In the browser, with the key stored in a `VITE_` environment variable.",
+      "In the browser, with the key hidden in a minified JavaScript file.",
+      "In `netlify.toml`, with the key written under the `[build]` section."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Anything shipped to the browser can be read, minified or not. A serverless function runs on Netlify's servers: the page calls the function, and the function calls the API with the key, which never leaves the server."
+  },
+  {
+    "id": 1180,
+    "category": "Netlify",
+    "difficulty": "medium",
+    "question": "A deployment broke the live site. What is the fastest way to recover on Netlify?",
+    "options": [
+      "Delete the site, create it again and connect the repository once more.",
+      "Wait for the CDN cache to expire, which restores the previous version.",
+      "Upload the old files one by one over the broken files by FTP.",
+      "Publish an earlier deploy from the Deploys list; old deploys are kept intact."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Every deploy is atomic and immutable: a complete snapshot that goes live all at once. Rolling back just points the site at a previous snapshot, in seconds and without a rebuild. Then fix the bug in Git, so the next deploy does not bring it back."
+  },
+  {
+    "id": 1181,
+    "category": "Netlify",
+    "difficulty": "easy",
+    "question": "You add a custom domain to a Netlify site. What does Netlify do about HTTPS?",
+    "options": [
+      "It serves the site over HTTP until you buy a certificate.",
+      "It asks you to upload a new certificate file every month.",
+      "It issues and renews a free TLS certificate automatically.",
+      "It supports HTTPS only on addresses under `netlify.app`."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Once the DNS records point to Netlify, it provisions a certificate from Let's Encrypt and renews it for you. Firebase Hosting, Vercel and Cloudflare Pages do the same: free managed HTTPS is now standard for static hosts."
+  },
+  {
+    "id": 1182,
+    "category": "Netlify",
+    "difficulty": "hard",
+    "question": "A redirect rule proxies `/api/*` to `https://api.example.com/:splat` with status 200. What problem does this solve for the frontend?",
+    "options": [
+      "The API responses are stored in the Git repository for later review.",
+      "The browser sees same-origin requests, so no CORS configuration is needed.",
+      "The API becomes faster because Netlify rewrites its database queries.",
+      "The API key is added to each request by the visitor's browser."
+    ],
+    "correctAnswer": 1,
+    "explanation": "With a 200 rewrite to another host, Netlify fetches the response on the server side and returns it under your own domain. The page calls `/api/users`, which is same-origin, so the browser applies no cross-origin restrictions."
+  },
+  {
+    "id": 1183,
+    "category": "Netlify",
+    "difficulty": "medium",
+    "question": "Netlify builds your project but the site shows \"Page not found\" on every URL, including `/`. What is the most likely cause?",
+    "options": [
+      "The publish directory points to the wrong folder, so `index.html` was not deployed.",
+      "The repository is private, so visitors are not allowed to see the pages.",
+      "The site has too many pages for the free plan, so all of them are hidden.",
+      "The build ran on Linux, while the project was written on Windows."
+    ],
+    "correctAnswer": 0,
+    "explanation": "The build succeeded, but Netlify published a folder without the built files, for example `public` when Vite writes to `dist`. Check the deploy log and the file list of the deploy, then fix `publish` in `netlify.toml` or in the site settings."
+  }
+]

@@ -1,0 +1,171 @@
+[
+  {
+    "id": 1150,
+    "category": "Firebase",
+    "difficulty": "easy",
+    "question": "How is data organized in Cloud Firestore?",
+    "options": [
+      "As rows, which are grouped in tables with a fixed schema.",
+      "As documents, which are grouped in collections.",
+      "As one large JSON tree with a single root node.",
+      "As files, which are grouped in buckets and folders."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Firestore is a NoSQL document database: a document is a set of fields (like a JSON object), lives in a collection and can contain subcollections. The single JSON tree describes the older Realtime Database; files and buckets describe Cloud Storage."
+  },
+  {
+    "id": 1151,
+    "category": "Firebase",
+    "difficulty": "medium",
+    "question": "The Firebase web config (`apiKey`, `projectId` and so on) is visible in the browser. Is that a security problem?",
+    "options": [
+      "No: it only identifies the project, and data is protected by security rules.",
+      "Yes: anyone who has the `apiKey` can read and delete the whole database.",
+      "Yes: the `apiKey` is the admin password and must be kept on a server.",
+      "No: Firebase encrypts the config, so the browser cannot actually read it."
+    ],
+    "correctAnswer": 0,
+    "explanation": "The web config is public by design; every visitor downloads it. What keeps data safe is Firebase Security Rules (and App Check). The real secret is a service-account key, which grants admin access and must never reach the client or the repository."
+  },
+  {
+    "id": 1152,
+    "category": "Firebase",
+    "difficulty": "medium",
+    "question": "What does this Firestore security rule allow?",
+    "codeSnippet": "match /users/{userId} {\n  allow read, write: if request.auth != null\n                     && request.auth.uid == userId;\n}",
+    "options": [
+      "Each signed-in user can read and write the documents of every other user.",
+      "Anyone, signed in or not, can read the documents but only owners can write.",
+      "Only the project owner can read and write documents in the `users` collection.",
+      "Each signed-in user can read and write only the document whose id is their own uid."
+    ],
+    "correctAnswer": 3,
+    "explanation": "`request.auth` is null for visitors who are not signed in, so the comparison fails for them. For signed-in users it is true only when the path variable `userId` equals their own uid. This is the standard \"owner only\" rule."
+  },
+  {
+    "id": 1153,
+    "category": "Firebase",
+    "difficulty": "hard",
+    "question": "Rules allow a user to read a `notes` document only if `ownerId` is their uid. The app runs `getDocs(collection(db, \"notes\"))`. What happens?",
+    "options": [
+      "The query returns only the notes that the user owns.",
+      "The query returns every note but hides the other owners' fields.",
+      "The whole query is rejected with a permission error.",
+      "The query returns an empty list and reports no error."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Security rules are not filters. Firestore checks whether the query could return a document the user may not read; if so, it fails entirely. The query must carry the same constraint as the rule: `where(\"ownerId\", \"==\", uid)`."
+  },
+  {
+    "id": 1154,
+    "category": "Firebase",
+    "difficulty": "easy",
+    "question": "Which Firestore function keeps the screen updated whenever the data changes on the server?",
+    "options": [
+      "`getDoc`, which reads the document once per call.",
+      "`onSnapshot`, which calls your listener on every change.",
+      "`setDoc`, which writes the document and returns it.",
+      "`addDoc`, which appends a document to a collection."
+    ],
+    "correctAnswer": 1,
+    "explanation": "`onSnapshot` opens a real-time listener: it fires with the current data and again after each change. It returns an unsubscribe function, which you should call when the screen closes so you stop paying for reads you no longer need."
+  },
+  {
+    "id": 1155,
+    "category": "Firebase",
+    "difficulty": "medium",
+    "question": "What mainly determines the cost of using Firestore?",
+    "options": [
+      "The number of document reads, writes and deletes, plus storage.",
+      "The number of collections that the database contains.",
+      "The number of developers who are members of the project.",
+      "The number of lines in the security rules file."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Firestore bills per operation: a query that returns 500 documents costs 500 reads. This is why you paginate with `limit`, avoid listeners on huge collections and store counters or summaries instead of reading everything to count it."
+  },
+  {
+    "id": 1156,
+    "category": "Firebase",
+    "difficulty": "medium",
+    "question": "A query filters on `status` and sorts by `createdAt`. Firestore answers with an error that contains a link. What is it asking for?",
+    "options": [
+      "A security rule that allows sorting on that field.",
+      "An upgrade from the free plan to the paid plan.",
+      "A smaller collection, with fewer than 100 documents.",
+      "A composite index for that combination of fields."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Firestore answers every query from an index, so query time depends on the result size, not the collection size. Single-field indexes are automatic; a filter on one field combined with a sort on another needs a composite index, which the link creates."
+  },
+  {
+    "id": 1157,
+    "category": "Firebase",
+    "difficulty": "medium",
+    "question": "A new Firestore database was created in \"test mode\". Why must the rules be changed before launch?",
+    "options": [
+      "Test mode stores the data in memory, so it is lost when the project restarts.",
+      "Test mode limits the database to ten documents in every collection.",
+      "Test mode lets anyone on the internet read and write all data for a limited time.",
+      "Test mode turns off authentication, so no user is able to sign in."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Test-mode rules are `allow read, write` for everyone until a date about 30 days ahead, after which all access is denied. Either way the app is broken or exposed. Write rules that match your data model and deploy them with `firebase deploy --only firestore:rules`."
+  },
+  {
+    "id": 1158,
+    "category": "Firebase",
+    "difficulty": "easy",
+    "question": "What does Firebase Hosting serve?",
+    "options": [
+      "Long-running backend servers that you write in Java or PHP.",
+      "Static files such as HTML, CSS and JavaScript, from a global CDN.",
+      "Relational databases that you query with standard SQL.",
+      "Virtual machines that you connect to and manage over SSH."
+    ],
+    "correctAnswer": 1,
+    "explanation": "You build the site (for example `npm run build`) and deploy the output folder named as `public` in `firebase.json`. Dynamic logic goes to Cloud Functions or Cloud Run, which Hosting can route to with rewrites."
+  },
+  {
+    "id": 1159,
+    "category": "Firebase",
+    "difficulty": "medium",
+    "question": "A single-page app on Firebase Hosting shows \"Page Not Found\" when the user refreshes `/profile`. What fixes it?",
+    "options": [
+      "A rewrite in `firebase.json` that serves `/index.html` for every path.",
+      "A redirect in `firebase.json` that sends every path to the home page.",
+      "A Firestore rule that allows public reads of the `profile` document.",
+      "A larger cache time for `/index.html` in the hosting headers."
+    ],
+    "correctAnswer": 0,
+    "explanation": "There is no file called `profile` on the server; the route exists only in the JavaScript router. A rewrite `{ \"source\": \"**\", \"destination\": \"/index.html\" }` returns the app without changing the URL, and the router shows the right screen. A redirect would change the URL and lose the route."
+  },
+  {
+    "id": 1160,
+    "category": "Firebase",
+    "difficulty": "medium",
+    "question": "In a client-only Firebase app, where should the \"is this user allowed to do this?\" checks be enforced?",
+    "options": [
+      "In the JavaScript of the page, because it runs before any request is sent.",
+      "In the CSS, by hiding the buttons that the user should not be able to press.",
+      "In `localStorage`, by saving the user's role next to their display name.",
+      "In security rules, because code that runs in the browser can be changed or bypassed."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Anyone can open the developer tools and call Firestore directly with the public config. Client-side checks improve the experience, but only rules (or trusted server code using the Admin SDK) actually protect data."
+  },
+  {
+    "id": 1161,
+    "category": "Firebase",
+    "difficulty": "easy",
+    "question": "Which Firebase product handles sign-in with email and password, Google and other providers?",
+    "options": [
+      "Firebase Hosting",
+      "Cloud Firestore",
+      "Firebase Authentication",
+      "Firebase Remote Config"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Authentication verifies identity and gives each user a stable `uid` and an ID token. Firestore and Storage rules receive that identity as `request.auth`, which is how \"only the owner can read this\" is expressed."
+  }
+]

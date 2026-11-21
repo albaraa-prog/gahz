@@ -51,6 +51,12 @@ export const ROADMAP_STEPS = {
   networking_fundamentals: ['Networking Fundamentals'],
   job_aptitude: ['Job Test: Aptitude & Reasoning'],
   job_it: ['Job Test: IT & Information Systems'],
+  git_github: ['Git & GitHub'],
+  cicd: ['CI/CD with GitHub Actions'],
+  docker: ['Docker'],
+  firebase: ['Firebase'],
+  supabase: ['Supabase'],
+  netlify: ['Netlify'],
 } as const satisfies Record<string, readonly string[]>;
 
 export type StepId = keyof typeof ROADMAP_STEPS;
@@ -68,6 +74,7 @@ export const ROADMAP_PATHS = [
   },
   { id: 'ai', steps: ['ai_fundamentals', 'llms', 'prompt_engineering'] },
   { id: 'game', steps: ['basics', 'csharp', 'unity', 'dsa', 'logic'] },
+  { id: 'devops', steps: ['git_github', 'cicd', 'docker', 'firebase', 'supabase', 'netlify'] },
   { id: 'networks', steps: ['networking_fundamentals', 'networking', 'rest', 'apis'] },
   { id: 'job_test', steps: ['job_aptitude', 'logic', 'job_it', 'networking_fundamentals'] },
   {

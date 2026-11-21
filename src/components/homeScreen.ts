@@ -1,6 +1,7 @@
 /** Home screen: hero, study-mode switch, preset cards and load notices. */
 
-import { PRESETS, presetText } from '../services/presets';
+import { PRESETS, type Preset, presetText } from '../services/presets';
+import { type Resource, resourcesForCategories } from '../services/resources';
 import { MISTAKES_MAX_QUESTIONS, mistakeQuestions } from '../services/mistakes';
 import { QuizStartError, setStudyMode, startMistakesQuiz, startPreset } from '../services/quizEngine';
 import { byId, closestFrom } from '../utils/dom';
@@ -9,6 +10,7 @@ import { escapeHtml } from '../utils/helpers';
 import { isRtl, t } from '../utils/i18n';
 import { state, store } from '../utils/state';
 import { showDialog } from './modal';
+import { resourceListHtml } from './resourceList';
 
 /** Runs a "start quiz" action and turns expected failures into a friendly notice. */
 export function startSafely(start: () => void): void {
@@ -43,6 +45,21 @@ function mistakesCard(): string {
     </div>`;
 }
 
+/** Free courses and certificates for the categories a preset draws its questions from. */
+function presetResources(preset: Preset): Resource[] {
+  return resourcesForCategories(new Set(preset.pick(state.allQuestions).map((question) => question.category)));
+}
+
+function showPresetResources(presetId: string | undefined): void {
+  const preset = PRESETS.find((candidate) => candidate.id === presetId);
+  if (!preset) return;
+  void showDialog({
+    title: `${t('resources.title')}: ${presetText(preset).title}`,
+    body: { html: `<div class="resources-dialog">${resourceListHtml(presetResources(preset))}</div>` },
+    cancelLabel: null,
+  });
+}
+
 function renderPresetCards(): void {
   const all = state.allQuestions;
   const ready = state.bankStatus === 'ready';
@@ -55,6 +72,14 @@ function renderPresetCards(): void {
       const unavailable = ready && available === 0;
       // A card whose text is always Arabic needs its own direction in the English interface.
       const direction = preset.card?.alwaysArabic && !isRtl() ? ' dir="rtl" lang="ar"' : '';
+      // Free courses for the topics of this card. A real button inside the card, handled before the card itself.
+      const resources = ready ? presetResources(preset) : [];
+      const resourcesButton =
+        resources.length > 0
+          ? `<button class="link-btn card-resources" type="button" data-resources="${escapeHtml(preset.id)}">${escapeHtml(
+              t('resources.title'),
+            )} <span dir="ltr">(${resources.length})</span></button>`
+          : '';
       return `
         <div class="mode-card" role="button" tabindex="0" data-preset="${escapeHtml(preset.id)}"${direction}
              aria-disabled="${String(!ready || unavailable)}">
@@ -62,7 +87,10 @@ function renderPresetCards(): void {
             <div class="mode-title">${escapeHtml(text.title)}</div>
             <p class="mode-description">${escapeHtml(text.description)}</p>
           </div>
-          <div class="mode-meta">${chips.map((chip) => `<span>${escapeHtml(chip)}</span>`).join('<span aria-hidden="true">·</span>')}</div>
+          <div>
+            <div class="mode-meta">${chips.map((chip) => `<span>${escapeHtml(chip)}</span>`).join('<span aria-hidden="true">·</span>')}</div>
+            ${resourcesButton}
+          </div>
         </div>`;
     })
     .join('');
@@ -111,11 +139,14 @@ export function initHomeScreen(onRetryBank: () => void): void {
     else if ('mistakes' in trigger.dataset) startSafely(startMistakesQuiz);
   };
   home.addEventListener('click', (event) => {
-    if (closestFrom(event, '#retryBankBtn')) onRetryBank();
+    const resources = closestFrom(event, '[data-resources]');
+    if (resources) showPresetResources(resources.dataset.resources);
+    else if (closestFrom(event, '#retryBankBtn')) onRetryBank();
     else activate(event);
   });
   home.addEventListener('keydown', (event) => {
     // Preset cards are div[role=button]; real buttons already handle these keys.
+    if (closestFrom(event, '[data-resources]')) return;
     if ((event.key === 'Enter' || event.key === ' ') && closestFrom(event, '.mode-card')) {
       event.preventDefault();
       activate(event);

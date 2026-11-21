@@ -5,6 +5,7 @@
 
 import { openLesson } from '../services/lessonPlayer';
 import { lessonStatus, lessonsForStep, localized } from '../services/lessons';
+import { resourcesForStep } from '../services/resources';
 import { openRoadmap, returnToHome, startRoadmapStep } from '../services/quizEngine';
 import {
   ROADMAP_PATHS,
@@ -22,6 +23,7 @@ import { escapeHtml, formatRichText } from '../utils/helpers';
 import { t } from '../utils/i18n';
 import { state, store } from '../utils/state';
 import { startSafely } from './homeScreen';
+import { resourceListHtml } from './resourceList';
 
 interface PathView {
   path: RoadmapPath;
@@ -83,6 +85,17 @@ function lessonLinks(stepId: StepId): string {
   return links.length > 0 ? `<div class="lesson-links">${links.join('')}</div>` : '';
 }
 
+/** Free courses and certificates on other websites for this step. Closed until the learner opens it. */
+function resourceLinks(stepId: StepId): string {
+  const resources = resourcesForStep(stepId);
+  if (resources.length === 0) return '';
+  return `
+    <details class="resources">
+      <summary>${escapeHtml(t('resources.title'))} <span class="resources-count" dir="ltr">${resources.length}</span></summary>
+      ${resourceListHtml(resources)}
+    </details>`;
+}
+
 function renderRoadmap(): void {
   const paths = visiblePaths();
   const current = paths.find(({ path }) => path.id === state.roadmapPath) ?? paths[0];
@@ -119,6 +132,7 @@ function renderRoadmap(): void {
             <h4 class="roadmap-step-title">${escapeHtml(t(`step.${step.id}.title`))}</h4>
             <p class="mode-description">${formatRichText(t(`step.${step.id}.desc`))}</p>
             ${lessonLinks(step.id)}
+            ${resourceLinks(step.id)}
             <div class="roadmap-step-progress">
               ${bar(step.percent)}
               <span>${escapeHtml(t('roadmap.mastered', { n: step.mastered, total: step.total }))}</span>

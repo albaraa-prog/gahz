@@ -43,7 +43,7 @@
             <ul>
                 <li>your email address, and the display name and profile picture link if you give one or sign in with Google;</li>
                 <li>your password in hashed form, handled by Firebase Authentication (we can never see it);</li>
-                <li>your quiz history (date, mode, score, the answers you chose), your settings and your statistics;</li>
+                <li>your quiz history (date, mode, score, the answers you chose), your progress in the lessons (how far you got in each one and when you finished it), your settings and your statistics;</li>
                 <li>technical sign-in records kept by Firebase Authentication, such as IP address and sign-in times, for security.</li>
             </ul>
             <p>We use this only to sign you in and to sync your progress between your devices. Your record can be read only by you. We do not sell your data, show ads, or send marketing messages.</p>
@@ -52,14 +52,14 @@
             <p>Only if you choose "Accept" on the analytics question, Gahz sends anonymous usage events to Google Analytics for Firebase: that a quiz was started or finished (its mode, number of questions and score) and that a sign-in happened (its method). Google also receives standard technical data such as device type, approximate location derived from your IP address, and an analytics identifier stored in your browser. Question content and your answers are never sent. If you choose "No thanks", analytics is not loaded at all. You can change your choice at any time with the "Analytics choice" link at the bottom of the site.</p>
 
             <h3>Where your data is stored, and transfer outside Oman</h3>
-            <p>Gahz is hosted on Google Firebase (Firebase Hosting, Firebase Authentication, Cloud Firestore and Google Analytics), provided by Google LLC and its affiliates. Your account profile, settings and quiz history are stored in Google data centres in the <strong>United States</strong> (Cloud Firestore location <span dir="ltr">nam5</span>), which is <strong>outside the Sultanate of Oman</strong>. Google may also process sign-in and analytics data in other countries where it operates. Fonts are loaded from Google Fonts, which means your browser contacts Google servers when a page opens. Creating an account, or accepting analytics, means you expressly agree to this transfer. Google acts as our processor under the <a href="https://firebase.google.com/terms/data-processing-terms" rel="noopener">Firebase data processing terms</a>; see also <a href="https://firebase.google.com/support/privacy" rel="noopener">Privacy and security in Firebase</a>.</p>
+            <p>Gahz is hosted on Google Firebase (Firebase Hosting, Firebase Authentication, Cloud Firestore and Google Analytics), provided by Google LLC and its affiliates. Your account profile, settings, quiz history and lesson progress are stored in Google data centres in the <strong>United States</strong> (Cloud Firestore location <span dir="ltr">nam5</span>), which is <strong>outside the Sultanate of Oman</strong>. Google may also process sign-in and analytics data in other countries where it operates. Fonts are loaded from Google Fonts, which means your browser contacts Google servers when a page opens. Creating an account, or accepting analytics, means you expressly agree to this transfer. Google acts as our processor under the <a href="https://firebase.google.com/terms/data-processing-terms" rel="noopener">Firebase data processing terms</a>; see also <a href="https://firebase.google.com/support/privacy" rel="noopener">Privacy and security in Firebase</a>.</p>
 
             <h3>How long we keep it</h3>
             <p>Account data is kept until you delete your account. Guest data stays in your browser until you clear it. Analytics data is kept by Google for the retention period set in Google Analytics and is not linked to your account by us.</p>
 
             <h3>Your rights and choices</h3>
             <ul>
-                <li><strong>Delete:</strong> use "Delete my account" at the bottom of the site while signed in. This permanently removes your sign-in, profile, settings and quiz history from our systems.</li>
+                <li><strong>Delete:</strong> use "Delete my account" at the bottom of the site while signed in. This permanently removes your sign-in, profile, settings, quiz history and lesson progress from our systems.</li>
                 <li><strong>Access, copy or correct:</strong> write to us and we will send you a copy of your data or correct it.</li>
                 <li><strong>Withdraw consent:</strong> delete your account, or switch analytics off, at any time. Guest mode keeps working.</li>
                 <li><strong>Complain:</strong> you may contact us first, and you also have the right to complain to the Ministry of Transport, Communications and Information Technology of Oman, or to the data protection authority where you live.</li>
@@ -97,7 +97,7 @@
             <ul>
                 <li>بريدك الإلكتروني، والاسم المعروض ورابط الصورة الشخصية إن قدّمتهما أو سجّلت الدخول عبر Google؛</li>
                 <li>كلمة المرور بصيغة مشفّرة (hash) تديرها خدمة Firebase Authentication، ولا يمكننا الاطلاع عليها؛</li>
-                <li>سجلّ اختباراتك (التاريخ، النمط، النتيجة، الإجابات التي اخترتها) وإعداداتك وإحصاءاتك؛</li>
+                <li>سجلّ اختباراتك (التاريخ، النمط، النتيجة، الإجابات التي اخترتها) وتقدّمك في الدروس (أين وصلت في كل درس ومتى أنهيته) وإعداداتك وإحصاءاتك؛</li>
                 <li>سجلّات تقنية لتسجيل الدخول تحتفظ بها Firebase Authentication، مثل عنوان IP وأوقات الدخول، لأغراض الأمان.</li>
             </ul>
             <p>نستخدم هذه البيانات لتسجيل دخولك ومزامنة تقدّمك بين أجهزتك فقط. لا يستطيع قراءة سجلّك أحد غيرك. لا نبيع بياناتك، ولا نعرض إعلانات، ولا نرسل رسائل تسويقية.</p>
@@ -106,14 +106,14 @@
             <p>فقط إذا اخترت «موافق» في سؤال التحليلات، يرسل جاهز أحداث استخدام مجهولة إلى Google Analytics for Firebase: بدء اختبار أو إنهاؤه (نمطه وعدد أسئلته ونتيجته) وحدوث تسجيل دخول (طريقته). تتلقى Google كذلك بيانات تقنية معتادة مثل نوع الجهاز والموقع التقريبي المستنتج من عنوان IP ومعرّف تحليلات يُحفظ في متصفحك. لا يُرسل محتوى الأسئلة ولا إجاباتك أبداً. إذا اخترت «لا، شكراً» فلن تُحمَّل التحليلات إطلاقاً. يمكنك تغيير اختيارك في أي وقت من رابط «خيار التحليلات» أسفل الموقع.</p>
 
             <h3>أين تُخزَّن بياناتك، ونقلها خارج عُمان</h3>
-            <p>يُستضاف جاهز على Google Firebase (Firebase Hosting و Firebase Authentication و Cloud Firestore و Google Analytics) التي تقدّمها شركة Google LLC والشركات التابعة لها. يُخزَّن ملف حسابك وإعداداتك وسجلّ اختباراتك في مراكز بيانات Google في <strong>الولايات المتحدة</strong> (موقع Cloud Firestore: <span dir="ltr">nam5</span>)، أي <strong>خارج سلطنة عُمان</strong>. وقد تعالج Google بيانات تسجيل الدخول والتحليلات في بلدان أخرى تعمل فيها. تُحمَّل الخطوط من Google Fonts، أي أن متصفحك يتصل بخوادم Google عند فتح الصفحة. إنشاؤك حساباً أو قبولك التحليلات يعني موافقتك الصريحة على هذا النقل. تعمل Google بصفتها معالجاً للبيانات لصالحنا وفق <a href="https://firebase.google.com/terms/data-processing-terms" rel="noopener">شروط معالجة البيانات في Firebase</a>، وانظر أيضاً <a href="https://firebase.google.com/support/privacy" rel="noopener">الخصوصية والأمان في Firebase</a>.</p>
+            <p>يُستضاف جاهز على Google Firebase (Firebase Hosting و Firebase Authentication و Cloud Firestore و Google Analytics) التي تقدّمها شركة Google LLC والشركات التابعة لها. يُخزَّن ملف حسابك وإعداداتك وسجلّ اختباراتك وتقدّمك في الدروس في مراكز بيانات Google في <strong>الولايات المتحدة</strong> (موقع Cloud Firestore: <span dir="ltr">nam5</span>)، أي <strong>خارج سلطنة عُمان</strong>. وقد تعالج Google بيانات تسجيل الدخول والتحليلات في بلدان أخرى تعمل فيها. تُحمَّل الخطوط من Google Fonts، أي أن متصفحك يتصل بخوادم Google عند فتح الصفحة. إنشاؤك حساباً أو قبولك التحليلات يعني موافقتك الصريحة على هذا النقل. تعمل Google بصفتها معالجاً للبيانات لصالحنا وفق <a href="https://firebase.google.com/terms/data-processing-terms" rel="noopener">شروط معالجة البيانات في Firebase</a>، وانظر أيضاً <a href="https://firebase.google.com/support/privacy" rel="noopener">الخصوصية والأمان في Firebase</a>.</p>
 
             <h3>مدة الاحتفاظ</h3>
             <p>تُحفظ بيانات الحساب إلى أن تحذف حسابك. تبقى بيانات الضيف في متصفحك إلى أن تمسحها. تحتفظ Google ببيانات التحليلات للمدة المحددة في إعدادات Google Analytics، ولا نربطها نحن بحسابك.</p>
 
             <h3>حقوقك وخياراتك</h3>
             <ul>
-                <li><strong>الحذف:</strong> استخدم «حذف حسابي» أسفل الموقع وأنت مسجّل الدخول. يزيل ذلك نهائياً بيانات دخولك وملفك وإعداداتك وسجلّ اختباراتك من أنظمتنا.</li>
+                <li><strong>الحذف:</strong> استخدم «حذف حسابي» أسفل الموقع وأنت مسجّل الدخول. يزيل ذلك نهائياً بيانات دخولك وملفك وإعداداتك وسجلّ اختباراتك وتقدّمك في الدروس من أنظمتنا.</li>
                 <li><strong>الاطلاع أو الحصول على نسخة أو التصحيح:</strong> راسلنا وسنرسل لك نسخة من بياناتك أو نصحّحها.</li>
                 <li><strong>سحب الموافقة:</strong> احذف حسابك أو أوقف التحليلات في أي وقت، ويبقى وضع الضيف يعمل.</li>
                 <li><strong>الشكوى:</strong> يمكنك التواصل معنا أولاً، ولك كذلك الحق في تقديم شكوى إلى وزارة النقل والاتصالات وتقنية المعلومات في سلطنة عُمان، أو إلى جهة حماية البيانات في بلد إقامتك.</li>

@@ -133,12 +133,17 @@ describe('roadmap content', () => {
   });
 
   it('stores an English mode label and translates it for the history table', () => {
-    expect(roadmapMode('databases')).toBe('Roadmap: databases');
-    expect(parseRoadmapMode('Roadmap: databases')).toBe('databases');
+    expect(roadmapMode('plsql')).toBe('Roadmap: plsql');
+    expect(parseRoadmapMode('Roadmap: plsql')).toBe('plsql');
     expect(parseRoadmapMode('Roadmap: nothing')).toBeNull();
     expect(parseRoadmapMode('Standard Mixed Exam')).toBeNull();
-    expect(displayMode('Roadmap: databases')).toBe('Roadmap: Databases');
+    expect(displayMode('Roadmap: sql')).toBe('Roadmap: SQL & databases');
     setActiveLocale('ar');
-    expect(displayMode('Roadmap: databases')).toBe('خارطة التعلّم: قواعد البيانات');
+    expect(displayMode('Roadmap: sql')).toBe('خارطة التعلّم: SQL وقواعد البيانات');
+  });
+
+  it('shows attempts saved under a merged step as the step that replaced it', () => {
+    expect(parseRoadmapMode('Roadmap: databases')).toBe('sql');
+    expect(displayMode('Roadmap: databases')).toBe('Roadmap: SQL & databases');
   });
 });

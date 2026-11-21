@@ -15,6 +15,8 @@ import {
   isOrderCorrect,
   lessonStatus,
   lessonsForStep,
+  mergeLessonProgress,
+  parseLessonProgress,
   sameJson,
   shuffledOrder,
   tokenBank,
@@ -300,5 +302,50 @@ describe('code runner page', () => {
     // The runner page is sandboxed, so the browser asks the Pyodide files for permission to read them.
     const pyodide = config.hosting.headers.find((entry) => entry.source === '/pyodide/**');
     expect(pyodide?.headers).toContainEqual({ key: 'Access-Control-Allow-Origin', value: '*' });
+  });
+});
+
+describe('lesson progress sync', () => {
+  it('keeps the furthest step and the earliest finish from either side', () => {
+    const local = { a: { reached: 3, completedAt: null }, b: { reached: 5, completedAt: 900 }, c: { reached: 1, completedAt: null } };
+    const remote = { a: { reached: 2, completedAt: null }, b: { reached: 5, completedAt: 400 }, d: { reached: 4, completedAt: 700 } };
+    expect(mergeLessonProgress(local, remote)).toEqual({
+      a: { reached: 3, completedAt: null },
+      b: { reached: 5, completedAt: 400 },
+      c: { reached: 1, completedAt: null },
+      d: { reached: 4, completedAt: 700 },
+    });
+    // The same result whichever side is "local".
+    expect(mergeLessonProgress(remote, local)).toEqual(mergeLessonProgress(local, remote));
+  });
+
+  it('returns the same object when the other side adds nothing', () => {
+    const local = { a: { reached: 3, completedAt: 50 } };
+    expect(mergeLessonProgress(local, {})).toBe(local);
+    expect(mergeLessonProgress(local, { a: { reached: 1, completedAt: 80 } })).toBe(local);
+  });
+
+  it('drops malformed entries read from storage or the account', () => {
+    expect(parseLessonProgress(null)).toBeNull();
+    expect(parseLessonProgress([])).toBeNull();
+    expect(
+      parseLessonProgress({
+        'js-variables': { reached: 2.7, completedAt: 'yesterday' },
+        done: { reached: 4, completedAt: 123 },
+        'bad id!': { reached: 1, completedAt: null },
+        negative: { reached: -1, completedAt: null },
+        text: 'nope',
+        huge: { reached: 1e9, completedAt: null },
+      }),
+    ).toEqual({
+      'js-variables': { reached: 2, completedAt: null },
+      done: { reached: 4, completedAt: 123 },
+      huge: { reached: 1000, completedAt: null },
+    });
+  });
+
+  it('every lesson id can be stored', () => {
+    const all = Object.fromEntries(LESSONS.map((lesson) => [lesson.id, { reached: 1, completedAt: null }]));
+    expect(Object.keys(parseLessonProgress(all) ?? {})).toHaveLength(LESSONS.length);
   });
 });

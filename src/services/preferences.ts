@@ -4,6 +4,7 @@ import type { CustomQuizConfig, Theme, UserPreferences } from '../types';
 import { detectLocale, parseLocale, setActiveLocale, type Locale } from '../utils/i18n';
 import { clamp, isRecord } from '../utils/helpers';
 import { DEFAULT_CUSTOM_CONFIG, state, store } from '../utils/state';
+import { currentCategories } from './categoryAliases';
 import { STORAGE_KEYS, readJson, readString, writeJson, writeString } from './storage';
 
 export function parseCustomConfig(value: unknown): CustomQuizConfig {
@@ -13,7 +14,7 @@ export function parseCustomConfig(value: unknown): CustomQuizConfig {
     typeof value.minutes === 'number' && Number.isFinite(value.minutes) ? clamp(Math.round(value.minutes), 1, 120) : 25;
   const categories =
     Array.isArray(value.categories) && value.categories.every((c) => typeof c === 'string')
-      ? (value.categories as string[])
+      ? currentCategories(value.categories as string[])
       : null;
   return { count, minutes, categories };
 }

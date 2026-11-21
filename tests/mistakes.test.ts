@@ -28,7 +28,7 @@ const attempt = (timestamp: number, answers: AttemptAnswer[]): Attempt => ({
 
 const question = (id: number, options = ['a', 'b', 'c', 'd']): Question => ({
   id,
-  category: 'Databases',
+  category: 'SQL & Databases',
   difficulty: 'easy',
   question: `Question number ${id}?`,
   options,
@@ -108,9 +108,9 @@ describe('Arabic question text', () => {
   });
 
   it('translates category names for display only', () => {
-    expect(categoryLabel('Databases')).toBe('Databases');
+    expect(categoryLabel('SQL & Databases')).toBe('SQL & Databases');
     state.locale = 'ar';
-    expect(categoryLabel('Databases')).toBe('قواعد البيانات');
+    expect(categoryLabel('SQL & Databases')).toBe('SQL وقواعد البيانات');
     expect(categoryLabel('Unknown topic')).toBe('Unknown topic');
   });
 
@@ -127,7 +127,6 @@ describe('Arabic question text', () => {
       'PHP',
       'PL/SQL',
       'Python',
-      'SQL',
       'Spring Boot',
       'Supabase',
     ]);

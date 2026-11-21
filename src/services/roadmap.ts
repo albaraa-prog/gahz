@@ -23,13 +23,12 @@ export const ROADMAP_STEPS = {
   logic: ['Logic & IQ'],
   systems: ['General Computer Science & Advanced Systems'],
   javascript: ['JavaScript'],
-  fullstack: ['Fullstack Web Dev', 'Fullstack'],
+  fullstack: ['Fullstack Web Dev'],
   backend_language: ['Java', 'C#', 'PHP', 'Python'],
-  databases: ['Databases'],
   plsql: ['PL/SQL'],
   rest: ['REST & SOAP'],
   apis: ['APIs & Data Integration (REST, GraphQL, WebSockets)'],
-  networking: ['CS & Networks', 'Computer Networking & Protocols'],
+  networking: ['Computer Networking & Protocols'],
   flutter_basics: ['Flutter & Dart Fundamentals (Junior to Mid)'],
   flutter_core: ['Flutter & Dart Core Mastery'],
   flutter_architecture: ['Flutter Clean Architecture & Provider'],
@@ -41,7 +40,7 @@ export const ROADMAP_STEPS = {
   // Categories below arrive with other question packs. A step with no questions
   // in the loaded bank is hidden, and so is a path with no steps left.
   dsa: ['Data Structures & Algorithms'],
-  sql: ['SQL'],
+  sql: ['SQL & Databases'],
   ai_fundamentals: ['AI Fundamentals'],
   llms: ['LLMs & Generative AI'],
   prompt_engineering: ['Prompt Engineering'],
@@ -72,10 +71,10 @@ export type StepId = keyof typeof ROADMAP_STEPS;
 
 export const ROADMAP_PATHS = [
   { id: 'foundations', steps: ['basics', 'fundamentals', 'dsa', 'logic', 'systems'] },
-  { id: 'web', steps: ['basics', 'javascript', 'frontend', 'fullstack', 'rest', 'apis', 'sql', 'databases'] },
+  { id: 'web', steps: ['basics', 'javascript', 'frontend', 'fullstack', 'rest', 'apis', 'sql'] },
   {
     id: 'backend',
-    steps: ['fundamentals', 'backend_language', 'backend_frameworks', 'sql', 'databases', 'plsql', 'rest', 'apis', 'networking'],
+    steps: ['fundamentals', 'backend_language', 'backend_frameworks', 'sql', 'plsql', 'rest', 'apis', 'networking'],
   },
   {
     id: 'mobile',
@@ -115,11 +114,18 @@ export function isStepId(value: unknown): value is StepId {
   return typeof value === 'string' && Object.hasOwn(ROADMAP_STEPS, value);
 }
 
+/**
+ * Steps that were folded into another one when their categories were merged.
+ * Attempts saved under the old id still show up as the step that replaced it.
+ */
+const MERGED_STEPS: Readonly<Record<string, StepId>> = { databases: 'sql' };
+
 /** The step a stored mode label belongs to, or null for any other kind of quiz. */
 export function parseRoadmapMode(mode: string): StepId | null {
   if (!mode.startsWith(MODE_PREFIX)) return null;
   const id = mode.slice(MODE_PREFIX.length);
-  return isStepId(id) ? id : null;
+  if (isStepId(id)) return id;
+  return Object.hasOwn(MERGED_STEPS, id) ? (MERGED_STEPS[id] ?? null) : null;
 }
 
 export function findPath(id: unknown): RoadmapPath | undefined {

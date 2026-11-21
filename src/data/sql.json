@@ -1,7 +1,7 @@
 [
   {
     "id": 346,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "easy",
     "question": "What does a `LEFT JOIN` return that an `INNER JOIN` does not?",
     "options": [
@@ -15,7 +15,7 @@
   },
   {
     "id": 347,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "easy",
     "question": "What is the difference between `WHERE` and `HAVING`?",
     "options": [
@@ -29,7 +29,7 @@
   },
   {
     "id": 348,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "The `manager_id` column is NULL for three employees. How many rows does this query return?",
     "codeSnippet": "SELECT *\nFROM employees\nWHERE manager_id = NULL;",
@@ -44,7 +44,7 @@
   },
   {
     "id": 349,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "A table has 10 rows and the `phone` column is NULL in 3 of them. What do `COUNT(*)` and `COUNT(phone)` return?",
     "options": [
@@ -58,7 +58,7 @@
   },
   {
     "id": 350,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "easy",
     "question": "What is the difference between `UNION` and `UNION ALL`?",
     "options": [
@@ -72,7 +72,7 @@
   },
   {
     "id": 351,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "What does this query return?",
     "codeSnippet": "SELECT MAX(salary)\nFROM employees\nWHERE salary < (SELECT MAX(salary) FROM employees);",
@@ -87,7 +87,7 @@
   },
   {
     "id": 352,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "Three rows have scores 100, 100 and 90. Ordered by score descending, what do `RANK()` and `DENSE_RANK()` assign?",
     "options": [
@@ -101,7 +101,7 @@
   },
   {
     "id": 353,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "easy",
     "question": "Which statement removes every row from a table but keeps the table itself, and does not accept a `WHERE` clause?",
     "options": [
@@ -115,7 +115,7 @@
   },
   {
     "id": 354,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "hard",
     "question": "The subquery below returns the values 1, 2 and NULL. What does the outer query return?",
     "codeSnippet": "SELECT *\nFROM customers\nWHERE id NOT IN (SELECT customer_id FROM orders);",
@@ -130,7 +130,7 @@
   },
   {
     "id": 355,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "easy",
     "question": "How does a `PRIMARY KEY` constraint differ from a `UNIQUE` constraint?",
     "options": [
@@ -144,7 +144,7 @@
   },
   {
     "id": 356,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "Which query lists the customers who have never placed an order?",
     "options": [
@@ -158,7 +158,7 @@
   },
   {
     "id": 357,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "Which query finds the email addresses that appear more than once in a `users` table?",
     "options": [
@@ -172,7 +172,7 @@
   },
   {
     "id": 358,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "A table has a composite index on `(last_name, first_name)`. Which filter can NOT use that index efficiently?",
     "options": [
@@ -186,7 +186,7 @@
   },
   {
     "id": 359,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "A table is already in second normal form. What must be removed to bring it to third normal form (3NF)?",
     "options": [
@@ -200,7 +200,7 @@
   },
   {
     "id": 360,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "easy",
     "question": "Which names does the filter `WHERE name LIKE '_a%'` match?",
     "options": [
@@ -214,7 +214,7 @@
   },
   {
     "id": 361,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "An `employees` table has `id`, `name` and `manager_id`, where `manager_id` points to another row of the same table. How do you list each employee next to their manager's name?",
     "options": [
@@ -228,7 +228,7 @@
   },
   {
     "id": 362,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "What makes a subquery a correlated subquery?",
     "options": [
@@ -242,7 +242,7 @@
   },
   {
     "id": 363,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "easy",
     "question": "What does `COALESCE(nickname, first_name, 'Guest')` return?",
     "options": [
@@ -256,7 +256,7 @@
   },
   {
     "id": 364,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "hard",
     "question": "What does the `running` column contain in this query?",
     "codeSnippet": "SELECT customer_id, order_date, amount,\n       SUM(amount) OVER (\n         PARTITION BY customer_id\n         ORDER BY order_date\n       ) AS running\nFROM orders;",
@@ -271,7 +271,7 @@
   },
   {
     "id": 365,
-    "category": "SQL",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "`created_at` is indexed, yet the filter `WHERE YEAR(created_at) = 2024` is slow on a large table. Why?",
     "options": [

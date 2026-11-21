@@ -586,6 +586,82 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
       'دورات مجانية بشهادات رقمية في الدعم التقني والسحابة والبيانات والأمن.',
     ),
   ],
+  oop_patterns: [
+    certificate(
+      'Java Programming',
+      'University of Helsinki (MOOC.fi)',
+      'https://java-programming.mooc.fi/',
+      'A full university course built around objects, classes, interfaces and inheritance.',
+      'مقرّر جامعي كامل يدور حول الكائنات والأصناف والواجهات والوراثة.',
+    ),
+    FCC_CSHARP,
+    course(
+      'A tour of C#',
+      'Microsoft Learn',
+      'https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/',
+      'The official overview of an object-oriented language: types, interfaces, generics and more.',
+      'النظرة الرسمية العامة على لغة كائنية: الأنواع والواجهات والأنواع العامة وغيرها.',
+    ),
+  ],
+  system_design: [
+    AZURE_FUNDAMENTALS,
+    course(
+      'Google SRE books',
+      'Google',
+      'https://sre.google/books/',
+      'Free books on how large systems are built to stay up: load balancing, overload, monitoring and incidents.',
+      'كتب مجانية عن بناء الأنظمة الكبيرة لتبقى متاحة: توزيع الحمل والحمل الزائد والمراقبة والحوادث.',
+    ),
+  ],
+  frontend: [
+    certificate(
+      'Responsive Web Design',
+      'freeCodeCamp',
+      'https://www.freecodecamp.org/learn/2022/responsive-web-design/',
+      'HTML and CSS, including accessibility, flexbox and grid.',
+      'HTML و CSS، ومنها إتاحة الوصول و flexbox و grid.',
+    ),
+    FCC_JS,
+    course(
+      'Learn web development',
+      'MDN Web Docs',
+      'https://developer.mozilla.org/en-US/docs/Learn_web_development',
+      'Mozilla’s structured path through HTML, CSS, JavaScript and frameworks such as React.',
+      'مسار Mozilla المنظَّم في HTML و CSS و JavaScript وأطر العمل مثل React.',
+    ),
+  ],
+  engineering_practices: [
+    certificate(
+      'CS50’s Web Programming with Python and JavaScript',
+      'Harvard University',
+      'https://cs50.harvard.edu/web/',
+      'Includes a full week on testing and CI/CD, inside a complete web course.',
+      'يتضمّن أسبوعاً كاملاً عن الاختبار و CI/CD ضمن مقرّر ويب متكامل.',
+    ),
+    course(
+      'Google SRE books',
+      'Google',
+      'https://sre.google/books/',
+      'Free books with chapters on testing for reliability, release engineering and blameless postmortems.',
+      'كتب مجانية فيها فصول عن الاختبار من أجل الموثوقية وهندسة الإصدارات وتحليل الحوادث دون لوم.',
+    ),
+  ],
+  behavioral: [
+    certificate(
+      'BUS210: Business Communication',
+      'Saylor Academy',
+      'https://learn.saylor.org/course/bus210',
+      'Speaking, writing and presenting yourself at work, with a free certificate after the final exam.',
+      'التحدّث والكتابة وتقديم نفسك في العمل، مع شهادة مجانية بعد الاختبار النهائي.',
+    ),
+    course(
+      'Technical Writing',
+      'Google for Developers',
+      'https://developers.google.com/tech-writing',
+      'Short courses on explaining technical work clearly, which is what interview answers need.',
+      'دورات قصيرة في شرح العمل التقني بوضوح، وهو ما تحتاجه إجابات المقابلات.',
+    ),
+  ],
   git_github: [
     certificate(
       'Git Training',

@@ -1,0 +1,170 @@
+[
+  {
+    "id": 1262,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "easy",
+    "question": "One test calls `calculateDiscount(100, \"GOLD\")` directly and checks the number. Another starts the API, saves an order to a test database and reads it back. What are these two kinds of test?",
+    "options": [
+      "The first is a smoke test; the second is a regression test",
+      "The first is an integration test; the second is a unit test",
+      "The first is a unit test; the second is an integration test",
+      "The first is a load test; the second is an acceptance test"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A unit test checks one small piece in isolation and runs in milliseconds. An integration test checks that several real parts (API, database) work together; it is slower but catches wiring mistakes that unit tests cannot see."
+  },
+  {
+    "id": 1263,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "medium",
+    "question": "A team has 20 unit tests and 600 browser end-to-end tests. The suite takes two hours and fails randomly. What does the test pyramid recommend?",
+    "options": [
+      "Many end-to-end tests, fewer integration tests, and only a few unit tests",
+      "Many fast unit tests, fewer integration tests, and only a few end-to-end tests",
+      "The same number of tests at each level so that no layer is favoured",
+      "Only manual testing before each release, since automation is unstable"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Lower-level tests are fast, stable and point at the exact failure, so most checks belong there. End-to-end tests are slow and brittle; keep them for a handful of critical user journeys."
+  },
+  {
+    "id": 1264,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "medium",
+    "question": "A tester designs cases only from the requirements document, without ever seeing the code. Another designs cases to make every branch of an `if` statement execute. Which techniques are these?",
+    "options": [
+      "Black-box testing, then white-box testing",
+      "White-box testing, then black-box testing",
+      "Alpha testing, then beta testing",
+      "Static testing, then dynamic testing"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Black-box testing checks behaviour against the specification and ignores the implementation. White-box testing uses knowledge of the code's structure, for example to reach branch coverage. Alpha and beta describe who tests and where, not how cases are designed."
+  },
+  {
+    "id": 1265,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "medium",
+    "question": "Unit tests for `CheckoutService` call the real payment provider's sandbox. They are slow and fail whenever the sandbox is down. What should the unit tests do instead?",
+    "options": [
+      "Call the production payment endpoint, because it has far better uptime",
+      "Run each test three times and accept the result if any single run passes",
+      "Delete the tests for checkout and rely on the provider's own test suite",
+      "Replace the payment client with a test double that returns prepared responses"
+    ],
+    "correctAnswer": 3,
+    "explanation": "A unit test should depend only on the code under test. A fake or mock makes it fast and deterministic and lets you simulate declines and timeouts. Keep a small number of separate integration tests for the real sandbox."
+  },
+  {
+    "id": 1266,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "medium",
+    "question": "What is the order of steps in the test-driven development (TDD) cycle?",
+    "options": [
+      "Refactor the code, write a failing test, then write code to pass it",
+      "Write the code, write tests that pass against it, then refactor",
+      "Write a failing test, write just enough code to pass it, then refactor",
+      "Write all tests for the feature, write all the code, then deploy it"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Red, green, refactor: the failing test proves the test can fail and defines the behaviour, the minimal code makes it pass, and refactoring cleans up while the tests keep you safe. The cycle is repeated in small steps."
+  },
+  {
+    "id": 1267,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "medium",
+    "question": "A customer reports that orders with a 100% discount crash the invoice page. You have found the faulty line. What is the best next step?",
+    "options": [
+      "Fix the line, deploy at once, and ask the customer to confirm it works",
+      "Write a test that reproduces the crash, see it fail, then fix the code",
+      "Fix the line and add a comment that explains what the old bug was",
+      "Wrap the page in a try/catch that hides the error from the customer"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A test that fails before the fix and passes after it proves the bug is really fixed and guards against it coming back. That is a regression test. Catching and hiding the exception leaves the wrong behaviour in place."
+  },
+  {
+    "id": 1268,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "medium",
+    "question": "You are asked to review a pull request that changes 2,400 lines in 60 files and mixes a refactor, a new feature and formatting changes. What is the most useful response?",
+    "options": [
+      "Ask the author to split it into smaller pull requests that each do one thing",
+      "Approve it quickly, since nobody can review that much code carefully anyway",
+      "Review only the first ten files in depth and approve the rest on trust",
+      "Reject it without comment so the author learns to send smaller changes"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Review quality drops sharply as size grows, and mixed changes hide the risky parts. Small, single-purpose pull requests are reviewed faster and more thoroughly. Rejecting without explanation teaches nothing and damages trust."
+  },
+  {
+    "id": 1269,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "medium",
+    "question": "During a code review you find a loop that runs one database query per item. Which review comment is the most effective?",
+    "options": [
+      "\"Looks fine to me.\" Then fix it yourself later in a separate pull request.",
+      "\"This is wrong. Did you even test it with more than three items in the list?\"",
+      "\"I would never have written it this way. Please rewrite the whole function.\"",
+      "\"This runs one query per item; could we load them all in one query before the loop?\""
+    ],
+    "correctAnswer": 3,
+    "explanation": "Good review comments are about the code, not the person: they name the specific problem, explain the impact and suggest a direction. Sarcasm makes people defensive, and silently fixing it later means the author never learns about the issue."
+  },
+  {
+    "id": 1270,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "easy",
+    "question": "What is the main difference between the Waterfall model and Agile development?",
+    "options": [
+      "Waterfall has no documentation at all; Agile requires a full specification up front",
+      "Waterfall delivers in short iterations and adapts; Agile finishes each phase before the next",
+      "Waterfall finishes each phase before the next; Agile delivers in short iterations and adapts",
+      "Waterfall is used only for web projects; Agile is used only for mobile projects"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Waterfall moves once through requirements, design, build, test and release, so change late in the project is expensive. Agile builds small working increments, gathers feedback after each one and re-plans."
+  },
+  {
+    "id": 1271,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "easy",
+    "question": "In Scrum, what is the purpose of the sprint retrospective?",
+    "options": [
+      "The team shows the finished work to stakeholders and collects their feedback",
+      "The team reflects on how it worked and agrees on improvements for the next sprint",
+      "The team selects backlog items and estimates the work for the coming sprint",
+      "The team members each report what they did yesterday and plan for today"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The retrospective is about the process: what went well, what did not, and what to change. Showing the work is the sprint review, choosing work is sprint planning, and the short daily sync is the daily scrum."
+  },
+  {
+    "id": 1272,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "medium",
+    "question": "Which of these is a non-functional requirement?",
+    "options": [
+      "The search results page must load in under two seconds for 95% of requests",
+      "A user must be able to reset their password using a link sent by email",
+      "An admin must be able to export the list of orders as a CSV file",
+      "The system must send an SMS to the customer when an order ships"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Functional requirements say what the system does. Non-functional requirements say how well it does it: performance, availability, security, usability. A response-time target is the classic example."
+  },
+  {
+    "id": 1273,
+    "category": "Testing, Code Review & Agile",
+    "difficulty": "medium",
+    "question": "A test passes on your machine but fails about one run in ten on the CI server, with no code change. What is the right way to deal with it?",
+    "options": [
+      "Raise every timeout in the test suite until the failure stops appearing",
+      "Add an automatic retry so the pipeline goes green and move on to other work",
+      "Mark the test as skipped until someone on the team has time to look at it",
+      "Look for hidden dependencies such as timing, test order or shared state, and remove them"
+    ],
+    "correctAnswer": 3,
+    "explanation": "A flaky test is nondeterministic: it usually depends on the clock, on another test's leftovers, on network calls or on a race. Retrying or skipping hides the signal and may hide a real concurrency bug in the product."
+  }
+]

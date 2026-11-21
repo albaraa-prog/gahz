@@ -1,0 +1,174 @@
+[
+  {
+    "id": 1250,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "easy",
+    "question": "A page builds its menu from `<div onclick=\"...\">` elements. A reviewer asks for `<nav>` with real `<button>` and `<a>` elements. What is the main practical gain?",
+    "options": [
+      "The CSS specificity of the menu becomes higher, so its styles can no longer be overridden",
+      "The browser downloads the page faster because semantic tags are shorter than `div` tags",
+      "Screen readers and keyboards understand them: focus, Enter and roles work without extra code",
+      "Search engines stop indexing the menu links, which keeps the crawl budget for content"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Semantic elements carry meaning and built-in behaviour: a `<button>` is focusable, reacts to Enter and Space, and is announced as a button. A clickable `div` gives assistive technology nothing unless you rebuild all of that by hand."
+  },
+  {
+    "id": 1251,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "easy",
+    "question": "How wide is this element on screen?",
+    "codeSnippet": ".card {\n  box-sizing: border-box;\n  width: 200px;\n  padding: 20px;\n  border: 5px solid;\n  margin: 10px;\n}",
+    "options": [
+      "250px",
+      "200px",
+      "240px",
+      "270px"
+    ],
+    "correctAnswer": 1,
+    "explanation": "With `border-box`, `width` includes padding and border, so the box is 200px wide and the content area shrinks to 150px. With the default `content-box` it would be 200 + 40 + 10 = 250px. Margin is outside the box in both cases."
+  },
+  {
+    "id": 1252,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "medium",
+    "question": "Given `<ul id=\"menu\" class=\"nav\"><li><a class=\"link\" href=\"#\">Home</a></li></ul>`, what colour is the link?",
+    "codeSnippet": ".nav .link { color: green; }\n#menu a    { color: red; }\na.link     { color: blue; }",
+    "options": [
+      "Red, because a selector with an id outranks selectors made of classes",
+      "Blue, because the rule that comes last in the file always wins",
+      "Green, because two classes outrank one id plus one element",
+      "Black, because rules that conflict cancel each other out"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Specificity compares ids first, then classes, then elements. `#menu a` has one id; the others have none, so no number of classes beats it. Source order only decides between rules of equal specificity."
+  },
+  {
+    "id": 1253,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "medium",
+    "question": "You need a page layout with a header, a sidebar, a main area and a footer, aligned in both rows and columns. Separately, you need a row of buttons spaced evenly. Which tools fit?",
+    "options": [
+      "Absolute positioning for both, with fixed pixel offsets",
+      "Flexbox for the page layout and Grid for the row of buttons",
+      "Floats for the page layout and tables for the row of buttons",
+      "Grid for the page layout and Flexbox for the row of buttons"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Grid is two-dimensional: it controls rows and columns together, which suits whole-page layouts. Flexbox is one-dimensional: it distributes items along a single row or column, which suits toolbars and button groups."
+  },
+  {
+    "id": 1254,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "medium",
+    "question": "Two scripts are in `<head>`: `app.js` depends on `lib.js`. You want them to download without blocking HTML parsing and still run in order. Which attribute do you put on both?",
+    "options": [
+      "`async`: download one at a time, run before the parser starts on the body",
+      "`async`: download in parallel, run in document order after parsing ends",
+      "`defer`: download in parallel, run in document order after parsing ends",
+      "`defer`: download one at a time, run whenever each of them has arrived"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Both attributes download without blocking the parser. `defer` scripts run in order once the document is parsed; `async` scripts run as soon as each one arrives, in any order, so `app.js` could run before `lib.js`."
+  },
+  {
+    "id": 1255,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "medium",
+    "question": "A list has 2,000 rows and new rows are added while the page is open. Each row must react to clicks. What is the efficient way to wire this up?",
+    "options": [
+      "One listener per row, added again for the whole list after every new row",
+      "One listener on the list that checks `event.target`, relying on event bubbling",
+      "An inline `onclick` attribute written into the HTML of every single row",
+      "A timer that checks every 100 ms which row is under the mouse pointer"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Clicks bubble up from the row to its ancestors, so a single listener on the parent handles every row, including rows added later. This is event delegation: less memory, and no re-binding when the list changes."
+  },
+  {
+    "id": 1256,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "medium",
+    "question": "This React component sends requests in an endless loop. Why?",
+    "codeSnippet": "function Profile({ id }) {\n  const [user, setUser] = useState(null);\n  useEffect(() => {\n    fetch(`/api/users/${id}`)\n      .then((r) => r.json())\n      .then(setUser);\n  });\n  return <p>{user?.name}</p>;\n}",
+    "options": [
+      "The effect has no dependency array, so it runs after every render, and `setUser` triggers a render",
+      "The effect has no cleanup function, so React restarts it again whenever the fetch resolves",
+      "The `fetch` call is not awaited, so React repeats the request until a value is returned",
+      "The `user` state starts as `null`, so React keeps re-rendering until it becomes an object"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Without a dependency array an effect runs after every render. The fetch sets state, state causes a render, and the effect runs again. Passing `[id]` makes it run on mount and only when `id` changes."
+  },
+  {
+    "id": 1257,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "medium",
+    "question": "A React to-do list renders `items.map((item, i) => <Row key={i} ... />)`, and each row has its own text input. After deleting the first item, the text typed in row 1 appears next to a different task. Why?",
+    "options": [
+      "Inputs inside a list are always reset by React whenever the list length changes",
+      "Keys must be strings, so React ignores numeric keys and creates every row again",
+      "Deleting an item mutates the array, and `map` then skips the first remaining row",
+      "Index keys shift after the delete, so React reuses each row's state for the wrong item"
+    ],
+    "correctAnswer": 3,
+    "explanation": "React matches old and new elements by key. With index keys, the item that moves into position 0 inherits the component state that belonged to the deleted row. A stable id from the data (`key={item.id}`) keeps state attached to the right item."
+  },
+  {
+    "id": 1258,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "medium",
+    "question": "`count` is 0. After one click on this button, what does the component show?",
+    "codeSnippet": "const [count, setCount] = useState(0);\n\nfunction handleClick() {\n  setCount(count + 1);\n  setCount(count + 1);\n}",
+    "options": [
+      "0, because React discards updates that are queued twice in a row",
+      "2, because each call runs immediately and sees the previous update",
+      "1, because both calls read the same `count` value from this render",
+      "An error, because state may be set only once in a single handler"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Inside one render `count` is a constant (0), so both calls ask for 1. To build on the pending value, pass a function: `setCount((c) => c + 1)` twice gives 2."
+  },
+  {
+    "id": 1259,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "medium",
+    "question": "A search box calls the API on every keystroke, so typing \"javascript\" sends ten requests. Which technique sends one request after the user stops typing?",
+    "options": [
+      "Throttle: call the API on each keystroke but always cancel the first response",
+      "Debounce: restart a short timer on each keystroke and call the API when it finishes",
+      "Memoize: cache the result of each keystroke so the next one returns instantly",
+      "Polling: call the API every second whether or not the text has changed"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Debouncing waits for a pause (for example 300 ms) before running. Throttling is different: it runs at most once per interval while events keep coming, which suits scroll and resize handlers."
+  },
+  {
+    "id": 1260,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "easy",
+    "question": "A page has a purely decorative divider image and a product photo. How should the `alt` attributes be written?",
+    "options": [
+      "`alt=\"\"` on the divider, and a short description of the product on the photo",
+      "No `alt` attribute on the divider, and the file name of the photo on the photo",
+      "`alt=\"image\"` on both of them, so that every image is announced the same way",
+      "A long keyword list on both of them, so that search engines rank the page higher"
+    ],
+    "correctAnswer": 0,
+    "explanation": "An empty `alt` tells screen readers to skip a decorative image. Leaving `alt` out makes many readers announce the file name instead. Informative images need a short description of what they show."
+  },
+  {
+    "id": 1261,
+    "category": "Frontend: HTML, CSS & React",
+    "difficulty": "hard",
+    "question": "A React component starts a `setInterval` and must clear it later. Where should the interval id be kept so that storing it does not cause a re-render and the value survives between renders?",
+    "options": [
+      "In `useMemo`, because it recalculates the id on each new render",
+      "In `useState`, because state is the only value kept between renders",
+      "In a plain `let` variable declared inside the component function",
+      "In `useRef`, because changing `ref.current` does not trigger a render"
+    ],
+    "correctAnswer": 3,
+    "explanation": "A ref is a mutable box that persists for the life of the component and is invisible to rendering. State would also persist but re-renders on every change, and a local `let` is recreated on each render, so the id would be lost."
+  }
+]

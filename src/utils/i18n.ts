@@ -143,6 +143,10 @@ const en = {
   'preset.job_test.desc':
     'Practice for written job tests in Oman: math word problems and reasoning, plus IT, information systems and security basics.',
   'preset.job_test.chip': 'Job tests',
+  'preset.interview_essentials.title': 'Interview Essentials',
+  'preset.interview_essentials.desc':
+    'The topics that come up in most software interviews: OOP and design patterns, system design, frontend, testing and code review, and behavioral questions.',
+  'preset.interview_essentials.chip': 'Most asked',
   'preset.arabic.title': 'الأسئلة باللغة العربية',
   'preset.arabic.desc': 'أسئلة تدريبية باللغة العربية تختبر أساسيات البرمجة وعلم الحاسوب.',
   'mode.custom': 'Custom ({n:question})',
@@ -252,6 +256,9 @@ const en = {
   'path.job_test.title': 'Job test preparation',
   'path.job_test.desc':
     'Get ready for the written tests in public-sector and university hiring in Oman: aptitude and reasoning first, then IT and networking basics.',
+  'path.tech_interview.title': 'Software engineer interview',
+  'path.tech_interview.desc':
+    'The rounds most companies run: data structures, OOP and design patterns, system design, engineering practices, then the behavioral interview.',
   'path.interview.title': 'GCC enterprise interview',
   'path.interview.desc':
     'Get ready for banks, telecom operators and government employers in Oman and the GCC: reasoning, systems, then real enterprise scenarios.',
@@ -295,6 +302,16 @@ const en = {
   'step.job_aptitude.desc': 'Word problems on age, money, time and percentages, and reasoning puzzles like those in written job tests.',
   'step.job_it.title': 'IT and information systems',
   'step.job_it.desc': 'Computer basics, information systems, security, cloud and software development, as asked in IT job tests.',
+  'step.oop_patterns.title': 'OOP and design patterns',
+  'step.oop_patterns.desc': 'The four pillars, SOLID, composition over inheritance and the patterns interviewers name most.',
+  'step.system_design.title': 'System design basics',
+  'step.system_design.desc': 'Scaling, caching, load balancing, queues, replication and sharding, with the classic design exercises.',
+  'step.frontend.title': 'Frontend: HTML, CSS and React',
+  'step.frontend.desc': 'Semantic HTML and accessibility, the box model, specificity, layout, events and React hooks.',
+  'step.engineering_practices.title': 'Testing, code review and Agile',
+  'step.engineering_practices.desc': 'Unit and integration tests, TDD, flaky tests, reviewing pull requests and how Agile teams work.',
+  'step.behavioral.title': 'Behavioral and HR interview',
+  'step.behavioral.desc': 'STAR answers, strengths and weaknesses, conflict, failure, salary and the questions you should ask.',
   'step.git_github.title': 'Git and GitHub',
   'step.git_github.desc': 'Commits, branches, merging and rebasing, pull requests, forks and how to contribute to a project such as Gahz.',
   'step.cicd.title': 'CI/CD with GitHub Actions',
@@ -600,6 +617,10 @@ const ar: Record<TranslationKey, string> = {
   'preset.job_test.desc':
     'تدرّب على اختبارات التوظيف التحريرية في عُمان: مسائل رياضية واستدلال منطقي، وأساسيات تقنية المعلومات ونظم المعلومات والأمن.',
   'preset.job_test.chip': 'اختبارات التوظيف',
+  'preset.interview_essentials.title': 'أساسيات المقابلات',
+  'preset.interview_essentials.desc':
+    'المواضيع التي تتكرر في معظم مقابلات البرمجيات: البرمجة الكائنية وأنماط التصميم، وتصميم الأنظمة، والواجهة الأمامية، والاختبار ومراجعة الكود، والأسئلة السلوكية.',
+  'preset.interview_essentials.chip': 'الأكثر تكراراً',
   'preset.arabic.title': 'الأسئلة باللغة العربية',
   'preset.arabic.desc': 'أسئلة تدريبية باللغة العربية تختبر أساسيات البرمجة وعلم الحاسوب.',
   'mode.custom': 'مخصص ({n:question})',
@@ -707,6 +728,9 @@ const ar: Record<TranslationKey, string> = {
   'path.job_test.title': 'الاستعداد لاختبارات التوظيف',
   'path.job_test.desc':
     'استعدّ للاختبارات التحريرية في التوظيف الحكومي والجامعي في عُمان: القدرات والاستدلال أولًا، ثم أساسيات تقنية المعلومات والشبكات.',
+  'path.tech_interview.title': 'مقابلة مهندس البرمجيات',
+  'path.tech_interview.desc':
+    'الجولات التي تجريها معظم الشركات: هياكل البيانات، والبرمجة الكائنية وأنماط التصميم، وتصميم الأنظمة، والممارسات الهندسية، ثم المقابلة السلوكية.',
   'path.interview.title': 'مقابلات المؤسسات في الخليج',
   'path.interview.desc':
     'استعدّ لمقابلات البنوك وشركات الاتصالات والجهات الحكومية في عُمان والخليج: التفكير المنطقي، ثم الأنظمة، ثم مواقف واقعية من بيئة المؤسسات.',
@@ -750,6 +774,16 @@ const ar: Record<TranslationKey, string> = {
   'step.job_aptitude.desc': 'مسائل كلامية في الأعمار والمال والوقت والنسب، وألغاز استدلال مثل التي تأتي في اختبارات التوظيف.',
   'step.job_it.title': 'تقنية المعلومات ونظم المعلومات',
   'step.job_it.desc': 'أساسيات الحاسوب ونظم المعلومات والأمن والحوسبة السحابية وتطوير البرمجيات، كما تأتي في اختبارات وظائف تقنية المعلومات.',
+  'step.oop_patterns.title': 'البرمجة الكائنية وأنماط التصميم',
+  'step.oop_patterns.desc': 'الأركان الأربعة، ومبادئ SOLID، وتفضيل التركيب على الوراثة، والأنماط التي يذكرها المحاورون أكثر.',
+  'step.system_design.title': 'أساسيات تصميم الأنظمة',
+  'step.system_design.desc': 'التوسعة والـcaching وتوزيع الحمل والطوابير والنسخ والتقسيم، مع تمارين التصميم المعروفة.',
+  'step.frontend.title': 'الواجهة الأمامية: HTML و CSS و React',
+  'step.frontend.desc': 'HTML الدلالي وإمكانية الوصول، ونموذج الصندوق، والخصوصية، والتخطيط، والأحداث، و hooks في React.',
+  'step.engineering_practices.title': 'الاختبار ومراجعة الكود و Agile',
+  'step.engineering_practices.desc': 'اختبارات الوحدة والتكامل، و TDD، والاختبارات المتقلبة، ومراجعة الـpull requests، وطريقة عمل فرق Agile.',
+  'step.behavioral.title': 'المقابلة السلوكية ومقابلة الموارد البشرية',
+  'step.behavioral.desc': 'إجابات STAR، ونقاط القوة والضعف، والخلاف، والإخفاق، والراتب، والأسئلة التي ينبغي أن تطرحها.',
   'step.git_github.title': 'Git و GitHub',
   'step.git_github.desc': 'الـ commits والفروع والدمج والـ rebase، وطلبات السحب والـ forks، وكيف تساهم في مشروع مثل Gahz.',
   'step.cicd.title': 'CI/CD بـ GitHub Actions',

@@ -1,12 +1,14 @@
 /**
  * Firestore sync.
  *
- *   /users/{uid}                      profile, settings, stats
+ *   /users/{uid}                      profile, settings, stats, lesson progress
  *   /users/{uid}/attempts/{attemptId} one document per finished quiz
  *
  * localStorage stays the source the UI reads from. On sign-in the local and
- * cloud histories are merged in both directions; afterwards every new attempt
- * and every settings change is written to Firestore as well. Firestore's
+ * cloud histories are merged in both directions, and so is lesson progress;
+ * afterwards every new attempt, settings change and lesson step is written to
+ * Firestore as well. Roadmap progress needs nothing of its own: it is worked
+ * out from the attempt history (see services/roadmap.ts). Firestore's
  * offline cache queues writes while disconnected, so nothing here blocks on
  * the network.
  */
@@ -27,6 +29,7 @@ import {
   replaceHistory,
   setHistoryOwner,
 } from './history';
+import { clearLocalLessonProgress, mergeLessonProgress, parseLessonProgress, saveLessonProgress } from './lessons';
 import { currentPreferences, parseCustomConfig, parseTheme } from './preferences';
 import { computeStats } from './scoring';
 
@@ -107,6 +110,9 @@ async function pushProfile(): Promise<void> {
           customConfig: preferences.customConfig,
         },
         stats: computeStats(state.history),
+        // Parsed again so that only well-formed entries are sent. With `merge`, lessons are added to
+        // the ones already on the account, never removed.
+        lessons: parseLessonProgress(state.lessonProgress) ?? {},
         updatedAt: sdk.serverTimestamp(),
       },
       { merge: true },
@@ -140,7 +146,8 @@ export async function handleSignedIn(uid: string): Promise<void> {
     // Local history is only uploaded when it belongs to a guest or to this
     // same account, never when another account used this browser before.
     const owner = getHistoryOwner();
-    const local = owner === null || owner === uid ? state.history : [];
+    const ownsLocal = owner === null || owner === uid;
+    const local = ownsLocal ? state.history : [];
 
     const [attemptsSnap, profileSnap] = await Promise.all([
       sdk.getDocs(sdk.query(attemptsRef, sdk.orderBy('timestamp', 'desc'), sdk.limit(MAX_ATTEMPTS))),
@@ -165,14 +172,22 @@ export async function handleSignedIn(uid: string): Promise<void> {
     replaceHistory(mergeAttempts(local, remote));
     setHistoryOwner(uid);
 
+    // Lesson progress only ever moves forward, so the two copies are combined; pushProfile below
+    // sends the result back. Read from the state now, in case a step was finished while loading.
+    const profile: unknown = profileSnap.data();
+    const remoteLessons = parseLessonProgress(isRecord(profile) ? profile.lessons : null) ?? {};
+    const lessonProgress = mergeLessonProgress(ownsLocal ? state.lessonProgress : {}, remoteLessons);
+    if (lessonProgress !== state.lessonProgress) saveLessonProgress(lessonProgress);
+
     // Settings saved in the cloud win over this device's, so a second device picks up the user's choices.
-    const remoteSettings = parseRemoteSettings(profileSnap.data());
+    const remoteSettings = parseRemoteSettings(profile);
+    applyingRemote = true;
+    store.set({ lessonProgress });
     if (remoteSettings) {
-      applyingRemote = true;
       store.set({ theme: remoteSettings.theme, studyMode: remoteSettings.studyMode, customConfig: remoteSettings.customConfig });
-      store.flush();
-      applyingRemote = false;
     }
+    store.flush();
+    applyingRemote = false;
 
     await pushProfile();
     refreshStatus();
@@ -190,10 +205,13 @@ export function handleSignedOut(): void {
   deleting = false;
   pendingWrites = 0;
   state.syncStatus = isFirebaseConfigured ? 'guest' : 'disabled';
-  // The history on this device belonged to an account. It is backed up in the
-  // cloud, so remove the local copy instead of showing it to the next person.
+  // The history and lesson progress on this device belonged to an account. They
+  // are backed up in the cloud, so remove the local copy instead of showing it
+  // to the next person.
   if (getHistoryOwner() !== null) {
     clearLocalHistory();
+    clearLocalLessonProgress();
+    state.lessonProgress = {};
     setHistoryOwner(null);
   }
 }
@@ -222,7 +240,7 @@ export async function clearRemoteAttempts(): Promise<void> {
 
 /**
  * Deletes everything stored in the cloud for the signed-in user: every attempt
- * and the profile document. Unlike the other writes here it waits for the
+ * and the profile document, which also holds the lesson progress. Unlike the other writes here it waits for the
  * server, so the caller can delete the sign-in afterwards knowing the data is gone.
  */
 export async function deleteRemoteData(): Promise<void> {
@@ -266,7 +284,7 @@ export function initSync(): void {
 
   store.subscribe(() => {
     if (state.user && !applyingRemote) pushProfileSoon();
-  }, ['theme', 'studyMode', 'customConfig', 'history']);
+  }, ['theme', 'studyMode', 'customConfig', 'history', 'lessonProgress']);
 
   store.subscribe(refreshStatus, ['online']);
 }

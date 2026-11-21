@@ -136,7 +136,7 @@ export interface LessonProgress {
   completedAt: number | null;
 }
 
-/** Lesson id -> progress. Kept in this browser only. */
+/** Lesson id -> progress. Kept in this browser and, when signed in, on the account. */
 export type LessonProgressMap = Record<string, LessonProgress>;
 
 export interface AppState {

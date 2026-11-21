@@ -5,8 +5,9 @@
  * the checking rules are easy to unit test. Lesson content lives in
  * /src/lessons; the player is components/lessonScreen.ts.
  *
- * Progress is kept in this browser only (one small localStorage entry). It is
- * not part of the attempt history, so "Clear history" leaves it alone.
+ * Progress is kept in one small localStorage entry, which is all a guest has.
+ * For a signed-in user services/sync.ts also keeps a copy on the account. It
+ * is not part of the attempt history, so "Clear history" leaves it alone.
  */
 
 import { LESSONS } from '../lessons';
@@ -16,7 +17,7 @@ import { isRecord, randomSample } from '../utils/helpers';
 import type { Locale } from '../utils/i18n';
 import type { CallResult } from './codeRunner';
 import type { StepId } from './roadmap';
-import { STORAGE_KEYS, readJson, writeJson } from './storage';
+import { STORAGE_KEYS, readJson, remove, writeJson } from './storage';
 
 export { LESSONS };
 
@@ -101,21 +102,55 @@ export function gradeTests(tests: readonly CodeTest[], results: readonly CallRes
 
 // ---------------------------------------------------------------- progress
 
-function parseProgress(value: unknown): LessonProgressMap | null {
+/** Limits for what is kept, matched by firestore.rules. */
+export const MAX_LESSON_ENTRIES = 200;
+const MAX_REACHED = 1000;
+const LESSON_ID = /^[\w-]{1,100}$/;
+
+/** Reads progress from storage or from the account. Entries that do not look right are dropped. */
+export function parseLessonProgress(value: unknown): LessonProgressMap | null {
   if (!isRecord(value)) return null;
   const map: LessonProgressMap = {};
-  for (const [id, entry] of Object.entries(value)) {
-    if (!isRecord(entry) || typeof entry.reached !== 'number' || entry.reached < 0) continue;
+  for (const [id, entry] of Object.entries(value).slice(0, MAX_LESSON_ENTRIES)) {
+    if (!LESSON_ID.test(id) || !isRecord(entry)) continue;
+    if (typeof entry.reached !== 'number' || !Number.isFinite(entry.reached) || entry.reached < 0) continue;
     map[id] = {
-      reached: Math.floor(entry.reached),
-      completedAt: typeof entry.completedAt === 'number' ? entry.completedAt : null,
+      reached: Math.min(Math.floor(entry.reached), MAX_REACHED),
+      completedAt: typeof entry.completedAt === 'number' && Number.isFinite(entry.completedAt) ? entry.completedAt : null,
     };
   }
   return map;
 }
 
+/**
+ * Combines progress from two places (this browser and the account). Progress
+ * never goes backwards: the furthest step wins, and a lesson finished on either
+ * side stays finished, with the earlier finish time. Returns `a` itself when
+ * `b` adds nothing, so callers can tell that nothing changed.
+ */
+export function mergeLessonProgress(a: LessonProgressMap, b: LessonProgressMap): LessonProgressMap {
+  let merged = a;
+  for (const [id, theirs] of Object.entries(b)) {
+    const ours = a[id];
+    const completedAt =
+      ours?.completedAt && theirs.completedAt
+        ? Math.min(ours.completedAt, theirs.completedAt)
+        : (ours?.completedAt ?? theirs.completedAt);
+    const reached = Math.max(ours?.reached ?? 0, theirs.reached);
+    if (ours && ours.reached === reached && ours.completedAt === completedAt) continue;
+    if (merged === a) merged = { ...a };
+    merged[id] = { reached, completedAt };
+  }
+  return merged;
+}
+
 export function loadLessonProgress(): LessonProgressMap {
-  return readJson(STORAGE_KEYS.lessons, parseProgress, {});
+  return readJson(STORAGE_KEYS.lessons, parseLessonProgress, {});
+}
+
+/** Removes this browser's copy, for example after signing out of the account it belongs to. */
+export function clearLocalLessonProgress(): void {
+  remove(STORAGE_KEYS.lessons);
 }
 
 export function saveLessonProgress(progress: LessonProgressMap): void {

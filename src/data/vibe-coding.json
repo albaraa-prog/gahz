@@ -1,0 +1,256 @@
+[
+  {
+    "id": 1341,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "easy",
+    "question": "What does \"vibe coding\" mean?",
+    "options": [
+      "Writing code by hand while listening to music, so that you stay relaxed and focused for many hours.",
+      "Describing what you want in plain language and letting AI write the code, often without reading it closely.",
+      "Programming with drag-and-drop blocks and no text at all.",
+      "Pair programming where two developers share one keyboard."
+    ],
+    "correctAnswer": 1,
+    "explanation": "The term was coined by Andrej Karpathy in 2025 for building software by talking to an AI and accepting its changes by feel. It is fast for prototypes. The risk is in the name: you ship code that nobody has read."
+  },
+  {
+    "id": 1342,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "easy",
+    "question": "Which pair are AI-first code editors (IDEs), as opposed to browser tools that build a whole app from a prompt?",
+    "options": [
+      "Lovable and Bolt",
+      "v0 and Lovable",
+      "Bolt and v0",
+      "Cursor and Windsurf"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Cursor and Windsurf are desktop editors with completion, chat and an agent built in; you work on your own files. Lovable, Bolt, v0 and Replit Agent start from a prompt in the browser and generate, preview and host the app for you."
+  },
+  {
+    "id": 1343,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "medium",
+    "question": "What is v0 (by Vercel) best known for?",
+    "options": [
+      "Generating user interfaces and web apps, typically React and Next.js, from a prompt.",
+      "Training large language models from scratch on your company's private data and documents.",
+      "Scanning Python packages for known security vulnerabilities.",
+      "Hosting PostgreSQL databases with automatic daily backups."
+    ],
+    "correctAnswer": 0,
+    "explanation": "v0 turns a description or a screenshot into working front-end code that you can preview, refine in chat and deploy on Vercel. Knowing what each tool is strong at lets you choose: v0 for the interface, an agent in your editor for an existing codebase."
+  },
+  {
+    "id": 1344,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "medium",
+    "question": "In which situation is pure vibe coding (accepting code without reading it) a reasonable choice?",
+    "options": [
+      "A payment service that stores card details for customers.",
+      "A hospital system that holds patient medical records.",
+      "A weekend prototype to test an idea, with no real user data.",
+      "A login library that many other teams will depend on."
+    ],
+    "correctAnswer": 2,
+    "explanation": "The question is what happens when the code is wrong. For a throwaway demo the cost is small. Once real users, money or personal data are involved, the code must be read, tested and reviewed like any other software."
+  },
+  {
+    "id": 1345,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "medium",
+    "question": "You are starting a new app in an AI app builder. Which first prompt works best?",
+    "options": [
+      "\"Build me a great app.\"",
+      "\"Make something like a famous social network, but better.\"",
+      "\"Create an app with every feature a startup might need.\"",
+      "Who the users are, the two or three core features, the data to store and the pages, built one feature at a time."
+    ],
+    "correctAnswer": 3,
+    "explanation": "The builder fills every gap in your prompt with a guess. A short specification removes the guessing, and building in small steps lets you test each feature before the next one is added on top of it."
+  },
+  {
+    "id": 1346,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "medium",
+    "question": "An AI builder put this line in the code that runs in the visitor's browser. What is the problem?",
+    "codeSnippet": "const OPENAI_API_KEY = \"sk-proj-4f9a...\";",
+    "options": [
+      "Constants cannot hold strings longer than 16 characters.",
+      "Anyone can read the key in the browser and use it at your expense.",
+      "The key must be written in capital letters to be accepted.",
+      "Browsers block every request that carries a key."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Everything sent to the browser is public: open the developer tools and the key is there. Secret keys belong on a server or in a serverless function that reads them from environment variables, and the browser calls that function. Revoke a key that was exposed."
+  },
+  {
+    "id": 1347,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "hard",
+    "question": "An AI builder created your app on Supabase. The tables have no Row Level Security (RLS) policies. What does that allow?",
+    "options": [
+      "Anyone with the public key from your site can read or change every row.",
+      "Nothing, because the public key works only on your own domain.",
+      "The database becomes read-only until you add a policy.",
+      "Queries get slower, but access stays private to each user."
+    ],
+    "correctAnswer": 0,
+    "explanation": "The public (anon) key is shipped in the browser by design, and RLS is what limits what it may do. Without policies, a visitor can query the API directly and read other users' data. This is one of the most common leaks in AI-built apps: enable RLS and test it as another user."
+  },
+  {
+    "id": 1348,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "medium",
+    "question": "The AI has \"fixed\" the same error five times and the app is getting worse. What is the best next step?",
+    "options": [
+      "Keep sending \"still broken, try again\" until the error finally disappears by itself.",
+      "Ask it to rewrite the entire app from the beginning.",
+      "Go back to the last working version and give the exact error in a fresh chat.",
+      "Add more features so that the error matters less."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Each failed attempt adds confusing history and more broken code. Restore a checkpoint, start a clean conversation, paste the precise error message and ask for the cause before a fix. Often the fastest path is to read the failing code yourself."
+  },
+  {
+    "id": 1349,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "easy",
+    "question": "Why should you connect an AI-built project to Git and GitHub?",
+    "options": [
+      "Git makes the AI write code about twice as fast.",
+      "GitHub automatically finds and removes all the bugs from the project on each push.",
+      "App builders refuse to show a preview without it.",
+      "You get checkpoints to return to, and the code stays yours outside the tool."
+    ],
+    "correctAnswer": 3,
+    "explanation": "An agent can break a working app in one step. Commits give you a history to compare and restore. A repository also means you are not locked into one builder: you can open the same code in an editor, review it and deploy it elsewhere."
+  },
+  {
+    "id": 1350,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "medium",
+    "question": "What are project rules in an AI editor such as Cursor used for?",
+    "options": [
+      "They limit how many files the editor may open at one time.",
+      "They give the AI standing instructions about the project's stack and conventions.",
+      "They encrypt the project's source code before any part of it is sent to the model.",
+      "They replace the tests, so the project no longer needs any."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Rules are saved instructions that are added to the AI's context, for example \"use TypeScript strict mode\" or \"never edit the migrations folder\". They do the job that `CLAUDE.md` does in Claude Code: you state the conventions once and not in every prompt."
+  },
+  {
+    "id": 1351,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "medium",
+    "question": "In editors such as Cursor and Windsurf, how does agent mode differ from tab completion?",
+    "options": [
+      "The agent plans a task, edits several files and can run commands; completion predicts the next lines.",
+      "The agent works only offline on your own machine; completion always needs an internet connection.",
+      "The agent writes comments only; completion writes the actual code.",
+      "They are two names for exactly the same feature."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Completion is a small, fast prediction at your cursor that you accept with `Tab`. An agent takes a goal, searches the codebase, changes many files and runs tools in a loop. More autonomy means more to review, so check its diff before you keep it."
+  },
+  {
+    "id": 1352,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "hard",
+    "question": "An AI tool generated this login check. What is the most serious problem?",
+    "codeSnippet": "const user = await db.users.findOne({ email });\nif (user && user.password === password) {\n  startSession(user);\n}",
+    "options": [
+      "`findOne` should be replaced by `findMany`.",
+      "`===` must be `==` when comparing strings.",
+      "`await` is not allowed before a database call.",
+      "Passwords are stored and compared as plain text."
+    ],
+    "correctAnswer": 3,
+    "explanation": "If the database leaks, every password leaks with it. Passwords must be stored as salted hashes (bcrypt, Argon2) and checked with the library's compare function. Better still, use a proven authentication service and do not let generated code invent its own."
+  },
+  {
+    "id": 1353,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "medium",
+    "question": "The generated app checks the form only in the browser, for example that a price is not negative. Why is that not enough?",
+    "options": [
+      "Browser checks run only on mobile phones.",
+      "JavaScript cannot compare numbers reliably.",
+      "Anyone can skip the page and send requests straight to the API.",
+      "Forms are no longer supported by most of the modern web browsers."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Client-side validation is a convenience for honest users. An attacker sends the request with a tool such as curl and never loads your page. Every rule that matters (types, ranges, who owns the record) must be enforced again on the server or in the database."
+  },
+  {
+    "id": 1354,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "hard",
+    "question": "Before you open an AI-built app to real users, which check matters most?",
+    "options": [
+      "That the landing page has a smooth animation, a logo and a dark mode.",
+      "That each user can reach only their own data, and no secret is exposed.",
+      "That the code has as few files as possible.",
+      "That the app was generated by the newest model."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Builders optimise for a demo that works, not for an attacker. Sign in as a second user and try to open the first user's records, search the shipped code for keys, check the database rules and add server-side validation. These are the failures that end up in the news."
+  },
+  {
+    "id": 1355,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "hard",
+    "question": "Your vibe-coded app has grown and the AI can no longer fix a bug. You cannot fix it either. Which habit would have prevented this?",
+    "options": [
+      "Reading each change and asking the AI to explain what you do not understand.",
+      "Writing longer prompts with more exclamation marks.",
+      "Changing to a different AI tool every week.",
+      "Never committing your work, so that there is much less history for anyone to read."
+    ],
+    "correctAnswer": 0,
+    "explanation": "Code that nobody understands is debt that comes due when the tool gets stuck. Keep the app small, read the diffs, ask for explanations and learn the basics of the stack. The AI then speeds up work that you could do, and does not replace understanding you lack."
+  },
+  {
+    "id": 1356,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "medium",
+    "question": "Most AI app builders charge by credits or tokens. Which habit wastes the most of them?",
+    "options": [
+      "Planning the whole feature in writing before you send the first prompt.",
+      "Asking for one small change at a time and testing it.",
+      "Pasting the exact error message when something fails.",
+      "Sending vague requests again and again in one very long conversation."
+    ],
+    "correctAnswer": 3,
+    "explanation": "Each message sends the conversation so far to the model, so a long thread costs more every turn, and a vague request often has to be repeated. A clear, specific prompt in a fresh conversation is cheaper and gives a better result."
+  },
+  {
+    "id": 1357,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "easy",
+    "question": "An interviewer asks: \"How do you use AI tools when you code?\" Which answer is strongest?",
+    "options": [
+      "\"I never use them, because that would be cheating.\"",
+      "\"They write everything for me, so I no longer need to read or understand the code.\"",
+      "\"I use them to move faster, and I review, test and understand whatever I commit.\"",
+      "\"I paste the task into a chat and submit the first answer.\""
+    ],
+    "correctAnswer": 2,
+    "explanation": "Teams want people who are productive with AI and still accountable. Give a concrete example: where the tool saved you time, a mistake it made and how your review or tests caught it. That shows judgement, which is what the question is testing."
+  },
+  {
+    "id": 1358,
+    "category": "Vibe Coding & AI App Builders",
+    "difficulty": "medium",
+    "question": "For a small feature the AI agent added twelve new npm packages. What should you do?",
+    "options": [
+      "Nothing; more packages always make an app more secure, since each one has been reviewed.",
+      "Check that each one exists, is maintained and is really needed, and remove the rest.",
+      "Delete the lock file so that the list looks shorter.",
+      "Copy all of them into your other projects as well."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Every dependency is code you run but did not write: it can carry vulnerabilities, be abandoned or even be a fake package with a name the model invented. Review new dependencies in the diff like any other change, and prefer what the platform already provides."
+  }
+]

@@ -15,8 +15,10 @@ import { githubActionsCi } from './github-actions-ci';
 import { jsFunctionsArrays } from './js-functions-arrays';
 import { jsVariables } from './js-variables';
 import { pythonListsDicts } from './python-lists-dicts';
+import { pythonWithAiAssistant } from './python-with-ai-assistant';
 import { sqlFirstQueries } from './sql-first-queries';
 import type { Lesson } from './types';
+import { vibeCodingSafely } from './vibe-coding-safely';
 
 export const LESSONS: readonly Lesson[] = [
   jsVariables,
@@ -28,4 +30,6 @@ export const LESSONS: readonly Lesson[] = [
   gitContributeToGahz,
   githubActionsCi,
   dockerFirstContainer,
+  pythonWithAiAssistant,
+  vibeCodingSafely,
 ];

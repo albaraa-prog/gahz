@@ -79,6 +79,20 @@ const FCC_CSHARP = certificate(
   'Microsoft Learn lessons on C#, followed by a free certification exam.',
   'دروس Microsoft Learn في C#، يتبعها اختبار شهادة مجاني.',
 );
+const CS50P = certificate(
+  'CS50’s Introduction to Programming with Python',
+  'Harvard University',
+  'https://cs50.harvard.edu/python/',
+  'Python from functions and loops to testing, files and classes.',
+  'Python من الدوال والحلقات إلى الاختبار والملفات والأصناف.',
+);
+const ANTHROPIC_COURSES = certificate(
+  'Anthropic Courses',
+  'Anthropic',
+  'https://anthropic.skilljar.com/',
+  'Free courses on working with Claude and building with AI, with certificates of completion.',
+  'دورات مجانية في العمل مع Claude والبناء بالذكاء الاصطناعي، مع شهادات إتمام.',
+);
 const POSTMAN = certificate(
   'Postman Academy',
   'Postman',
@@ -233,13 +247,7 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
       'A full university course in Java and object-oriented programming.',
       'مقرّر جامعي كامل في Java والبرمجة الكائنية.',
     ),
-    certificate(
-      'CS50’s Introduction to Programming with Python',
-      'Harvard University',
-      'https://cs50.harvard.edu/python/',
-      'Python from functions and loops to testing, files and classes.',
-      'Python من الدوال والحلقات إلى الاختبار والملفات والأصناف.',
-    ),
+    CS50P,
     FCC_CSHARP,
     course(
       'PHP: The Right Way',
@@ -482,13 +490,7 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
     ),
   ],
   prompt_engineering: [
-    certificate(
-      'Anthropic Courses',
-      'Anthropic',
-      'https://anthropic.skilljar.com/',
-      'Free courses on working with Claude and building with AI, with certificates of completion.',
-      'دورات مجانية في العمل مع Claude والبناء بالذكاء الاصطناعي، مع شهادات إتمام.',
-    ),
+    ANTHROPIC_COURSES,
     course(
       'ChatGPT Prompt Engineering for Developers',
       'DeepLearning.AI',
@@ -749,6 +751,64 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
       'https://developer.mozilla.org/en-US/docs/Learn_web_development',
       'Mozilla’s path through the web platform that static hosts publish.',
       'مسار Mozilla في منصّة الويب التي تنشرها الاستضافة الثابتة.',
+    ),
+  ],
+  ai_python: [
+    CS50P,
+    course(
+      'AI Python for Beginners',
+      'DeepLearning.AI',
+      'https://www.deeplearning.ai/courses/ai-python-for-beginners',
+      'Python from zero, taught by Andrew Ng with an AI chatbot that explains, debugs and helps you write code.',
+      'Python من الصفر، يدرّسها Andrew Ng مع مساعد ذكاء اصطناعي يشرح ويصحّح ويعينك على كتابة الشيفرة.',
+    ),
+    course(
+      'Using GitHub Copilot with Python',
+      'Microsoft Learn',
+      'https://learn.microsoft.com/en-us/training/modules/introduction-copilot-python/',
+      'A hands-on module: set up Copilot in VS Code and build a small Python web API with it.',
+      'وحدة عملية: جهّز Copilot في VS Code وابنِ به واجهة API صغيرة بـ Python.',
+    ),
+    course(
+      'GitHub Copilot Fundamentals Part 1 of 2',
+      'Microsoft Learn',
+      'https://learn.microsoft.com/en-us/training/paths/copilot/',
+      'How an AI pair programmer works, prompt writing for code and responsible use.',
+      'كيف يعمل مساعد البرمجة بالذكاء الاصطناعي، وكتابة الـ prompts للشيفرة، والاستخدام المسؤول.',
+    ),
+  ],
+  claude_code: [
+    ANTHROPIC_COURSES,
+    course(
+      'Claude Code: A Highly Agentic Coding Assistant',
+      'DeepLearning.AI and Anthropic',
+      'https://www.deeplearning.ai/short-courses/claude-code-a-highly-agentic-coding-assistant/',
+      'A short video course: explore a codebase, add features, write tests and refactor with Claude Code.',
+      'دورة فيديو قصيرة: استكشف شيفرة مشروع وأضف ميزات واكتب اختبارات وأعد الهيكلة بـ Claude Code.',
+    ),
+    course(
+      'Claude Code quickstart',
+      'Claude Code Docs',
+      'https://code.claude.com/docs/en/quickstart',
+      'The official first steps: install it, ask about your code, make a change and commit it.',
+      'الخطوات الأولى الرسمية: ثبّته واسأله عن شيفرتك ونفّذ تغييراً وأودِعه.',
+    ),
+  ],
+  vibe_coding: [
+    ANTHROPIC_COURSES,
+    course(
+      'Vibe Coding 101 with Replit',
+      'DeepLearning.AI and Replit',
+      'https://www.deeplearning.ai/short-courses/vibe-coding-101-with-replit/',
+      'Build and deploy two apps with an AI agent while learning how to plan, prompt and debug.',
+      'ابنِ تطبيقين وانشرهما مع وكيل ذكاء اصطناعي، وتعلّم التخطيط وكتابة الـ prompts وتصحيح الأخطاء.',
+    ),
+    course(
+      'OWASP Top Ten',
+      'OWASP Foundation',
+      'https://owasp.org/www-project-top-ten/',
+      'The most common web security risks, to check an AI-built app against before it goes live.',
+      'أشيع المخاطر الأمنية في تطبيقات الويب، لتفحص عليها التطبيق المبني بالذكاء الاصطناعي قبل إطلاقه.',
     ),
   ],
 };

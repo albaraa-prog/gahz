@@ -97,6 +97,14 @@ const en = {
   'preset.prompt_engineering.desc':
     'Write prompts that work: clear instructions, examples, roles, delimiters, structured output, grounding answers in sources, testing prompts and defending against prompt injection.',
   'preset.prompt_engineering.chip': 'New track',
+  'preset.ai_python.title': 'Python with AI Assistants',
+  'preset.ai_python.desc':
+    'Write Python with an AI assistant in VS Code, PyCharm or Cursor: prompting with comments, reviewing suggestions, spotting the bugs and security holes that generated code repeats, and testing before you accept.',
+  'preset.ai_python.chip': 'New track',
+  'preset.vibe_coding.title': 'Claude & Vibe Coding',
+  'preset.vibe_coding.desc':
+    'Claude and Claude Code (CLAUDE.md, plan mode, permissions, context), then Cursor, Windsurf, Lovable, Bolt, v0 and Replit: clear prompts, small steps, and the secrets, access and validation checks AI-built apps often miss.',
+  'preset.vibe_coding.chip': 'New track',
   'preset.game_dev.title': 'Unity & C# Game Development',
   'preset.game_dev.desc':
     'The Unity game loop, physics and collisions, coroutines, prefabs, ScriptableObjects and object pooling, plus the C# behind them.',
@@ -231,6 +239,9 @@ const en = {
   'path.mobile.desc': 'Dart and Flutter from the basics to clean architecture, performance and payment-grade security.',
   'path.ai.title': 'AI and prompt engineering',
   'path.ai.desc': 'How modern AI models work, then how to write prompts that get reliable results from them.',
+  'path.ai_coding.title': 'Coding with AI',
+  'path.ai_coding.desc':
+    'Learn Python with an AI assistant in your IDE, write better prompts, then build with Claude Code and vibe coding tools while keeping the code reviewed, tested and safe.',
   'path.game.title': 'Game developer',
   'path.game.desc': 'Programming basics and C#, then building games with Unity and the algorithms games rely on.',
   'path.networks.title': 'Networks',
@@ -296,6 +307,12 @@ const en = {
   'step.supabase.desc': 'Postgres, Row Level Security, API keys, storage, realtime and edge functions.',
   'step.netlify.title': 'Netlify',
   'step.netlify.desc': 'Builds from Git, deploy previews, redirects, environment variables and functions.',
+  'step.ai_python.title': 'Python with an AI assistant',
+  'step.ai_python.desc': 'Completions and chat in VS Code, PyCharm or Cursor: prompt well, review, test and stay secure.',
+  'step.claude_code.title': 'Claude and Claude Code',
+  'step.claude_code.desc': 'The Claude app, then Claude Code: CLAUDE.md, plan mode, permissions, context and reviewing its work.',
+  'step.vibe_coding.title': 'Vibe coding and AI app builders',
+  'step.vibe_coding.desc': 'Cursor, Windsurf, Lovable, Bolt, v0 and Replit: when to use them, and the security checks before you launch.',
   'step.flutter_basics.title': 'Flutter and Dart fundamentals',
   'step.flutter_basics.desc': 'Widget lifecycle, layout and asynchronous Dart.',
   'step.flutter_core.title': 'Flutter and Dart core mastery',
@@ -537,6 +554,14 @@ const ar: Record<TranslationKey, string> = {
   'preset.prompt_engineering.desc':
     'اكتب prompts تؤدي الغرض: تعليمات واضحة، أمثلة، أدوار، محدِّدات، مخرجات منظَّمة، إسناد الإجابات إلى المصادر، اختبار الـ prompts والحماية من حقن الأوامر.',
   'preset.prompt_engineering.chip': 'مسار جديد',
+  'preset.ai_python.title': 'Python مع مساعدات الذكاء الاصطناعي',
+  'preset.ai_python.desc':
+    'اكتب Python مع مساعد ذكاء اصطناعي في VS Code أو PyCharm أو Cursor: التوجيه بالتعليقات، ومراجعة الاقتراحات، وكشف الأخطاء والثغرات الأمنية التي تكرّرها الشيفرة المولَّدة، والاختبار قبل القبول.',
+  'preset.ai_python.chip': 'مسار جديد',
+  'preset.vibe_coding.title': 'Claude والـ Vibe Coding',
+  'preset.vibe_coding.desc':
+    'Claude و Claude Code (ملف CLAUDE.md ووضع التخطيط والأذونات والسياق)، ثم Cursor و Windsurf و Lovable و Bolt و v0 و Replit: prompts واضحة وخطوات صغيرة، وفحوص الأسرار والوصول والتحقق التي تغفل عنها التطبيقات المبنية بالذكاء الاصطناعي.',
+  'preset.vibe_coding.chip': 'مسار جديد',
   'preset.game_dev.title': 'تطوير الألعاب بـUnity و C#',
   'preset.game_dev.desc':
     'حلقة اللعبة في Unity، الفيزياء والتصادمات، الـcoroutines، الـprefabs، ScriptableObject وتجميع الكائنات، مع أساسيات C# التي تقوم عليها.',
@@ -669,6 +694,9 @@ const ar: Record<TranslationKey, string> = {
   'path.mobile.desc': 'Dart و Flutter من الأساسيات إلى المعمارية النظيفة والأداء والأمان بمستوى أنظمة الدفع.',
   'path.ai.title': 'الذكاء الاصطناعي وهندسة الأوامر',
   'path.ai.desc': 'كيف تعمل نماذج الذكاء الاصطناعي الحديثة، ثم كيف تكتب أوامر تحصل بها على نتائج موثوقة.',
+  'path.ai_coding.title': 'البرمجة مع الذكاء الاصطناعي',
+  'path.ai_coding.desc':
+    'تعلّم Python مع مساعد ذكاء اصطناعي في بيئة التطوير، واكتب prompts أفضل، ثم ابنِ بـ Claude Code وأدوات الـ vibe coding مع إبقاء الشيفرة مُراجَعة ومُختبَرة وآمنة.',
   'path.game.title': 'مطوّر ألعاب',
   'path.game.desc': 'أساسيات البرمجة و C#، ثم بناء الألعاب بـUnity والخوارزميات التي تعتمد عليها الألعاب.',
   'path.networks.title': 'الشبكات',
@@ -734,6 +762,12 @@ const ar: Record<TranslationKey, string> = {
   'step.supabase.desc': 'Postgres و Row Level Security ومفاتيح الـ API والتخزين والتحديث اللحظي والدوال الطرفية.',
   'step.netlify.title': 'Netlify',
   'step.netlify.desc': 'البناء من Git ومعاينات النشر والتحويلات ومتغيّرات البيئة والدوال.',
+  'step.ai_python.title': 'Python مع مساعد ذكاء اصطناعي',
+  'step.ai_python.desc': 'الإكمال والمحادثة في VS Code أو PyCharm أو Cursor: وجّه جيداً، وراجع، واختبر، وحافظ على الأمان.',
+  'step.claude_code.title': 'Claude و Claude Code',
+  'step.claude_code.desc': 'تطبيق Claude ثم Claude Code: ملف CLAUDE.md ووضع التخطيط والأذونات والسياق ومراجعة عمله.',
+  'step.vibe_coding.title': 'الـ Vibe coding وأدوات بناء التطبيقات',
+  'step.vibe_coding.desc': 'Cursor و Windsurf و Lovable و Bolt و v0 و Replit: متى تستخدمها، والفحوص الأمنية قبل الإطلاق.',
   'step.flutter_basics.title': 'أساسيات Flutter و Dart',
   'step.flutter_basics.desc': 'دورة حياة الودجت والتخطيط والبرمجة غير المتزامنة في Dart.',
   'step.flutter_core.title': 'إتقان Flutter و Dart',

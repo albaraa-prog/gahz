@@ -10,6 +10,7 @@
 
 import type { Difficulty, Question } from '../types';
 import { isRecord } from '../utils/helpers';
+import { currentCategory } from './categoryAliases';
 
 type BankModule = { default: unknown };
 
@@ -73,7 +74,8 @@ export function parseQuestion(value: unknown, bank: string): Question | null {
   const difficulty = DIFFICULTIES.includes(value.difficulty as Difficulty) ? (value.difficulty as Difficulty) : 'medium';
   const question: Question = {
     id,
-    category,
+    // A quiz saved before two categories were merged still carries the old name.
+    category: currentCategory(category),
     difficulty,
     question: text,
     options,

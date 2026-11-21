@@ -34,7 +34,7 @@ describe('free courses and certificates', () => {
   });
 
   it('collects the resources for a quiz card, certificates first and without repeats', () => {
-    const resources = resourcesForCategories(['SQL', 'Databases']);
+    const resources = resourcesForCategories(['SQL & Databases']);
     const urls = resources.map((resource) => resource.url);
     expect(new Set(urls).size).toBe(urls.length);
     expect(urls).toContain('https://www.freecodecamp.org/learn/relational-database/');

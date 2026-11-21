@@ -6,6 +6,7 @@
 
 import type { Attempt, AttemptAnswer, CategoryStat } from '../types';
 import { formatAttemptDate, isRecord } from '../utils/helpers';
+import { mergeCategoryStats } from './categoryAliases';
 import { state } from '../utils/state';
 import { STORAGE_KEYS, readJson, readString, remove, writeJson, writeString } from './storage';
 
@@ -26,7 +27,7 @@ function parseCategoryStats(value: unknown): CategoryStat[] | undefined {
     (item): item is CategoryStat =>
       isRecord(item) && typeof item.category === 'string' && typeof item.total === 'number' && typeof item.correct === 'number',
   );
-  return stats.length > 0 ? stats : undefined;
+  return stats.length > 0 ? mergeCategoryStats(stats) : undefined;
 }
 
 function parseAnswers(value: unknown): AttemptAnswer[] | undefined {

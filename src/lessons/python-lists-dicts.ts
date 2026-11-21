@@ -8,7 +8,7 @@ export const pythonListsDicts: Lesson = {
     en: 'The two data structures you will use in almost every Python interview answer, including the aliasing trap.',
     ar: 'بنيتا البيانات اللتان ستستخدمهما في معظم إجابات مقابلات Python، مع فخّ الإشارة إلى القائمة نفسها.',
   },
-  minutes: 10,
+  minutes: 15,
   roadmapSteps: ['backend_language'],
   steps: [
     {
@@ -93,6 +93,30 @@ export const pythonListsDicts: Lesson = {
       },
     },
     {
+      kind: 'code',
+      language: 'python',
+      text: {
+        en: 'Your turn, in real Python. Write `count_words(words)`: it takes a list of words and returns a dictionary that maps each word to how many times it appears.',
+        ar: 'دورك الآن، بلغة Python حقيقية. اكتب `count_words(words)`: تأخذ قائمة كلمات وتُرجع قاموساً يربط كل كلمة بعدد مرات ظهورها.',
+      },
+      starter: 'def count_words(words):\n    counts = {}\n    # your code here\n    return counts\n\nprint(count_words(["go", "java", "go"]))',
+      solution:
+        'def count_words(words):\n    counts = {}\n    for word in words:\n        counts[word] = counts.get(word, 0) + 1\n    return counts\n\nprint(count_words(["go", "java", "go"]))',
+      tests: [
+        { call: 'count_words(["go", "java", "go"])', expect: { go: 2, java: 1 } },
+        { call: 'count_words(["a", "a", "a"])', expect: { a: 3 } },
+        { call: 'count_words([])', expect: {} },
+      ],
+      hint: {
+        en: 'Loop over `words`. For each one, read its current count with `counts.get(word, 0)` and store that plus one.',
+        ar: 'مرّ على `words` بحلقة. ولكل كلمة اقرأ عددها الحالي بـ `counts.get(word, 0)` ثم خزّنه مضافاً إليه واحد.',
+      },
+      explain: {
+        en: 'This is the counting pattern from the previous step, now as a function you can reuse. Python also ships it ready-made as `collections.Counter`, but interviewers often ask you to write it by hand first.',
+        ar: 'هذا نمط العدّ من الخطوة السابقة، لكنه الآن دالة يمكنك إعادة استخدامها. وتوفّره Python جاهزاً باسم `collections.Counter`، لكن المقابِلين كثيراً ما يطلبون كتابته يدوياً أولاً.',
+      },
+    },
+    {
       kind: 'blank',
       text: {
         en: 'Complete the code so it reads a key safely and then loops over every key and value.',
@@ -140,6 +164,31 @@ export const pythonListsDicts: Lesson = {
       explain: {
         en: 'Membership in a list is O(n): it may scan every item. In a set or dictionary it is O(1) on average thanks to hashing. Choosing the right structure is often the whole answer to an optimisation question.',
         ar: 'فحص الانتماء في القائمة تعقيده O(n) لأنه قد يمرّ على كل العناصر، أما في المجموعة أو القاموس فهو O(1) في المتوسط بفضل التجزئة. واختيار البنية المناسبة هو في الغالب الجواب الكامل عن سؤال تحسين الأداء.',
+      },
+    },
+    {
+      kind: 'code',
+      language: 'python',
+      text: {
+        en: 'Put it together. Write `unique_in_order(items)`: it returns a new list without the repeated items, keeping each item where it first appeared. Use a set to remember what you have already seen.',
+        ar: 'اجمع ما تعلّمته. اكتب `unique_in_order(items)`: تُرجع قائمة جديدة دون العناصر المكرّرة، مع إبقاء كل عنصر في موضع ظهوره الأول. استخدم مجموعة (set) لتتذكّر ما رأيته.',
+      },
+      starter: 'def unique_in_order(items):\n    seen = set()\n    result = []\n    # your code here\n    return result\n\nprint(unique_in_order([3, 1, 3, 2, 1]))',
+      solution:
+        'def unique_in_order(items):\n    seen = set()\n    result = []\n    for item in items:\n        if item not in seen:\n            seen.add(item)\n            result.append(item)\n    return result\n\nprint(unique_in_order([3, 1, 3, 2, 1]))',
+      tests: [
+        { call: 'unique_in_order([3, 1, 3, 2, 1])', expect: [3, 1, 2] },
+        { call: 'unique_in_order(["go", "go", "go"])', expect: ['go'] },
+        { call: 'unique_in_order([])', expect: [] },
+        { call: 'unique_in_order([1, 2, 3])', expect: [1, 2, 3] },
+      ],
+      hint: {
+        en: 'For each item: if it is not in `seen`, add it to `seen` and append it to `result`.',
+        ar: 'لكل عنصر: إن لم يكن في `seen` فأضفه إلى `seen` وألحقه بـ `result`.',
+      },
+      explain: {
+        en: 'The list keeps the order and the set answers "have I seen this?" in O(1), so the whole function is O(n). Checking `item not in result` instead would also work, but it scans the list every time and becomes O(n²).',
+        ar: 'القائمة تحفظ الترتيب، والمجموعة تجيب عن سؤال «هل رأيت هذا؟» في O(1)، فتصبح الدالة كلها O(n). أما الفحص بـ `item not in result` فيعمل أيضاً، لكنه يمرّ على القائمة كل مرة فيصبح التعقيد O(n²).',
       },
     },
   ],

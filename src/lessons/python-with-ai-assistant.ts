@@ -8,7 +8,7 @@ export const pythonWithAiAssistant: Lesson = {
     en: 'Prompt the assistant in VS Code or PyCharm with a good comment, then review, fix and test what it suggests before you accept it.',
     ar: 'وجّه المساعد في VS Code أو PyCharm بتعليق جيد، ثم راجع ما يقترحه وأصلحه واختبره قبل أن تقبله.',
   },
-  minutes: 12,
+  minutes: 14,
   roadmapSteps: ['ai_python'],
   steps: [
     {
@@ -118,6 +118,31 @@ export const pythonWithAiAssistant: Lesson = {
       explain: {
         en: 'Generated tests tend to cover the easy cases. Ask for the edge cases by name (empty input, one item, negative numbers, wrong types) and decide the expected values yourself, so the tests check what you want and not what the code happens to do.',
         ar: 'الاختبارات المولَّدة تميل إلى تغطية الحالات السهلة. اطلب الحالات الطرفية بالاسم (مدخل فارغ، عنصر واحد، أعداد سالبة، أنواع خاطئة)، وحدّد القيم المتوقّعة بنفسك، لتفحص الاختبارات ما تريده أنت لا ما تفعله الشيفرة مصادفةً.',
+      },
+    },
+    {
+      kind: 'code',
+      language: 'python',
+      text: {
+        en: 'Now run those tests for real. This is the assistant\'s first suggestion again. Run it, read which check fails, then fix the function so an empty list gives `0.0`.',
+        ar: 'شغّل الآن تلك الاختبارات فعلياً. هذا اقتراح المساعد الأول مرة أخرى. شغّله واقرأ أي اختبار يفشل، ثم أصلح الدالة لتُرجع `0.0` للقائمة الفارغة.',
+      },
+      starter: 'def average(numbers):\n    return sum(numbers) / len(numbers)\n\nprint(average([2, 4]))',
+      solution:
+        'def average(numbers):\n    if not numbers:\n        return 0.0\n    return sum(numbers) / len(numbers)\n\nprint(average([2, 4]))',
+      tests: [
+        { call: 'average([2, 4])', expect: 3 },
+        { call: 'average([5])', expect: 5 },
+        { call: 'average([1, 2])', expect: 1.5 },
+        { call: 'average([])', expect: 0 },
+      ],
+      hint: {
+        en: 'Return early when the list is empty, before the line that divides.',
+        ar: 'أرجِع القيمة مبكراً عندما تكون القائمة فارغة، قبل السطر الذي يقسم.',
+      },
+      explain: {
+        en: 'The suggestion passed the normal cases and failed only the edge case, with `ZeroDivisionError`. Running the code against cases you chose yourself is what turned "looks fine" into "works".',
+        ar: 'نجح الاقتراح في الحالات العادية وفشل في الحالة الطرفية وحدها بالخطأ `ZeroDivisionError`. وتشغيل الشيفرة على حالات اخترتها بنفسك هو ما حوّل «تبدو سليمة» إلى «تعمل».',
       },
     },
     {

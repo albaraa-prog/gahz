@@ -15,6 +15,12 @@
   itself runs in a worker, so an endless loop cannot freeze the app; the worker
   is stopped after a few seconds.
 
+  JavaScript runs directly. Python runs in Pyodide (CPython compiled to
+  WebAssembly), which is downloaded from /pyodide/ on this same site the first
+  time a Python exercise needs it; that folder is the only address the policy
+  lets this page reach. The Python worker is kept between runs, because starting
+  Python takes a moment, and is replaced when a run has to be stopped.
+
   The policy in firebase.json allows this exact inline script by its hash.
   After editing the script, run `npm test`: the lessons test prints the new hash.
 -->
@@ -92,12 +98,241 @@
     };
   }
 
-  var workerUrl = URL.createObjectURL(new Blob(['(' + workerMain.toString() + ')()'], { type: 'text/javascript' }));
+  function pythonWorkerMain() {
+    // Runs inside Python. It mirrors what the JavaScript worker above does: run the code, keep what it
+    // prints, then evaluate each check in the same scope and report the values as JSON.
+    var HARNESS = String.raw`
+import builtins, json, sys, traceback
+
+_GAHZ_MAX_LOGS = 200
+_GAHZ_MAX_TEXT = 2000
+_GAHZ_FILE = "main.py"
+
+
+def _gahz_clip(text):
+    return text[:_GAHZ_MAX_TEXT] + "…" if len(text) > _GAHZ_MAX_TEXT else text
+
+
+class _GahzOutput:
+    def __init__(self, level, logs, state):
+        self.level, self.logs, self.state, self.pending = level, logs, state, ""
+
+    def write(self, text):
+        # Only the learner's own run is shown, not what the checks print when they call the code again.
+        if self.state["checking"] or len(self.logs) >= _GAHZ_MAX_LOGS:
+            return len(text)
+        self.pending += str(text)
+        while "\n" in self.pending and len(self.logs) < _GAHZ_MAX_LOGS:
+            line, self.pending = self.pending.split("\n", 1)
+            self.logs.append({"level": self.level, "text": _gahz_clip(line)})
+        if len(self.pending) > 2 * _GAHZ_MAX_TEXT:
+            self.pending = self.pending[: 2 * _GAHZ_MAX_TEXT]
+        return len(text)
+
+    def flush(self):
+        pass
+
+    def finish(self):
+        if self.pending and len(self.logs) < _GAHZ_MAX_LOGS:
+            self.logs.append({"level": self.level, "text": _gahz_clip(self.pending)})
+        self.pending = ""
+
+
+def _gahz_describe(error):
+    text = "".join(traceback.format_exception_only(type(error), error)).strip()
+    if isinstance(error, SyntaxError):
+        return text
+    line = None
+    step = error.__traceback__
+    while step is not None:
+        if step.tb_frame.f_code.co_filename == _GAHZ_FILE:
+            line = step.tb_lineno
+        step = step.tb_next
+    return text if line is None else text + " (line " + str(line) + ")"
+
+
+def _gahz_plain(value, depth=0):
+    # The value as JSON would hold it, so it can be compared with the expected value of a check.
+    if depth > 50:
+        raise ValueError("too deep")
+    if value is None or isinstance(value, (bool, int, str)):
+        return value
+    if isinstance(value, float):
+        if value != value or value in (float("inf"), float("-inf")):
+            raise ValueError("not a JSON number")
+        return int(value) if value.is_integer() else value
+    if isinstance(value, (list, tuple)):
+        return [_gahz_plain(item, depth + 1) for item in value]
+    if isinstance(value, (set, frozenset)):
+        items = [_gahz_plain(item, depth + 1) for item in value]
+        try:
+            return sorted(items)
+        except TypeError:
+            return items
+    if isinstance(value, dict):
+        return {str(key): _gahz_plain(item, depth + 1) for key, item in value.items()}
+    raise TypeError("not JSON")
+
+
+def _gahz_json(value):
+    try:
+        return json.dumps(_gahz_plain(value), ensure_ascii=False, separators=(",", ":"))
+    except Exception:
+        return "unserializable"
+
+
+def _gahz_no_input(*args, **kwargs):
+    raise RuntimeError("input() is not available here. Put the value in a variable instead.")
+
+
+def _gahz_run(code, calls_json):
+    logs, results, failure = [], [], None
+    state = {"checking": False}
+    out, err = _GahzOutput("log", logs, state), _GahzOutput("error", logs, state)
+    scope = {"__name__": "__main__", "__builtins__": builtins, "input": _gahz_no_input}
+    old_out, old_err = sys.stdout, sys.stderr
+    sys.stdout, sys.stderr = out, err
+    try:
+        try:
+            exec(compile(code, _GAHZ_FILE, "exec"), scope)
+        except BaseException as error:
+            failure = _gahz_describe(error)
+        out.finish()
+        err.finish()
+        if failure is None:
+            state["checking"] = True
+            for call in json.loads(calls_json):
+                try:
+                    value = eval(compile(call, "check", "eval"), scope)
+                    results.append({"ok": True, "json": _gahz_json(value), "text": _gahz_clip(repr(value))})
+                except BaseException as error:
+                    results.append({"ok": False, "error": _gahz_describe(error)})
+    finally:
+        sys.stdout, sys.stderr = old_out, old_err
+    return json.dumps({"logs": logs, "results": results, "error": failure})
+`;
+
+    var run = null;
+
+    self.onmessage = function (event) {
+      var data = event.data;
+      if (data.type === 'load') {
+        try {
+          importScripts(data.base + 'pyodide.js');
+          self.loadPyodide({ indexURL: data.base }).then(function (pyodide) {
+            pyodide.runPython(HARNESS);
+            run = pyodide.globals.get('_gahz_run');
+            self.postMessage({ type: 'ready' });
+          }, function (error) {
+            self.postMessage({ type: 'load-error', error: String(error) });
+          });
+        } catch (error) {
+          self.postMessage({ type: 'load-error', error: String(error) });
+        }
+        return;
+      }
+      var payload;
+      try {
+        payload = JSON.parse(run(data.code, JSON.stringify(data.calls)));
+      } catch (error) {
+        payload = { logs: [], results: [], error: String(error) };
+      }
+      self.postMessage({ type: 'result', logs: payload.logs, results: payload.results, error: payload.error });
+    };
+  }
+
+  function workerUrlFor(main) {
+    return URL.createObjectURL(new Blob(['(' + main.toString() + ')()'], { type: 'text/javascript' }));
+  }
+
+  var workerUrl = workerUrlFor(workerMain);
+  var pythonWorkerUrl = workerUrlFor(pythonWorkerMain);
+  // This page sits at the root of the site, next to the pyodide folder.
+  var PYODIDE_BASE = new URL('pyodide/', location.href).href;
+  var PYTHON_LOAD_TIMEOUT_MS = 90000;
+
+  // The one Python worker: { worker, ready }. `ready` settles when Python has loaded, or failed to.
+  var python = null;
+  // Python runs take turns, because they share that worker.
+  var pythonTurn = Promise.resolve();
+
+  function stopPython(entry) {
+    if (entry.worker) entry.worker.terminate();
+    if (python === entry) python = null;
+  }
+
+  function startPython() {
+    if (python) return python;
+    var entry = { worker: null, ready: null, loaded: false };
+    entry.ready = new Promise(function (resolve, reject) {
+      var worker = new Worker(pythonWorkerUrl);
+      entry.worker = worker;
+      var timer = setTimeout(function () { reject(new Error('Python took too long to load')); }, PYTHON_LOAD_TIMEOUT_MS);
+      worker.onmessage = function (message) {
+        clearTimeout(timer);
+        if (message.data.type === 'ready') {
+          entry.loaded = true;
+          resolve(worker);
+        }
+        else reject(new Error(message.data.error || 'Python did not load'));
+      };
+      worker.onerror = function (error) {
+        clearTimeout(timer);
+        reject(new Error(error.message || 'Python did not load'));
+      };
+      worker.postMessage({ type: 'load', base: PYODIDE_BASE });
+    });
+    // A worker that failed to load is thrown away, so the next run tries again.
+    entry.ready.catch(function () { stopPython(entry); });
+    python = entry;
+    return entry;
+  }
+
+  function runPython(request, reply) {
+    pythonTurn = pythonTurn.then(function () {
+      return new Promise(function (done) {
+        var finish = function (payload) { reply(payload); done(); };
+        var entry;
+        try {
+          entry = startPython();
+        } catch (error) {
+          finish({ logs: [], results: [], error: null, timedOut: false, unavailable: true });
+          return;
+        }
+        entry.ready.then(function (worker) {
+          var timer = setTimeout(function () {
+            stopPython(entry);
+            finish({ logs: [], results: [], error: null, timedOut: true });
+          }, TIMEOUT_MS);
+          worker.onmessage = function (message) {
+            clearTimeout(timer);
+            finish({ logs: message.data.logs, results: message.data.results, error: message.data.error, timedOut: false });
+          };
+          worker.onerror = function (error) {
+            clearTimeout(timer);
+            stopPython(entry);
+            finish({ logs: [], results: [], error: String(error.message || 'Error'), timedOut: false });
+          };
+          worker.postMessage({ type: 'run', code: request.code, calls: request.calls });
+        }, function () {
+          finish({ logs: [], results: [], error: null, timedOut: false, unavailable: true });
+        });
+      });
+    });
+  }
 
   window.addEventListener('message', function (event) {
     if (event.source !== window.parent) return;
     var request = event.data;
-    if (!request || request.type !== 'gahz-run' || typeof request.code !== 'string' || !Array.isArray(request.calls)) return;
+    if (!request) return;
+    // Sent when a Python exercise is opened, so Python is usually ready before the first run.
+    if (request.type === 'gahz-warm') {
+      if (request.language === 'python') {
+        try { startPython(); } catch (error) { /* The run itself reports it. */ }
+      }
+      return;
+    }
+    if (request.type !== 'gahz-run' || typeof request.code !== 'string' || !Array.isArray(request.calls)) return;
 
     var reply = function (payload) {
       payload.type = 'gahz-result';
@@ -105,6 +340,12 @@
       // The sandbox gives this page an opaque origin, so there is no origin to name. The reply holds only run output.
       window.parent.postMessage(payload, '*');
     };
+
+    if (request.language === 'python') {
+      if (!python || !python.loaded) window.parent.postMessage({ type: 'gahz-loading', id: request.id }, '*');
+      runPython(request, reply);
+      return;
+    }
 
     var worker;
     try {

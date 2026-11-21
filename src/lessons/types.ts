@@ -8,6 +8,7 @@
  * once as plain strings.
  */
 
+import type { CodeLanguage } from '../services/codeRunner';
 import type { StepId } from '../services/roadmap';
 import type { Locale } from '../utils/i18n';
 
@@ -63,15 +64,20 @@ export interface OrderStep extends ExerciseBase {
 }
 
 export interface CodeTest {
-  /** A JavaScript expression evaluated after the learner's code, such as `sum([1, 2])`. */
+  /** An expression in the exercise's language, evaluated after the learner's code, such as `sum([1, 2])`. */
   call: string;
-  /** The value it must produce. Compared as JSON. */
+  /**
+   * The value it must produce. Compared as JSON, ignoring the order of object keys. From Python, a tuple
+   * counts as a list, a set as a sorted list, a dictionary as an object and a whole float such as 2.0 as 2.
+   */
   expect: unknown;
 }
 
-/** Write JavaScript that runs in the browser and has to pass the tests. */
+/** Write JavaScript or Python that runs in the browser and has to pass the tests. */
 export interface CodeStep extends ExerciseBase {
   kind: 'code';
+  /** The language of `starter`, `solution` and the test calls. JavaScript when left out. */
+  language?: CodeLanguage;
   /** What the editor starts with. */
   starter: string;
   /** A reference answer. The test suite runs it against `tests`. */

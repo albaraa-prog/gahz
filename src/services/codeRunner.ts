@@ -1,5 +1,5 @@
 /**
- * Runs a learner's JavaScript without a server and without trusting it.
+ * Runs a learner's JavaScript or Python without a server and without trusting it.
  *
  * The code runs in /runner.html, loaded in a hidden iframe with
  * sandbox="allow-scripts". That gives it a throwaway origin with no access to
@@ -7,7 +7,13 @@
  * Content-Security-Policy blocks network requests. Inside the iframe the code
  * runs in a worker that is stopped after a few seconds, so an endless loop
  * only ends that run.
+ *
+ * Python runs in Pyodide (CPython compiled to WebAssembly). It is about 13 MB,
+ * so the runner downloads it from this site's /pyodide/ folder only when a
+ * Python exercise is opened, and the browser caches it after that.
  */
+
+export type CodeLanguage = 'javascript' | 'python';
 
 export interface LogLine {
   level: 'log' | 'warn' | 'error';
@@ -32,6 +38,15 @@ export class RunnerUnavailableError extends Error {}
 const READY_TIMEOUT_MS = 8000;
 /** The runner stops the code after 3 seconds; this is the backstop for a runner that never answers. */
 const REPLY_TIMEOUT_MS = 6000;
+/** A Python run may first have to download and start Python. The runner gives that 90 seconds. */
+const PYTHON_REPLY_TIMEOUT_MS = 100_000;
+
+export interface RunOptions {
+  /** Defaults to JavaScript. */
+  language?: CodeLanguage;
+  /** Called when the run has to wait for the language itself to download first. */
+  onLoading?: () => void;
+}
 
 let frame: HTMLIFrameElement | null = null;
 let ready: Promise<HTMLIFrameElement> | null = null;
@@ -80,10 +95,23 @@ function isRunResult(value: unknown): value is RunResult {
 }
 
 /**
+ * Starts loading what `language` needs, so the first run does not have to wait for it.
+ * Only Python needs anything. Failing here is fine: the run reports it.
+ */
+export function warmUpRunner(language: CodeLanguage): void {
+  if (language !== 'python') return;
+  loadRunner().then(
+    (iframe) => iframe.contentWindow?.postMessage({ type: 'gahz-warm', language }, '*'),
+    () => undefined,
+  );
+}
+
+/**
  * Runs `code`, then evaluates each expression in `calls` in the same scope
  * (so they can use the functions the code declares).
  */
-export async function runCode(code: string, calls: readonly string[] = []): Promise<RunResult> {
+export async function runCode(code: string, calls: readonly string[] = [], options: RunOptions = {}): Promise<RunResult> {
+  const language = options.language ?? 'javascript';
   const iframe = await loadRunner();
   const id = nextId++;
   return new Promise<RunResult>((resolve, reject) => {
@@ -96,13 +124,23 @@ export async function runCode(code: string, calls: readonly string[] = []): Prom
         ready = null;
       }
       reject(new RunnerUnavailableError('The code runner did not answer'));
-    }, REPLY_TIMEOUT_MS);
+    }, language === 'python' ? PYTHON_REPLY_TIMEOUT_MS : REPLY_TIMEOUT_MS);
     const onMessage = (event: MessageEvent): void => {
       if (event.source !== iframe.contentWindow) return;
       const data: unknown = event.data;
-      if ((data as { type?: unknown; id?: unknown })?.type !== 'gahz-result' || (data as { id?: unknown }).id !== id) return;
+      const type = (data as { type?: unknown } | null)?.type;
+      if ((data as { id?: unknown } | null)?.id !== id) return;
+      if (type === 'gahz-loading') {
+        options.onLoading?.();
+        return;
+      }
+      if (type !== 'gahz-result') return;
       clearTimeout(timer);
       window.removeEventListener('message', onMessage);
+      if ((data as { unavailable?: unknown }).unavailable === true) {
+        reject(new RunnerUnavailableError('The language could not be loaded'));
+        return;
+      }
       if (!isRunResult(data)) {
         reject(new RunnerUnavailableError('The code runner sent an unexpected answer'));
         return;
@@ -111,6 +149,6 @@ export async function runCode(code: string, calls: readonly string[] = []): Prom
     };
     window.addEventListener('message', onMessage);
     // The sandboxed frame has an opaque origin, so no target origin can be named.
-    iframe.contentWindow?.postMessage({ type: 'gahz-run', id, code, calls }, '*');
+    iframe.contentWindow?.postMessage({ type: 'gahz-run', id, code, calls, language }, '*');
   });
 }

@@ -1,9 +1,10 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { loadPyodide } from 'pyodide';
 import { describe, expect, it } from 'vitest';
 import { LESSONS } from '../src/lessons';
 import type { BlankStep, CodeStep, Lesson, Localized, OrderStep } from '../src/lessons/types';
-import type { CallResult } from '../src/services/codeRunner';
+import type { CallResult, RunResult } from '../src/services/codeRunner';
 import {
   advanceProgress,
   blankCount,
@@ -14,6 +15,7 @@ import {
   isOrderCorrect,
   lessonStatus,
   lessonsForStep,
+  sameJson,
   shuffledOrder,
   tokenBank,
 } from '../src/services/lessons';
@@ -30,8 +32,32 @@ function expectLocalized(text: Localized, where: string): void {
   for (const locale of LOCALES) expect((text[locale].match(/`/g) ?? []).length % 2, `${where} (${locale}) backticks`).toBe(0);
 }
 
+type PythonRun = Pick<RunResult, 'logs' | 'results' | 'error'>;
+let pythonRunner: Promise<(code: string, calls: readonly string[]) => PythonRun> | null = null;
+
+/** Python as the lessons run it: Pyodide with the harness taken out of public/runner.html. */
+function python(): Promise<(code: string, calls: readonly string[]) => PythonRun> {
+  pythonRunner ??= (async () => {
+    const harness = /String\.raw`([\s\S]*?)`/.exec(readFileSync('public/runner.html', 'utf8'))?.[1];
+    if (!harness) throw new Error('The Python harness was not found in public/runner.html');
+    const pyodide = await loadPyodide();
+    pyodide.runPython(harness);
+    const run = pyodide.globals.get('_gahz_run') as (code: string, calls: string) => string;
+    return (code, calls) => JSON.parse(run(code, JSON.stringify(calls))) as PythonRun;
+  })();
+  return pythonRunner;
+}
+
 /** What public/runner.html does with a learner's code, without the sandbox. */
-function runSolution(step: CodeStep): CallResult[] {
+async function runSolution(step: CodeStep): Promise<CallResult[]> {
+  if (step.language === 'python') {
+    const run = (await python())(
+      step.solution,
+      step.tests.map((test) => test.call),
+    );
+    expect(run.error, 'the code must load without an error').toBeNull();
+    return run.results;
+  }
   const thunks = step.tests.map((test) => `function () { return (${test.call}\n); }`);
   const silent = { log() {}, info() {}, debug() {}, warn() {}, error() {} };
   const run = new Function('console', `"use strict";\n${step.solution}\n;return [${thunks.join(',')}];`)(silent) as (() => unknown)[];
@@ -90,20 +116,26 @@ describe('lesson content', () => {
     }
   });
 
-  it('has a solution that passes its tests for every code exercise, and a starter that does not', () => {
+  it('has a solution that passes its tests for every code exercise, and a starter that does not', async () => {
     for (const lesson of LESSONS) {
-      lesson.steps.forEach((step, index) => {
-        if (step.kind !== 'code') return;
+      for (const [index, step] of lesson.steps.entries()) {
+        if (step.kind !== 'code') continue;
         const where = `${lesson.id} step ${index + 1}`;
-        const outcomes = gradeTests(step.tests, runSolution(step));
+        const outcomes = gradeTests(step.tests, await runSolution(step));
         for (const outcome of outcomes) expect(outcome.passed, `${where}: ${outcome.test.call} gave ${outcome.actual}`).toBe(true);
-        const starter = gradeTests(step.tests, runSolution({ ...step, solution: step.starter }));
+        const starter = gradeTests(step.tests, await runSolution({ ...step, solution: step.starter }));
         expect(
           starter.some((outcome) => !outcome.passed),
           `${where}: the starter code already passes`,
         ).toBe(true);
-      });
+      }
     }
+  }, 60_000);
+
+  it('has exercises that run Python', () => {
+    const languages = LESSONS.flatMap((lesson) => lesson.steps).flatMap((step) => (step.kind === 'code' ? [step.language ?? 'javascript'] : []));
+    expect(languages).toContain('python');
+    expect(languages).toContain('javascript');
   });
 
   it('is offered on the roadmap steps it names', () => {
@@ -172,6 +204,47 @@ describe('checking answers', () => {
     // A run that stopped early has no result for the later tests.
     expect(gradeTests(tests, []).every((outcome) => !outcome.passed)).toBe(true);
   });
+
+  it('compares objects whatever the order of their keys, and nothing else loosely', () => {
+    expect(sameJson('{"go":2,"java":1}', '{"java":1,"go":2}')).toBe(true);
+    expect(sameJson('[{"b":[1,2],"a":1}]', '[{"a":1,"b":[1,2]}]')).toBe(true);
+    expect(sameJson('[1,2]', '[2,1]')).toBe(false);
+    expect(sameJson('"1"', '1')).toBe(false);
+    expect(sameJson('undefined', 'undefined')).toBe(true);
+    expect(sameJson('unserializable', '{}')).toBe(false);
+  });
+});
+
+describe('running Python', () => {
+  it('reports printed lines, values as JSON and errors with their line', async () => {
+    const run = await python();
+    const good = run(
+      'def pair(n):\n    print("inside a check")\n    return (n, n / 2)\n\nprint("hello", 3)\nprint("two\\nlines")\ntags = {"b", "a"}',
+      ['pair(4)', 'tags', '{"x": None, "ok": True}', 'pair("a")', 'object()'],
+    );
+    expect(good.error).toBeNull();
+    // Only the learner's own run is shown, not what the checks print.
+    expect(good.logs.map((line) => line.text)).toEqual(['hello 3', 'two', 'lines']);
+    expect(good.results[0]).toEqual({ ok: true, json: '[4,2]', text: '(4, 2.0)' });
+    expect(good.results[1]).toMatchObject({ ok: true, json: '["a","b"]' });
+    expect(good.results[2]).toMatchObject({ ok: true, json: '{"x":null,"ok":true}' });
+    expect(good.results[3]).toMatchObject({ ok: false });
+    expect((good.results[3] as { error: string }).error).toMatch(/^TypeError: .* \(line 3\)$/);
+    expect(good.results[4]).toMatchObject({ ok: true, json: 'unserializable' });
+
+    const crash = run('x = 1\nprint("before")\nprint(y)', ['x']);
+    expect(crash.error).toBe("NameError: name 'y' is not defined (line 3)");
+    expect(crash.logs.map((line) => line.text)).toEqual(['before']);
+    expect(crash.results).toEqual([]);
+
+    const syntax = run('def broken(:\n    pass', []);
+    expect(syntax.error).toContain('SyntaxError');
+    expect(syntax.error).toContain('line 1');
+
+    expect(run('name = input("Name? ")', []).error).toContain('input() is not available');
+    // One run cannot see the names of the one before it.
+    expect(run('print(x)', []).error).toContain('NameError');
+  }, 60_000);
 });
 
 describe('lesson progress', () => {
@@ -211,5 +284,21 @@ describe('code runner page', () => {
     expect(policy, `runner.html changed: put ${hash} in the /runner policy in firebase.json`).toContain(hash);
     expect(policy).toContain("default-src 'none'");
     expect(policy).toContain('sandbox allow-scripts');
+  });
+
+  it('can download Python from this site, and nothing else', () => {
+    const config = JSON.parse(readFileSync('firebase.json', 'utf8')) as {
+      hosting: { headers: { source: string; headers: { key: string; value: string }[] }[] };
+    };
+    const policy =
+      config.hosting.headers
+        .find((entry) => entry.source.startsWith('/runner'))
+        ?.headers.find((header) => header.key === 'Content-Security-Policy')?.value ?? '';
+    const connect = /connect-src ([^;]*)/.exec(policy)?.[1]?.split(' ') ?? [];
+    expect(connect).toContain("'self'");
+    for (const source of connect) expect(source === "'self'" || source.startsWith('https://gahz.web.app/pyodide/'), source).toBe(true);
+    // The runner page is sandboxed, so the browser asks the Pyodide files for permission to read them.
+    const pyodide = config.hosting.headers.find((entry) => entry.source === '/pyodide/**');
+    expect(pyodide?.headers).toContainEqual({ key: 'Access-Control-Allow-Origin', value: '*' });
   });
 });

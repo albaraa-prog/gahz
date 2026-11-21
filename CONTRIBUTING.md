@@ -55,12 +55,15 @@ Lessons are short, hands-on walkthroughs ("Learn by doing" on the home screen). 
    - `choice`: pick one option, for example "what does this print?"
    - `blank`: fill the `___` gaps in a code template from a bank of tokens
    - `order`: put shuffled lines back in order (make sure only one order is correct)
-   - `code`: write JavaScript that runs in the browser and must pass `tests`
+   - `code`: write JavaScript, or Python with `language: 'python'`, that runs in the browser and must pass `tests`
 4. Give every exercise a `hint` that nudges without giving the answer away and an `explain` that says why.
 5. List the roadmap steps the lesson belongs to in `roadmapSteps`; it is then offered on those steps.
 6. Run `npm test`. It checks both languages and runs each code exercise's `solution` against its `tests`.
 
-Code exercises are JavaScript only for now. For other languages use `choice`, `blank` and `order`.
+Code exercises run JavaScript or Python. In a Python exercise the test calls are Python expressions and only
+the standard library is available: no `input()`, no files, no packages such as NumPy. Expected values are
+written as JSON: a tuple counts as a list, a set as a sorted list, and the order of dictionary keys does not
+matter. For other languages use `choice`, `blank` and `order`.
 
 ## Adding a free course or certificate
 

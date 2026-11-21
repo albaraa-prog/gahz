@@ -24,9 +24,11 @@ track**. It was previously called DevQuiz Studio.
 - **Practice my mistakes**: a quiz built from the questions you last answered wrong. A question leaves the
   list once you get it right.
 - **Learn by doing**: short interactive lessons in English and Arabic. Predict what code prints, fill the
-  gaps, put lines in order and write JavaScript that runs in the browser against tests, with hints and
-  instant feedback. Code runs in a sandboxed frame with no access to the app or the network; no server is
-  involved. Lessons are linked from the roadmap steps they teach.
+  gaps, put lines in order and write JavaScript or Python that runs in the browser against tests, with hints
+  and instant feedback. Code runs in a sandboxed frame with no access to the app or the network; no server is
+  involved. Python is [Pyodide](https://pyodide.org) (CPython compiled to WebAssembly), served from the site
+  itself and downloaded only when a Python exercise is opened. Lessons are linked from the roadmap steps they
+  teach.
 - **History and streaks**, saved in the browser. An unfinished quiz can be resumed after closing the tab.
 - **Optional cloud sync**: sign in with Email/Password or Google to back up history, settings and stats to
   Firestore and use them on other devices. Without sign-in the app is a fully working guest mode.

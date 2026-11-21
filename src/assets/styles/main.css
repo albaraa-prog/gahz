@@ -1239,6 +1239,23 @@ footer .link-btn { font-size: 13px; }
 .lesson-link { color: var(--iris); text-align: start; }
 .lesson-link--done { color: var(--verdant-text); }
 
+/* Free courses and certificates under a roadmap step */
+.resources { margin-top: var(--s-12); max-width: 640px; }
+.resources summary { cursor: pointer; color: var(--iris); font-size: 14px; width: fit-content; }
+.resources summary:hover { color: var(--fg); }
+.resources-count { color: var(--muted); margin-inline-start: var(--s-6); }
+.resource-list { list-style: none; margin: var(--s-12) 0 0; padding: 0; display: grid; gap: var(--s-12); }
+.resource { display: grid; gap: 2px; padding-inline-start: var(--s-12); border-inline-start: 2px solid var(--line); }
+.resource-link { color: var(--fg); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; width: fit-content; unicode-bidi: plaintext; }
+.resource-link:hover { color: var(--iris); }
+.resource-meta { display: flex; flex-wrap: wrap; gap: var(--s-6) var(--s-12); color: var(--muted); font-size: 13px; }
+.resource-kind--certificate { color: var(--verdant-text); }
+.resource-about { color: var(--muted); font-size: 14px; }
+.resources-note { color: var(--muted); font-size: 13px; margin: var(--s-12) 0 0; }
+.card-resources { color: var(--iris); margin-top: var(--s-12); text-align: start; }
+.resources-dialog { max-height: 55vh; overflow-y: auto; padding-inline-end: var(--s-6); font-weight: 400; text-align: start; }
+.resources-dialog .resource-list { margin-top: 0; }
+
 /* -------------------------------------------------------------- responsive */
 
 @media (max-width: 960px) {

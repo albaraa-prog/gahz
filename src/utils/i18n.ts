@@ -56,7 +56,7 @@ const en = {
   'home.lead':
     '{count:question} across {topics:topic}: Flutter and fintech, APIs and networking, databases, CS fundamentals, AI and prompt engineering, logic, Arabic, and an Oman and GCC enterprise track. Timed, randomized every session, with an explanation for every answer.',
   'home.studyLabel': 'Study mode.',
-  'home.studyText': 'Show whether you were right, and why, as soon as you answer.',
+  'home.studyText': 'Show whether you were right, and why, when you check each answer.',
   'home.start': 'Start mixed exam · 25 min',
   'home.custom': 'Build a custom quiz',
   'home.focused': 'Focused practice',
@@ -385,6 +385,7 @@ const en = {
   // Quiz
   'quiz.prev': 'Previous',
   'quiz.next': 'Next',
+  'quiz.check': 'Check answer',
   'quiz.reviewFinish': 'Review and finish',
   'quiz.flag': 'Flag for review',
   'quiz.map': 'Question map',
@@ -555,7 +556,7 @@ const ar: Record<TranslationKey, string> = {
   'home.lead':
     '{count:question} في {topics:topic}: Flutter والتقنية المالية، واجهات البرمجة والشبكات، قواعد البيانات، أساسيات علوم الحاسوب، الذكاء الاصطناعي وهندسة الأوامر، المنطق، أسئلة بالعربية، ومسار خاص بمؤسسات عُمان والخليج. اختبارات مؤقتة وعشوائية في كل مرة، مع شرح لكل إجابة.',
   'home.studyLabel': 'وضع الدراسة.',
-  'home.studyText': 'اعرف إن كانت إجابتك صحيحة، ولماذا، فور اختيارها.',
+  'home.studyText': 'اعرف إن كانت إجابتك صحيحة، ولماذا، عند التحقق من كل إجابة.',
   'home.start': 'ابدأ اختباراً منوّعاً · 25 دقيقة',
   'home.custom': 'أنشئ اختباراً مخصصاً',
   'home.focused': 'تدريب مركّز',
@@ -878,6 +879,7 @@ const ar: Record<TranslationKey, string> = {
 
   'quiz.prev': 'السابق',
   'quiz.next': 'التالي',
+  'quiz.check': 'تحقق من الإجابة',
   'quiz.reviewFinish': 'راجع وأنهِ',
   'quiz.flag': 'علّم للمراجعة',
   'quiz.map': 'خريطة الأسئلة',

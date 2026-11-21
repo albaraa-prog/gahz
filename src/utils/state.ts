@@ -15,6 +15,7 @@ const initialState: AppState = {
 
   questions: [],
   answers: {},
+  checked: {},
   flags: {},
   currentIdx: 0,
   secondsRemaining: 0,

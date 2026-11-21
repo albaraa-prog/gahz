@@ -1,6 +1,6 @@
 /** The active question: text, code snippet, options, explanation and navigation. */
 
-import { navigate, selectOption, setStudyMode, submitQuiz, toggleFlag, unansweredCount } from '../services/quizEngine';
+import { checkAnswer, navigate, needsCheck, selectOption, setStudyMode, submitQuiz, toggleFlag, unansweredCount } from '../services/quizEngine';
 import { categoryLabel, questionDirection, questionText } from '../services/questionText';
 import { byId, closestFrom } from '../utils/dom';
 import { formatLine, formatRichText } from '../utils/helpers';
@@ -28,7 +28,7 @@ function render(): void {
   const total = state.questions.length;
   const answer = state.answers[question.id];
   const answered = answer !== undefined;
-  const reveal = state.studyMode && answered;
+  const reveal = answered && Boolean(state.checked[question.id]);
   const direction = questionDirection(question);
   const text = questionText(question);
 
@@ -80,7 +80,8 @@ function render(): void {
     : '';
 
   byId<HTMLButtonElement>('prevBtn').disabled = index === 0;
-  byId('nextBtn').textContent = index === total - 1 ? t('quiz.reviewFinish') : t('quiz.next');
+  // In study mode the first press checks the chosen answer; the next press moves on.
+  byId('nextBtn').textContent = needsCheck() ? t('quiz.check') : index === total - 1 ? t('quiz.reviewFinish') : t('quiz.next');
 
   const flag = byId('flagBtn');
   const flagged = Boolean(state.flags[question.id]);
@@ -100,7 +101,8 @@ export function initQuestionCard(): void {
 
   byId('prevBtn').addEventListener('click', () => navigate(-1));
   byId('nextBtn').addEventListener('click', () => {
-    if (!navigate(1)) void confirmSubmit();
+    if (needsCheck()) checkAnswer();
+    else if (!navigate(1)) void confirmSubmit();
   });
   byId('flagBtn').addEventListener('click', toggleFlag);
   byId('finishBtn').addEventListener('click', () => void confirmSubmit());
@@ -108,5 +110,5 @@ export function initQuestionCard(): void {
     setStudyMode((event.target as HTMLInputElement).checked);
   });
 
-  store.subscribe(render, ['screen', 'questions', 'currentIdx', 'answers', 'flags', 'studyMode', 'locale', 'translationsReady']);
+  store.subscribe(render, ['screen', 'questions', 'currentIdx', 'answers', 'checked', 'flags', 'studyMode', 'locale', 'translationsReady']);
 }

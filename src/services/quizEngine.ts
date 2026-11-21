@@ -35,6 +35,7 @@ function saveProgress(): void {
   const session: SavedSession = {
     questions: state.questions,
     answers: state.answers,
+    checked: state.checked,
     flags: state.flags,
     currentIdx: state.currentIdx,
     secondsRemaining: state.secondsRemaining,
@@ -83,16 +84,27 @@ export function parseSavedSession(value: unknown): SavedSession | null {
   for (const key of Object.keys(answers)) if (!ids.has(Number(key))) delete answers[Number(key)];
   for (const key of Object.keys(flags)) if (!ids.has(Number(key))) delete flags[Number(key)];
 
+  const studyMode = typeof value.studyMode === 'boolean' ? value.studyMode : true;
+  let checked: Record<number, boolean> = {};
+  if (isRecord(value.checked)) {
+    checked = parseFlagMap(value.checked);
+    for (const key of Object.keys(checked)) if (answers[Number(key)] === undefined) delete checked[Number(key)];
+  } else if (studyMode) {
+    // Saved before answers were checked on Next: study mode had already revealed every answer.
+    for (const key of Object.keys(answers)) checked[Number(key)] = true;
+  }
+
   return {
     questions,
     answers,
+    checked,
     flags,
     currentIdx: typeof value.currentIdx === 'number' ? clamp(Math.floor(value.currentIdx), 0, questions.length - 1) : 0,
     secondsRemaining: Math.floor(secondsRemaining),
     totalSeconds:
       typeof totalSeconds === 'number' && totalSeconds >= secondsRemaining ? Math.floor(totalSeconds) : Math.floor(secondsRemaining),
     activeMode: typeof value.activeMode === 'string' ? value.activeMode : 'Resumed Quiz',
-    studyMode: typeof value.studyMode === 'boolean' ? value.studyMode : true,
+    studyMode,
   };
 }
 
@@ -139,6 +151,7 @@ function begin(picked: Question[], minutes: number, modeLabel: string): void {
   store.set({
     questions,
     answers: {},
+    checked: {},
     flags: {},
     currentIdx: 0,
     totalSeconds,
@@ -198,6 +211,7 @@ export function resumeQuiz(session: SavedSession): void {
   store.set({
     questions: session.questions,
     answers: session.answers,
+    checked: session.checked,
     flags: session.flags,
     currentIdx: session.currentIdx,
     secondsRemaining: session.secondsRemaining,
@@ -213,9 +227,24 @@ export function resumeQuiz(session: SavedSession): void {
 
 export function selectOption(questionId: number, optionIndex: number): void {
   if (state.screen !== 'quiz') return;
-  // In study mode the answer is revealed immediately, so it cannot be changed.
-  if (state.studyMode && state.answers[questionId] !== undefined) return;
+  // A choice stays open until it is checked; a checked answer has been revealed, so it is locked.
+  if (state.checked[questionId]) return;
   state.answers = { ...state.answers, [questionId]: optionIndex };
+  saveProgress();
+}
+
+/** True when the current question has a chosen answer that study mode has not revealed yet. */
+export function needsCheck(): boolean {
+  const question = state.questions[state.currentIdx];
+  if (!question || !state.studyMode) return false;
+  return state.answers[question.id] !== undefined && !state.checked[question.id];
+}
+
+/** Locks in the current answer and reveals whether it was right. Study mode only. */
+export function checkAnswer(): void {
+  const question = state.questions[state.currentIdx];
+  if (state.screen !== 'quiz' || !question || !needsCheck()) return;
+  state.checked = { ...state.checked, [question.id]: true };
   saveProgress();
 }
 

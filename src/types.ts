@@ -80,6 +80,8 @@ export interface Attempt {
 export interface SavedSession {
   questions: Question[];
   answers: AnswerMap;
+  /** Questions whose answer was checked in study mode: revealed and locked. */
+  checked: FlagMap;
   flags: FlagMap;
   currentIdx: number;
   secondsRemaining: number;
@@ -150,6 +152,8 @@ export interface AppState {
   // Active quiz
   questions: Question[];
   answers: AnswerMap;
+  /** Questions whose answer was checked in study mode: revealed and locked. */
+  checked: FlagMap;
   flags: FlagMap;
   currentIdx: number;
   secondsRemaining: number;

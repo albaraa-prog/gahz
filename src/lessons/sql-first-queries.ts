@@ -17,7 +17,7 @@ export const sqlFirstQueries: Lesson = {
     ar: 'اقرأ البيانات وصفِّها وجمّعها واربط الجداول، وتجنّب خطأ NULL الذي يقع فيه معظم المتقدّمين.',
   },
   minutes: 12,
-  roadmapSteps: ['sql', 'databases'],
+  roadmapSteps: ['sql'],
   steps: [
     {
       kind: 'explain',

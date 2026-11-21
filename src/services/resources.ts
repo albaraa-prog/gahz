@@ -257,23 +257,6 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
       'ممارسات PHP الحديثة: المعايير والاعتماديات والأمان والاختبار.',
     ),
   ],
-  databases: [
-    FCC_SQL,
-    certificate(
-      'MongoDB University',
-      'MongoDB',
-      'https://learn.mongodb.com/',
-      'Free courses and skill badges on document databases, indexes and data modelling.',
-      'دورات وشارات مهارة مجانية في قواعد البيانات المستندية والفهارس وتصميم البيانات.',
-    ),
-    course(
-      'PostgreSQL Tutorial',
-      'PostgreSQL documentation',
-      'https://www.postgresql.org/docs/current/tutorial.html',
-      'The official tutorial: tables, joins, transactions, views and window functions.',
-      'الدرس الرسمي: الجداول والربط والمعاملات والـ views ودوال النوافذ.',
-    ),
-  ],
   plsql: [
     certificate(
       'Oracle Dev Gym',
@@ -441,6 +424,20 @@ export const STEP_RESOURCES: Record<StepId, readonly Resource[]> = {
       'https://sqlbolt.com/',
       'Interactive SQL lessons that run in the browser, one idea at a time.',
       'دروس SQL تفاعلية تعمل في المتصفح، فكرة في كل درس.',
+    ),
+    certificate(
+      'MongoDB University',
+      'MongoDB',
+      'https://learn.mongodb.com/',
+      'Free courses and skill badges on document databases, indexes and data modelling.',
+      'دورات وشارات مهارة مجانية في قواعد البيانات المستندية والفهارس وتصميم البيانات.',
+    ),
+    course(
+      'PostgreSQL Tutorial',
+      'PostgreSQL documentation',
+      'https://www.postgresql.org/docs/current/tutorial.html',
+      'The official tutorial: tables, joins, transactions, views and window functions.',
+      'الدرس الرسمي: الجداول والربط والمعاملات والـ views ودوال النوافذ.',
     ),
   ],
   ai_fundamentals: [

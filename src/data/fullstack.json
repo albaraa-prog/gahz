@@ -1,7 +1,7 @@
 [
   {
     "id": 91,
-    "category": "Fullstack",
+    "category": "Fullstack Web Dev",
     "difficulty": "medium",
     "question": "Which cookie attribute prevents client-side scripts (like Javascript `document.cookie`) from reading the cookie value, mitigating XSS theft?",
     "options": [
@@ -15,7 +15,7 @@
   },
   {
     "id": 92,
-    "category": "Fullstack",
+    "category": "Fullstack Web Dev",
     "difficulty": "medium",
     "question": "What is the difference between Cross-Site Scripting (XSS) and Cross-Site Request Forgery (CSRF)?",
     "options": [
@@ -29,7 +29,7 @@
   },
   {
     "id": 93,
-    "category": "Fullstack",
+    "category": "Fullstack Web Dev",
     "difficulty": "medium",
     "question": "Which Cache-Control header directive forces caches to submit requests to the origin server for validation before using a cached copy?",
     "options": [
@@ -43,7 +43,7 @@
   },
   {
     "id": 94,
-    "category": "Fullstack",
+    "category": "Fullstack Web Dev",
     "difficulty": "medium",
     "question": "What is the storage capacity difference between LocalStorage and Cookies?",
     "options": [
@@ -57,7 +57,7 @@
   },
   {
     "id": 95,
-    "category": "Fullstack",
+    "category": "Fullstack Web Dev",
     "difficulty": "medium",
     "question": "What are the three core sections of a JSON Web Token (JWT)?",
     "options": [
@@ -71,7 +71,7 @@
   },
   {
     "id": 96,
-    "category": "Fullstack",
+    "category": "Fullstack Web Dev",
     "difficulty": "medium",
     "question": "Which HTTP header is used by servers in CORS configuration to specify which web domains are allowed to access resources?",
     "options": [
@@ -85,7 +85,7 @@
   },
   {
     "id": 97,
-    "category": "Fullstack",
+    "category": "Fullstack Web Dev",
     "difficulty": "medium",
     "question": "What is the difference between Server-Side Rendering (SSR) and Static Site Generation (SSG)?",
     "options": [
@@ -99,7 +99,7 @@
   },
   {
     "id": 98,
-    "category": "Fullstack",
+    "category": "Fullstack Web Dev",
     "difficulty": "medium",
     "question": "What does the `SameSite=Lax` cookie attribute do?",
     "options": [
@@ -113,7 +113,7 @@
   },
   {
     "id": 99,
-    "category": "Fullstack",
+    "category": "Fullstack Web Dev",
     "difficulty": "medium",
     "question": "What is the primary role of a bundler like Webpack or Vite in frontend development?",
     "options": [
@@ -127,7 +127,7 @@
   },
   {
     "id": 100,
-    "category": "Fullstack",
+    "category": "Fullstack Web Dev",
     "difficulty": "medium",
     "question": "What is a main mitigation strategy against SQL Injection?",
     "options": [

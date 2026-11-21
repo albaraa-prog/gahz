@@ -1,7 +1,7 @@
 [
   {
     "id": 71,
-    "category": "Databases",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "Which database index structure is optimized for range queries in relational databases like MySQL and Oracle?",
     "options": [
@@ -15,7 +15,7 @@
   },
   {
     "id": 72,
-    "category": "Databases",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "Which window function assigns unique sequential integers to rows within a partition, ignoring duplicate tie values?",
     "options": [
@@ -29,7 +29,7 @@
   },
   {
     "id": 73,
-    "category": "Databases",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "In database transaction management, what does the 'I' in ACID stand for?",
     "options": [
@@ -43,7 +43,7 @@
   },
   {
     "id": 74,
-    "category": "Databases",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "Which transaction Isolation Level prevents Dirty Reads but allows Non-Repeatable Reads and Phantom Reads?",
     "options": [
@@ -57,7 +57,7 @@
   },
   {
     "id": 75,
-    "category": "Databases",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "What is the logical order of execution for query clauses in SQL?",
     "options": [
@@ -71,7 +71,7 @@
   },
   {
     "id": 76,
-    "category": "Databases",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "What happens when using the `ON DELETE SET NULL` constraint action on a foreign key?",
     "options": [
@@ -85,7 +85,7 @@
   },
   {
     "id": 77,
-    "category": "Databases",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "Which SQL command provides a breakdown of how the query optimizer plans to execute a query?",
     "options": [
@@ -99,7 +99,7 @@
   },
   {
     "id": 80,
-    "category": "Databases",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "What is a Common Table Expression (CTE) in SQL?",
     "options": [
@@ -113,7 +113,7 @@
   },
   {
     "id": 78,
-    "category": "Databases",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "How does a Shared Lock (S) differ from an Exclusive Lock (X) in databases?",
     "options": [
@@ -127,7 +127,7 @@
   },
   {
     "id": 79,
-    "category": "Databases",
+    "category": "SQL & Databases",
     "difficulty": "medium",
     "question": "What is the primary difference in how Oracle and MySQL generate auto-incrementing key fields?",
     "options": [

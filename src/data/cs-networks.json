@@ -1,7 +1,7 @@
 [
   {
     "id": 81,
-    "category": "CS & Networks",
+    "category": "Computer Networking & Protocols",
     "difficulty": "medium",
     "question": "Which property is a key differentiator of UDP compared to TCP?",
     "options": [
@@ -15,7 +15,7 @@
   },
   {
     "id": 82,
-    "category": "CS & Networks",
+    "category": "Computer Networking & Protocols",
     "difficulty": "medium",
     "question": "Under the OSI Model, which layer is responsible for IP addressing and routing packets across networks?",
     "options": [
@@ -29,7 +29,7 @@
   },
   {
     "id": 83,
-    "category": "CS & Networks",
+    "category": "Computer Networking & Protocols",
     "difficulty": "medium",
     "question": "What is the correct order of DNS lookup steps when visiting a new website?",
     "options": [
@@ -43,7 +43,7 @@
   },
   {
     "id": 84,
-    "category": "CS & Networks",
+    "category": "Computer Networking & Protocols",
     "difficulty": "medium",
     "question": "What is the network IP address classification of the range `192.168.0.0` to `192.168.255.255`?",
     "options": [
@@ -57,7 +57,7 @@
   },
   {
     "id": 85,
-    "category": "CS & Networks",
+    "category": "Computer Networking & Protocols",
     "difficulty": "medium",
     "question": "What cryptographic operation occurs during the TLS/SSL handshake in HTTPS?",
     "options": [
@@ -71,7 +71,7 @@
   },
   {
     "id": 86,
-    "category": "CS & Networks",
+    "category": "Computer Networking & Protocols",
     "difficulty": "medium",
     "question": "What is the difference between a load balancer's Round Robin and Least Connections routing algorithms?",
     "options": [
@@ -85,7 +85,7 @@
   },
   {
     "id": 87,
-    "category": "CS & Networks",
+    "category": "Computer Networking & Protocols",
     "difficulty": "medium",
     "question": "What is a key difference between Hashing and Encryption?",
     "options": [
@@ -99,7 +99,7 @@
   },
   {
     "id": 88,
-    "category": "CS & Networks",
+    "category": "Git & GitHub",
     "difficulty": "medium",
     "question": "What is the difference between Git Merge and Git Rebase?",
     "options": [
@@ -113,7 +113,7 @@
   },
   {
     "id": 89,
-    "category": "CS & Networks",
+    "category": "Computer Networking & Protocols",
     "difficulty": "medium",
     "question": "Which network ports are standard defaults for DNS and SSH protocols respectively?",
     "options": [
@@ -127,7 +127,7 @@
   },
   {
     "id": 90,
-    "category": "CS & Networks",
+    "category": "Computer Networking & Protocols",
     "difficulty": "medium",
     "question": "What is the role of Network Address Translation (NAT)?",
     "options": [

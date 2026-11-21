@@ -9,7 +9,7 @@
  */
 
 import type { BlankStep, ChoiceStep, CodeStep, ExerciseStep, Lesson, LessonStep, OrderStep } from '../lessons/types';
-import { RunnerUnavailableError, runCode, type RunResult } from '../services/codeRunner';
+import { RunnerUnavailableError, runCode, warmUpRunner, type RunResult } from '../services/codeRunner';
 import { closeLesson, currentLesson, goToLessonStep, openLesson } from '../services/lessonPlayer';
 import {
   LESSONS,
@@ -59,6 +59,8 @@ interface Work {
   // code
   code: string;
   running: boolean;
+  /** The run is waiting for the language itself (Python) to download. */
+  loadingLanguage: boolean;
   run: RunResult | null;
   outcomes: TestOutcome[] | null;
   runnerDown: boolean;
@@ -80,6 +82,7 @@ function newWork(key: string, step: LessonStep | undefined): Work {
     order: [],
     code: '',
     running: false,
+    loadingLanguage: false,
     run: null,
     outcomes: null,
     runnerDown: false,
@@ -95,6 +98,8 @@ function newWork(key: string, step: LessonStep | undefined): Work {
     base.order = shuffledOrder(step);
   } else if (step.kind === 'code') {
     base.code = step.starter;
+    // Python is a large download: start it now, while the learner reads the task.
+    warmUpRunner(step.language ?? 'javascript');
   }
   return base;
 }
@@ -262,9 +267,9 @@ function renderRunOutput(step: CodeStep, current: Work): string {
 function renderCode(step: CodeStep, current: Work): string {
   return `
     <label class="sr-only" for="lessonEditor">${escapeHtml(t('lesson.editor'))}</label>
-    <textarea class="code-editor" id="lessonEditor" dir="ltr" spellcheck="false" autocapitalize="off" autocomplete="off"
+    <textarea class="code-editor" id="lessonEditor" dir="ltr" data-indent="${step.language === 'python' ? '    ' : '  '}" spellcheck="false" autocapitalize="off" autocomplete="off"
       autocorrect="off" rows="${Math.max(8, current.code.split('\n').length + 2)}">${escapeHtml(current.code)}</textarea>
-    <p class="lesson-note">${escapeHtml(t('lesson.editorNote'))}</p>
+    <p class="lesson-note">${escapeHtml(t(step.language === 'python' ? 'lesson.editorNotePython' : 'lesson.editorNote'))}</p>
     <div class="run-results" id="lessonRunResults" aria-live="polite">${renderRunOutput(step, current)}</div>`;
 }
 
@@ -383,7 +388,8 @@ function render(): void {
   const continueLabel = index === total - 1 ? t('lesson.finish') : t('lesson.continue');
   const primary: string[] = [];
   if (step.kind !== 'explain' && !solved) {
-    const label = step.kind === 'code' ? (current.running ? t('lesson.running') : t('lesson.run')) : t('lesson.check');
+    const runLabel = current.loadingLanguage ? t('lesson.loadingPython') : current.running ? t('lesson.running') : t('lesson.run');
+    const label = step.kind === 'code' ? runLabel : t('lesson.check');
     primary.push(
       `<button class="btn" type="button" data-lesson-action="check"${canCheck(step, current) ? '' : ' disabled'}>${escapeHtml(label)}</button>`,
     );
@@ -440,6 +446,16 @@ async function runAndGrade(step: CodeStep, current: Work): Promise<void> {
     const run = await runCode(
       current.code,
       step.tests.map((test) => test.call),
+      {
+        language: step.language,
+        onLoading: () => {
+          if (work !== current || !current.running) return;
+          current.loadingLanguage = true;
+          // Keep what is in the editor: drawing the step again rebuilds it.
+          readEditor();
+          render();
+        },
+      },
     );
     if (work !== current) return;
     current.run = run;
@@ -454,6 +470,7 @@ async function runAndGrade(step: CodeStep, current: Work): Promise<void> {
     if (!(error instanceof RunnerUnavailableError)) reportError(error);
   } finally {
     current.running = false;
+    current.loadingLanguage = false;
     if (work === current) render();
   }
 }
@@ -606,7 +623,7 @@ function onEditorKey(event: KeyboardEvent): void {
       return;
     }
     event.preventDefault();
-    editor.setRangeText('  ', editor.selectionStart, editor.selectionEnd, 'end');
+    editor.setRangeText(editor.dataset.indent ?? '  ', editor.selectionStart, editor.selectionEnd, 'end');
     return;
   }
   delete editor.dataset.tabOut;

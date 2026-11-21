@@ -84,6 +84,27 @@ export function expectedJson(value: unknown): string {
   return json === undefined ? 'undefined' : json;
 }
 
+function sortKeys(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(sortKeys);
+  if (!isRecord(value)) return value;
+  return Object.fromEntries(
+    Object.keys(value)
+      .sort()
+      .map((key) => [key, sortKeys(value[key])]),
+  );
+}
+
+/** Whether two JSON texts hold the same value. Object keys may come in any order: a Python dictionary keeps the order it was filled in. */
+export function sameJson(actual: string, expected: string): boolean {
+  if (actual === expected) return true;
+  try {
+    return JSON.stringify(sortKeys(JSON.parse(actual))) === JSON.stringify(sortKeys(JSON.parse(expected)));
+  } catch {
+    // 'undefined' and 'unserializable' are not JSON, and only equal themselves.
+    return false;
+  }
+}
+
 export interface TestOutcome {
   test: CodeTest;
   passed: boolean;
@@ -96,7 +117,7 @@ export function gradeTests(tests: readonly CodeTest[], results: readonly CallRes
     const result = results[index];
     if (!result) return { test, passed: false, actual: '' };
     if (!result.ok) return { test, passed: false, actual: result.error };
-    return { test, passed: result.json === expectedJson(test.expect), actual: result.text };
+    return { test, passed: sameJson(result.json, expectedJson(test.expect)), actual: result.text };
   });
 }
 

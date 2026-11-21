@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "ajv": "^8.20.0",
+    "pyodide": "314.0.8",
     "typescript": "^7.0.2",
     "vite": "^8.3.8",
     "vitest": "^5.1.0"

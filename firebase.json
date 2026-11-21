@@ -27,9 +27,13 @@
           { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
           {
             "key": "Content-Security-Policy",
-            "value": "default-src 'none'; script-src 'sha256-cYDT8+6zsl8qfTJ75LUfzDXf0p8jv2sg4BuwIPI1oE0=' 'unsafe-eval' blob:; worker-src blob:; frame-ancestors 'self'; sandbox allow-scripts"
+            "value": "default-src 'none'; script-src 'sha256-95btNAIrNywUmJH9okjleWx2IKPsCDby9e12qvSgvZk=' 'unsafe-eval' blob: 'self' https://gahz.web.app/pyodide/; connect-src 'self' https://gahz.web.app/pyodide/; worker-src blob:; frame-ancestors 'self'; sandbox allow-scripts"
           }
         ]
+      },
+      {
+        "source": "/pyodide/**",
+        "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
       },
       {
         "source": "/assets/**",

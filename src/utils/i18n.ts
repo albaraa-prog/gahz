@@ -182,7 +182,7 @@ const en = {
   // Interactive lessons
   'lesson.title': 'Learn by doing',
   'lesson.intro':
-    'Short lessons where you do the work: predict what code prints, fill the gaps, put lines in order and write JavaScript that runs right here in the browser.',
+    'Short lessons where you do the work: predict what code prints, fill the gaps, put lines in order and write JavaScript or Python that runs right here in the browser.',
   'lesson.steps': '{n} steps',
   'lesson.progress': '{n} of {total} steps',
   'lesson.done': 'Complete',
@@ -196,6 +196,7 @@ const en = {
   'lesson.check': 'Check',
   'lesson.run': 'Run and check',
   'lesson.running': 'Running…',
+  'lesson.loadingPython': 'Loading Python…',
   'lesson.continue': 'Continue',
   'lesson.finish': 'Finish lesson',
   'lesson.skip': 'Skip',
@@ -213,6 +214,8 @@ const en = {
   'lesson.moveDown': 'Move line {n} down',
   'lesson.editor': 'Your code',
   'lesson.editorNote': 'Your code runs in your browser. Press Ctrl + Enter to run it.',
+  'lesson.editorNotePython':
+    'Your Python runs in your browser. Press Ctrl + Enter to run it. Python is downloaded the first time (about 13 MB), then runs instantly.',
   'lesson.output': 'Output',
   'lesson.error': 'Error',
   'lesson.tests': 'Checks: {passed} of {total} passed',
@@ -677,7 +680,7 @@ const ar: Record<TranslationKey, string> = {
   // Interactive lessons
   'lesson.title': 'تعلّم بالتطبيق',
   'lesson.intro':
-    'دروس قصيرة تطبّق فيها بنفسك: توقّع ما تطبعه الشيفرة، املأ الفراغات، رتّب الأسطر، واكتب JavaScript تعمل هنا في المتصفح مباشرة.',
+    'دروس قصيرة تطبّق فيها بنفسك: توقّع ما تطبعه الشيفرة، املأ الفراغات، رتّب الأسطر، واكتب JavaScript أو Python تعمل هنا في المتصفح مباشرة.',
   'lesson.steps': '{n} خطوات',
   'lesson.progress': '{n} من {total} خطوات',
   'lesson.done': 'مكتمل',
@@ -691,6 +694,7 @@ const ar: Record<TranslationKey, string> = {
   'lesson.check': 'تحقّق',
   'lesson.run': 'شغّل وتحقّق',
   'lesson.running': 'جارٍ التشغيل…',
+  'lesson.loadingPython': 'جارٍ تحميل Python…',
   'lesson.continue': 'متابعة',
   'lesson.finish': 'إنهاء الدرس',
   'lesson.skip': 'تخطَّ',
@@ -708,6 +712,8 @@ const ar: Record<TranslationKey, string> = {
   'lesson.moveDown': 'انقل السطر {n} إلى الأسفل',
   'lesson.editor': 'شيفرتك',
   'lesson.editorNote': 'تعمل شيفرتك داخل متصفحك. اضغط Ctrl + Enter لتشغيلها.',
+  'lesson.editorNotePython':
+    'تعمل شيفرة Python داخل متصفحك. اضغط Ctrl + Enter لتشغيلها. يُحمَّل Python في المرة الأولى (نحو 13 ميغابايت)، ثم يعمل فوراً.',
   'lesson.output': 'المخرجات',
   'lesson.error': 'خطأ',
   'lesson.tests': 'الاختبارات: نجح {passed} من {total}',

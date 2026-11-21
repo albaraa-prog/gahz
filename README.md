@@ -217,8 +217,14 @@ Browser storage keys still start with `devquiz-` (the original name) so existing
 
 Guests: everything stays in the browser. Signed-in users: attempt history, settings and stats are stored in
 the user's own Firestore record, readable only by them. Signing out removes the history from the device; it
-returns on the next sign-in. Analytics events are sent only if a measurement ID is configured, and never
-include question content or answers.
+returns on the next sign-in. Analytics events are sent only if a measurement ID is configured and the visitor
+has accepted the analytics question, and never include question content or answers. Creating an account needs
+an explicit tick agreeing to the policy, and "Delete my account" in the footer removes the sign-in and all cloud
+data.
+
+The full bilingual [privacy policy](src/privacy.html) and [terms of use](src/terms.html) are served at `/privacy`
+and `/terms`. If you deploy your own copy, edit both pages and `CONTACT_EMAIL` in `src/utils/legalLinks.ts` so
+they name you, your contact address and where your Firebase project stores data.
 
 ## Contributors
 

@@ -20,6 +20,7 @@ export const STORAGE_KEYS = {
   preferences: 'devquiz-prefs',
   historyOwner: 'devquiz-history-owner',
   lessons: 'gahz-lessons',
+  analyticsConsent: 'gahz-analytics-consent',
 } as const;
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];
